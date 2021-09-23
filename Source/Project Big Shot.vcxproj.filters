@@ -25,26 +25,14 @@
     <Filter Include="Sources\Tools\Glew">
       <UniqueIdentifier>{981a4c1e-ff65-4504-afc5-7c7c7a2b43ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\Main">
+      <UniqueIdentifier>{50ea56d3-2a34-4c10-b2af-f7df96052f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\GUI">
+      <UniqueIdentifier>{a0fac03e-30a5-4409-aafb-792f5dd38203}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Module.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleAudio.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleCamera3D.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleInput.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleRenderer3D.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleWindow.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="p2DynArray.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
@@ -108,23 +96,29 @@
     <ClInclude Include="External\Glew\include\glew.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleWindow.h">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleAudio.h">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCamera3D.h">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleInput.h">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleRenderer3D.h">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleGuiManager.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ModuleAudio.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleCamera3D.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleInput.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleRenderer3D.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleWindow.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="log.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
@@ -172,6 +166,24 @@
     </ClCompile>
     <ClCompile Include="External\imgui\include\imgui_widgets.cpp">
       <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleAudio.cpp">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleCamera3D.cpp">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleInput.cpp">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleRenderer3D.cpp">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleWindow.cpp">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleGuiManager.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
