@@ -51,15 +51,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="p2DynArray.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2List.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="glmath.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
@@ -91,9 +82,6 @@
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
     <ClInclude Include="Module.h">
-      <Filter>Sources\Modules\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleAudio.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
     <ClInclude Include="ModuleCamera3D.h">
@@ -388,9 +376,6 @@
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Sources\Modules\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleAudio.cpp">
-      <Filter>Sources\Modules\Main</Filter>
     </ClCompile>
     <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Sources\Modules\Main</Filter>
