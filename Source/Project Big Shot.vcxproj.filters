@@ -84,33 +84,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="External\imgui\include\imgui.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imgui_impl_opengl3.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imgui_impl_opengl3_loader.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imgui_impl_sdl.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imgui_internal.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imstb_rectpack.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imstb_textedit.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imstb_truetype.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="External\imgui\include\imconfig.h">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="External\Glew\include\glew.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
@@ -360,6 +333,33 @@
     <ClInclude Include="External\MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Sources\Tools\MathGeoLib\Algorithm\Random</Filter>
     </ClInclude>
+    <ClInclude Include="External\imgui\include\imgui.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imgui_impl_opengl3.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imgui_impl_opengl3_loader.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imgui_impl_sdl.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imgui_internal.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imstb_rectpack.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imstb_textedit.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imstb_truetype.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="External\imgui\include\imconfig.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -388,27 +388,6 @@
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Sources\Modules\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="External\imgui\include\imgui.cpp">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="External\imgui\include\imgui_demo.cpp">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="External\imgui\include\imgui_draw.cpp">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="External\imgui\include\imgui_impl_opengl3.cpp">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="External\imgui\include\imgui_impl_sdl.cpp">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="External\imgui\include\imgui_tables.cpp">
-      <Filter>Sources\Tools\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="External\imgui\include\imgui_widgets.cpp">
-      <Filter>Sources\Tools\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ModuleAudio.cpp">
       <Filter>Sources\Modules\Main</Filter>
@@ -553,6 +532,27 @@
     </ClCompile>
     <ClCompile Include="External\MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Sources\Tools\MathGeoLib\Algorithm\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui_demo.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui_draw.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui_impl_opengl3.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui_impl_sdl.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui_tables.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui_widgets.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

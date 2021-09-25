@@ -16,6 +16,7 @@ bool ModuleGuiManager::Start()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& ioHandler = ImGui::GetIO(); (void)ioHandler;
+    ioHandler.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGui::StyleColorsDark();
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
     ImGui_ImplOpenGL3_Init("#version 460");
