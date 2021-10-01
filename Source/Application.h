@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "Timer.h"
+#include "PerfTimer.h"
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -25,6 +26,18 @@ private:
 	std::string orgName = "UPC CITM";
 	
 	int fpsLimit = 60;
+	// Frame variables
+	PerfTimer pTimer;
+	uint64 frameCount = 0;
+	uint32 lastFrameMs = 0;
+	float averageFps = 0.0f;
+
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastSecFrameTime;
+	uint32 lastSecFrameCount = 0;
+	uint32 prevLastSecFrameCount = 0;
+	float dt = 0.0f;
 
 	std::vector<Module*> list_modules;
 public:
@@ -44,6 +57,8 @@ public:
 	const char* GetOrgName();
 	void SetFpsLimit(int _limit);
 	int GetFpsLimit();
+	float GetFps();
+	float GetMs();
 
 
 private:

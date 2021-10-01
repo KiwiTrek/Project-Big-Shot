@@ -17,6 +17,8 @@ void log(const char file[], int line, const char* format, ...);
 
 
 typedef unsigned int uint;
+typedef unsigned __int32 uint32;
+typedef unsigned __int64 uint64;
 
 enum update_status
 {
@@ -25,12 +27,19 @@ enum update_status
 	UPDATE_ERROR
 };
 
+// ImGui Globals
+#define IMGUI_LIGHT_GREY ImVec4(0.8f,0.8f,0.8f,1.f)
+#define IMGUI_GREY ImVec4(0.6f,0.6f,0.6f,1.f)
+#define IMGUI_BLUE ImVec4(0.2f,0.2f,1.f,1.f)
+#define IMGUI_GREEN ImVec4(0.f,1.f,0.f,1.f)
+#define IMGUI_YELLOW ImVec4(1.f,1.f,0.f,1.f)
+#define IMGUI_RED ImVec4(1.f,0.f,0.f,1.f)
+#define IMGUI_WHITE ImVec4(1.f,1.f,1.f,1.f)
+
+// Performance macros
+#define PERF_START(timer) timer.Start()
+#define PERF_PEEK(timer) LOG("%s took %f ms", __FUNCTION__, timer.ReadMs())
+
 // Configuration -----------
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
 #define SCREEN_SIZE 1
-#define WIN_FULLSCREEN false
-#define WIN_RESIZABLE true
-#define WIN_BORDERLESS false
-#define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true

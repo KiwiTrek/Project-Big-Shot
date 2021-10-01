@@ -348,6 +348,9 @@
     <ClInclude Include="ModuleGuiManager.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -538,6 +541,9 @@
     </ClCompile>
     <ClCompile Include="ModuleGuiManager.cpp">
       <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

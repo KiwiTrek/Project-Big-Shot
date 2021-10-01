@@ -4,7 +4,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 
-ModuleGuiManager::ModuleGuiManager(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleGuiManager::ModuleGuiManager(Application* app, bool start_enabled) : Module(app, start_enabled), fpsHist(100), msHist(100)
 {}
 
 ModuleGuiManager::~ModuleGuiManager()
@@ -154,11 +154,85 @@ void ModuleGuiManager::Config()
             }
 
             int maxFPS = App->GetFpsLimit();
-            if (ImGui::SliderInt("Max FPS", &maxFPS, 0, 120))
+            if (ImGui::SliderInt("Max FPS", &maxFPS, 1, 120))
             {
                 App->SetFpsLimit(maxFPS);
             }
+
+            //TODO: should only get the last frame framerate
+            std::string Title = "Framerate: " + std::to_string(App->GetFps());
+            ImGui::PlotHistogram("##framerate", &fpsHist[0], fpsHist.size(), 0, Title.c_str(), 0.0f, 120.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
+            Title = "Milliseconds: " + std::to_string(App->GetMs());
+            ImGui::PlotHistogram("##milliseconds", &msHist[0], msHist.size(), 0, Title.c_str(), 0.0f, 50.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
         }
+
+        if (ImGui::CollapsingHeader("Window"))
+        {
+            float b = App->window->GetBrightness();
+            if (ImGui::SliderFloat("Brightness", &b, 0.05f, 1.0f))
+            {
+                App->window->SetBrightness(b);
+            }
+
+            int w = App->window->GetWidth();
+            int h = App->window->GetHeight();
+            int maxW, maxH;
+            App->window->GetMaxWindow(maxW, maxH);
+            if (ImGui::SliderInt("Width", &w, 640, maxW))
+            {
+                App->window->SetWidth(w);
+            }
+
+            if (ImGui::SliderInt("Height", &h, 480, maxH))
+            {
+                App->window->SetHeight(h);
+            }
+
+            ImGui::Text("Refresh rate:");
+            ImGui::SameLine();
+            ImGui::TextColored(IMGUI_BLUE, "%u", App->window->GetRefreshRate());
+
+            bool fullscreen = App->window->IsFullscreen();
+            if (ImGui::Checkbox("Fullscreen", &fullscreen))
+            {
+                App->window->SetFullscreen(fullscreen);
+            }
+            bool resizable = App->window->IsResizable();
+            if(ImGui::Checkbox("Resizable", &resizable))
+            {
+                App->window->SetResizable(resizable);
+            }
+            bool borderless = App->window->IsBorderless();
+            if (ImGui::Checkbox("Borderless", &borderless))
+            {
+                App->window->SetBorderless(borderless);
+            }
+            bool fullscreenDesktop = App->window->IsFullscreenDesktop();
+            if (ImGui::Checkbox("Fullscreen Desktop", &fullscreenDesktop))
+            {
+                App->window->SetFullscreenDesktop(fullscreenDesktop);
+            }
+        }
+
         ImGui::End();
     }
+}
+
+void ModuleGuiManager::UpdateHistogram()
+{
+    static uint count = 0;
+
+    if (count == 100)
+    {
+        for (uint i = 0; i < 100 - 1; ++i)
+        {
+            fpsHist[i] = fpsHist[i + 1];
+            msHist[i] = msHist[i + 1];
+        }
+    }
+    else
+        ++count;
+
+    fpsHist[count - 1] = App->GetFps();
+    msHist[count - 1] = App->GetMs();
 }

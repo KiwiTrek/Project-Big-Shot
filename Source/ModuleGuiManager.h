@@ -22,12 +22,15 @@ public:
 
 	update_status MenuBar();
 	void Config();
+	void UpdateHistogram();
 
 public:
 	bool console;
 	bool config;
 	bool about;
 	bool demo;
+	std::vector<float> fpsHist;
+	std::vector<float> msHist;
 };
 
 
