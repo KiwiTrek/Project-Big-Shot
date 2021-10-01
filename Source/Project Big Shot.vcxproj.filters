@@ -93,9 +93,6 @@
     <ClInclude Include="ModuleRenderer3D.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleGuiManager.h">
-      <Filter>Sources\Modules\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="External\MathGeoLib\include\MathBuildConfig.h">
       <Filter>Sources\Tools\MathGeoLib</Filter>
     </ClInclude>
@@ -348,6 +345,9 @@
     <ClInclude Include="External\imgui\include\imconfig.h">
       <Filter>Sources\Tools\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleGuiManager.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -388,9 +388,6 @@
     </ClCompile>
     <ClCompile Include="ModuleWindow.cpp">
       <Filter>Sources\Modules\Main</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleGuiManager.cpp">
-      <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
     <ClCompile Include="External\MathGeoLib\include\Time\Clock.cpp">
       <Filter>Sources\Tools\MathGeoLib\Time</Filter>
@@ -538,6 +535,9 @@
     </ClCompile>
     <ClCompile Include="External\imgui\include\imgui_widgets.cpp">
       <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleGuiManager.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

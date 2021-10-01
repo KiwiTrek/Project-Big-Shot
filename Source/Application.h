@@ -21,9 +21,12 @@ public:
 	ModuleGuiManager* gui;
 
 private:
+	std::string appName = "Project Big Shot";
+	std::string orgName = "UPC CITM";
+	
+	int fpsLimit = 60;
 
 	std::vector<Module*> list_modules;
-
 public:
 
 	Application();
@@ -32,6 +35,16 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+
+	void RequestBrowser(const char* link);
+
+	void SetAppName(std::string _name);
+	const char* GetAppName();
+	void SetOrgName(std::string _name);
+	const char* GetOrgName();
+	void SetFpsLimit(int _limit);
+	int GetFpsLimit();
+
 
 private:
 

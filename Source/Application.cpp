@@ -1,4 +1,5 @@
 #include "Application.h"
+#include <shellapi.h>
 
 Application::Application()
 {
@@ -123,4 +124,36 @@ bool Application::CleanUp()
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
+}
+
+void Application::RequestBrowser(const char* link)
+{
+	ShellExecute(NULL, "open", link, NULL, NULL, SW_SHOWNORMAL);
+}
+
+void Application::SetAppName(std::string _name)
+{
+	appName = _name;
+}
+const char* Application::GetAppName()
+{
+	return appName.c_str();
+}
+
+void Application::SetOrgName(std::string _name)
+{
+	orgName = _name;
+}
+const char* Application::GetOrgName()
+{
+	return orgName.c_str();
+}
+
+void Application::SetFpsLimit(int _limit)
+{
+	fpsLimit = _limit;
+}
+int Application::GetFpsLimit()
+{
+	return fpsLimit;
 }

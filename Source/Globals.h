@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <glew.h>
 #include <vector>
+#include <string>
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
@@ -33,4 +34,3 @@ enum update_status
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "Engine Big Shot"

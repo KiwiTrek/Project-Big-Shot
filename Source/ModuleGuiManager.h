@@ -20,7 +20,14 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	update_status AddWindow(const char* name);
+	update_status MenuBar();
+	void Config();
+
+public:
+	bool console;
+	bool config;
+	bool about;
+	bool demo;
 };
 
 
