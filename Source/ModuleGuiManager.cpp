@@ -152,6 +152,7 @@ void ModuleGuiManager::Config()
             {
                 App->SetOrgName(orgName);
             }
+            ImGui::Separator();
 
             int maxFPS = App->GetFpsLimit();
             if (ImGui::SliderInt("Max FPS", &maxFPS, 1, 120))
@@ -191,7 +192,7 @@ void ModuleGuiManager::Config()
             ImGui::Text("Refresh rate:");
             ImGui::SameLine();
             ImGui::TextColored(IMGUI_BLUE, "%u", App->window->GetRefreshRate());
-
+            ImGui::Separator();
             bool fullscreen = App->window->IsFullscreen();
             if (ImGui::Checkbox("Fullscreen", &fullscreen))
             {
@@ -212,6 +213,60 @@ void ModuleGuiManager::Config()
             {
                 App->window->SetFullscreenDesktop(fullscreenDesktop);
             }
+        }
+
+        if (ImGui::CollapsingHeader("Hardware"))
+        {
+            int major, minor, patch;
+            App->GetSDLVersion(major, minor, patch);
+            IMGUI_PRINT(IMGUI_BLUE, "SDL Version:", "%d.%d.%d", major, minor, patch);
+            ImGui::Separator();
+            int count, size;
+            App->GetCPU(count, size);
+            IMGUI_PRINT(IMGUI_BLUE, "CPUs:", "%d (%dKb)", count, size);
+            float ram = App->GetRAM();
+            IMGUI_PRINT(IMGUI_BLUE, "RAM:", "%.2fGb", ram);
+            ImGui::Separator();
+            bool threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42;
+            App->GetCaps(threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42);
+            IMGUI_PRINT(IMGUI_BLUE, "Caps:", "%s%s%s%s%s%s", threeD ? "3DNow, " : "", altiVec ? "AltiVec, " : "", avx ? "AVX, " : "", avx2 ? "AVX2, " : "", mmx ? "MMX, " : "", rdtsc ? "RDTSC, " : "");
+            IMGUI_PRINT(IMGUI_BLUE, "", "%s%s%s%s%s", sse ? "SSE, " : "", sse2 ? "SSE2, " : "", sse3 ? "SSE3, " : "", sse41 ? "SSE41, " : "", sse42 ? "SSE42" : "");
+
+            //TODO: implement this function without linker error
+            //uint vendorId, deviceId;
+            //std::wstring brand;
+            //uint64 videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
+            //getGraphicsDeviceInfo(&vendorId, &deviceId, &brand, &videoMemBudget, &videoMemCurrent, &videoMemAvailable, &videoMemReserved);
+            //IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "%d %s %d %d %d %d %d", vendorId, deviceId, brand.c_str(), videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
+        }
+
+        if (ImGui::CollapsingHeader("Render"))
+        {
+            bool vSync = App->renderer3D->GetVSync();
+            if (ImGui::Checkbox("VSync", &vSync))
+            {
+                App->renderer3D->SetVSync(vSync);
+            }
+            IMGUI_PRINT(IMGUI_BLUE, "Video Driver:", "%s", App->renderer3D->GetVideoDriver());
+        }
+
+        if (ImGui::CollapsingHeader("Input"))
+        {
+            ImVec2 mousePos;
+            mousePos.x = App->input->GetMouseX();
+            mousePos.y = App->input->GetMouseY();
+            IMGUI_PRINT(IMGUI_BLUE, "Mouse Position: ", "%d,%d", (int)mousePos.x, (int)mousePos.y);
+            int mousewheel = App->input->GetMouseZ();
+            IMGUI_PRINT(IMGUI_BLUE, "Mousewheel: ", "%d", mousewheel);
+            ImVec2 mouseMotion;
+            mouseMotion.x = App->input->GetMouseXMotion();
+            mouseMotion.y = App->input->GetMouseYMotion();
+            IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%.2f,%.2f", mouseMotion.x, mouseMotion.y);
+            ImGui::Separator();
+            ImGui::BeginChild("Input Log");
+            ImGui::TextUnformatted(LogInputText.begin());
+            ImGui::SetScrollHereY(1.0f);
+            ImGui::EndChild();
         }
 
         ImGui::End();

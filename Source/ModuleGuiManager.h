@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include "DeviceId.h"
 
 class ModuleGuiManager : public Module
 {
@@ -31,6 +32,7 @@ public:
 	bool demo;
 	std::vector<float> fpsHist;
 	std::vector<float> msHist;
+	ImGuiTextBuffer LogInputText;
 };
 
 

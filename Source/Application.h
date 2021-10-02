@@ -59,6 +59,10 @@ public:
 	int GetFpsLimit();
 	float GetFps();
 	float GetMs();
+	void GetSDLVersion(int& major, int& minor, int& patch);
+	void GetCPU(int& count, int& size);
+	float GetRAM();
+	void GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bool& mmx, bool& rdtsc, bool& sse, bool& sse2, bool& sse3, bool& sse41, bool& sse42);
 
 
 private:

@@ -35,6 +35,10 @@ enum update_status
 #define IMGUI_YELLOW ImVec4(1.f,1.f,0.f,1.f)
 #define IMGUI_RED ImVec4(1.f,0.f,0.f,1.f)
 #define IMGUI_WHITE ImVec4(1.f,1.f,1.f,1.f)
+#define IMGUI_PRINT(color, field, format, ...) \
+    ImGui::Text(field); \
+    ImGui::SameLine(); \
+    ImGui::TextColored(color, format, __VA_ARGS__)
 
 // Performance macros
 #define PERF_START(timer) timer.Start()
@@ -42,4 +46,3 @@ enum update_status
 
 // Configuration -----------
 #define SCREEN_SIZE 1
-#define VSYNC true

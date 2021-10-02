@@ -18,6 +18,9 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+	bool GetVSync();
+	void SetVSync(bool vsync);
+	const char* GetVideoDriver();
 
 public:
 
@@ -25,4 +28,6 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+private:
+	bool vSync = true;
 };

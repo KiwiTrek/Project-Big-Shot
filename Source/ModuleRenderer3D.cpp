@@ -33,8 +33,10 @@ bool ModuleRenderer3D::Init()
 	if(ret == true)
 	{
 		//Use Vsync
-		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		if (vSync && SDL_GL_SetSwapInterval(1) < 0)
+		{
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+		}
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -114,8 +116,10 @@ update_status ModuleRenderer3D::PreUpdate()
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
-	for(uint i = 0; i < MAX_LIGHTS; ++i)
+	for (uint i = 0; i < MAX_LIGHTS; ++i)
+	{
 		lights[i].Render();
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -149,4 +153,19 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+bool ModuleRenderer3D::GetVSync()
+{
+	return vSync;
+}
+
+void ModuleRenderer3D::SetVSync(bool vsync)
+{
+	vSync = vsync;
+}
+
+const char* ModuleRenderer3D::GetVideoDriver()
+{
+	return SDL_GetCurrentVideoDriver();
 }
