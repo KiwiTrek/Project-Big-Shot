@@ -25,6 +25,9 @@ public:
 	void Config();
 	void UpdateHistogram();
 
+	void Console();
+	void About();
+
 public:
 	bool console;
 	bool config;
@@ -33,7 +36,7 @@ public:
 	std::vector<float> fpsHist;
 	std::vector<float> msHist;
 	ImGuiTextBuffer LogInputText;
+	ImGuiTextBuffer LogConsoleText;
 };
-
 
 #endif // __ModuleGuiManager_H__

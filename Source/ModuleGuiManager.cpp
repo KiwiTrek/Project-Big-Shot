@@ -45,6 +45,8 @@ update_status ModuleGuiManager::Update()
     status = MenuBar();
     if (demo) ImGui::ShowDemoWindow();
     if (config) Config();
+    if (console) Console();
+    if (about) About();
 
     return status;
 }
@@ -117,160 +119,161 @@ update_status ModuleGuiManager::MenuBar()
 
 void ModuleGuiManager::Config()
 {
-    if (ImGui::Begin("Configuration"))
+    ImGui::Begin("Configuration");
+    if (ImGui::BeginMenu("Options"))
     {
-        if (ImGui::BeginMenu("Options"))
+        if (ImGui::MenuItem("Set Defaults"))
         {
-            if (ImGui::MenuItem("Set Defaults"))
-            {
 
-            }
-            if (ImGui::MenuItem("Save"))
-            {
+        }
+        if (ImGui::MenuItem("Save"))
+        {
 
-            }
-            if (ImGui::MenuItem("Load"))
-            {
+        }
+        if (ImGui::MenuItem("Load"))
+        {
 
-            }
-
-            ImGui::EndMenu();
         }
 
-        if (ImGui::CollapsingHeader("Application"))
-        {
-            static char appName[120];
-            strcpy_s(appName, 120, App->GetAppName());
-            if (ImGui::InputText("App Name", appName, 120, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
-            {
-                App->SetAppName(appName);
-            }
-
-            static char orgName[120];
-            strcpy_s(orgName, 120, App->GetOrgName());
-            if (ImGui::InputText("Organization", orgName, 120, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
-            {
-                App->SetOrgName(orgName);
-            }
-            ImGui::Separator();
-
-            int maxFPS = App->GetFpsLimit();
-            if (ImGui::SliderInt("Max FPS", &maxFPS, 1, 120))
-            {
-                App->SetFpsLimit(maxFPS);
-            }
-
-            //TODO: should only get the last frame framerate
-            std::string Title = "Framerate: " + std::to_string(App->GetFps());
-            ImGui::PlotHistogram("##framerate", &fpsHist[0], fpsHist.size(), 0, Title.c_str(), 0.0f, 120.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
-            Title = "Milliseconds: " + std::to_string(App->GetMs());
-            ImGui::PlotHistogram("##milliseconds", &msHist[0], msHist.size(), 0, Title.c_str(), 0.0f, 50.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
-        }
-
-        if (ImGui::CollapsingHeader("Window"))
-        {
-            float b = App->window->GetBrightness();
-            if (ImGui::SliderFloat("Brightness", &b, 0.05f, 1.0f))
-            {
-                App->window->SetBrightness(b);
-            }
-
-            int w = App->window->GetWidth();
-            int h = App->window->GetHeight();
-            int maxW, maxH;
-            App->window->GetMaxWindow(maxW, maxH);
-            if (ImGui::SliderInt("Width", &w, 640, maxW))
-            {
-                App->window->SetWidth(w);
-            }
-
-            if (ImGui::SliderInt("Height", &h, 480, maxH))
-            {
-                App->window->SetHeight(h);
-            }
-
-            ImGui::Text("Refresh rate:");
-            ImGui::SameLine();
-            ImGui::TextColored(IMGUI_BLUE, "%u", App->window->GetRefreshRate());
-            ImGui::Separator();
-            bool fullscreen = App->window->IsFullscreen();
-            if (ImGui::Checkbox("Fullscreen", &fullscreen))
-            {
-                App->window->SetFullscreen(fullscreen);
-            }
-            bool resizable = App->window->IsResizable();
-            if(ImGui::Checkbox("Resizable", &resizable))
-            {
-                App->window->SetResizable(resizable);
-            }
-            bool borderless = App->window->IsBorderless();
-            if (ImGui::Checkbox("Borderless", &borderless))
-            {
-                App->window->SetBorderless(borderless);
-            }
-            bool fullscreenDesktop = App->window->IsFullscreenDesktop();
-            if (ImGui::Checkbox("Fullscreen Desktop", &fullscreenDesktop))
-            {
-                App->window->SetFullscreenDesktop(fullscreenDesktop);
-            }
-        }
-
-        if (ImGui::CollapsingHeader("Hardware"))
-        {
-            int major, minor, patch;
-            App->GetSDLVersion(major, minor, patch);
-            IMGUI_PRINT(IMGUI_BLUE, "SDL Version:", "%d.%d.%d", major, minor, patch);
-            ImGui::Separator();
-            int count, size;
-            App->GetCPU(count, size);
-            IMGUI_PRINT(IMGUI_BLUE, "CPUs:", "%d (%dKb)", count, size);
-            float ram = App->GetRAM();
-            IMGUI_PRINT(IMGUI_BLUE, "RAM:", "%.2fGb", ram);
-            ImGui::Separator();
-            bool threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42;
-            App->GetCaps(threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42);
-            IMGUI_PRINT(IMGUI_BLUE, "Caps:", "%s%s%s%s%s%s", threeD ? "3DNow, " : "", altiVec ? "AltiVec, " : "", avx ? "AVX, " : "", avx2 ? "AVX2, " : "", mmx ? "MMX, " : "", rdtsc ? "RDTSC, " : "");
-            IMGUI_PRINT(IMGUI_BLUE, "", "%s%s%s%s%s", sse ? "SSE, " : "", sse2 ? "SSE2, " : "", sse3 ? "SSE3, " : "", sse41 ? "SSE41, " : "", sse42 ? "SSE42" : "");
-
-            //TODO: implement this function without linker error
-            //uint vendorId, deviceId;
-            //std::wstring brand;
-            //uint64 videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
-            //getGraphicsDeviceInfo(&vendorId, &deviceId, &brand, &videoMemBudget, &videoMemCurrent, &videoMemAvailable, &videoMemReserved);
-            //IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "%d %s %d %d %d %d %d", vendorId, deviceId, brand.c_str(), videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
-        }
-
-        if (ImGui::CollapsingHeader("Render"))
-        {
-            bool vSync = App->renderer3D->GetVSync();
-            if (ImGui::Checkbox("VSync", &vSync))
-            {
-                App->renderer3D->SetVSync(vSync);
-            }
-            IMGUI_PRINT(IMGUI_BLUE, "Video Driver:", "%s", App->renderer3D->GetVideoDriver());
-        }
-
-        if (ImGui::CollapsingHeader("Input"))
-        {
-            ImVec2 mousePos;
-            mousePos.x = App->input->GetMouseX();
-            mousePos.y = App->input->GetMouseY();
-            IMGUI_PRINT(IMGUI_BLUE, "Mouse Position: ", "%d,%d", (int)mousePos.x, (int)mousePos.y);
-            int mousewheel = App->input->GetMouseZ();
-            IMGUI_PRINT(IMGUI_BLUE, "Mousewheel: ", "%d", mousewheel);
-            ImVec2 mouseMotion;
-            mouseMotion.x = App->input->GetMouseXMotion();
-            mouseMotion.y = App->input->GetMouseYMotion();
-            IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%.2f,%.2f", mouseMotion.x, mouseMotion.y);
-            ImGui::Separator();
-            ImGui::BeginChild("Input Log");
-            ImGui::TextUnformatted(LogInputText.begin());
-            ImGui::SetScrollHereY(1.0f);
-            ImGui::EndChild();
-        }
-
-        ImGui::End();
+        ImGui::EndMenu();
     }
+
+    if (ImGui::CollapsingHeader("Application"))
+    {
+        static char appName[120];
+        strcpy_s(appName, 120, App->GetAppName());
+        if (ImGui::InputText("App Name", appName, IM_ARRAYSIZE(appName), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+        {
+            App->SetAppName(appName);
+        }
+
+        static char orgName[120];
+        strcpy_s(orgName, 120, App->GetOrgName());
+        if (ImGui::InputText("Organization", orgName, IM_ARRAYSIZE(orgName), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+        {
+            App->SetOrgName(orgName);
+        }
+        ImGui::Separator();
+
+        int maxFPS = App->GetFpsLimit();
+        if (ImGui::SliderInt("Max FPS", &maxFPS, 1, 120))
+        {
+            App->SetFpsLimit(maxFPS);
+        }
+
+        //TODO: should only get the last frame framerate
+        std::string Title = "Framerate: " + std::to_string(App->GetFps());
+        ImGui::PlotHistogram("##framerate", &fpsHist[0], fpsHist.size(), 0, Title.c_str(), 0.0f, 120.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
+        Title = "Milliseconds: " + std::to_string(App->GetMs());
+        ImGui::PlotHistogram("##milliseconds", &msHist[0], msHist.size(), 0, Title.c_str(), 0.0f, 50.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
+    }
+
+    if (ImGui::CollapsingHeader("Window"))
+    {
+        float b = App->window->GetBrightness();
+        if (ImGui::SliderFloat("Brightness", &b, 0.05f, 1.0f))
+        {
+            App->window->SetBrightness(b);
+        }
+
+        int w = App->window->GetWidth();
+        int h = App->window->GetHeight();
+        int maxW, maxH;
+        App->window->GetMaxWindow(maxW, maxH);
+        if (ImGui::SliderInt("Width", &w, 640, maxW))
+        {
+            App->window->SetWidth(w);
+        }
+
+        if (ImGui::SliderInt("Height", &h, 480, maxH))
+        {
+            App->window->SetHeight(h);
+        }
+
+        ImGui::Text("Refresh rate:");
+        ImGui::SameLine();
+        ImGui::TextColored(IMGUI_BLUE, "%u", App->window->GetRefreshRate());
+        ImGui::Separator();
+        bool fullscreen = App->window->IsFullscreen();
+        if (ImGui::Checkbox("Fullscreen", &fullscreen))
+        {
+            App->window->SetFullscreen(fullscreen);
+        }
+        bool resizable = App->window->IsResizable();
+        if (ImGui::Checkbox("Resizable", &resizable))
+        {
+            App->window->SetResizable(resizable);
+        }
+        bool borderless = App->window->IsBorderless();
+        if (ImGui::Checkbox("Borderless", &borderless))
+        {
+            App->window->SetBorderless(borderless);
+        }
+        bool fullscreenDesktop = App->window->IsFullscreenDesktop();
+        if (ImGui::Checkbox("Fullscreen Desktop", &fullscreenDesktop))
+        {
+            App->window->SetFullscreenDesktop(fullscreenDesktop);
+        }
+    }
+
+    if (ImGui::CollapsingHeader("Hardware"))
+    {
+        int major, minor, patch;
+        App->GetSDLVersion(major, minor, patch);
+        IMGUI_PRINT(IMGUI_BLUE, "SDL Version:", "%d.%d.%d", major, minor, patch);
+        ImGui::Separator();
+        int count, size;
+        App->GetCPU(count, size);
+        IMGUI_PRINT(IMGUI_BLUE, "CPUs:", "%d (%dKb)", count, size);
+        float ram = App->GetRAM();
+        IMGUI_PRINT(IMGUI_BLUE, "RAM:", "%.2fGb", ram);
+        ImGui::Separator();
+        bool threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42;
+        App->GetCaps(threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42);
+        IMGUI_PRINT(IMGUI_BLUE, "Caps:", "%s%s%s%s%s%s", threeD ? "3DNow, " : "", altiVec ? "AltiVec, " : "", avx ? "AVX, " : "", avx2 ? "AVX2, " : "", mmx ? "MMX, " : "", rdtsc ? "RDTSC, " : "");
+        IMGUI_PRINT(IMGUI_BLUE, "", "%s%s%s%s%s", sse ? "SSE, " : "", sse2 ? "SSE2, " : "", sse3 ? "SSE3, " : "", sse41 ? "SSE41, " : "", sse42 ? "SSE42" : "");
+
+        //TODO: implement this function without linker error
+        //uint vendorId, deviceId;
+        //std::wstring brand;
+        //uint64 videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
+        //getGraphicsDeviceInfo(&vendorId, &deviceId, &brand, &videoMemBudget, &videoMemCurrent, &videoMemAvailable, &videoMemReserved);
+        //IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "%d %s %d %d %d %d %d", vendorId, deviceId, brand.c_str(), videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
+    }
+
+    if (ImGui::CollapsingHeader("Render"))
+    {
+        bool vSync = App->renderer3D->GetVSync();
+        if (ImGui::Checkbox("VSync", &vSync))
+        {
+            App->renderer3D->SetVSync(vSync);
+        }
+        IMGUI_PRINT(IMGUI_BLUE, "Video Driver:", "%s", App->renderer3D->GetVideoDriver());
+    }
+
+    if (ImGui::CollapsingHeader("Input"))
+    {
+        ImVec2 mousePos;
+        mousePos.x = App->input->GetMouseX();
+        mousePos.y = App->input->GetMouseY();
+        IMGUI_PRINT(IMGUI_BLUE, "Mouse Position: ", "%d,%d", (int)mousePos.x, (int)mousePos.y);
+        int mousewheel = App->input->GetMouseZ();
+        IMGUI_PRINT(IMGUI_BLUE, "Mousewheel: ", "%d", mousewheel);
+        ImVec2 mouseMotion;
+        mouseMotion.x = App->input->GetMouseXMotion();
+        mouseMotion.y = App->input->GetMouseYMotion();
+        IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%.2f,%.2f", mouseMotion.x, mouseMotion.y);
+        ImGui::Separator();
+        if (ImGui::Button("Clear", ImVec2(ImGui::CalcItemWidth(), 20)))
+        {
+            LogInputText.clear();
+        }
+        ImGui::BeginChild("Input Log");
+        ImGui::TextUnformatted(LogInputText.begin());
+        ImGui::SetScrollHereY(1.0f);
+        ImGui::EndChild();
+    }
+    ImGui::End();
 }
 
 void ModuleGuiManager::UpdateHistogram()
@@ -290,4 +293,55 @@ void ModuleGuiManager::UpdateHistogram()
 
     fpsHist[count - 1] = App->GetFps();
     msHist[count - 1] = App->GetMs();
+}
+
+void ModuleGuiManager::Console()
+{
+    //TODO: Get text from LOG()
+    ImGui::Begin("Console");
+    ImGui::TextUnformatted(LogConsoleText.begin());
+    //LogConsoleText.appendf(bufferConsole);
+    ImGui::SetScrollHereY(1.0f);
+    ImGui::End();
+}
+
+void ModuleGuiManager::About()
+{
+    ImGui::Begin("About");
+    ImGui::SetWindowFontScale(1.2f);
+    ImGui::TextColored(IMGUI_BLUE, "Project Big Shot");
+    ImGui::SetWindowFontScale(1);
+    ImGui::TextWrapped("Engine created for the 'Game Engines' subject in the Bachelor's degree in Video Game Design and Development at the CITM-UPC center, Barcelona.");
+    ImGui::Text("By:");
+    ImGui::BulletText("Guillem Alava (https://github.com/WillyTrek19)");
+    ImGui::BulletText("Sergi Colomer (https://github.com/Lladruc37)");
+
+    ImGui::Separator();
+    ImGui::TextColored(IMGUI_BLUE, "3rd Party Libraries used:");
+    int major, minor, patch;
+    App->GetSDLVersion(major, minor, patch);
+    IMGUI_BULLET(IMGUI_BLACK, "SDL", "%d.%d.%d", major, minor, patch);
+    ImGui::BulletText("Glew 7.0");
+    //TODO: ImGui::BulletText("GPU Detect");
+    ImGui::BulletText("imgui v1.85");
+    ImGui::BulletText("MathGeoLib 1.5");
+
+    ImGui::Separator();
+    ImGui::TextWrapped("License:");
+    ImGui::Spacing();
+    ImGui::TextWrapped("MIT License");
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::TextWrapped("Copyright (c) 2021 Guillem Alava & Sergi Colomer");
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::TextWrapped("Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions :");
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::TextWrapped("The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.");
+    ImGui::Spacing();
+    ImGui::Spacing();
+    ImGui::TextWrapped("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
+
+    ImGui::End();
 }

@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
+#define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__)
 
 void log(const char file[], int line, const char* format, ...);
 
@@ -28,6 +28,7 @@ enum update_status
 };
 
 // ImGui Globals
+#define IMGUI_BLACK ImVec4(0.0f,0.0f,0.0f,1.f)
 #define IMGUI_LIGHT_GREY ImVec4(0.8f,0.8f,0.8f,1.f)
 #define IMGUI_GREY ImVec4(0.6f,0.6f,0.6f,1.f)
 #define IMGUI_BLUE ImVec4(0.2f,0.2f,1.f,1.f)
@@ -37,6 +38,11 @@ enum update_status
 #define IMGUI_WHITE ImVec4(1.f,1.f,1.f,1.f)
 #define IMGUI_PRINT(color, field, format, ...) \
     ImGui::Text(field); \
+    ImGui::SameLine(); \
+    ImGui::TextColored(color, format, __VA_ARGS__)
+
+#define IMGUI_BULLET(color, field, format, ...) \
+    ImGui::BulletText(field); \
     ImGui::SameLine(); \
     ImGui::TextColored(color, format, __VA_ARGS__)
 

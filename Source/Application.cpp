@@ -181,7 +181,11 @@ void Application::RequestBrowser(const char* link)
 
 void Application::SetAppName(std::string _name)
 {
-	appName = _name;
+	if (!_name.empty())
+	{
+		appName = _name;
+		window->SetTitle(_name.c_str());
+	}
 }
 const char* Application::GetAppName()
 {
@@ -190,7 +194,10 @@ const char* Application::GetAppName()
 
 void Application::SetOrgName(std::string _name)
 {
-	orgName = _name;
+	if (!_name.empty())
+	{
+		orgName = _name;
+	}
 }
 const char* Application::GetOrgName()
 {
