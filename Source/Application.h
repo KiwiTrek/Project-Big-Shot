@@ -54,9 +54,7 @@ public:
 
 	void RequestBrowser(const char* link);
 	//void LoadConfig();
-	//void SaveConfig();
-	//void ReadConfiguration(const ConfigJSON& config);
-	//void SaveConfiguration(ConfigJSON& config) const;
+	//void SaveConfig() const;
 
 	void SetAppName(std::string _name);
 	const char* GetAppName();
@@ -70,6 +68,7 @@ public:
 	void GetCPU(int& count, int& size);
 	float GetRAM();
 	void GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bool& mmx, bool& rdtsc, bool& sse, bool& sse2, bool& sse3, bool& sse41, bool& sse42);
+	void GetGPU(uint& gpuVendor, uint& gpuDevice, char* gpuBrand, float& vramBudget, float& vramUsage, float& vramAvailable, float& vramReserved);
 	//uint GetFramerateLimit() const;
 	//void SetFramerateLimit(uint max_framerate);
 

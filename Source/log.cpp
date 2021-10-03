@@ -1,5 +1,7 @@
 #pragma once
 #include "Globals.h"
+#include <windows.h>
+#include <stdio.h>
 
 const char* log(const char file[], int line, const char* format, ...)
 {

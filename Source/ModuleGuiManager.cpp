@@ -145,6 +145,7 @@ void ModuleGuiManager::Config()
 
     if (ImGui::CollapsingHeader("Application"))
     {
+        //TODO: ImGui::InputText does not work
         static char appName[120];
         strcpy_s(appName, 120, App->GetAppName());
         if (ImGui::InputText("App Name", appName, IM_ARRAYSIZE(appName), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
@@ -238,12 +239,18 @@ void ModuleGuiManager::Config()
         IMGUI_PRINT(IMGUI_BLUE, "Caps:", "%s%s%s%s%s%s", threeD ? "3DNow, " : "", altiVec ? "AltiVec, " : "", avx ? "AVX, " : "", avx2 ? "AVX2, " : "", mmx ? "MMX, " : "", rdtsc ? "RDTSC, " : "");
         IMGUI_PRINT(IMGUI_BLUE, "", "%s%s%s%s%s", sse ? "SSE, " : "", sse2 ? "SSE2, " : "", sse3 ? "SSE3, " : "", sse41 ? "SSE41, " : "", sse42 ? "SSE42" : "");
 
-        //TODO: implement this function without linker error
-        //uint vendorId, deviceId;
-        //std::wstring brand;
-        //uint64 videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
-        //getGraphicsDeviceInfo(&vendorId, &deviceId, &brand, &videoMemBudget, &videoMemCurrent, &videoMemAvailable, &videoMemReserved);
-        //IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "%d %s %d %d %d %d %d", vendorId, deviceId, brand.c_str(), videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
+        ImGui::Separator();
+        uint vendorId, deviceId;
+        char brand[250];
+        float videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
+        App->GetGPU(vendorId, deviceId, brand, videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
+        IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "VendorId: %d - DeviceId: %d");
+        IMGUI_PRINT(IMGUI_BLUE, "Brand: ", brand);
+        IMGUI_PRINT(IMGUI_BLUE, "VRAM Budget: ", "%.1f Mb", videoMemBudget);
+        IMGUI_PRINT(IMGUI_BLUE, "VRAM Usage: ", "%.1f Mb", videoMemCurrent);
+        IMGUI_PRINT(IMGUI_BLUE, "VRAM Available: ", "%.1f Mb", videoMemAvailable);
+        IMGUI_PRINT(IMGUI_BLUE, "VRAM Reserved: ", "%.1f Mb", videoMemReserved);
+
     }
 
     if (ImGui::CollapsingHeader("Render"))
@@ -340,7 +347,7 @@ void ModuleGuiManager::About()
     App->GetSDLVersion(major, minor, patch);
     IMGUI_BULLET(IMGUI_BLACK, "SDL", "%d.%d.%d", major, minor, patch);
     ImGui::BulletText("Glew 7.0");
-    //TODO: ImGui::BulletText("GPU Detect");
+    ImGui::BulletText("GPU Detect (2015)");
     ImGui::BulletText("imgui v1.85");
     ImGui::BulletText("MathGeoLib 1.5");
     ImGui::BulletText("Parson 1.2.1");

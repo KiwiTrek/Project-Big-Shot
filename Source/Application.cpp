@@ -260,6 +260,20 @@ void Application::GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bo
 	sse42 = SDL_HasSSE42();
 }
 
+void Application::GetGPU(uint& gpuVendor, uint& gpuDevice, char* gpuBrand, float& vramBudget, float& vramUsage, float& vramAvailable, float& vramReserved)
+{
+	std::wstring brand;
+	uint64 videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
+	if (getGraphicsDeviceInfo(&gpuVendor, &gpuDevice, &brand, &videoMemBudget, &videoMemCurrent, &videoMemAvailable, &videoMemReserved))
+	{
+		sprintf_s(gpuBrand, 250, "%S", brand.c_str());
+		vramBudget = float(videoMemBudget) / (1024.f * 1024.f);
+		vramUsage = float(videoMemCurrent) / (1024.f * 1024.f);
+		vramAvailable = float(videoMemAvailable) / (1024.f * 1024.f);
+		vramReserved = float(videoMemReserved) / (1024.f * 1024.f);
+	}
+}
+
 //uint Application::GetFramerateLimit() const
 //{
 //	if (capped_ms > 0)
@@ -288,7 +302,9 @@ void Application::GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bo
 //		{
 //			LOG("Loading Engine Preferences");
 //
-//			ReadConfiguration(config.GetSection("App"));
+//			SetAppName(config.GetSection("App").GetString("Name", "Project Big Shot"));
+//			SetOrgName(config.GetSection("App").GetString("Organization", "UPC CITM"));
+//			SetFramerateLimit(config.GetSection("App").GetInt("MaxFramerate", 0));
 //
 //			ConfigJSON section;
 //			std::vector<Module*>::iterator item = list_modules.begin();
@@ -307,30 +323,24 @@ void Application::GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bo
 //	}
 //}
 //
-//void Application::SavePrefs() const
+//void Application::SaveConfig() const
 //{
 //	ConfigJSON config;
 //
-//	SaveConfiguration(config.AddSection("App"));
+//	config.AddSection("App").AddString("Name", appName.c_str());
+//	config.AddSection("App").AddString("Organization", orgName.c_str());
+//	config.AddSection("App").AddInt("MaxFramerate", GetFramerateLimit());
 //
-//	for (list<Module*>::const_iterator it = modules.begin(); it != modules.end(); ++it)
-//		(*it)->Save(&config.AddSection((*it)->GetName()));
+//	std::vector<Module*>::reverse_iterator item = list_modules.rbegin();
+//
+//	while (item != list_modules.rend())
+//	{
+//		(*item)->Save(&config.AddSection((*item)->GetName()));
+//	}
 //
 //	char* buf;
-//	uint size = config.Save(&buf, "Saved preferences for Edu Engine");
-//	if (App->fs->Save(SETTINGS_FOLDER "config.json", buf, size) > 0)
+//	uint size = config.Save(&buf, "Saved preferences for Project Big Shot");
+//	if (App->fs->Save("/Engine/config.json", buf, size) > 0)
 //		LOG("Saved Engine Preferences");
 //	RELEASE_ARRAY(buf);
-//}
-//
-//void Application::ReadConfiguration(const ConfigJSON& config)
-//{
-//	appName = config.GetString("Name", "Edu Engine");
-//	organizationName = config.GetString("Organization", "UPC CITM");
-//	SetFramerateLimit(config.GetInt("MaxFramerate", 0));
-//}
-//
-//void Application::SaveConfiguration(ConfigJSON& config) const
-//{
-//
 //}

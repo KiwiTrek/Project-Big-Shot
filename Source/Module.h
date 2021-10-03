@@ -1,5 +1,6 @@
 #pragma once
 #include "Globals.h"
+#include <string>
 
 class Application;
 class ConfigJSON;
@@ -58,7 +59,7 @@ public:
 		return true;
 	}
 
-	virtual bool Save()
+	virtual bool Save(ConfigJSON* file)
 	{
 		return true;
 	}
