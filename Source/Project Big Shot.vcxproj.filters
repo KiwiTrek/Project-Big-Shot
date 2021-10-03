@@ -52,6 +52,9 @@
     <Filter Include="Sources\Tools\GPUDetect">
       <UniqueIdentifier>{43f76ec5-fcab-41ac-9072-27886a3bb3fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Parson">
+      <UniqueIdentifier>{9adcc5d1-d686-4192-8984-ea5689604ec1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h">
@@ -360,6 +363,18 @@
     <ClInclude Include="External\GPUDetect\include\dxgi1_4.h">
       <Filter>Sources\Tools\GPUDetect</Filter>
     </ClInclude>
+    <ClInclude Include="External\parson\include\parson.h">
+      <Filter>Sources\Tools\Parson</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleBuffer.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigJSON.h">
+      <Filter>Sources\Tools\Parson</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Sources\Tools\MathGeoLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -556,6 +571,12 @@
     </ClCompile>
     <ClCompile Include="External\GPUDetect\include\DeviceId.cpp">
       <Filter>Sources\Tools\GPUDetect</Filter>
+    </ClCompile>
+    <ClCompile Include="External\parson\include\parson.c">
+      <Filter>Sources\Tools\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigJSON.cpp">
+      <Filter>Sources\Tools\Parson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

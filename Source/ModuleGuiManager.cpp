@@ -5,14 +5,16 @@
 #include "ModuleWindow.h"
 
 ModuleGuiManager::ModuleGuiManager(Application* app, bool start_enabled) : Module(app, start_enabled), fpsHist(100), msHist(100)
-{}
+{
+    name = "gui";
+}
 
 ModuleGuiManager::~ModuleGuiManager()
 {}
 
 bool ModuleGuiManager::Start()
 {
-    LOG("Loading Gui Manager");
+    if (App->gui != nullptr) App->gui->LogConsole(LOG("Loading Gui Manager"));
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& ioHandler = ImGui::GetIO(); (void)ioHandler;
@@ -20,6 +22,9 @@ bool ModuleGuiManager::Start()
     ImGui::StyleColorsLight();
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
     ImGui_ImplOpenGL3_Init("#version 460");
+
+    LogConsoleText.appendf(App->buff->initBuff1);
+    LogConsoleText.appendf(App->buff->initBuff2);
 
     config = false;
     console = false;
@@ -297,12 +302,15 @@ void ModuleGuiManager::UpdateHistogram()
 
 void ModuleGuiManager::Console()
 {
-    //TODO: Get text from LOG()
     ImGui::Begin("Console");
     ImGui::TextUnformatted(LogConsoleText.begin());
-    //LogConsoleText.appendf(bufferConsole);
     ImGui::SetScrollHereY(1.0f);
     ImGui::End();
+}
+
+void ModuleGuiManager::LogConsole(const char* buff)
+{
+    LogConsoleText.appendf(buff);
 }
 
 void ModuleGuiManager::About()
@@ -314,7 +322,17 @@ void ModuleGuiManager::About()
     ImGui::TextWrapped("Engine created for the 'Game Engines' subject in the Bachelor's degree in Video Game Design and Development at the CITM-UPC center, Barcelona.");
     ImGui::Text("By:");
     ImGui::BulletText("Guillem Alava (https://github.com/WillyTrek19)");
+    ImGui::SameLine();
+    if (ImGui::Button("Go to link",ImVec2(100,20)))
+    {
+        App->RequestBrowser("https://github.com/WillyTrek19");
+    }
     ImGui::BulletText("Sergi Colomer (https://github.com/Lladruc37)");
+    ImGui::SameLine();
+    if (ImGui::Button("Go to link", ImVec2(100, 20)))
+    {
+        App->RequestBrowser("https://github.com/Lladruc37");
+    }
 
     ImGui::Separator();
     ImGui::TextColored(IMGUI_BLUE, "3rd Party Libraries used:");
@@ -325,6 +343,7 @@ void ModuleGuiManager::About()
     //TODO: ImGui::BulletText("GPU Detect");
     ImGui::BulletText("imgui v1.85");
     ImGui::BulletText("MathGeoLib 1.5");
+    ImGui::BulletText("Parson 1.2.1");
 
     ImGui::Separator();
     ImGui::TextWrapped("License:");

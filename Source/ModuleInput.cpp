@@ -6,6 +6,7 @@
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	name = "input";
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
 }
@@ -19,13 +20,13 @@ ModuleInput::~ModuleInput()
 // Called before render is available
 bool ModuleInput::Init()
 {
-	LOG("Init SDL input event system");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Init SDL input event system"));
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError()));
 		ret = false;
 	}
 
@@ -144,7 +145,7 @@ update_status ModuleInput::PreUpdate()
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
-	LOG("Quitting SDL input event subsystem");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Quitting SDL input event subsystem"));
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

@@ -26,6 +26,7 @@ public:
 	void UpdateHistogram();
 
 	void Console();
+	void LogConsole(const char* buff);
 	void About();
 
 public:

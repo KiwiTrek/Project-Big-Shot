@@ -5,6 +5,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	name = "sceneIntro";
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -13,7 +14,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	LOG("Loading Intro assets");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Loading Intro assets"));
 	bool ret = true;
 
 	return ret;
@@ -22,7 +23,7 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
-	LOG("Unloading Intro scene");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Unloading Intro scene"));
 
 	return true;
 }

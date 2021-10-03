@@ -4,6 +4,7 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	name = "camera";
 	CalculateViewMatrix();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
@@ -20,7 +21,7 @@ ModuleCamera3D::~ModuleCamera3D()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
-	LOG("Setting up the camera");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Setting up the camera"));
 	bool ret = true;
 
 	return ret;
@@ -29,7 +30,7 @@ bool ModuleCamera3D::Start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
-	LOG("Cleaning camera");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Cleaning camera"));
 
 	return true;
 }
@@ -38,16 +39,6 @@ bool ModuleCamera3D::CleanUp()
 update_status ModuleCamera3D::Update()
 {
 	// OnKeys WASD keys -----------------------------------
-
-	// TODO 3: Make the camera go up/down when pressing R (up) F(down)
-
-	// TODO 4: Make the camera go forward (w) and backward with (s)
-	// Note that the vectors X/Y/Z contain the current axis of the camera
-	// you can read them to modify Position
-
-	// TODO 5: Make the camera go left (a) and right with (d)
-	// Note that the vectors X/Y/Z contain the current axis of the camera
-	// you can read them to modify Position
 	
 	// Mouse motion ----------------
 	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
@@ -55,7 +46,6 @@ update_status ModuleCamera3D::Update()
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
-		// TODO (Homework): Rotate the camera with the mouse
 	}
 
 	// Recalculate matrix -------------

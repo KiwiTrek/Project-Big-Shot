@@ -1,8 +1,9 @@
 #include "Application.h"
 #include <shellapi.h>
 
-Application::Application()
+Application::Application(ConsoleBuffer* _buff)
 {
+	buff = _buff;
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	scene_intro = new ModuleSceneIntro(this);
@@ -57,7 +58,7 @@ bool Application::Init()
 	PERF_START(pTimer);
 
 	// After all Init calls we call Start() in all modules
-	LOG("Application Start --------------");
+	if (gui != nullptr) gui->LogConsole(LOG("Application Start --------------"));
 	item = list_modules.begin();
 
 	while(item != list_modules.end() && ret == true)
@@ -258,3 +259,78 @@ void Application::GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bo
 	sse41 = SDL_HasSSE41();
 	sse42 = SDL_HasSSE42();
 }
+
+//uint Application::GetFramerateLimit() const
+//{
+//	if (capped_ms > 0)
+//		return (uint)((1.0f / (float)capped_ms) * 1000.0f);
+//	else
+//		return 0;
+//}
+//
+//void Application::SetFramerateLimit(uint max_framerate)
+//{
+//	if (max_framerate > 0)
+//		capped_ms = 1000 / max_framerate;
+//	else
+//		capped_ms = 0;
+//}
+//
+//void Application::LoadConfig()
+//{
+//	char* buffer = "/Engine/config.json";
+//
+//	if (buffer != nullptr)
+//	{
+//		ConfigJSON config((const char*)buffer);
+//
+//		if (config.IsValid() == true)
+//		{
+//			LOG("Loading Engine Preferences");
+//
+//			ReadConfiguration(config.GetSection("App"));
+//
+//			ConfigJSON section;
+//			std::vector<Module*>::iterator item = list_modules.begin();
+//
+//			while (item != list_modules.end())
+//			{
+//				section = config.GetSection((*item)->GetName());
+//				//if (section.IsValid())
+//				(*item)->Load(&section);
+//			}
+//		}
+//		else
+//			LOG("Cannot load Engine Preferences: Invalid format");
+//
+//		RELEASE_ARRAY(buffer);
+//	}
+//}
+//
+//void Application::SavePrefs() const
+//{
+//	ConfigJSON config;
+//
+//	SaveConfiguration(config.AddSection("App"));
+//
+//	for (list<Module*>::const_iterator it = modules.begin(); it != modules.end(); ++it)
+//		(*it)->Save(&config.AddSection((*it)->GetName()));
+//
+//	char* buf;
+//	uint size = config.Save(&buf, "Saved preferences for Edu Engine");
+//	if (App->fs->Save(SETTINGS_FOLDER "config.json", buf, size) > 0)
+//		LOG("Saved Engine Preferences");
+//	RELEASE_ARRAY(buf);
+//}
+//
+//void Application::ReadConfiguration(const ConfigJSON& config)
+//{
+//	appName = config.GetString("Name", "Edu Engine");
+//	organizationName = config.GetString("Organization", "UPC CITM");
+//	SetFramerateLimit(config.GetInt("MaxFramerate", 0));
+//}
+//
+//void Application::SaveConfiguration(ConfigJSON& config) const
+//{
+//
+//}

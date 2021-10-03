@@ -10,6 +10,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGuiManager.h"
+#include "ConfigJSON.h"
 
 class Application
 {
@@ -20,6 +21,8 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleGuiManager* gui;
+
+	ConsoleBuffer* buff;
 
 private:
 	std::string appName = "Project Big Shot";
@@ -42,7 +45,7 @@ private:
 	std::vector<Module*> list_modules;
 public:
 
-	Application();
+	Application(ConsoleBuffer* _buff);
 	~Application();
 
 	bool Init();
@@ -50,6 +53,10 @@ public:
 	bool CleanUp();
 
 	void RequestBrowser(const char* link);
+	//void LoadConfig();
+	//void SaveConfig();
+	//void ReadConfiguration(const ConfigJSON& config);
+	//void SaveConfiguration(ConfigJSON& config) const;
 
 	void SetAppName(std::string _name);
 	const char* GetAppName();
@@ -63,6 +70,8 @@ public:
 	void GetCPU(int& count, int& size);
 	float GetRAM();
 	void GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bool& mmx, bool& rdtsc, bool& sse, bool& sse2, bool& sse3, bool& sse41, bool& sse42);
+	//uint GetFramerateLimit() const;
+	//void SetFramerateLimit(uint max_framerate);
 
 private:
 

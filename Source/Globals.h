@@ -4,10 +4,11 @@
 #include <glew.h>
 #include <vector>
 #include <string>
+#include "ConsoleBuffer.h"
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__)
 
-void log(const char file[], int line, const char* format, ...);
+const char* log(const char file[], int line, const char* format, ...);
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 
@@ -15,10 +16,30 @@ void log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
 
+// Deletes a buffer
+#define RELEASE( x )\
+    {\
+       if( x != nullptr )\
+       {\
+         delete x;\
+	     x = nullptr;\
+       }\
+    }
+
+// Deletes an array of buffers
+#define RELEASE_ARRAY( x )\
+	{\
+       if( x != nullptr )\
+       {\
+           delete[] x;\
+	       x = nullptr;\
+		 }\
+	 }
 
 typedef unsigned int uint;
 typedef unsigned __int32 uint32;
 typedef unsigned __int64 uint64;
+typedef unsigned long long UID;
 
 enum update_status
 {

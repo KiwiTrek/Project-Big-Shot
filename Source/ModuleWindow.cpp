@@ -4,6 +4,7 @@
 
 ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	name = "window";
 	window = NULL;
 	screen_surface = NULL;
 }
@@ -16,12 +17,12 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Init()
 {
-	LOG("Init SDL window & surface");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Init SDL window & surface"));
 	bool ret = true;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError()));
 		ret = false;
 	}
 	else
@@ -59,7 +60,7 @@ bool ModuleWindow::Init()
 
 		if(window == NULL)
 		{
-			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError()));
 			ret = false;
 		}
 		else
@@ -75,7 +76,7 @@ bool ModuleWindow::Init()
 // Called before quitting
 bool ModuleWindow::CleanUp()
 {
-	LOG("Destroying SDL window and quitting all SDL systems");
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Destroying SDL window and quitting all SDL systems"));
 
 	//Destroy window
 	if(window != NULL)
@@ -130,7 +131,7 @@ void ModuleWindow::GetMaxWindow(int& w, int& h)
 	SDL_DisplayMode dm;
 	if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
 	{
-		LOG("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError()));
 	}
 	else
 	{
@@ -146,7 +147,7 @@ uint ModuleWindow::GetRefreshRate()
 	SDL_DisplayMode dm;
 	if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
 	{
-		LOG("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError()));
 	}
 	else
 	{
@@ -169,7 +170,7 @@ void ModuleWindow::SetFullscreen(bool f)
 		{
 			if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) != 0)
 			{
-				LOG("Could not switch to fullscreen: %s\n", SDL_GetError());
+				if (App->gui != nullptr) App->gui->LogConsole(LOG("Could not switch to fullscreen: %s\n", SDL_GetError()));
 			}
 			fullscreenDesktop = false;
 		}
@@ -177,7 +178,7 @@ void ModuleWindow::SetFullscreen(bool f)
 		{
 			if (SDL_SetWindowFullscreen(window, 0) != 0)
 			{
-				LOG("Could not switch to windowed: %s\n", SDL_GetError());
+				if (App->gui != nullptr) App->gui->LogConsole(LOG("Could not switch to windowed: %s\n", SDL_GetError()));
 			}
 		}
 	}
@@ -222,7 +223,7 @@ void ModuleWindow::SetFullscreenDesktop(bool fd)
 		{
 			if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP) != 0)
 			{
-				LOG("Could not switch to fullscreen desktop: %s\n", SDL_GetError());
+				if (App->gui != nullptr) App->gui->LogConsole(LOG("Could not switch to fullscreen desktop: %s\n", SDL_GetError()));
 			}
 			fullscreen = false;
 		}
@@ -230,7 +231,7 @@ void ModuleWindow::SetFullscreenDesktop(bool fd)
 		{
 			if (SDL_SetWindowFullscreen(window, 0) != 0)
 			{
-				LOG("Could not switch to windowed: %s\n", SDL_GetError());
+				if (App->gui != nullptr) App->gui->LogConsole(LOG("Could not switch to windowed: %s\n", SDL_GetError()));
 			}
 		}
 	}
