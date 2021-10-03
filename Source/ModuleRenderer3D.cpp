@@ -1,12 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
+#include "RenderGlobals.h"
 #include "ModuleRenderer3D.h"
-#include "SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
-#pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
-#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -23,6 +18,13 @@ bool ModuleRenderer3D::Init()
 	if (App->gui != nullptr) App->gui->LogConsole(LOG("Creating 3D Renderer context"));
 	bool ret = true;
 	
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
@@ -33,6 +35,22 @@ bool ModuleRenderer3D::Init()
 	
 	if(ret == true)
 	{
+		GLenum err = glewInit();
+
+		if (err != GLEW_OK)
+		{
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Glew Init Error: %s\n", glewGetErrorString(err)));
+		}
+		else
+		{
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Using Glew %s", glewGetString(GLEW_VERSION)));
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Vendor: %s", glGetString(GL_VENDOR)));
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Renderer: %s", glGetString(GL_RENDERER)));
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("OpenGL version supported %s", glGetString(GL_VERSION)));
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION)));
+		}
+
+
 		//Use Vsync
 		if (vSync && SDL_GL_SetSwapInterval(1) < 0)
 		{
@@ -44,10 +62,10 @@ bool ModuleRenderer3D::Init()
 		glLoadIdentity();
 
 		//Check for error
-		GLenum error = glGetError();
-		if(error != GL_NO_ERROR)
+		err = glGetError();
+		if(err != GL_NO_ERROR)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(error)));
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(err)));
 			ret = false;
 		}
 
@@ -56,10 +74,10 @@ bool ModuleRenderer3D::Init()
 		glLoadIdentity();
 
 		//Check for error
-		error = glGetError();
-		if(error != GL_NO_ERROR)
+		err = glGetError();
+		if(err != GL_NO_ERROR)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(error)));
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(err)));
 			ret = false;
 		}
 		
@@ -68,12 +86,13 @@ bool ModuleRenderer3D::Init()
 		
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		//Check for error
-		error = glGetError();
-		if(error != GL_NO_ERROR)
+		err = glGetError();
+		if(err != GL_NO_ERROR)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(error)));
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(err)));
 			ret = false;
 		}
 		
@@ -97,6 +116,7 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_TEXTURE_2D);
 	}
 
 	// Projection matrix for

@@ -16,6 +16,8 @@ bool ModuleSceneIntro::Start()
 {
 	if (App->gui != nullptr) App->gui->LogConsole(LOG("Loading Intro assets"));
 	bool ret = true;
+	App->camera->Move(vec3(0, 2, 0));
+	App->camera->LookAt(vec3(0, 0, 0));
 
 	return ret;
 }
@@ -31,6 +33,9 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	PlaneP p(0, 1, 0, 0);
+	p.axis = true;
+	p.Render();
 	return UPDATE_CONTINUE;
 }
 
