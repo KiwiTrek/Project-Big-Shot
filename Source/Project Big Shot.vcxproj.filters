@@ -55,6 +55,9 @@
     <Filter Include="Sources\Tools\Parson">
       <UniqueIdentifier>{9adcc5d1-d686-4192-8984-ea5689604ec1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\GUI\Panels">
+      <UniqueIdentifier>{cbf34549-1379-4b24-be26-4f46a0b8bf76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h">
@@ -375,6 +378,18 @@
     <ClInclude Include="Math.h">
       <Filter>Sources\Tools\MathGeoLib</Filter>
     </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelAbout.h">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelConsole.h">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelConfig.h">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -577,6 +592,15 @@
     </ClCompile>
     <ClCompile Include="ConfigJSON.cpp">
       <Filter>Sources\Tools\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelAbout.cpp">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelConsole.cpp">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelConfig.cpp">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

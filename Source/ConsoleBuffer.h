@@ -2,6 +2,6 @@
 
 struct ConsoleBuffer
 {
-    const char* initBuff1;
+    const char* initBuff;
     const char* initBuff2;
 };

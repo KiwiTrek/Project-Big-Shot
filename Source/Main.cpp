@@ -16,7 +16,7 @@ enum main_states
 int main(int argc, char ** argv)
 {
 	ConsoleBuffer* consoleBuff = new ConsoleBuffer;
-	consoleBuff->initBuff1 = LOG("Starting Engine...");
+	consoleBuff->initBuff = LOG("Starting Engine...");
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -35,12 +35,9 @@ int main(int argc, char ** argv)
 
 		case MAIN_START:
 
-			if (App != nullptr)
+			if (App->gui != nullptr)
 			{
-				if (App->gui != nullptr)
-				{
-					App->gui->LogConsole(LOG("-------------- Application Init --------------"));
-				}
+				App->gui->LogConsole(LOG("-------------- Application Init --------------"));
 			}
 			if (App->Init() == false)
 			{

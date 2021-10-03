@@ -4,12 +4,12 @@
 Application::Application(ConsoleBuffer* _buff)
 {
 	buff = _buff;
+	gui = new ModuleGuiManager(this);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	scene_intro = new ModuleSceneIntro(this);
+	sceneIntro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-	gui = new ModuleGuiManager(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -21,7 +21,7 @@ Application::Application(ConsoleBuffer* _buff)
 	AddModule(input);
 	
 	// Scenes
-	AddModule(scene_intro);
+	AddModule(sceneIntro);
 
 	AddModule(gui);
 	AddModule(renderer3D);
@@ -118,7 +118,7 @@ void Application::FinishUpdate()
 	{
 		SDL_Delay((1000 / fpsLimit) - lastFrameMs);
 	}
-	gui->UpdateHistogram();
+	if (gui->config != nullptr) gui->config->UpdateHistogram();
 	// Measure accurately the amount of time SDL_Delay() actually waits compared to what was expected
 	PERF_PEEK(pTimer);
 }

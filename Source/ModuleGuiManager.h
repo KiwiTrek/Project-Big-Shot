@@ -2,6 +2,7 @@
 #define __ModuleGuiManager_H__
 
 #include "Module.h"
+#include "Panel.h"
 #include "Globals.h"
 #include <vector>
 
@@ -9,6 +10,10 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "DeviceId.h"
+
+#include "PanelAbout.h"
+#include "PanelConsole.h"
+#include "PanelConfig.h"
 
 class ModuleGuiManager : public Module
 {
@@ -22,21 +27,20 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	update_status MenuBar();
-	void Config();
-	void UpdateHistogram();
+	void AddPanel(Panel* panel);
 
-	void Console();
+	update_status MenuBar();
+
 	void LogConsole(const char* buff);
-	void About();
 
 public:
-	bool console;
-	bool config;
-	bool about;
+	std::vector<Panel*> list_panels;
+
+	PanelAbout* about;
+	PanelConsole* console;
+	PanelConfig* config;
+
 	bool demo;
-	std::vector<float> fpsHist;
-	std::vector<float> msHist;
 	ImGuiTextBuffer LogInputText;
 	ImGuiTextBuffer LogConsoleText;
 };
