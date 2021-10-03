@@ -244,7 +244,7 @@ void ModuleGuiManager::Config()
         char brand[250];
         float videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
         App->GetGPU(vendorId, deviceId, brand, videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
-        IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "VendorId: %d - DeviceId: %d");
+        IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "VendorId: %d - DeviceId: %d", vendorId, deviceId);
         IMGUI_PRINT(IMGUI_BLUE, "Brand: ", brand);
         IMGUI_PRINT(IMGUI_BLUE, "VRAM Budget: ", "%.1f Mb", videoMemBudget);
         IMGUI_PRINT(IMGUI_BLUE, "VRAM Usage: ", "%.1f Mb", videoMemCurrent);
