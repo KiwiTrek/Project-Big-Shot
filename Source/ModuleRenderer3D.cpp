@@ -190,3 +190,30 @@ const char* ModuleRenderer3D::GetVideoDriver()
 {
 	return SDL_GetCurrentVideoDriver();
 }
+
+void ModuleRenderer3D::ToggleWireframe()
+{
+	wireframe = !wireframe;
+}
+
+bool ModuleRenderer3D::IsWireframe()
+{
+	return wireframe;
+}
+
+void ModuleRenderer3D::AddPrimitive(Primitive* p)
+{
+	listPrimitives.push_back(p);
+}
+
+void ModuleRenderer3D::Render()
+{
+	std::vector<Primitive*>::iterator item = listPrimitives.begin();
+
+	while (item != listPrimitives.end())
+	{
+		(*item)->wire = wireframe;
+		(*item)->Render();
+		++item;
+	}
+}

@@ -19,6 +19,18 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(0, 2, 0));
 	App->camera->LookAt(vec3(0, 0, 0));
 
+	PlaneP* p = new PlaneP(0, 1, 0, 0);
+	p->axis = true;
+	App->renderer3D->AddPrimitive(p);
+
+	CubeP* c = new CubeP(1, 1, 1);
+	c->SetPos(-2, 0, 0);
+	App->renderer3D->AddPrimitive(c);
+
+	CylinderP* cyl = new CylinderP(1, 3);
+	cyl->SetPos(2, 0, 0);
+	App->renderer3D->AddPrimitive(cyl);
+
 	return ret;
 }
 
@@ -33,9 +45,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	PlaneP p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();
 	return UPDATE_CONTINUE;
 }
-
+update_status ModuleSceneIntro::PostUpdate()
+{
+	App->renderer3D->Render();
+	return UPDATE_CONTINUE;
+}

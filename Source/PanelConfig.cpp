@@ -144,12 +144,19 @@ update_status PanelConfig::Update()
 
     if (ImGui::CollapsingHeader("Render"))
     {
+        IMGUI_PRINT(IMGUI_BLUE, "Video Driver:", "%s", App->renderer3D->GetVideoDriver());
+
         bool vSync = App->renderer3D->GetVSync();
         if (ImGui::Checkbox("VSync", &vSync))
         {
             App->renderer3D->SetVSync(vSync);
         }
-        IMGUI_PRINT(IMGUI_BLUE, "Video Driver:", "%s", App->renderer3D->GetVideoDriver());
+
+        bool wireframe = App->renderer3D->IsWireframe();
+        if (ImGui::Checkbox("Wireframe", &wireframe))
+        {
+            App->renderer3D->ToggleWireframe();
+        }
     }
 
     if (ImGui::CollapsingHeader("Input"))
