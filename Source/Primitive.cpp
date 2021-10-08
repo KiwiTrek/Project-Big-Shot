@@ -165,10 +165,40 @@ SphereP::SphereP(float radius) : Primitive(), radius(radius)
 	type = PrimitiveTypes::Primitive_Sphere;
 }
 
-//void Sphere::InnerRender() const
-//{
-//	glutSolidSphere(radius, 25, 25);
-//}
+void SphereP::InnerRender() const
+{
+	int stacks = 16;
+	int slices = 16;
+
+	int i, j;
+	for (j = 0; j < stacks; j++)
+	{
+		double lat1 = (M_PI / stacks) * j - M_PI / 2;
+		double lat2 = (M_PI / stacks) * (j + 1) - M_PI / 2;
+		double sinLat1 = sin(lat1);
+		double cosLat1 = cos(lat1);
+		double sinLat2 = sin(lat2);
+		double cosLat2 = cos(lat2);
+		glBegin(GL_QUAD_STRIP);
+		for (i = 0; i <= slices; i++)
+		{
+			double longitude = (2 * M_PI / slices) * i;
+			double sinLong = sin(longitude);
+			double cosLong = cos(longitude);
+			double x1 = cosLong * cosLat1;
+			double y1 = sinLong * cosLat1;
+			double z1 = sinLat1;
+			double x2 = cosLong * cosLat2;
+			double y2 = sinLong * cosLat2;
+			double z2 = sinLat2;
+			glNormal3d(x2, y2, z2);
+			glVertex3d(radius * x2, radius * y2, radius * z2);
+			glNormal3d(x1, y1, z1);
+			glVertex3d(radius * x1, radius * y1, radius * z1);
+		}
+		glEnd();
+	}
+}
 
 
 // CYLINDER ============================================
@@ -269,6 +299,92 @@ void PlaneP::InnerRender() const
 		glVertex3f(-d, 0.0f, i);
 		glVertex3f(d, 0.0f, i);
 	}
+
+	glEnd();
+}
+
+// PYRAMID ================================================
+PyramidP::PyramidP() : Primitive(), base(1.0f, 1.0f), height(1.0f)
+{
+	type = PrimitiveTypes::Primitive_Pyramid;
+}
+
+PyramidP::PyramidP(float baseX, float baseZ, float height) : Primitive(), base(baseX, baseZ), height(height)
+{
+	type = PrimitiveTypes::Primitive_Pyramid;
+}
+
+void PyramidP::InnerRender() const
+{
+	float bx = base.x * 0.5f;
+	float bz = base.y * 0.5f;
+	float sh = height * 0.5f;
+
+	glBegin(GL_QUADS);
+
+	//Base
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	glVertex3f(-bx, -sh, bz);
+	glVertex3f(bx, -sh, bz);
+	glVertex3f(bx, -sh, -bz);
+	glVertex3f(-bx, -sh, -bz);
+	
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+
+	//Faces
+	//vec3 edge1 = vec3(0 + bx, sh + sh, 0 - bz);
+	//vec3 edge2 = vec3(bx + bx, -sh + sh, bz - bz);
+	//vec3 normal = cross(edge2, edge1);
+	//normalize(normal);
+	//glNormal3f(normal.x, normal.y, normal.z);
+
+	float ang = atan(height / bz);
+	glNormal3f(0.0f, ang, ang);
+
+	glVertex3f(0, sh, 0);
+	glVertex3f(-bx, -sh, bz);
+	glVertex3f(bx, -sh, bz);
+
+	//edge1 = vec3(0 - bx, sh + sh, 0 - bz);
+	//edge2 = vec3(bx - bx, -sh + sh, bz + bz);
+	//normal = cross(edge2, edge1);
+	//normalize(normal);
+	//glNormal3f(normal.x, normal.y, normal.z);
+
+	ang = atan(height / bx);
+	glNormal3f(ang, ang, 0.0f);
+
+	glVertex3f(0, sh, 0);
+	glVertex3f(bx, -sh, bz);
+	glVertex3f(bx, -sh, -bz);
+
+	//edge1 = vec3(0 - bx, sh + sh, 0 + bz);
+	//edge2 = vec3(bx + bx, -sh + sh, -bz + bz);
+	//normal = cross(edge2, edge1);
+	//normalize(normal);
+	//glNormal3f(normal.x, normal.y, normal.z);
+
+	ang = atan(height / -bz);
+	glNormal3f(0.0f, ang, ang);
+
+	glVertex3f(0, sh, 0);
+	glVertex3f(bx, -sh, -bz);
+	glVertex3f(-bx, -sh, -bz);
+
+	//edge1 = vec3(0 + bx, sh + sh, 0 + bz);
+	//edge2 = vec3(-bx + bx, -sh + sh, -bz - bz);
+	//normal = cross(edge2, edge1);
+	//normalize(normal);
+	//glNormal3f(normal.x, normal.y, normal.z);
+
+	ang = atan(height / -bx);
+	glNormal3f(ang, ang, 0.0f);
+
+	glVertex3f(0, sh, 0);
+	glVertex3f(-bx, -sh, -bz);
+	glVertex3f(-bx, -sh, bz);
 
 	glEnd();
 }

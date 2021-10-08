@@ -99,10 +99,11 @@ void Application::FinishUpdate()
 		frameCounter = 0;
 	}
 
-	lastFrameMs = pTimer.ReadMs(); // Time from the prepare update until now (whole update method)
+	lastFrameMs = lastFrameMsFloat = pTimer.ReadMs();
 
 	PERF_START(pTimer);
 	// Use SDL_Delay to make sure you get your capped framerate
+	// TODO: Why.
 	if ((2000 / fpsLimit) > lastFrameMs)
 	{
 		SDL_Delay((2000 / fpsLimit) - lastFrameMs);
@@ -208,8 +209,8 @@ float Application::GetFps()
 
 float Application::GetMs()
 {
-	//TODO: why.
-	return lastFrameMs / 2;
+	//TODO: Just why.
+	return lastFrameMsFloat / 2.0f;
 }
 
 void Application::GetSDLVersion(int& major, int& minor, int& patch)

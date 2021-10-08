@@ -23,14 +23,18 @@ bool ModuleSceneIntro::Start()
 	p->axis = true;
 	App->renderer3D->AddPrimitive(p);
 
-	CubeP* c = new CubeP(1, 1, 1);
+	c = new CubeP(1, 1, 1);
 	c->SetPos(-2, 0, 0);
 	App->renderer3D->AddPrimitive(c);
 
-	CylinderP* cyl = new CylinderP(1, 3);
-	cyl->SetPos(2, 0, 0);
-	App->renderer3D->AddPrimitive(cyl);
+	pyd = new PyramidP(2, 2, 2);
+	pyd->SetPos(2, 0, 0);
+	App->renderer3D->AddPrimitive(pyd);
 
+	SphereP* s = new SphereP();
+	App->renderer3D->AddPrimitive(s);
+
+	rotation = 0.0f;
 	return ret;
 }
 
@@ -45,6 +49,13 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	rotation += 0.5f;
+	if (rotation >= 360.0f)
+	{
+		rotation = 0.0f;
+	}
+	pyd->SetRotation(rotation, vec3(0, 1, 0));
+	c->SetRotation(rotation, vec3(0, 1, 0));
 	return UPDATE_CONTINUE;
 }
 update_status ModuleSceneIntro::PostUpdate()

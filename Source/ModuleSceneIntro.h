@@ -4,8 +4,8 @@
 
 #define BOUNCER_TIME 200
 
-struct PhysBody3D;
-class Cube;
+class PyramidP;
+class CubeP;
 
 class ModuleSceneIntro : public Module
 {
@@ -19,4 +19,7 @@ public:
 	bool CleanUp();
 
 public:
+	CubeP* c;
+	PyramidP* pyd;
+	float rotation;
 };
