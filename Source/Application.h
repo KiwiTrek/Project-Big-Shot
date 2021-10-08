@@ -28,18 +28,15 @@ private:
 	std::string appName = "Project Big Shot";
 	std::string orgName = "UPC CITM";
 	
-	int fpsLimit = 60;
+	int fpsLimit = 30;
 	// Frame variables
 	PerfTimer pTimer;
-	uint64 frameCount = 0;
 	uint32 lastFrameMs = 0;
 	float averageFps = 0.0f;
 
-	Timer startupTime;
 	Timer frameTime;
-	Timer lastSecFrameTime;
-	uint32 lastSecFrameCount = 0;
-	uint32 prevLastSecFrameCount = 0;
+	int frameCounter;
+	Timer framesPerSecTime;
 	float dt = 0.0f;
 
 	std::vector<Module*> list_modules;

@@ -56,7 +56,6 @@ update_status PanelConfig::Update()
             App->SetFpsLimit(maxFPS);
         }
 
-        //TODO: should only get the last frame framerate
         std::string Title = "Framerate: " + std::to_string(App->GetFps());
         ImGui::PlotHistogram("##framerate", &fpsHist[0], fpsHist.size(), 0, Title.c_str(), 0.0f, 120.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
         Title = "Milliseconds: " + std::to_string(App->GetMs());
