@@ -21,7 +21,7 @@ void PerfTimer::Start()
 
 double PerfTimer::ReadMs() const
 {
-	return (1000.0 * (double(SDL_GetPerformanceCounter() - startTick) / double(SDL_GetPerformanceFrequency())));
+	return (1000.0 * (float(SDL_GetPerformanceCounter() - startTick) / float(SDL_GetPerformanceFrequency())));
 }
 
 uint64 PerfTimer::ReadTicks() const

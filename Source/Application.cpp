@@ -45,8 +45,6 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	PERF_START(pTimer);
-
 	// Call Init() in all modules
 	std::vector<Module*>::iterator item = list_modules.begin();
 
@@ -67,8 +65,6 @@ bool Application::Init()
 	}
 
 	PERF_START(framesPerSecTime);
-
-	PERF_PEEK(pTimer);
 	
 	return ret;
 }
@@ -83,6 +79,7 @@ void Application::PrepareUpdate()
 
 	// Start the timer after read because we want to know how much time it took from the last frame to the new one
 	PERF_START(frameTime);
+	PERF_START(pTimer);
 }
 
 // ---------------------------------------------
@@ -91,23 +88,24 @@ void Application::FinishUpdate()
 	// Framerate calculations------------------------------------------
 	if (framesPerSecTime.Read() >= 1000)
 	{
-		LOG("%d", frameCounter);
-		LOG("%d", framesPerSecTime.Read());
-		framesPerSecTime.Stop();
-		averageFps = float(frameCounter) / framesPerSecTime.ReadSec();
+		//LOG("%d", frameCounter);
+		//LOG("%d", framesPerSecTime.Read());
+		averageFps = (float)frameCounter / framesPerSecTime.ReadSec();
 		PERF_START(framesPerSecTime);
 		frameCounter = 0;
 	}
 
 	lastFrameMs = lastFrameMsFloat = pTimer.ReadMs();
 
-	PERF_START(pTimer);
 	// Use SDL_Delay to make sure you get your capped framerate
-	// TODO: Why.
-	if ((2000 / fpsLimit) > lastFrameMs)
+	if (float(1000 / fpsLimit) > lastFrameMsFloat)
 	{
-		SDL_Delay((2000 / fpsLimit) - lastFrameMs);
+		SDL_Delay(floor(float(1000 / fpsLimit) - lastFrameMsFloat));
+		lastFrameMsFloat = pTimer.ReadMs();
+		PERF_PEEK(pTimer);
+		PERF_START(pTimer);
 	}
+
 	if (gui->config != nullptr) gui->config->UpdateHistogram();
 }
 
@@ -129,7 +127,7 @@ update_status Application::Update()
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		ret = (*item)->Update();
+		ret = (*item)->Update(dt);
 		++item;
 	}
 
@@ -209,8 +207,7 @@ float Application::GetFps()
 
 float Application::GetMs()
 {
-	//TODO: Just why.
-	return lastFrameMsFloat / 2.0f;
+	return lastFrameMsFloat;
 }
 
 void Application::GetSDLVersion(int& major, int& minor, int& patch)

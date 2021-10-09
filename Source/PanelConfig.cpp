@@ -59,7 +59,7 @@ update_status PanelConfig::Update()
         std::string Title = "Framerate: " + std::to_string(App->GetFps());
         ImGui::PlotHistogram("##framerate", &fpsHist[0], fpsHist.size(), 0, Title.c_str(), 0.0f, 120.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
         Title = "Milliseconds: " + std::to_string(App->GetMs());
-        ImGui::PlotHistogram("##milliseconds", &msHist[0], msHist.size(), 0, Title.c_str(), 0.0f, 50.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
+        ImGui::PlotHistogram("##milliseconds", &msHist[0], msHist.size(), 0, Title.c_str(), 0.0f, 120.0f, ImVec2(ImGui::CalcItemWidth(), 100.0f));
     }
 
     if (ImGui::CollapsingHeader("Window"))
@@ -155,6 +155,36 @@ update_status PanelConfig::Update()
         if (ImGui::Checkbox("Wireframe", &wireframe))
         {
             App->renderer3D->ToggleWireframe();
+        }
+
+        bool depthTest = App->renderer3D->IsDepthTest();
+        if (ImGui::Checkbox("Depth Test", &depthTest))
+        {
+            App->renderer3D->ToggleDepthTest();
+        }
+
+        bool cullFace = App->renderer3D->IsCullFace();
+        if (ImGui::Checkbox("Cull Face", &cullFace))
+        {
+            App->renderer3D->ToggleCullFace();
+        }
+
+        bool lighting = App->renderer3D->IsLighting();
+        if (ImGui::Checkbox("Lighting", &lighting))
+        {
+            App->renderer3D->ToggleLighting();
+        }
+
+        bool colorMaterial = App->renderer3D->IsColorMaterial();
+        if (ImGui::Checkbox("Color Material", &colorMaterial))
+        {
+            App->renderer3D->ToggleColorMaterial();
+        }
+
+        bool texture2D = App->renderer3D->IsTexture2D();
+        if (ImGui::Checkbox("Texture 2D", &texture2D))
+        {
+            App->renderer3D->ToggleTexture2D();
         }
     }
 

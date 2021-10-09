@@ -129,6 +129,13 @@ bool ModuleRenderer3D::Init()
 update_status ModuleRenderer3D::PreUpdate()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	depthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+	cullFace ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+	lighting ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
+	colorMaterial ? glEnable(GL_COLOR_MATERIAL) : glDisable(GL_COLOR_MATERIAL);
+	texture2D ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
+
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
@@ -181,9 +188,9 @@ bool ModuleRenderer3D::GetVSync()
 	return vSync;
 }
 
-void ModuleRenderer3D::SetVSync(bool vsync)
+void ModuleRenderer3D::SetVSync(bool _vsync)
 {
-	vSync = vsync;
+	vSync = _vsync;
 }
 
 const char* ModuleRenderer3D::GetVideoDriver()
@@ -199,6 +206,56 @@ void ModuleRenderer3D::ToggleWireframe()
 bool ModuleRenderer3D::IsWireframe()
 {
 	return wireframe;
+}
+
+void ModuleRenderer3D::ToggleDepthTest()
+{
+	depthTest = !depthTest;
+}
+
+bool ModuleRenderer3D::IsDepthTest()
+{
+	return depthTest;
+}
+
+void ModuleRenderer3D::ToggleCullFace()
+{
+	cullFace = !cullFace;
+}
+
+bool ModuleRenderer3D::IsCullFace()
+{
+	return cullFace;
+}
+
+void ModuleRenderer3D::ToggleLighting()
+{
+	lighting = !lighting;
+}
+
+bool ModuleRenderer3D::IsLighting()
+{
+	return lighting;
+}
+
+void ModuleRenderer3D::ToggleColorMaterial()
+{
+	colorMaterial = !colorMaterial;
+}
+
+bool ModuleRenderer3D::IsColorMaterial()
+{
+	return colorMaterial;
+}
+
+void ModuleRenderer3D::ToggleTexture2D()
+{
+	texture2D = !texture2D;
+}
+
+bool ModuleRenderer3D::IsTexture2D()
+{
+	return texture2D;
 }
 
 void ModuleRenderer3D::AddPrimitive(Primitive* p)

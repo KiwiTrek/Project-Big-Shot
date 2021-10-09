@@ -56,7 +56,7 @@ update_status ModuleGuiManager::PreUpdate()
     return UPDATE_CONTINUE;
 }
 
-update_status ModuleGuiManager::Update()
+update_status ModuleGuiManager::Update(float dt)
 {
     update_status status = UPDATE_CONTINUE;
 

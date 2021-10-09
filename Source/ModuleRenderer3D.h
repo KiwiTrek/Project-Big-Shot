@@ -21,7 +21,17 @@ public:
 
 	void OnResize(int width, int height);
 	bool GetVSync();
-	void SetVSync(bool vsync);
+	void SetVSync(bool _vsync);
+	bool IsDepthTest();
+	void ToggleDepthTest();
+	bool IsCullFace();
+	void ToggleCullFace();
+	bool IsLighting();
+	void ToggleLighting();
+	bool IsColorMaterial();
+	void ToggleColorMaterial();
+	bool IsTexture2D();
+	void ToggleTexture2D();
 	const char* GetVideoDriver();
 	void ToggleWireframe();
 	bool IsWireframe();
@@ -38,4 +48,9 @@ public:
 private:
 	bool vSync = false;
 	bool wireframe = false;
+	bool depthTest = true;
+	bool cullFace = true;
+	bool lighting = true;
+	bool colorMaterial = true;
+	bool texture2D = true;
 };
