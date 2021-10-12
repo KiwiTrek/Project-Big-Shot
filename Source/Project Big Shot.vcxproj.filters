@@ -52,9 +52,6 @@
     <Filter Include="Sources\Tools\GPUDetect">
       <UniqueIdentifier>{43f76ec5-fcab-41ac-9072-27886a3bb3fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools\Parson">
-      <UniqueIdentifier>{9adcc5d1-d686-4192-8984-ea5689604ec1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Modules\GUI\Panels">
       <UniqueIdentifier>{cbf34549-1379-4b24-be26-4f46a0b8bf76}</UniqueIdentifier>
     </Filter>
@@ -366,14 +363,8 @@
     <ClInclude Include="External\GPUDetect\include\dxgi1_4.h">
       <Filter>Sources\Tools\GPUDetect</Filter>
     </ClInclude>
-    <ClInclude Include="External\parson\include\parson.h">
-      <Filter>Sources\Tools\Parson</Filter>
-    </ClInclude>
     <ClInclude Include="ConsoleBuffer.h">
       <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="ConfigJSON.h">
-      <Filter>Sources\Tools\Parson</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">
       <Filter>Sources\Tools\MathGeoLib</Filter>
@@ -392,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="RenderGlobals.h">
       <Filter>Sources\Tools\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h">
+      <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -590,12 +584,6 @@
     <ClCompile Include="External\GPUDetect\include\DeviceId.cpp">
       <Filter>Sources\Tools\GPUDetect</Filter>
     </ClCompile>
-    <ClCompile Include="External\parson\include\parson.c">
-      <Filter>Sources\Tools\Parson</Filter>
-    </ClCompile>
-    <ClCompile Include="ConfigJSON.cpp">
-      <Filter>Sources\Tools\Parson</Filter>
-    </ClCompile>
     <ClCompile Include="PanelAbout.cpp">
       <Filter>Sources\Modules\GUI\Panels</Filter>
     </ClCompile>
@@ -604,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="PanelConfig.cpp">
       <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp">
+      <Filter>Sources\Modules\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

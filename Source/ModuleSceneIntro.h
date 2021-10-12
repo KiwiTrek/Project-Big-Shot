@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MODULE_SCENE_INTRO_H__
+#define __MODULE_SCENE_INTRO_H__
+
 #include "Module.h"
 #include "Globals.h"
 
@@ -23,3 +25,5 @@ public:
 	PyramidP* pyd;
 	float rotation;
 };
+
+#endif // !__MODULE_SCENE_INTRO_H__

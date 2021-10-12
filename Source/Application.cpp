@@ -10,6 +10,7 @@ Application::Application(ConsoleBuffer* _buff)
 	sceneIntro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
+	fileSystem = new ModuleFileSystem(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -19,6 +20,7 @@ Application::Application(ConsoleBuffer* _buff)
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(fileSystem);
 	
 	// Scenes
 	AddModule(sceneIntro);
@@ -95,13 +97,14 @@ void Application::FinishUpdate()
 		frameCounter = 0;
 	}
 
-	lastFrameMs = lastFrameMsFloat = pTimer.ReadMs();
+	lastFrameMsFloat = (float)pTimer.ReadMs();
+	lastFrameMs = (uint32)lastFrameMsFloat;
 
 	// Use SDL_Delay to make sure you get your capped framerate
 	if (float(1000 / fpsLimit) > lastFrameMsFloat)
 	{
-		SDL_Delay(floor(float(1000 / fpsLimit) - lastFrameMsFloat));
-		lastFrameMsFloat = pTimer.ReadMs();
+		SDL_Delay((uint32)floor((double)(1000.0f / (float)fpsLimit) - lastFrameMsFloat));
+		lastFrameMsFloat = (float)pTimer.ReadMs();
 		PERF_PEEK(pTimer);
 		PERF_START(pTimer);
 	}
@@ -112,12 +115,12 @@ void Application::FinishUpdate()
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
-	update_status ret = UPDATE_CONTINUE;
+	update_status ret = update_status::UPDATE_CONTINUE;
 	PrepareUpdate();
 	
 	std::vector<Module*>::iterator item = list_modules.begin();
 	
-	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
+	while(item != list_modules.end() && ret == update_status::UPDATE_CONTINUE)
 	{
 		ret = (*item)->PreUpdate();
 		++item;
@@ -125,7 +128,7 @@ update_status Application::Update()
 
 	item = list_modules.begin();
 
-	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
+	while(item != list_modules.end() && ret == update_status::UPDATE_CONTINUE)
 	{
 		ret = (*item)->Update(dt);
 		++item;
@@ -133,7 +136,7 @@ update_status Application::Update()
 
 	item = list_modules.begin();
 
-	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
+	while(item != list_modules.end() && ret == update_status::UPDATE_CONTINUE)
 	{
 		ret = (*item)->PostUpdate();
 		++item;
@@ -233,17 +236,17 @@ float Application::GetRAM()
 
 void Application::GetCaps(bool& threeD, bool& altiVec, bool& avx, bool& avx2, bool& mmx, bool& rdtsc, bool& sse, bool& sse2, bool& sse3, bool& sse41, bool& sse42)
 {
-	threeD = SDL_Has3DNow();
-	altiVec = SDL_HasAltiVec();
-	avx = SDL_HasAVX();
-	avx2 = SDL_HasAVX2();
-	mmx = SDL_HasMMX();
-	rdtsc = SDL_HasRDTSC();
-	sse = SDL_HasSSE();
-	sse2 = SDL_HasSSE2();
-	sse3 = SDL_HasSSE3();
-	sse41 = SDL_HasSSE41();
-	sse42 = SDL_HasSSE42();
+	threeD = (bool)SDL_Has3DNow();
+	altiVec = (bool)SDL_HasAltiVec();
+	avx = (bool)SDL_HasAVX();
+	avx2 = (bool)SDL_HasAVX2();
+	mmx = (bool)SDL_HasMMX();
+	rdtsc = (bool)SDL_HasRDTSC();
+	sse = (bool)SDL_HasSSE();
+	sse2 = (bool)SDL_HasSSE2();
+	sse3 = (bool)SDL_HasSSE3();
+	sse41 = (bool)SDL_HasSSE41();
+	sse42 = (bool)SDL_HasSSE42();
 }
 
 void Application::GetGPU(uint& gpuVendor, uint& gpuDevice, char* gpuBrand, float& vramBudget, float& vramUsage, float& vramAvailable, float& vramReserved)

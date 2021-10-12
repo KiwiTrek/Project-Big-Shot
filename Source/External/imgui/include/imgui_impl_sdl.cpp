@@ -266,7 +266,7 @@ static bool ImGui_ImplSDL2_Init(SDL_Window* window, void* sdl_gl_context)
 #ifdef _WIN32
     SDL_SysWMinfo info;
     SDL_VERSION(&info.version);
-    if (SDL_GetWindowWMInfo(window, &info))
+    if ((bool)SDL_GetWindowWMInfo(window, &info))
         main_viewport->PlatformHandleRaw = info.info.win.window;
 #endif
 
@@ -372,7 +372,7 @@ static void ImGui_ImplSDL2_UpdateMousePosAndButtons()
         mouse_window = focused_window;
 
     // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger other operations outside
-    SDL_CaptureMouse(ImGui::IsAnyMouseDown() ? SDL_TRUE : SDL_FALSE);
+    SDL_CaptureMouse(ImGui::IsAnyMouseDown() ? SDL_bool::SDL_TRUE : SDL_bool::SDL_FALSE);
 #else
     // SDL 2.0.3 and non-windowed systems: single-viewport only
     SDL_Window* mouse_window = (SDL_GetWindowFlags(bd->Window) & SDL_WINDOW_INPUT_FOCUS) ? bd->Window : NULL;
@@ -428,13 +428,13 @@ static void ImGui_ImplSDL2_UpdateMouseCursor()
     if (io.MouseDrawCursor || imgui_cursor == ImGuiMouseCursor_None)
     {
         // Hide OS mouse cursor if imgui is drawing it or if it wants no cursor
-        SDL_ShowCursor(SDL_FALSE);
+        SDL_ShowCursor((int)SDL_bool::SDL_FALSE);
     }
     else
     {
         // Show OS mouse cursor
         SDL_SetCursor(bd->MouseCursors[imgui_cursor] ? bd->MouseCursors[imgui_cursor] : bd->MouseCursors[ImGuiMouseCursor_Arrow]);
-        SDL_ShowCursor(SDL_TRUE);
+        SDL_ShowCursor((int)SDL_bool::SDL_TRUE);
     }
 }
 
@@ -601,7 +601,7 @@ static void ImGui_ImplSDL2_CreateWindow(ImGuiViewport* viewport)
 #if defined(_WIN32)
     SDL_SysWMinfo info;
     SDL_VERSION(&info.version);
-    if (SDL_GetWindowWMInfo(vd->Window, &info))
+    if ((bool)SDL_GetWindowWMInfo(vd->Window, &info))
         viewport->PlatformHandleRaw = info.info.win.window;
 #endif
 }

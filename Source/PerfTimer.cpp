@@ -1,5 +1,4 @@
 #include "PerfTimer.h"
-
 #include "SDL_timer.h"
 
 uint64 PerfTimer::frequency = 0;

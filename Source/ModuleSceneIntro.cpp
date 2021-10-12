@@ -56,10 +56,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	pyd->SetRotation(rotation, vec3(0, 1, 0));
 	c->SetRotation(rotation, vec3(0, 1, 0));
-	return UPDATE_CONTINUE;
+	return update_status::UPDATE_CONTINUE;
 }
 update_status ModuleSceneIntro::PostUpdate()
 {
 	App->renderer3D->Render();
-	return UPDATE_CONTINUE;
+	return update_status::UPDATE_CONTINUE;
 }

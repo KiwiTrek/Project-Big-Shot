@@ -4,7 +4,7 @@
 
 #include "SDL.h"
 
-enum main_states
+enum class main_states
 {
 	MAIN_CREATION,
 	MAIN_START,
@@ -19,21 +19,21 @@ int main(int argc, char ** argv)
 	consoleBuff->initBuff = LOG("Starting Engine...");
 
 	int main_return = EXIT_FAILURE;
-	main_states state = MAIN_CREATION;
+	main_states state = main_states::MAIN_CREATION;
 	Application* App = NULL;
 
-	while (state != MAIN_EXIT)
+	while (state != main_states::MAIN_EXIT)
 	{
 		switch (state)
 		{
-		case MAIN_CREATION:
+		case main_states::MAIN_CREATION:
 
 			consoleBuff->initBuff2 = LOG("-------------- Application Creation --------------");
 			App = new Application(consoleBuff);
-			state = MAIN_START;
+			state = main_states::MAIN_START;
 			break;
 
-		case MAIN_START:
+		case main_states::MAIN_START:
 
 			if (App->gui != nullptr)
 			{
@@ -45,11 +45,11 @@ int main(int argc, char ** argv)
 				{
 					App->gui->LogConsole(LOG("Application Init exits with ERROR"));
 				}
-				state = MAIN_EXIT;
+				state = main_states::MAIN_EXIT;
 			}
 			else
 			{
-				state = MAIN_UPDATE;
+				state = main_states::MAIN_UPDATE;
 				if (App->gui != nullptr)
 				{
 					App->gui->LogConsole(LOG("-------------- Application Update --------------"));
@@ -58,25 +58,25 @@ int main(int argc, char ** argv)
 
 			break;
 
-		case MAIN_UPDATE:
+		case main_states::MAIN_UPDATE:
 		{
-			int update_return = App->Update();
+			update_status update_return = App->Update();
 
-			if (update_return == UPDATE_ERROR)
+			if (update_return == update_status::UPDATE_ERROR)
 			{
 				if (App->gui != nullptr)
 				{
 					App->gui->LogConsole(LOG("Application Update exits with ERROR"));
 				}
-				state = MAIN_EXIT;
+				state = main_states::MAIN_EXIT;
 			}
 
-			if (update_return == UPDATE_STOP)
-				state = MAIN_FINISH;
+			if (update_return == update_status::UPDATE_STOP)
+				state = main_states::MAIN_FINISH;
 		}
 			break;
 
-		case MAIN_FINISH:
+		case main_states::MAIN_FINISH:
 
 			if (App->gui != nullptr)
 			{
@@ -92,7 +92,7 @@ int main(int argc, char ** argv)
 			else
 				main_return = EXIT_SUCCESS;
 
-			state = MAIN_EXIT;
+			state = main_states::MAIN_EXIT;
 
 			break;
 

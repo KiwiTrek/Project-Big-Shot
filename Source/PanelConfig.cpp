@@ -1,5 +1,4 @@
 #include "PanelConfig.h"
-
 #include "Application.h"
 #include "ModuleGuiManager.h"
 
@@ -190,16 +189,16 @@ update_status PanelConfig::Update()
 
     if (ImGui::CollapsingHeader("Input"))
     {
-        ImVec2 mousePos;
-        mousePos.x = App->input->GetMouseX();
-        mousePos.y = App->input->GetMouseY();
-        IMGUI_PRINT(IMGUI_BLUE, "Mouse Position: ", "%d,%d", (int)mousePos.x, (int)mousePos.y);
+        int mouseX, mouseY;
+        mouseX = App->input->GetMouseX();
+        mouseY = App->input->GetMouseY();
+        IMGUI_PRINT(IMGUI_BLUE, "Mouse Position: ", "%d,%d", mouseX, mouseY);
         int mousewheel = App->input->GetMouseZ();
         IMGUI_PRINT(IMGUI_BLUE, "Mousewheel: ", "%d", mousewheel);
-        ImVec2 mouseMotion;
-        mouseMotion.x = App->input->GetMouseXMotion();
-        mouseMotion.y = App->input->GetMouseYMotion();
-        IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%.2f,%.2f", mouseMotion.x, mouseMotion.y);
+        int mouseMotionX, mouseMotionY;
+        mouseMotionX = App->input->GetMouseXMotion();
+        mouseMotionY = App->input->GetMouseYMotion();
+        IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%.2f,%.2f", mouseMotionX, mouseMotionY);
         ImGui::Separator();
         if (ImGui::Button("Clear", ImVec2(ImGui::CalcItemWidth(), 20)))
         {
@@ -211,7 +210,7 @@ update_status PanelConfig::Update()
         ImGui::EndChild();
     }
     ImGui::End();
-    return UPDATE_CONTINUE;
+    return update_status::UPDATE_CONTINUE;
 }
 
 void PanelConfig::UpdateHistogram()

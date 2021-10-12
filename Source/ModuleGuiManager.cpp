@@ -1,5 +1,4 @@
 #include "ModuleGuiManager.h"
-
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
@@ -53,18 +52,18 @@ update_status ModuleGuiManager::PreUpdate()
     ImGui_ImplSDL2_NewFrame(App->window->window);
     ImGui::NewFrame();
 
-    return UPDATE_CONTINUE;
+    return update_status::UPDATE_CONTINUE;
 }
 
 update_status ModuleGuiManager::Update(float dt)
 {
-    update_status status = UPDATE_CONTINUE;
+    update_status status = update_status::UPDATE_CONTINUE;
 
     status = MenuBar();
 
     std::vector<Panel*>::iterator item = list_panels.begin();
 
-    while (item != list_panels.end() && status == UPDATE_CONTINUE)
+    while (item != list_panels.end() && status == update_status::UPDATE_CONTINUE)
     {
         if ((*item)->active == true)
         {
@@ -82,7 +81,7 @@ update_status ModuleGuiManager::PostUpdate()
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    return UPDATE_CONTINUE;
+    return update_status::UPDATE_CONTINUE;
 }
 
 bool ModuleGuiManager::CleanUp()
@@ -106,7 +105,7 @@ update_status ModuleGuiManager::MenuBar()
         {
             if (ImGui::MenuItem("Quit","ESC"))
             {
-                return UPDATE_STOP;
+                return update_status::UPDATE_STOP;
             }
             ImGui::EndMenu();
         }
@@ -145,7 +144,7 @@ update_status ModuleGuiManager::MenuBar()
     }
     ImGui::EndMainMenuBar();
 
-    return UPDATE_CONTINUE;
+    return update_status::UPDATE_CONTINUE;
 }
 
 void ModuleGuiManager::LogConsole(const char* buff)

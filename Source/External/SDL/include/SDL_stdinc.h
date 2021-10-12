@@ -123,11 +123,11 @@
  */
 /* @{ */
 
-typedef enum
+enum class SDL_bool
 {
     SDL_FALSE = 0,
     SDL_TRUE = 1
-} SDL_bool;
+};
 
 /**
  * \brief A signed 8-bit integer type.

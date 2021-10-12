@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __PANEL_ABOUT_H__
+#define __PANEL_ABOUT_H__
+
 #include "Panel.h"
 
 class PanelAbout :public Panel
@@ -9,3 +11,5 @@ public:
 
     update_status Update();
 };
+
+#endif // !__PANEL_ABOUT_H__

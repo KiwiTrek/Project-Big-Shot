@@ -1,8 +1,6 @@
-
 #include "Globals.h"
 #include "RenderGlobals.h"
 #include "Primitive.h"
-
 
 // ------------------------------------------------------------
 Primitive::Primitive() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
@@ -174,7 +172,7 @@ void SphereP::InnerRender() const
 	for (j = 0; j < stacks; j++)
 	{
 		double lat1 = (M_PI / stacks) * j - M_PI / 2;
-		double lat2 = (M_PI / stacks) * (j + 1) - M_PI / 2;
+		double lat2 = (M_PI / stacks) * ((double)j + 1) - M_PI / 2;
 		double sinLat1 = sin(lat1);
 		double cosLat1 = cos(lat1);
 		double sinLat2 = sin(lat2);
@@ -221,8 +219,8 @@ void CylinderP::InnerRender() const
 	
 	for(int i = 360; i >= 0; i -= (360 / n))
 	{
-		float a = i * M_PI / 180; // degrees to radians
-		glVertex3f(-height*0.5f, radius * cos(a), radius * sin(a));
+		float a = (float)(i * M_PI / 180); // degrees to radians
+		glVertex3f((GLfloat)(-height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
 	}
 	glEnd();
 
@@ -231,8 +229,8 @@ void CylinderP::InnerRender() const
 	glNormal3f(0.0f, 0.0f, 1.0f);
 	for(int i = 0; i <= 360; i += (360 / n))
 	{
-		float a = i * M_PI / 180; // degrees to radians
-		glVertex3f(height * 0.5f, radius * cos(a), radius * sin(a));
+		float a = (float)(i * M_PI / 180); // degrees to radians
+		glVertex3f((GLfloat)(height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
 	}
 	glEnd();
 
@@ -240,10 +238,10 @@ void CylinderP::InnerRender() const
 	glBegin(GL_QUAD_STRIP);
 	for(int i = 0; i < 480; i += (360 / n))
 	{
-		float a = i * M_PI / 180; // degrees to radians
+		float a = (float)(i * M_PI / 180); // degrees to radians
 
-		glVertex3f(height*0.5f,  radius * cos(a), radius * sin(a) );
-		glVertex3f(-height*0.5f, radius * cos(a), radius * sin(a) );
+		glVertex3f((GLfloat)(height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
+		glVertex3f((GLfloat)(-height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
 	}
 	glEnd();
 }
@@ -340,7 +338,7 @@ void PyramidP::InnerRender() const
 	//normalize(normal);
 	//glNormal3f(normal.x, normal.y, normal.z);
 
-	float ang = atan(height / bz);
+	float ang = (float)atan(height / bz);
 	glNormal3f(0.0f, ang, ang);
 
 	glVertex3f(0, sh, 0);
@@ -353,7 +351,7 @@ void PyramidP::InnerRender() const
 	//normalize(normal);
 	//glNormal3f(normal.x, normal.y, normal.z);
 
-	ang = atan(height / bx);
+	ang = (float)atan(height / bx);
 	glNormal3f(ang, ang, 0.0f);
 
 	glVertex3f(0, sh, 0);
@@ -366,7 +364,7 @@ void PyramidP::InnerRender() const
 	//normalize(normal);
 	//glNormal3f(normal.x, normal.y, normal.z);
 
-	ang = atan(height / -bz);
+	ang = (float)atan(height / -bz);
 	glNormal3f(0.0f, ang, ang);
 
 	glVertex3f(0, sh, 0);
@@ -379,7 +377,7 @@ void PyramidP::InnerRender() const
 	//normalize(normal);
 	//glNormal3f(normal.x, normal.y, normal.z);
 
-	ang = atan(height / -bx);
+	ang = (float)atan(height / -bx);
 	glNormal3f(ang, ang, 0.0f);
 
 	glVertex3f(0, sh, 0);

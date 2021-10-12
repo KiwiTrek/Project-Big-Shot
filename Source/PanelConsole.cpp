@@ -1,5 +1,4 @@
 #include "PanelConsole.h"
-
 #include "Application.h"
 #include "ModuleGuiManager.h"
 
@@ -17,5 +16,5 @@ update_status PanelConsole::Update()
     ImGui::TextUnformatted(App->gui->LogConsoleText.begin());
     ImGui::SetScrollHereY(1.0f);
     ImGui::End();
-    return UPDATE_CONTINUE;
+    return update_status::UPDATE_CONTINUE;
 }

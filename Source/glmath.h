@@ -3,7 +3,9 @@
 // Version 2.04
 //
 // ----------------------------------------------------------------------------------------------------------------------------
-#pragma once
+#ifndef __GL_MATH_H__
+#define __GL_MATH_H__
+
 #define _USE_MATH_DEFINES
 
 #include <math.h>
@@ -516,3 +518,5 @@ mat4x4 rotate(float angle, const vec3 &u);
 mat4x4 scale(float x, float y, float z);
 mat4x4 translate(float x, float y, float z);
 mat4x4 transpose(const mat4x4 &Matrix);
+
+#endif // !__GL_MATH_H__

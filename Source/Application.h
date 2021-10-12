@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __APPLICATION_H__
+#define __APPLICATION_H__
 
 #include "Globals.h"
 #include "Timer.h"
@@ -10,7 +11,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGuiManager.h"
-#include "ConfigJSON.h"
+#include "ModuleFileSystem.h"
 
 class Application
 {
@@ -21,6 +22,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleGuiManager* gui;
+	ModuleFileSystem* fileSystem;
 
 	ConsoleBuffer* buff;
 
@@ -76,3 +78,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+
+#endif // !__APPLICATION_H__

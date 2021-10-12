@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __GLOBALS_H__
+#define __GLOBALS_H__
+
 #include "ConsoleBuffer.h"
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__)
@@ -35,7 +37,7 @@ typedef unsigned __int32 uint32;
 typedef unsigned __int64 uint64;
 typedef unsigned long long UID;
 
-enum update_status
+enum class update_status
 {
 	UPDATE_CONTINUE = 1,
 	UPDATE_STOP,
@@ -67,3 +69,5 @@ enum update_status
 
 // Configuration -----------
 #define SCREEN_SIZE 1
+
+#endif // !__GLOBALS_H__

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __PANEL_H__
+#define __PANEL_H__
+
 #include "Globals.h"
 #include <string>
 #include <vector>
@@ -25,7 +27,7 @@ public:
 
 	virtual update_status Update()
 	{
-		return UPDATE_CONTINUE;
+		return update_status::UPDATE_CONTINUE;
 	}
 
 	virtual bool CleanUp()
@@ -33,3 +35,5 @@ public:
 		return true;
 	}
 };
+
+#endif // !__PANEL_H__

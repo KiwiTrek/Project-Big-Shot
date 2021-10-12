@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MODULE_RENDERER_3D_H__
+#define __MODULE_RENDERER_3D_H__
+
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
@@ -54,3 +56,5 @@ private:
 	bool colorMaterial = true;
 	bool texture2D = true;
 };
+
+#endif // !__MODULE_RENDERER_3D_H__

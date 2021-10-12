@@ -1,5 +1,4 @@
 #include "PanelAbout.h"
-
 #include "Application.h"
 #include "ModuleGuiManager.h"
 
@@ -41,7 +40,7 @@ update_status PanelAbout::Update()
     ImGui::BulletText("GPU Detect (2015)");
     ImGui::BulletText("imgui v1.85");
     ImGui::BulletText("MathGeoLib 1.5");
-    ImGui::BulletText("Parson 1.2.1");
+    ImGui::BulletText("Assimp 4.0.1");
 
     ImGui::Separator();
     ImGui::TextWrapped("License:");
@@ -61,5 +60,5 @@ update_status PanelAbout::Update()
     ImGui::TextWrapped("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
 
     ImGui::End();
-    return UPDATE_CONTINUE;
+    return update_status::UPDATE_CONTINUE;
 }

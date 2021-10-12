@@ -1,9 +1,10 @@
-#pragma once
+#ifndef __MODULE_H__
+#define __MODULE_H__
+
 #include "Globals.h"
 #include <string>
 
 class Application;
-class ConfigJSON;
 
 class Module
 {
@@ -31,17 +32,17 @@ public:
 
 	virtual update_status PreUpdate()
 	{
-		return UPDATE_CONTINUE;
+		return update_status::UPDATE_CONTINUE;
 	}
 
 	virtual update_status Update(float dt)
 	{
-		return UPDATE_CONTINUE;
+		return update_status::UPDATE_CONTINUE;
 	}
 
 	virtual update_status PostUpdate()
 	{
-		return UPDATE_CONTINUE;
+		return update_status::UPDATE_CONTINUE;
 	}
 
 	virtual bool CleanUp() 
@@ -53,14 +54,6 @@ public:
 	{
 		return name.c_str();
 	}
-
-	virtual bool Load(ConfigJSON* file)
-	{
-		return true;
-	}
-
-	virtual bool Save(ConfigJSON* file)
-	{
-		return true;
-	}
 };
+
+#endif // !__MODULE_H__

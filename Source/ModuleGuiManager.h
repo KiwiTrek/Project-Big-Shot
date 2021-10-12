@@ -1,5 +1,5 @@
-#ifndef __ModuleGuiManager_H__
-#define __ModuleGuiManager_H__
+#ifndef __MODULE_GUI_MANAGER_H__
+#define __MODULE_GUI_MANAGER_H__
 
 #include "Module.h"
 #include "Panel.h"
@@ -45,4 +45,4 @@ public:
 	ImGuiTextBuffer LogConsoleText;
 };
 
-#endif // __ModuleGuiManager_H__
+#endif // !__MODULE_GUI_MANAGER_H__

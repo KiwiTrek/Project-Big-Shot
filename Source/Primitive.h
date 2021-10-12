@@ -1,5 +1,6 @@
+#ifndef __PRIMITIVE_H__
+#define __PRIMITIVE_H__
 
-#pragma once
 #include "glmath.h"
 #include "Color.h"
 
@@ -106,3 +107,5 @@ public:
 	vec2 base;
 	float height;
 };
+
+#endif // !__PRIMITIVE_H__

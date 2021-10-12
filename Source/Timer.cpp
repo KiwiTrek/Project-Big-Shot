@@ -49,5 +49,3 @@ float Timer::ReadSec() const
 		return float(stopped_at - started_at) / 1000.0f;
 	}
 }
-
-
