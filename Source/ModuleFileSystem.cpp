@@ -29,7 +29,7 @@ bool ModuleFileSystem::Init()
 	aiAttachLogStream(&stream);
 
 	//ImportScene("Assets/warrior.fbx");
-	ImportScene("Assets/BakerHouse.fbx");
+	//ImportScene("Assets/BakerHouse.fbx");
 
 	return ret;
 }
@@ -50,7 +50,7 @@ void ModuleFileSystem::AddPrimitive(Mesh* p)
 	listMesh.push_back(p);
 }
 
-void ModuleFileSystem::ImportScene(const char* path)
+uint ModuleFileSystem::ImportScene(const char* path)
 {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
@@ -66,6 +66,8 @@ void ModuleFileSystem::ImportScene(const char* path)
 	{
 		if (App->gui != nullptr) App->gui->LogConsole(LOG("Error loading scene with path %s", path));
 	}
+
+	return scene->mNumMeshes;
 }
 
 CustomMesh* ModuleFileSystem::ImportModel(aiMesh* mesh)
@@ -78,6 +80,15 @@ CustomMesh* ModuleFileSystem::ImportModel(aiMesh* mesh)
 
 	if (mesh->HasFaces())
 	{
+		//if (mesh->HasNormals())
+		//{
+		//	tmp->num_normals = mesh->mNumVertices;
+		//	for (int k = 0; k < tmp->num_normals; k++)
+		//	{
+		//		tmp->normals[k].Set((float)mesh->mNormals[k].x, (float)mesh->mNormals[k].y, (float)mesh->mNormals[k].z);
+		//	}
+		//}
+
 		tmp->num_index = mesh->mNumFaces * 3;
 		tmp->indices = new uint[tmp->num_index];
 		for (uint j = 0; j < mesh->mNumFaces; j++)

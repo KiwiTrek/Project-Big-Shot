@@ -20,7 +20,7 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	void ImportScene(const char* path);
+	uint ImportScene(const char* path);
 	CustomMesh* ImportModel(aiMesh* mesh);
 	void AddPrimitive(Mesh* p);
 

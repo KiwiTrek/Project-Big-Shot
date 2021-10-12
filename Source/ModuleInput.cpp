@@ -130,8 +130,23 @@ update_status ModuleInput::PreUpdate()
 
 			case SDL_WINDOWEVENT:
 			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				if(e.window.event == SDL_WINDOWEVENT_RESIZED) App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				break;
+			}
+
+			case SDL_DROPFILE:
+			{
+				char* tmp = e.drop.file;
+				if (tmp != nullptr)
+				{
+					int c = App->fileSystem->ImportScene(tmp);
+					for (int i = 0; i < c; i++)
+					{
+						App->renderer3D->InitMesh(App->sceneIntro->customMeshes.at(App->sceneIntro->customMeshes.size() - c + i));
+					}
+				}
+				SDL_free(tmp);
+				break;
 			}
 		}
 	}

@@ -135,24 +135,26 @@ bool ModuleRenderer3D::InitMeshes(std::vector<Mesh*> list)
 
 	while (item != list.end())
 	{
-		if ((*item)->GetType() == MeshTypes::Custom_Mesh)
-		{
-			CustomMesh* i = (CustomMesh*)(*item);
-			glGenBuffers(1, &i->data->id_vertex);
-			glGenBuffers(1, &i->data->id_index);
-
-			glBindBuffer(GL_ARRAY_BUFFER, i->data->id_vertex);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * i->data->num_vertex * 3, i->data->vertices, GL_STATIC_DRAW);
-
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i->data->id_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * i->data->num_index, i->data->indices, GL_STATIC_DRAW);
-		}
+		if ((*item)->GetType() == MeshTypes::Custom_Mesh) InitMesh((CustomMesh*)(*item));
 		++item;
 	}
 
+	return true;
+}
+
+bool ModuleRenderer3D::InitMesh(CustomMesh* m)
+{
+	glGenBuffers(1, &m->data->id_vertex);
+	glGenBuffers(1, &m->data->id_index);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m->data->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->data->num_vertex * 3, m->data->vertices, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->data->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m->data->num_index, m->data->indices, GL_STATIC_DRAW);
 	return true;
 }
 

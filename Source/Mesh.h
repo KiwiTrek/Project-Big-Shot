@@ -25,6 +25,10 @@ struct MeshData
 	uint id_vertex = 0; // unique vertex in VRAM
 	uint num_vertex = 0;
 	float* vertices = nullptr;
+
+	// normals for each face
+	//uint num_normals = 0;
+	//vec3* normals = nullptr;
 };
 
 class Mesh

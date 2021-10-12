@@ -18,6 +18,7 @@ public:
 
 	bool Init();
 	bool InitMeshes(std::vector<Mesh*> list);
+	bool InitMesh(CustomMesh* m);
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();

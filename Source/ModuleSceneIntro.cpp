@@ -35,11 +35,6 @@ bool ModuleSceneIntro::Start()
 	s->SetPos(0, 0, -3);
 	App->fileSystem->AddPrimitive(s);
 
-	std::vector<CustomMesh*>::iterator w = customMeshes.begin();
-	(*w)->SetPos(0,0,1);
-	//(*w)->SetRotation(45.0f, (1.0f, 0.0f, 0.0f)); TODO
-	(*w)->Scale(0.05, 0.05, 0.05);
-
 	rotation = 0.0f;
 	return ret;
 }
@@ -62,6 +57,15 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	pyd->SetRotation(rotation, vec3(0, 1, 0));
 	c->SetRotation(rotation, vec3(0, 1, 0));
+
+	if (!customMeshes.empty())
+	{
+		std::vector<CustomMesh*>::iterator w = customMeshes.begin();
+		(*w)->SetPos(0, 0, 1);
+		//(*w)->SetRotation(45.0f, (1.0f, 0.0f, 0.0f)); TODO
+		(*w)->Scale(0.05, 0.05, 0.05);
+	}
+
 	return update_status::UPDATE_CONTINUE;
 }
 update_status ModuleSceneIntro::PostUpdate()
