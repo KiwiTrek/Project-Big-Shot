@@ -7,7 +7,6 @@ Application::Application(ConsoleBuffer* _buff)
 	gui = new ModuleGuiManager(this);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	fileSystem = new ModuleFileSystem(this);
 	sceneIntro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
@@ -20,7 +19,6 @@ Application::Application(ConsoleBuffer* _buff)
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(fileSystem);
 	
 	// Scenes
 	AddModule(sceneIntro);
@@ -104,7 +102,7 @@ void Application::FinishUpdate()
 	{
 		SDL_Delay(floor(float(1000 / fpsLimit) - lastFrameMsFloat));
 		lastFrameMsFloat = pTimer.ReadMs();
-		//PERF_PEEK(pTimer);
+		PERF_PEEK(pTimer);
 		PERF_START(pTimer);
 	}
 

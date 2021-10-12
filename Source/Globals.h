@@ -42,11 +42,6 @@ enum update_status
 	UPDATE_ERROR
 };
 
-// Configuration -----------
-#define VERSION "0.4-alpha"
-#define ASSETS_FOLDER "/Assets/"
-#define SETTINGS_FOLDER "/Settings/"
-
 // ImGui Globals
 #define IMGUI_BLACK ImVec4(0.0f,0.0f,0.0f,1.f)
 #define IMGUI_LIGHT_GREY ImVec4(0.8f,0.8f,0.8f,1.f)
