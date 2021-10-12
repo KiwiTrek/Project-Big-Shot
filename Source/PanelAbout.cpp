@@ -41,7 +41,9 @@ update_status PanelAbout::Update()
     ImGui::BulletText("GPU Detect (2015)");
     ImGui::BulletText("imgui v1.85");
     ImGui::BulletText("MathGeoLib 1.5");
-    ImGui::BulletText("Parson 1.2.1");
+    ImGui::BulletText("Assimp 4.0.1");
+    ImGui::BulletText("PhysFS");
+    ImGui::BulletText("Bass 2.4");
 
     ImGui::Separator();
     ImGui::TextWrapped("License:");

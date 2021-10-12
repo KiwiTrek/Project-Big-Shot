@@ -10,7 +10,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGuiManager.h"
-#include "ConfigJSON.h"
+#include "ModuleFileSystem.h"
 
 class Application
 {
@@ -20,6 +20,7 @@ public:
 	ModuleSceneIntro* sceneIntro;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
+	ModuleFileSystem* fileSystem;
 	ModuleGuiManager* gui;
 
 	ConsoleBuffer* buff;
