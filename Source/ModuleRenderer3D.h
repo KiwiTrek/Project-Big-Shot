@@ -5,7 +5,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
-#include "Primitive.h"
+#include "Mesh.h"
 #include <vector>
 
 #define MAX_LIGHTS 8
@@ -17,6 +17,7 @@ public:
 	~ModuleRenderer3D();
 
 	bool Init();
+	bool InitMeshes(std::vector<Mesh*> list);
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
@@ -37,7 +38,6 @@ public:
 	const char* GetVideoDriver();
 	void ToggleWireframe();
 	bool IsWireframe();
-	void AddPrimitive(Primitive* p);
 	void Render();
 
 public:
@@ -46,7 +46,7 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-	std::vector<Primitive*> listPrimitives;
+
 private:
 	bool vSync = false;
 	bool wireframe = false;

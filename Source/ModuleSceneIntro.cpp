@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
-#include "Primitive.h"
+#include "Mesh.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -21,18 +21,24 @@ bool ModuleSceneIntro::Start()
 
 	PlaneP* p = new PlaneP(0, 1, 0, 0);
 	p->axis = true;
-	App->renderer3D->AddPrimitive(p);
+	App->fileSystem->AddPrimitive(p);
 
 	c = new CubeP(1, 1, 1);
-	c->SetPos(-2, 0, 0);
-	App->renderer3D->AddPrimitive(c);
+	c->SetPos(-2, 0, -3);
+	App->fileSystem->AddPrimitive(c);
 
 	pyd = new PyramidP(2, 2, 2);
-	pyd->SetPos(2, 0, 0);
-	App->renderer3D->AddPrimitive(pyd);
+	pyd->SetPos(2, 0, -3);
+	App->fileSystem->AddPrimitive(pyd);
 
 	SphereP* s = new SphereP();
-	App->renderer3D->AddPrimitive(s);
+	s->SetPos(0, 0, -3);
+	App->fileSystem->AddPrimitive(s);
+
+	std::vector<CustomMesh*>::iterator w = customMeshes.begin();
+	(*w)->SetPos(0,0,1);
+	//(*w)->SetRotation(45.0f, (1.0f, 0.0f, 0.0f)); TODO
+	(*w)->Scale(0.05, 0.05, 0.05);
 
 	rotation = 0.0f;
 	return ret;

@@ -1,24 +1,24 @@
 #include "Globals.h"
 #include "RenderGlobals.h"
-#include "Primitive.h"
+#include "Mesh.h"
 
 // ------------------------------------------------------------
-Primitive::Primitive() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitiveTypes::Primitive_Point)
+Mesh::Mesh() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(MeshTypes::Primitive_Point)
 {}
 
 // ------------------------------------------------------------
-PrimitiveTypes Primitive::GetType() const
+MeshTypes Mesh::GetType() const
 {
 	return type;
 }
 
 // ------------------------------------------------------------
-void Primitive::Render() const
+void Mesh::Render() const
 {
 	glPushMatrix();
 	glMultMatrixf(transform.M);
 
-	if(axis == true)
+	if (axis == true)
 	{
 		// Draw Axis Grid
 		glLineWidth(2.0f);
@@ -63,7 +63,7 @@ void Primitive::Render() const
 }
 
 // ------------------------------------------------------------
-void Primitive::InnerRender() const
+void Mesh::InnerRender() const
 {
 	glPointSize(5.0f);
 
@@ -77,32 +77,32 @@ void Primitive::InnerRender() const
 }
 
 // ------------------------------------------------------------
-void Primitive::SetPos(float x, float y, float z)
+void Mesh::SetPos(float x, float y, float z)
 {
 	transform.translate(x, y, z);
 }
 
 // ------------------------------------------------------------
-void Primitive::SetRotation(float angle, const vec3 &u)
+void Mesh::SetRotation(float angle, const vec3 &u)
 {
 	transform.rotate(angle, u);
 }
 
 // ------------------------------------------------------------
-void Primitive::Scale(float x, float y, float z)
+void Mesh::Scale(float x, float y, float z)
 {
 	transform.scale(x, y, z);
 }
 
 // CUBE ============================================
-CubeP::CubeP() : Primitive(), size(1.0f, 1.0f, 1.0f)
+CubeP::CubeP() : Mesh(), size(1.0f, 1.0f, 1.0f)
 {
-	type = PrimitiveTypes::Primitive_Cube;
+	type = MeshTypes::Primitive_Cube;
 }
 
-CubeP::CubeP(float sizeX, float sizeY, float sizeZ) : Primitive(), size(sizeX, sizeY, sizeZ)
+CubeP::CubeP(float sizeX, float sizeY, float sizeZ) : Mesh(), size(sizeX, sizeY, sizeZ)
 {
-	type = PrimitiveTypes::Primitive_Cube;
+	type = MeshTypes::Primitive_Cube;
 }
 
 void CubeP::InnerRender() const
@@ -153,14 +153,14 @@ void CubeP::InnerRender() const
 }
 
 // SPHERE ============================================
-SphereP::SphereP() : Primitive(), radius(1.0f)
+SphereP::SphereP() : Mesh(), radius(1.0f)
 {
-	type = PrimitiveTypes::Primitive_Sphere;
+	type = MeshTypes::Primitive_Sphere;
 }
 
-SphereP::SphereP(float radius) : Primitive(), radius(radius)
+SphereP::SphereP(float radius) : Mesh(), radius(radius)
 {
-	type = PrimitiveTypes::Primitive_Sphere;
+	type = MeshTypes::Primitive_Sphere;
 }
 
 void SphereP::InnerRender() const
@@ -200,14 +200,14 @@ void SphereP::InnerRender() const
 
 
 // CYLINDER ============================================
-CylinderP::CylinderP() : Primitive(), radius(1.0f), height(1.0f)
+CylinderP::CylinderP() : Mesh(), radius(1.0f), height(1.0f)
 {
-	type = PrimitiveTypes::Primitive_Cylinder;
+	type = MeshTypes::Primitive_Cylinder;
 }
 
-CylinderP::CylinderP(float radius, float height) : Primitive(), radius(radius), height(height)
+CylinderP::CylinderP(float radius, float height) : Mesh(), radius(radius), height(height)
 {
-	type = PrimitiveTypes::Primitive_Cylinder;
+	type = MeshTypes::Primitive_Cylinder;
 }
 
 void CylinderP::InnerRender() const
@@ -247,14 +247,14 @@ void CylinderP::InnerRender() const
 }
 
 // LINE ==================================================
-Line::Line() : Primitive(), origin(0, 0, 0), destination(1, 1, 1)
+Line::Line() : Mesh(), origin(0, 0, 0), destination(1, 1, 1)
 {
-	type = PrimitiveTypes::Primitive_Line;
+	type = MeshTypes::Primitive_Line;
 }
 
-Line::Line(float x, float y, float z) : Primitive(), origin(0, 0, 0), destination(x, y, z)
+Line::Line(float x, float y, float z) : Mesh(), origin(0, 0, 0), destination(x, y, z)
 {
-	type = PrimitiveTypes::Primitive_Line;
+	type = MeshTypes::Primitive_Line;
 }
 
 void Line::InnerRender() const
@@ -272,14 +272,14 @@ void Line::InnerRender() const
 }
 
 // PLANE ==================================================
-PlaneP::PlaneP() : Primitive(), normal(0, 1, 0), constant(1)
+PlaneP::PlaneP() : Mesh(), normal(0, 1, 0), constant(1)
 {
-	type = PrimitiveTypes::Primitive_Plane;
+	type = MeshTypes::Primitive_Plane;
 }
 
-PlaneP::PlaneP(float x, float y, float z, float d) : Primitive(), normal(x, y, z), constant(d)
+PlaneP::PlaneP(float x, float y, float z, float d) : Mesh(), normal(x, y, z), constant(d)
 {
-	type = PrimitiveTypes::Primitive_Plane;
+	type = MeshTypes::Primitive_Plane;
 }
 
 void PlaneP::InnerRender() const
@@ -302,14 +302,14 @@ void PlaneP::InnerRender() const
 }
 
 // PYRAMID ================================================
-PyramidP::PyramidP() : Primitive(), base(1.0f, 1.0f), height(1.0f)
+PyramidP::PyramidP() : Mesh(), base(1.0f, 1.0f), height(1.0f)
 {
-	type = PrimitiveTypes::Primitive_Pyramid;
+	type = MeshTypes::Primitive_Pyramid;
 }
 
-PyramidP::PyramidP(float baseX, float baseZ, float height) : Primitive(), base(baseX, baseZ), height(height)
+PyramidP::PyramidP(float baseX, float baseZ, float height) : Mesh(), base(baseX, baseZ), height(height)
 {
-	type = PrimitiveTypes::Primitive_Pyramid;
+	type = MeshTypes::Primitive_Pyramid;
 }
 
 void PyramidP::InnerRender() const
@@ -385,4 +385,23 @@ void PyramidP::InnerRender() const
 	glVertex3f(-bx, -sh, bz);
 
 	glEnd();
+}
+
+// CUSTOM MESH ============================================
+CustomMesh::CustomMesh() : Mesh()
+{
+	type = MeshTypes::Custom_Mesh;
+}
+
+CustomMesh::CustomMesh(MeshData* _data) : Mesh(), data(_data)
+{
+	type = MeshTypes::Custom_Mesh;
+}
+
+void CustomMesh::InnerRender() const
+{
+	glBindBuffer(GL_ARRAY_BUFFER, data->id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, data->id_index);
+
+	glDrawElements(GL_TRIANGLES, data->num_index, GL_UNSIGNED_INT, 0);
 }

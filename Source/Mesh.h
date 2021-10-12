@@ -1,10 +1,10 @@
-#ifndef __PRIMITIVE_H__
-#define __PRIMITIVE_H__
+#ifndef __MESH_H__
+#define __MESH_H__
 
 #include "glmath.h"
 #include "Color.h"
 
-enum PrimitiveTypes
+enum MeshTypes
 {
 	Primitive_Point,
 	Primitive_Line,
@@ -13,20 +13,32 @@ enum PrimitiveTypes
 	Primitive_Sphere,
 	Primitive_Cylinder,
 	Primitive_Pyramid,
+	Custom_Mesh,
 };
 
-class Primitive
+struct MeshData
+{
+	uint id_index = 0; // index in VRAM
+	uint num_index = 0;
+	uint* indices = nullptr;
+
+	uint id_vertex = 0; // unique vertex in VRAM
+	uint num_vertex = 0;
+	float* vertices = nullptr;
+};
+
+class Mesh
 {
 public:
 
-	Primitive();
+	Mesh();
 
 	virtual void	Render() const;
 	virtual void	InnerRender() const;
 	void			SetPos(float x, float y, float z);
 	void			SetRotation(float angle, const vec3 &u);
 	void			Scale(float x, float y, float z);
-	PrimitiveTypes	GetType() const;
+	MeshTypes	GetType() const;
 
 public:
 	
@@ -35,11 +47,11 @@ public:
 	bool axis,wire;
 
 protected:
-	PrimitiveTypes type;
+	MeshTypes type;
 };
 
 // ============================================
-class CubeP : public Primitive
+class CubeP : public Mesh
 {
 public :
 	CubeP();
@@ -50,7 +62,7 @@ public:
 };
 
 // ============================================
-class SphereP : public Primitive
+class SphereP : public Mesh
 {
 public:
 	SphereP();
@@ -61,7 +73,7 @@ public:
 };
 
 // ============================================
-class CylinderP : public Primitive
+class CylinderP : public Mesh
 {
 public:
 	CylinderP();
@@ -73,7 +85,7 @@ public:
 };
 
 // ============================================
-class Line : public Primitive
+class Line : public Mesh
 {
 public:
 	Line();
@@ -85,7 +97,7 @@ public:
 };
 
 // ============================================
-class PlaneP : public Primitive
+class PlaneP : public Mesh
 {
 public:
 	PlaneP();
@@ -97,7 +109,7 @@ public:
 };
 
 // ============================================
-class PyramidP : public Primitive
+class PyramidP : public Mesh
 {
 public:
 	PyramidP();
@@ -108,4 +120,14 @@ public:
 	float height;
 };
 
-#endif // !__PRIMITIVE_H__
+class CustomMesh : public Mesh
+{
+public:
+	CustomMesh();
+	CustomMesh(MeshData* _data);
+	void InnerRender() const;
+public:
+	MeshData* data;
+};
+
+#endif // !__MESH_H__

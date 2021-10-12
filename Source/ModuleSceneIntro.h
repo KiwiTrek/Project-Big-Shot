@@ -3,11 +3,13 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include <vector>
 
 #define BOUNCER_TIME 200
 
 class PyramidP;
 class CubeP;
+class CustomMesh;
 
 class ModuleSceneIntro : public Module
 {
@@ -23,6 +25,7 @@ public:
 public:
 	CubeP* c;
 	PyramidP* pyd;
+	std::vector<CustomMesh*> customMeshes;
 	float rotation;
 };
 

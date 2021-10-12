@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "RenderGlobals.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleFileSystem.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -122,7 +123,37 @@ bool ModuleRenderer3D::Init()
 	// Projection matrix for
 	OnResize(App->window->GetWidth(), App->window->GetHeight());
 
+	// Loading Meshes
+	ret = InitMeshes(App->fileSystem->listMesh);
+
 	return ret;
+}
+
+bool ModuleRenderer3D::InitMeshes(std::vector<Mesh*> list)
+{
+	std::vector<Mesh*>::iterator item = list.begin();
+
+	while (item != list.end())
+	{
+		if ((*item)->GetType() == MeshTypes::Custom_Mesh)
+		{
+			CustomMesh* i = (CustomMesh*)(*item);
+			glGenBuffers(1, &i->data->id_vertex);
+			glGenBuffers(1, &i->data->id_index);
+
+			glBindBuffer(GL_ARRAY_BUFFER, i->data->id_vertex);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * i->data->num_vertex * 3, i->data->vertices, GL_STATIC_DRAW);
+
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i->data->id_index);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * i->data->num_index, i->data->indices, GL_STATIC_DRAW);
+		}
+		++item;
+	}
+
+	return true;
 }
 
 // PreUpdate: clear buffer
@@ -159,6 +190,18 @@ update_status ModuleRenderer3D::PostUpdate()
 	return update_status::UPDATE_CONTINUE;
 }
 
+void ModuleRenderer3D::Render()
+{
+	std::vector<Mesh*>::iterator item = App->fileSystem->listMesh.begin();
+
+	while (item != App->fileSystem->listMesh.end())
+	{
+		(*item)->wire = wireframe;
+		(*item)->Render();
+		++item;
+	}
+}
+
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
@@ -168,7 +211,6 @@ bool ModuleRenderer3D::CleanUp()
 
 	return true;
 }
-
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
@@ -256,21 +298,4 @@ void ModuleRenderer3D::ToggleTexture2D()
 bool ModuleRenderer3D::IsTexture2D()
 {
 	return texture2D;
-}
-
-void ModuleRenderer3D::AddPrimitive(Primitive* p)
-{
-	listPrimitives.push_back(p);
-}
-
-void ModuleRenderer3D::Render()
-{
-	std::vector<Primitive*>::iterator item = listPrimitives.begin();
-
-	while (item != listPrimitives.end())
-	{
-		(*item)->wire = wireframe;
-		(*item)->Render();
-		++item;
-	}
 }

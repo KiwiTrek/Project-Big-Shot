@@ -3,18 +3,10 @@
 
 #include "Module.h"
 #include "SDL.h"
+#include "Mesh.h"
 
 class Application;
-
-struct MeshData
-{
-	uint id_index = 0; // index in VRAM
-	uint num_index = 0;
-	uint* indices = nullptr;
-	uint id_vertex = 0; // unique vertex in VRAM
-	uint num_vertex = 0;
-	float* vertices = nullptr;
-};
+struct aiMesh;
 
 class ModuleFileSystem : public Module
 {
@@ -28,10 +20,13 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	void ImportModel(const char* path);
+	void ImportScene(const char* path);
+	CustomMesh* ImportModel(aiMesh* mesh);
+	void AddPrimitive(Mesh* p);
 
 public:
-	std::vector<MeshData*> meshList;
+
+	std::vector<Mesh*> listMesh;
 
 private:
 

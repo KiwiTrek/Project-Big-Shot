@@ -105,7 +105,7 @@ void Application::FinishUpdate()
 	{
 		SDL_Delay((uint32)floor((double)(1000.0f / (float)fpsLimit) - lastFrameMsFloat));
 		lastFrameMsFloat = (float)pTimer.ReadMs();
-		PERF_PEEK(pTimer);
+		//PERF_PEEK(pTimer);
 		PERF_START(pTimer);
 	}
 

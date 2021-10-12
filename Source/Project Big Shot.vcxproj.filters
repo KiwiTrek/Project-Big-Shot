@@ -55,6 +55,9 @@
     <Filter Include="Sources\Modules\GUI\Panels">
       <UniqueIdentifier>{cbf34549-1379-4b24-be26-4f46a0b8bf76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\Assimp">
+      <UniqueIdentifier>{0da852c7-8e02-485a-9078-50fb98dfebf2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glmath.h">
@@ -66,7 +69,7 @@
     <ClInclude Include="Globals.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Primitive.h">
+    <ClInclude Include="Mesh.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
@@ -387,6 +390,117 @@
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
+    <ClInclude Include="External\Assimp\include\ai_assert.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\anim.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\camera.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\cexport.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\cfileio.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\cimport.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\color4.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\Compiler\poppack1.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\Compiler\pstdint.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\Compiler\pushpack1.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\config.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\DefaultLogger.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\defs.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\Exporter.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\Importer.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\importerdesc.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\IOStream.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\IOSystem.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\light.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\Logger.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\LogStream.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\material.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\matrix3x3.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\matrix4x4.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\mesh.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\metadata.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\NullLogger.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\port\AndroidJNI\AndroidJNIIOSystem.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\postprocess.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\ProgressHandler.hpp">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\quaternion.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\scene.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\texture.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\types.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\vector2.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\vector3.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Assimp\include\version.h">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -404,7 +518,7 @@
     <ClCompile Include="glmath.cpp">
       <Filter>Sources\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Primitive.cpp">
+    <ClCompile Include="Mesh.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
@@ -618,6 +732,27 @@
     </None>
     <None Include="External\MathGeoLib\include\Geometry\KDTree.inl">
       <Filter>Sources\Tools\MathGeoLib\Geometry</Filter>
+    </None>
+    <None Include="External\Assimp\include\color4.inl">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </None>
+    <None Include="External\Assimp\include\material.inl">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </None>
+    <None Include="External\Assimp\include\matrix3x3.inl">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </None>
+    <None Include="External\Assimp\include\matrix4x4.inl">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </None>
+    <None Include="External\Assimp\include\quaternion.inl">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </None>
+    <None Include="External\Assimp\include\vector2.inl">
+      <Filter>Sources\Tools\Assimp</Filter>
+    </None>
+    <None Include="External\Assimp\include\vector3.inl">
+      <Filter>Sources\Tools\Assimp</Filter>
     </None>
   </ItemGroup>
 </Project>
