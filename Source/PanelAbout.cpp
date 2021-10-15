@@ -1,6 +1,7 @@
 #include "PanelAbout.h"
 #include "Application.h"
 #include "ModuleGuiManager.h"
+#include "ModuleInput.h"
 
 PanelAbout::PanelAbout(Application* app, bool start_enabled) : Panel(app, start_enabled)
 {
@@ -12,21 +13,30 @@ PanelAbout::~PanelAbout()
 
 update_status PanelAbout::Update()
 {
+    App->input->isHovering = false;
+
     ImGui::Begin("About");
     ImGui::SetWindowFontScale(1.2f);
     ImGui::TextColored(IMGUI_BLUE, "Project Big Shot");
     ImGui::SetWindowFontScale(1);
     ImGui::TextWrapped("Engine created for the 'Game Engines' subject in the Bachelor's degree in Video Game Design and Development at the CITM-UPC center, Barcelona.");
     ImGui::Text("By:");
-    ImGui::BulletText("Guillem Alava (https://github.com/WillyTrek19)");
-    ImGui::SameLine();
-    if (ImGui::Button("Go to link", ImVec2(100, 20)))
+    IMGUI_BULLET(IMGUI_BLUE, "Guillem Alava ", "(https://github.com/WillyTrek19)");
+    if (ImGui::IsItemHovered())
+    {
+        App->input->isHovering = true;
+    }
+    if (ImGui::IsItemClicked())
     {
         App->RequestBrowser("https://github.com/WillyTrek19");
     }
-    ImGui::BulletText("Sergi Colomer (https://github.com/Lladruc37)");
-    ImGui::SameLine();
-    if (ImGui::Button("Go to link", ImVec2(100, 20)))
+
+    IMGUI_BULLET(IMGUI_BLUE, "Sergi Colomer ", "(https://github.com/Lladruc37)");
+    if (ImGui::IsItemHovered())
+    {
+        App->input->isHovering = true;
+    }
+    if (ImGui::IsItemClicked())
     {
         App->RequestBrowser("https://github.com/Lladruc37");
     }
@@ -41,6 +51,7 @@ update_status PanelAbout::Update()
     ImGui::BulletText("imgui v1.85");
     ImGui::BulletText("MathGeoLib 1.5");
     ImGui::BulletText("Assimp 4.0.1");
+    ImGui::BulletText("DevIL 1.8.0");
 
     ImGui::Separator();
     ImGui::TextWrapped("License:");

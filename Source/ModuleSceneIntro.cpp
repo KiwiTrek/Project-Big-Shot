@@ -12,7 +12,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 {}
 
 // Load assets
-bool ModuleSceneIntro::Start()
+bool ModuleSceneIntro::Init()
 {
 	if (App->gui != nullptr) App->gui->LogConsole(LOG("Loading Intro assets"));
 	bool ret = true;
@@ -21,19 +21,19 @@ bool ModuleSceneIntro::Start()
 
 	PlaneP* p = new PlaneP(0, 1, 0, 0);
 	p->axis = true;
-	App->fileSystem->AddPrimitive(p);
+	App->importer->AddPrimitive(p);
 
 	c = new CubeP(1, 1, 1);
 	c->SetPos(-2, 0, -3);
-	App->fileSystem->AddPrimitive(c);
+	App->importer->AddPrimitive(c);
 
 	pyd = new PyramidP(2, 2, 2);
 	pyd->SetPos(2, 0, -3);
-	App->fileSystem->AddPrimitive(pyd);
+	App->importer->AddPrimitive(pyd);
 
 	SphereP* s = new SphereP();
 	s->SetPos(0, 0, -3);
-	App->fileSystem->AddPrimitive(s);
+	App->importer->AddPrimitive(s);
 
 	rotation = 0.0f;
 	return ret;

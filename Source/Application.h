@@ -11,7 +11,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGuiManager.h"
-#include "ModuleFileSystem.h"
+#include "ModuleImporter.h"
 
 class Application
 {
@@ -22,7 +22,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleGuiManager* gui;
-	ModuleFileSystem* fileSystem;
+	ModuleImporter* importer;
 
 	ConsoleBuffer* buff;
 

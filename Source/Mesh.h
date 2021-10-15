@@ -31,6 +31,12 @@ struct MeshData
 	//vec3* normals = nullptr;
 };
 
+struct TexData
+{
+	int* data = nullptr;
+	uint id = 0;
+};
+
 class Mesh
 {
 public:
@@ -38,6 +44,7 @@ public:
 	Mesh();
 
 	virtual void	Render() const;
+	virtual void	DrawTex() const;
 	virtual void	InnerRender() const;
 	void			SetPos(float x, float y, float z);
 	void			SetRotation(float angle, const vec3 &u);
@@ -49,6 +56,7 @@ public:
 	Color color;
 	mat4x4 transform;
 	bool axis,wire;
+	TexData texture;
 
 protected:
 	MeshTypes type;

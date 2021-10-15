@@ -17,7 +17,7 @@ public:
 	ModuleSceneIntro(Application* app, bool start_enabled = true);
 	~ModuleSceneIntro();
 
-	bool Start();
+	bool Init();
 	update_status Update(float dt);
 	update_status PostUpdate();
 	bool CleanUp();

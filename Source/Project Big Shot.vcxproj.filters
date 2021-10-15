@@ -13,23 +13,17 @@
     <Filter Include="Sources\Tools">
       <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Helpers">
-      <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Modules\Game">
       <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\imgui">
-      <UniqueIdentifier>{a47bf538-53bf-46b5-bdcc-cb0620bb2550}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools\Glew">
-      <UniqueIdentifier>{981a4c1e-ff65-4504-afc5-7c7c7a2b43ea}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Modules\Main">
       <UniqueIdentifier>{50ea56d3-2a34-4c10-b2af-f7df96052f87}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Modules\GUI">
       <UniqueIdentifier>{a0fac03e-30a5-4409-aafb-792f5dd38203}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\GUI\Panels">
+      <UniqueIdentifier>{cbf34549-1379-4b24-be26-4f46a0b8bf76}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\MathGeoLib">
       <UniqueIdentifier>{83d16851-bbe8-4e10-8059-d3e7bcdd452a}</UniqueIdentifier>
@@ -49,14 +43,23 @@
     <Filter Include="Sources\Tools\MathGeoLib\Algorithm\Random">
       <UniqueIdentifier>{179cafc7-60a3-4c1e-8afb-955596331e63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\imgui">
+      <UniqueIdentifier>{a47bf538-53bf-46b5-bdcc-cb0620bb2550}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sources\Tools\GPUDetect">
       <UniqueIdentifier>{43f76ec5-fcab-41ac-9072-27886a3bb3fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\GUI\Panels">
-      <UniqueIdentifier>{cbf34549-1379-4b24-be26-4f46a0b8bf76}</UniqueIdentifier>
+    <Filter Include="Sources\Tools\Glew">
+      <UniqueIdentifier>{981a4c1e-ff65-4504-afc5-7c7c7a2b43ea}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Tools\Assimp">
       <UniqueIdentifier>{0da852c7-8e02-485a-9078-50fb98dfebf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\3D Helpers">
+      <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Tools\DevIL">
+      <UniqueIdentifier>{918fa67f-95bc-42e3-98e8-c8fa3981e845}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,13 +73,13 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\3D Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\3D Helpers</Filter>
     </ClInclude>
     <ClInclude Include="ModuleSceneIntro.h">
       <Filter>Sources\Modules\Game</Filter>
@@ -387,7 +390,7 @@
     <ClInclude Include="RenderGlobals.h">
       <Filter>Sources\Tools\Glew</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleFileSystem.h">
+    <ClInclude Include="ModuleImporter.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
     <ClInclude Include="External\Assimp\include\ai_assert.h">
@@ -501,6 +504,30 @@
     <ClInclude Include="External\Assimp\include\version.h">
       <Filter>Sources\Tools\Assimp</Filter>
     </ClInclude>
+    <ClInclude Include="External\DevIL\include\devil_cpp_wrapper.hpp">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DevIL\include\devil_internal_exports.h">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DevIL\include\il.h">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DevIL\include\ilu.h">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DevIL\include\ilut.h">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DevIL\include\ilut_config.h">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DevIL\include\ilu_region.h">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
+    <ClInclude Include="External\DevIL\include\il_wrap.h">
+      <Filter>Sources\Tools\DevIL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -519,13 +546,13 @@
       <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\3D Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\3D Helpers</Filter>
     </ClCompile>
     <ClCompile Include="ModuleSceneIntro.cpp">
       <Filter>Sources\Modules\Game</Filter>
@@ -707,7 +734,7 @@
     <ClCompile Include="PanelConfig.cpp">
       <Filter>Sources\Modules\GUI\Panels</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleFileSystem.cpp">
+    <ClCompile Include="ModuleImporter.cpp">
       <Filter>Sources\Modules\Main</Filter>
     </ClCompile>
   </ItemGroup>

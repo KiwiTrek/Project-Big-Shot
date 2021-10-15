@@ -1,24 +1,24 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleFileSystem.h"
+#include "ModuleImporter.h"
 #include "ModuleSceneIntro.h"
 
 #include "cimport.h"
 #include "scene.h"
 #include "postprocess.h"
 
-ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleImporter::ModuleImporter(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	name = "file_system";
 }
 
 // Destructor
-ModuleFileSystem::~ModuleFileSystem()
+ModuleImporter::~ModuleImporter()
 {
 }
 
 // Called before render is available
-bool ModuleFileSystem::Init()
+bool ModuleImporter::Init()
 {
 	if (App->gui != nullptr) App->gui->LogConsole(LOG("Init File System"));
 	bool ret = true;
@@ -29,13 +29,13 @@ bool ModuleFileSystem::Init()
 	aiAttachLogStream(&stream);
 
 	//ImportScene("Assets/warrior.fbx");
-	//ImportScene("Assets/BakerHouse.fbx");
+	ImportScene("Assets/BakerHouse.fbx");
 
 	return ret;
 }
 
 // Called before quitting
-bool ModuleFileSystem::CleanUp()
+bool ModuleImporter::CleanUp()
 {
 	if (App->gui != nullptr) App->gui->LogConsole(LOG("Destroying File System"));
 
@@ -45,12 +45,12 @@ bool ModuleFileSystem::CleanUp()
 	return true;
 }
 
-void ModuleFileSystem::AddPrimitive(Mesh* p)
+void ModuleImporter::AddPrimitive(Mesh* p)
 {
 	listMesh.push_back(p);
 }
 
-uint ModuleFileSystem::ImportScene(const char* path)
+uint ModuleImporter::ImportScene(const char* path)
 {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
@@ -70,7 +70,7 @@ uint ModuleFileSystem::ImportScene(const char* path)
 	return scene->mNumMeshes;
 }
 
-CustomMesh* ModuleFileSystem::ImportModel(aiMesh* mesh)
+CustomMesh* ModuleImporter::ImportModel(aiMesh* mesh)
 {
 	MeshData* tmp = new MeshData;
 	tmp->num_vertex = mesh->mNumVertices;

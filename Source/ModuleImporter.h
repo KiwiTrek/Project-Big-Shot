@@ -8,14 +8,14 @@
 class Application;
 struct aiMesh;
 
-class ModuleFileSystem : public Module
+class ModuleImporter : public Module
 {
 public:
 
-	ModuleFileSystem(Application* app, bool start_enabled = true);
+	ModuleImporter(Application* app, bool start_enabled = true);
 
 	// Destructor
-	virtual ~ModuleFileSystem();
+	virtual ~ModuleImporter();
 
 	bool Init();
 	bool CleanUp();

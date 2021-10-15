@@ -49,14 +49,14 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,7 +69,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -77,8 +77,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -122,6 +122,14 @@
     <ClInclude Include="External\Assimp\include\vector2.h" />
     <ClInclude Include="External\Assimp\include\vector3.h" />
     <ClInclude Include="External\Assimp\include\version.h" />
+    <ClInclude Include="External\DevIL\include\devil_cpp_wrapper.hpp" />
+    <ClInclude Include="External\DevIL\include\devil_internal_exports.h" />
+    <ClInclude Include="External\DevIL\include\il.h" />
+    <ClInclude Include="External\DevIL\include\ilu.h" />
+    <ClInclude Include="External\DevIL\include\ilut.h" />
+    <ClInclude Include="External\DevIL\include\ilut_config.h" />
+    <ClInclude Include="External\DevIL\include\ilu_region.h" />
+    <ClInclude Include="External\DevIL\include\il_wrap.h" />
     <ClInclude Include="External\Glew\include\glew.h" />
     <ClInclude Include="External\GPUDetect\include\DeviceId.h" />
     <ClInclude Include="External\GPUDetect\include\dxgi1_4.h" />
@@ -212,7 +220,7 @@
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Math.h" />
-    <ClInclude Include="ModuleFileSystem.h" />
+    <ClInclude Include="ModuleImporter.h" />
     <ClInclude Include="ModuleGuiManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="ModuleCamera3D.h" />
@@ -288,7 +296,7 @@
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
-    <ClCompile Include="ModuleFileSystem.cpp" />
+    <ClCompile Include="ModuleImporter.cpp" />
     <ClCompile Include="ModuleGuiManager.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />

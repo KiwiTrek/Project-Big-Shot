@@ -9,6 +9,7 @@ ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, sta
 	name = "input";
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, (int)KEY_STATE::KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
+	isHovering = false;
 }
 
 // Destructor
@@ -139,7 +140,7 @@ update_status ModuleInput::PreUpdate()
 				char* tmp = e.drop.file;
 				if (tmp != nullptr)
 				{
-					int c = App->fileSystem->ImportScene(tmp);
+					int c = App->importer->ImportScene(tmp);
 					for (int i = 0; i < c; i++)
 					{
 						App->renderer3D->InitMesh(App->sceneIntro->customMeshes.at(App->sceneIntro->customMeshes.size() - c + i));
@@ -153,6 +154,17 @@ update_status ModuleInput::PreUpdate()
 
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_STATE::KEY_UP)
 		return update_status::UPDATE_STOP;
+
+	if (isHovering)
+	{
+		SDL_Cursor* cursor;
+		cursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND);
+		SDL_SetCursor(cursor);
+	}
+	else
+	{
+		SDL_FreeCursor(SDL_GetCursor());
+	}
 
 	return update_status::UPDATE_CONTINUE;
 }

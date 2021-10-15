@@ -10,7 +10,7 @@ Application::Application(ConsoleBuffer* _buff)
 	sceneIntro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-	fileSystem = new ModuleFileSystem(this);
+	importer = new ModuleImporter(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -20,7 +20,7 @@ Application::Application(ConsoleBuffer* _buff)
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(fileSystem);
+	AddModule(importer);
 	
 	// Scenes
 	AddModule(sceneIntro);

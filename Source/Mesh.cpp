@@ -57,6 +57,8 @@ void Mesh::Render() const
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	DrawTex();
+
 	InnerRender();
 
 	glPopMatrix();
@@ -74,6 +76,12 @@ void Mesh::InnerRender() const
 	glEnd();
 
 	glPointSize(1.0f);
+}
+
+void Mesh::DrawTex() const
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, texture.id);
 }
 
 // ------------------------------------------------------------
