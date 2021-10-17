@@ -9,8 +9,6 @@
 #include <vector>
 
 #define MAX_LIGHTS 8
-#define CHECKERS_HEIGHT 64
-#define CHECKERS_WIDTH 64
 
 typedef unsigned char GLubyte;
 
@@ -21,10 +19,6 @@ public:
 	~ModuleRenderer3D();
 
 	bool Init();
-	bool CreateDefaultText();
-	bool InitMeshes(std::vector<Mesh*> list);
-	bool InitMesh(CustomMesh* m);
-	bool InitTex(Mesh* m);
 	update_status PreUpdate();
 	update_status PostUpdate();
 	void Render();
@@ -46,6 +40,10 @@ public:
 	const char* GetVideoDriver();
 	void ToggleWireframe();
 	bool IsWireframe();
+	void ToggleFaceNormals();
+	bool IsFaceNormals();
+	void ToggleVertexNormals();
+	bool IsVertexNormals();
 
 public:
 
@@ -53,7 +51,6 @@ public:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-	GLubyte checkerTex[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 
 private:
 	bool vSync = false;
@@ -63,6 +60,8 @@ private:
 	bool lighting = true;
 	bool colorMaterial = true;
 	bool texture2D = true;
+	bool faceNormals = false;
+	bool vecNormals = false;
 };
 
 #endif // !__MODULE_RENDERER_3D_H__

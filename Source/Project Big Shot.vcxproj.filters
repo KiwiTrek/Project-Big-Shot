@@ -528,6 +528,9 @@
     <ClInclude Include="External\DevIL\include\il_wrap.h">
       <Filter>Sources\Tools\DevIL</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Sources\3D Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">

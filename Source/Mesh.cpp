@@ -3,8 +3,41 @@
 #include "Mesh.h"
 
 // ------------------------------------------------------------
-Mesh::Mesh() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(MeshTypes::Primitive_Point)
-{}
+Mesh::Mesh() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(MeshTypes::Custom_Mesh), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
+normalsBuf(-1), textureBuf(-1), textureID(-1), texCoords(nullptr), normals(nullptr), colors(nullptr), texture(nullptr), drawFaceNormals(false), drawVertexNormals(false)
+{
+	SetTexture(nullptr);
+}
+
+Mesh::~Mesh()
+{
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDeleteBuffers(1, &vertexBuf);
+	delete vertices;
+	vertices = nullptr;
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glDeleteBuffers(1, &indexBuf);
+	delete indices;
+	indices = nullptr;
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDeleteBuffers(1, &normalsBuf);
+	delete normals;
+	normals = nullptr;
+
+	delete colors;
+	colors = nullptr;
+
+	delete texCoords;
+	texCoords = nullptr;
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteBuffers(1, &textureBuf);
+	glDeleteTextures(1, &textureID);
+
+	texture = nullptr;
+}
 
 // ------------------------------------------------------------
 MeshTypes Mesh::GetType() const
@@ -13,8 +46,126 @@ MeshTypes Mesh::GetType() const
 }
 
 // ------------------------------------------------------------
+void Mesh::GenerateBuffers()
+{
+	//Vertex
+	glGenBuffers(1, (GLuint*)&vertexBuf);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexNum * 3, vertices, GL_STATIC_DRAW);
+
+	//Normals
+	glGenBuffers(1, &normalsBuf);
+	glBindBuffer(GL_NORMAL_ARRAY, normalsBuf);
+	glBufferData(GL_NORMAL_ARRAY, sizeof(float) * vertexNum * 3, normals, GL_STATIC_DRAW);
+
+	//Textures
+	glGenBuffers(1, &textureBuf);
+	glBindBuffer(GL_ARRAY_BUFFER, textureBuf);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexNum* 2, texCoords, GL_STATIC_DRAW);
+
+	//Indices
+	glGenBuffers(1, &indexBuf);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indexNum, indices, GL_STATIC_DRAW);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// ------------------------------------------------------------
+bool Mesh::SetTexture(Texture* texture)
+{
+	if (texture != nullptr && texture->data != nullptr)
+	{
+		texture = texture;
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->width, texture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->data);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		return true;
+	}
+	else
+	{
+		SetDefaultTexture();
+		return false;
+	}
+}
+
+// ------------------------------------------------------------
+void Mesh::SetDefaultTexture()
+{
+	int checkersH = 64;
+	int checkersW = 64;
+
+	GLubyte checkerTex[64][64][4];
+
+	for (int i = 0; i < checkersH; ++i)
+	{
+		for (int j = 0; j < checkersW; ++j)
+		{
+			if (i + j == 0 || (i + j) % 2 == 0)
+			{
+				checkerTex[i][j][0] = 0;
+				checkerTex[i][j][1] = 0;
+				checkerTex[i][j][2] = 0;
+			}
+			else
+			{
+				checkerTex[i][j][0] = 255;
+				checkerTex[i][j][1] = 255;
+				checkerTex[i][j][2] = 255;
+			}
+			checkerTex[i][j][3] = 255;
+		}
+	}
+	
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkersW, checkersH, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerTex);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// ------------------------------------------------------------
+void Mesh::RemoveTexture(){}
+
+// ------------------------------------------------------------
 void Mesh::Render() const
 {
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	//vertices
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	//normals
+	glBindBuffer(GL_NORMAL_ARRAY, normalsBuf);
+	glNormalPointer(GL_FLOAT, 0, NULL);
+
+	//textures
+	glBindBuffer(GL_ARRAY_BUFFER, textureBuf);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	//indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
+
 	glPushMatrix();
 	glMultMatrixf(transform.M);
 
@@ -57,11 +208,28 @@ void Mesh::Render() const
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	DrawTex();
+	if (type == Primitive_Sphere)
+	{
+		InnerRender();
+	}
+	else
+	{
+		glDrawElements(GL_TRIANGLES, indexNum, GL_UNSIGNED_INT, NULL);
+	}
 
-	InnerRender();
+	if (drawFaceNormals) DrawFaceNormals();
+	if (drawVertexNormals) DrawVertexNormals();
 
 	glPopMatrix();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_NORMAL_ARRAY, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 // ------------------------------------------------------------
@@ -78,10 +246,60 @@ void Mesh::InnerRender() const
 	glPointSize(1.0f);
 }
 
-void Mesh::DrawTex() const
+// ------------------------------------------------------------
+void Mesh::DrawVertexNormals() const
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindTexture(GL_TEXTURE_2D, texture.id);
+	if (normalsBuf == -1)
+		return;
+
+	float normal_lenght = 0.5f;
+
+	//vertices normals
+	glBegin(GL_LINES);
+	for (size_t i = 0, c = 0; i < vertexNum * 3; i += 3, c += 4)
+	{
+		glColor3f(0.85f, 0.0f, 0.85f);
+		//glColor4f(colors[c], colors[c + 1], colors[c + 2], colors[c + 3]);
+		glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
+
+		glVertex3f(vertices[i] + (normals[i] * normal_lenght),
+			vertices[i + 1] + (normals[i + 1] * normal_lenght),
+			vertices[i + 2] + (normals[i + 2]) * normal_lenght);
+	}
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glEnd();
+}
+
+// ------------------------------------------------------------
+void Mesh::DrawFaceNormals() const
+{
+	if (normalsBuf == -1)
+		return;
+
+	//vertices normals
+	glBegin(GL_LINES);
+	for (size_t i = 0; i < vertexNum * 3; i += 3)
+	{
+		glColor3f(0.0f, 0.85f, 1.0f);
+		float vx = (vertices[i] + vertices[i + 3] + vertices[i + 6]) / 3;
+		float vy = (vertices[i + 1] + vertices[i + 4] + vertices[i + 7]) / 3;
+		float vz = (vertices[i + 2] + vertices[i + 5] + vertices[i + 8]) / 3;
+
+		float nx = (normals[i] + normals[i + 3] + normals[i + 6]) / 3;
+		float ny = (normals[i + 1] + normals[i + 4] + normals[i + 7]) / 3;
+		float nz = (normals[i + 2] + normals[i + 5] + normals[i + 8]) / 3;
+
+		glVertex3f(vx, vy, vz);
+
+		glVertex3f(vx + (normals[i] * 0.5f),
+			vy + (normals[i + 1] * 0.5f),
+			vz + (normals[i + 2]) * 0.5f);
+	}
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+	glEnd();
 }
 
 // ------------------------------------------------------------
@@ -102,93 +320,114 @@ void Mesh::Scale(float x, float y, float z)
 	transform.scale(x, y, z);
 }
 
-// CUBE ============================================
-CubeP::CubeP() : Mesh(), size(1.0f, 1.0f, 1.0f)
+// CUBE ===============================================
+CubeP::CubeP() : Mesh()
 {
 	type = MeshTypes::Primitive_Cube;
+
+	vertices = new float[24]
+	{
+		//Low vertices
+		-0.5f, -0.5f, -0.5f, //Bottom Left
+		0.5f, -0.5f, -0.5f, //Bottom Right
+		0.5f, -0.5f, 0.5f, //Top Right
+		-0.5f, -0.5f, 0.5f, //Top Left
+
+		//High vertices
+		-0.5f, 0.5f, -0.5f, //Bottom Left
+		0.5f, 0.5f, -0.5f, //Bottom Right
+		0.5f, 0.5f, 0.5f, //Top Right
+		-0.5f, 0.5f, 0.5f, //Top Left
+	};
+
+	indices = new uint[36]
+	{
+		// Faces
+		0,1,2, 2,3,0, //Bottom
+		3,2,6, 6,7,3, //Front
+		7,4,0, 0,3,7, //Left
+		2,1,5, 5,6,2, //Right
+		1,0,4, 4,5,1, //Back
+		5,4,7, 7,6,5 //Top
+	};
+
+	texCoords = new float[16]
+	{
+		//Low vertices
+		0.0f, 0.0f, //Bottom Left
+		1.0f, 0.0f, //Bottom Right
+		1.0f, 1.0f, //Top Right
+		0.0f, 1.0f, //Top Left
+
+		//High vertices
+		0.0f, 1.0f, //Bottom Left
+		1.0f, 1.0f, //Bottom Right
+		1.0f, 0.0f, //Top Right
+		0.0f, 0.0f //Top Left
+	};
+
+	vertexNum = 8;
+	indexNum = 36;
+
+	GenerateBuffers();
 }
 
-CubeP::CubeP(float sizeX, float sizeY, float sizeZ) : Mesh(), size(sizeX, sizeY, sizeZ)
+// PLANE ==============================================
+PlaneP::PlaneP() : Mesh()
 {
-	type = MeshTypes::Primitive_Cube;
-}
+	type = MeshTypes::Primitive_Plane;
 
-void CubeP::InnerRender() const
-{	
-	float sx = size.x * 0.5f;
-	float sy = size.y * 0.5f;
-	float sz = size.z * 0.5f;
+	vertices = new float[12]
+	{
+		-0.5f, 0.0f, -0.5f, //Bottom Left
+		0.5f, 0.0f, -0.5f, //Bottom Right
+		0.5f, 0.0f, 0.5f, //Top Right
+		-0.5f, 0.0f, 0.5f, //Top Left
+	};
 
-	glBegin(GL_QUADS);
+	indices = new uint[6]{ 0,3,2, 2,1,0 };
 
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(-sx, -sy, sz);
-	glVertex3f( sx, -sy, sz);
-	glVertex3f( sx,  sy, sz);
-	glVertex3f(-sx,  sy, sz);
+	texCoords = new float[8]
+	{
+		//Low vertices
+		0.0f, 0.0f, //Bottom Left
+		1.0f, 0.0f, //Bottom Right
+		1.0f, 1.0f, //Top Right
+		0.0f, 1.0f //Top Left
+	};
 
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glVertex3f( sx, -sy, -sz);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f(-sx,  sy, -sz);
-	glVertex3f( sx,  sy, -sz);
+	vertexNum = 4;
+	indexNum = 6;
 
-	glNormal3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(sx, -sy,  sz);
-	glVertex3f(sx, -sy, -sz);
-	glVertex3f(sx,  sy, -sz);
-	glVertex3f(sx,  sy,  sz);
-
-	glNormal3f(-1.0f, 0.0f, 0.0f);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f(-sx, -sy,  sz);
-	glVertex3f(-sx,  sy,  sz);
-	glVertex3f(-sx,  sy, -sz);
-
-	glNormal3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(-sx, sy,  sz);
-	glVertex3f( sx, sy,  sz);
-	glVertex3f( sx, sy, -sz);
-	glVertex3f(-sx, sy, -sz);
-
-	glNormal3f(0.0f, -1.0f, 0.0f);
-	glVertex3f(-sx, -sy, -sz);
-	glVertex3f( sx, -sy, -sz);
-	glVertex3f( sx, -sy,  sz);
-	glVertex3f(-sx, -sy,  sz);
-
-	glEnd();
+	GenerateBuffers();
 }
 
 // SPHERE ============================================
-SphereP::SphereP() : Mesh(), radius(1.0f)
+SphereP::SphereP() : Mesh(), radius(1), meshRings(12), quads(24)
 {
 	type = MeshTypes::Primitive_Sphere;
 }
 
-SphereP::SphereP(float radius) : Mesh(), radius(radius)
+SphereP::SphereP(float _radius, uint _meshRings, uint _quads) : Mesh(), radius(_radius), meshRings(_meshRings), quads(_quads)
 {
 	type = MeshTypes::Primitive_Sphere;
 }
 
 void SphereP::InnerRender() const
 {
-	int stacks = 16;
-	int slices = 16;
-
 	int i, j;
-	for (j = 0; j < stacks; j++)
+	for (j = 0; j < meshRings; j++)
 	{
-		double lat1 = (M_PI / stacks) * j - M_PI / 2;
-		double lat2 = (M_PI / stacks) * ((double)j + 1) - M_PI / 2;
-		double sinLat1 = sin(lat1);
-		double cosLat1 = cos(lat1);
-		double sinLat2 = sin(lat2);
-		double cosLat2 = cos(lat2);
+		double latitude1 = (M_PI / meshRings) * j - M_PI / 2;
+		double latitude2 = (M_PI / meshRings) * (j + 1) - M_PI / 2;
+		double sinLat1 = sin(latitude1);
+		double cosLat1 = cos(latitude1);
+		double sinLat2 = sin(latitude2);
+		double cosLat2 = cos(latitude2);
 		glBegin(GL_QUAD_STRIP);
-		for (i = 0; i <= slices; i++)
+		for (i = 0; i <= quads; i++)
 		{
-			double longitude = (2 * M_PI / slices) * i;
+			double longitude = (2 * M_PI / quads) * i;
 			double sinLong = sin(longitude);
 			double cosLong = cos(longitude);
 			double x1 = cosLong * cosLat1;
@@ -206,91 +445,180 @@ void SphereP::InnerRender() const
 	}
 }
 
-
-// CYLINDER ============================================
-CylinderP::CylinderP() : Mesh(), radius(1.0f), height(1.0f)
+// CYLINDER ==========================================
+CylinderP::CylinderP() : Mesh(), radius(1), height(1), sides(16)
 {
 	type = MeshTypes::Primitive_Cylinder;
+	CalcGeometry();
 }
 
-CylinderP::CylinderP(float radius, float height) : Mesh(), radius(radius), height(height)
+CylinderP::CylinderP(float _radius, float _height, uint _sides) : Mesh(), radius(_radius), height(_height), sides(_sides)
 {
 	type = MeshTypes::Primitive_Cylinder;
+	CalcGeometry();
 }
 
-void CylinderP::InnerRender() const
+void CylinderP::CalcGeometry()
 {
-	int n = 30;
+	float currentAngle = 0;
+	float increase = 2 * M_PI / sides;
 
-	// Cylinder Bottom
-	glBegin(GL_POLYGON);
-	
-	for(int i = 360; i >= 0; i -= (360 / n))
+	//Vertices ------------------------------------------------
+
+	std::vector<float> verticesTMP;
+
+	//Top center
+	verticesTMP.push_back(0);
+	verticesTMP.push_back(height * 0.5f);
+	verticesTMP.push_back(0);
+
+	//Top face
+	for (int i = 0; i < sides; i++)
 	{
-		float a = (float)(i * M_PI / 180); // degrees to radians
-		glVertex3f((GLfloat)(-height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
-	}
-	glEnd();
+		verticesTMP.push_back(radius * cos(currentAngle));//x
+		verticesTMP.push_back(height * 0.5f);		       //y
+		verticesTMP.push_back(radius * sin(currentAngle));//z
 
-	// Cylinder Top
-	glBegin(GL_POLYGON);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	for(int i = 0; i <= 360; i += (360 / n))
+		//anticlockwise
+		currentAngle -= increase;
+	}
+
+	currentAngle = 0;
+
+	//Bottom Center
+	verticesTMP.push_back(0);
+	verticesTMP.push_back(-height * 0.5f);
+	verticesTMP.push_back(0);
+
+	//Bottom face
+	for (int i = 0; i < sides; i++)
 	{
-		float a = (float)(i * M_PI / 180); // degrees to radians
-		glVertex3f((GLfloat)(height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
-	}
-	glEnd();
+		verticesTMP.push_back(radius * cos(currentAngle)); //x
+		verticesTMP.push_back(-height * 0.5f);			    //y
+		verticesTMP.push_back(radius * sin(currentAngle)); //z
 
-	// Cylinder "Cover"
-	glBegin(GL_QUAD_STRIP);
-	for(int i = 0; i < 480; i += (360 / n))
+		//clockwise
+		currentAngle -= increase;
+	}
+
+	// Indices ----------------------------------------------
+
+	std::vector<uint> indicesTMP;
+
+	//Top Face
+	for (int i = 1; i < sides; i++)
 	{
-		float a = (float)(i * M_PI / 180); // degrees to radians
-
-		glVertex3f((GLfloat)(height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
-		glVertex3f((GLfloat)(-height * 0.5f), (GLfloat)(radius * cos(a)), (GLfloat)(radius * sin(a)));
+		indicesTMP.push_back(0);
+		indicesTMP.push_back(i);
+		indicesTMP.push_back(i + 1);
 	}
-	glEnd();
+
+	indicesTMP.push_back(0);
+	indicesTMP.push_back(sides);
+	indicesTMP.push_back(1);
+
+	//Sides
+	for (int i = 1; i < sides; i++)
+	{
+		//Left triangle
+		indicesTMP.push_back(i);
+		indicesTMP.push_back(sides + i + 1);
+		indicesTMP.push_back(sides + i + 2);
+
+		//Right triangle
+		indicesTMP.push_back(i + sides + 2);
+		indicesTMP.push_back(i + 1);
+		indicesTMP.push_back(i);
+	}
+
+	indicesTMP.push_back(sides);
+	indicesTMP.push_back(2 * sides + 1);
+	indicesTMP.push_back(sides + 2);
+
+	indicesTMP.push_back(sides + 2);
+	indicesTMP.push_back(1);
+	indicesTMP.push_back(sides);
+
+	//Bottom Face
+	int k = sides + 1;
+	for (int i = 1; i < sides; i++)
+	{
+		indicesTMP.push_back(k);
+		indicesTMP.push_back(k + i + 1);
+		indicesTMP.push_back(k + i);
+	}
+
+	indicesTMP.push_back(k);
+	indicesTMP.push_back(sides + 2);
+	indicesTMP.push_back(2 * sides + 1);
+
+	vertexNum = verticesTMP.size();
+	vertices = new float[vertexNum]();
+
+	for (size_t i = 0; i < vertexNum; i++)
+	{
+		vertices[i] = verticesTMP[i];
+	}
+
+	indexNum = indicesTMP.size();
+	indices = new uint[indexNum]();
+
+	for (size_t i = 0; i < indexNum; i++)
+	{
+		indices[i] = indicesTMP[i];
+	}
+
+	verticesTMP.clear();
+	indicesTMP.clear();
+
+	GenerateBuffers();
 }
 
-// LINE ==================================================
-Line::Line() : Mesh(), origin(0, 0, 0), destination(1, 1, 1)
+// PYRAMID ===========================================
+PyramidP::PyramidP() : Mesh()
 {
-	type = MeshTypes::Primitive_Line;
+	type = MeshTypes::Primitive_Pyramid;
+
+	vertices = new float[15]
+	{
+		//Top Vertex
+		0.0f, 0.85f, 0.0f,
+
+		//Bottom 
+		-0.5f ,0.0f, -0.5f,
+		0.5f ,0.0f, -0.5f,
+		0.5f ,0.0f, 0.5f,
+		-0.5f ,0.0f, 0.5f
+	};
+
+	indices = new uint[18]
+	{
+		0, 4, 3, // Front
+		0, 3, 2, // Left
+		0, 2, 1, // Right
+		0, 1, 4,  // Back
+
+		1, 3, 4,  1, 2, 3 //Bottom
+	};
+
+	vertexNum = 5;
+	indexNum = 18;
+
+	GenerateBuffers();
 }
 
-Line::Line(float x, float y, float z) : Mesh(), origin(0, 0, 0), destination(x, y, z)
+// GRID ==============================================
+Grid::Grid() : Mesh(), normal(0, 1, 0), constant(1)
 {
-	type = MeshTypes::Primitive_Line;
+	type = MeshTypes::Primitive_Grid;
 }
 
-void Line::InnerRender() const
+Grid::Grid(float x, float y, float z, float d) : Mesh(), normal(x, y, z), constant(d)
 {
-	glLineWidth(2.0f);
-
-	glBegin(GL_LINES);
-
-	glVertex3f(origin.x, origin.y, origin.z);
-	glVertex3f(destination.x, destination.y, destination.z);
-
-	glEnd();
-
-	glLineWidth(1.0f);
+	type = MeshTypes::Primitive_Grid;
 }
 
-// PLANE ==================================================
-PlaneP::PlaneP() : Mesh(), normal(0, 1, 0), constant(1)
-{
-	type = MeshTypes::Primitive_Plane;
-}
-
-PlaneP::PlaneP(float x, float y, float z, float d) : Mesh(), normal(x, y, z), constant(d)
-{
-	type = MeshTypes::Primitive_Plane;
-}
-
-void PlaneP::InnerRender() const
+void Grid::Render() const
 {
 	glLineWidth(1.0f);
 
@@ -307,109 +635,4 @@ void PlaneP::InnerRender() const
 	}
 
 	glEnd();
-}
-
-// PYRAMID ================================================
-PyramidP::PyramidP() : Mesh(), base(1.0f, 1.0f), height(1.0f)
-{
-	type = MeshTypes::Primitive_Pyramid;
-}
-
-PyramidP::PyramidP(float baseX, float baseZ, float height) : Mesh(), base(baseX, baseZ), height(height)
-{
-	type = MeshTypes::Primitive_Pyramid;
-}
-
-void PyramidP::InnerRender() const
-{
-	float bx = base.x * 0.5f;
-	float bz = base.y * 0.5f;
-	float sh = height * 0.5f;
-
-	glBegin(GL_QUADS);
-
-	//Base
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glVertex3f(-bx, -sh, bz);
-	glVertex3f(bx, -sh, bz);
-	glVertex3f(bx, -sh, -bz);
-	glVertex3f(-bx, -sh, -bz);
-	
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-
-	//Faces
-	//vec3 edge1 = vec3(0 + bx, sh + sh, 0 - bz);
-	//vec3 edge2 = vec3(bx + bx, -sh + sh, bz - bz);
-	//vec3 normal = cross(edge2, edge1);
-	//normalize(normal);
-	//glNormal3f(normal.x, normal.y, normal.z);
-
-	float ang = (float)atan(height / bz);
-	glNormal3f(0.0f, ang, ang);
-
-	glVertex3f(0, sh, 0);
-	glVertex3f(-bx, -sh, bz);
-	glVertex3f(bx, -sh, bz);
-
-	//edge1 = vec3(0 - bx, sh + sh, 0 - bz);
-	//edge2 = vec3(bx - bx, -sh + sh, bz + bz);
-	//normal = cross(edge2, edge1);
-	//normalize(normal);
-	//glNormal3f(normal.x, normal.y, normal.z);
-
-	ang = (float)atan(height / bx);
-	glNormal3f(ang, ang, 0.0f);
-
-	glVertex3f(0, sh, 0);
-	glVertex3f(bx, -sh, bz);
-	glVertex3f(bx, -sh, -bz);
-
-	//edge1 = vec3(0 - bx, sh + sh, 0 + bz);
-	//edge2 = vec3(bx + bx, -sh + sh, -bz + bz);
-	//normal = cross(edge2, edge1);
-	//normalize(normal);
-	//glNormal3f(normal.x, normal.y, normal.z);
-
-	ang = (float)atan(height / -bz);
-	glNormal3f(0.0f, ang, ang);
-
-	glVertex3f(0, sh, 0);
-	glVertex3f(bx, -sh, -bz);
-	glVertex3f(-bx, -sh, -bz);
-
-	//edge1 = vec3(0 + bx, sh + sh, 0 + bz);
-	//edge2 = vec3(-bx + bx, -sh + sh, -bz - bz);
-	//normal = cross(edge2, edge1);
-	//normalize(normal);
-	//glNormal3f(normal.x, normal.y, normal.z);
-
-	ang = (float)atan(height / -bx);
-	glNormal3f(ang, ang, 0.0f);
-
-	glVertex3f(0, sh, 0);
-	glVertex3f(-bx, -sh, -bz);
-	glVertex3f(-bx, -sh, bz);
-
-	glEnd();
-}
-
-// CUSTOM MESH ============================================
-CustomMesh::CustomMesh() : Mesh()
-{
-	type = MeshTypes::Custom_Mesh;
-}
-
-CustomMesh::CustomMesh(MeshData* _data) : Mesh(), data(_data)
-{
-	type = MeshTypes::Custom_Mesh;
-}
-
-void CustomMesh::InnerRender() const
-{
-	glBindBuffer(GL_ARRAY_BUFFER, data->id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, data->id_index);
-
-	glDrawElements(GL_TRIANGLES, data->num_index, GL_UNSIGNED_INT, 0);
 }

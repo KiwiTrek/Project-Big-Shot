@@ -9,7 +9,7 @@
 
 class PyramidP;
 class CubeP;
-class CustomMesh;
+class Mesh;
 
 class ModuleSceneIntro : public Module
 {
@@ -18,6 +18,7 @@ public:
 	~ModuleSceneIntro();
 
 	bool Init();
+	bool Start();
 	update_status Update(float dt);
 	update_status PostUpdate();
 	bool CleanUp();
@@ -25,7 +26,6 @@ public:
 public:
 	CubeP* c;
 	PyramidP* pyd;
-	std::vector<CustomMesh*> customMeshes;
 	float rotation;
 };
 

@@ -18,10 +18,11 @@ public:
 	virtual ~ModuleImporter();
 
 	bool Init();
+	bool Start();
 	bool CleanUp();
 
 	uint ImportScene(const char* path);
-	CustomMesh* ImportModel(aiMesh* mesh);
+	Mesh* ImportModel(aiMesh* mesh);
 	void AddPrimitive(Mesh* p);
 
 public:

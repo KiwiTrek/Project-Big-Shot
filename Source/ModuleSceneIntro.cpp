@@ -11,7 +11,6 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 ModuleSceneIntro::~ModuleSceneIntro()
 {}
 
-// Load assets
 bool ModuleSceneIntro::Init()
 {
 	if (App->gui != nullptr) App->gui->LogConsole(LOG("Loading Intro assets"));
@@ -19,15 +18,22 @@ bool ModuleSceneIntro::Init()
 	App->camera->Move(vec3(0, 2, 0));
 	App->camera->LookAt(vec3(0, 0, 0));
 
-	PlaneP* p = new PlaneP(0, 1, 0, 0);
-	p->axis = true;
-	App->importer->AddPrimitive(p);
+	rotation = 0.0f;
+	return ret;
+}
 
-	c = new CubeP(1, 1, 1);
+// Load assets
+bool ModuleSceneIntro::Start()
+{
+	Grid* g = new Grid(0, 1, 0, 0);
+	g->axis = true;
+	App->importer->AddPrimitive(g);
+
+	c = new CubeP();
 	c->SetPos(-2, 0, -3);
 	App->importer->AddPrimitive(c);
 
-	pyd = new PyramidP(2, 2, 2);
+	pyd = new PyramidP();
 	pyd->SetPos(2, 0, -3);
 	App->importer->AddPrimitive(pyd);
 
@@ -35,11 +41,13 @@ bool ModuleSceneIntro::Init()
 	s->SetPos(0, 0, -3);
 	App->importer->AddPrimitive(s);
 
-	rotation = 0.0f;
-	return ret;
+	CylinderP* cyl = new CylinderP();
+	cyl->SetPos(0, 0, -6);
+	App->importer->AddPrimitive(cyl);
+	
+	return true;
 }
 
-// Load assets
 bool ModuleSceneIntro::CleanUp()
 {
 	if (App->gui != nullptr) App->gui->LogConsole(LOG("Unloading Intro scene"));
@@ -57,14 +65,6 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	pyd->SetRotation(rotation, vec3(0, 1, 0));
 	c->SetRotation(rotation, vec3(0, 1, 0));
-
-	if (!customMeshes.empty())
-	{
-		std::vector<CustomMesh*>::iterator w = customMeshes.begin();
-		(*w)->SetPos(0, 0, 1);
-		//(*w)->SetRotation(45.0f, (1.0f, 0.0f, 0.0f)); TODO
-		(*w)->Scale(0.05, 0.05, 0.05);
-	}
 
 	return update_status::UPDATE_CONTINUE;
 }

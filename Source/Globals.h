@@ -36,6 +36,7 @@ typedef unsigned int uint;
 typedef unsigned __int32 uint32;
 typedef unsigned __int64 uint64;
 typedef unsigned long long UID;
+typedef unsigned short ushort;
 
 enum class update_status
 {

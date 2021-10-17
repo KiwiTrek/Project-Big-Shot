@@ -3,9 +3,12 @@
 
 #include "glmath.h"
 #include "Color.h"
+#include "Texture.h"
+#include <vector>
 
 enum MeshTypes
 {
+	Primitive_Grid,
 	Primitive_Point,
 	Primitive_Line,
 	Primitive_Plane,
@@ -14,27 +17,7 @@ enum MeshTypes
 	Primitive_Cylinder,
 	Primitive_Pyramid,
 	Custom_Mesh,
-};
-
-struct MeshData
-{
-	uint id_index = 0; // index in VRAM
-	uint num_index = 0;
-	uint* indices = nullptr;
-
-	uint id_vertex = 0; // unique vertex in VRAM
-	uint num_vertex = 0;
-	float* vertices = nullptr;
-
-	// normals for each face
-	//uint num_normals = 0;
-	//vec3* normals = nullptr;
-};
-
-struct TexData
-{
-	int* data = nullptr;
-	uint id = 0;
+	Mult_Mesh,
 };
 
 class Mesh
@@ -42,21 +25,51 @@ class Mesh
 public:
 
 	Mesh();
+	virtual	~Mesh();
+
+	void			GenerateBuffers();
+
+	bool			SetTexture(Texture* texture);
+	void			SetDefaultTexture();
+	void			RemoveTexture();
 
 	virtual void	Render() const;
-	virtual void	DrawTex() const;
 	virtual void	InnerRender() const;
+	void			DrawVertexNormals() const;
+	void			DrawFaceNormals() const;
+
 	void			SetPos(float x, float y, float z);
 	void			SetRotation(float angle, const vec3 &u);
 	void			Scale(float x, float y, float z);
-	MeshTypes	GetType() const;
+
+	MeshTypes		GetType() const;
 
 public:
 	
 	Color color;
 	mat4x4 transform;
 	bool axis,wire;
-	TexData texture;
+
+	uint indexBuf = -1; // index in VRAM
+	int indexNum = -1;
+	uint* indices = nullptr;
+
+	uint vertexBuf = -1; // unique vertex in VRAM
+	int vertexNum = -1; // = normalsNum
+	float* vertices = nullptr;
+
+	// normals for each face
+	uint normalsBuf = -1;
+	float* normals = nullptr;
+
+	uint textureBuf = -1;
+	uint textureID = -1;
+	Texture* texture = nullptr;
+	float* texCoords = nullptr;
+	float* colors = nullptr;
+
+	bool drawVertexNormals;
+	bool drawFaceNormals;
 
 protected:
 	MeshTypes type;
@@ -67,45 +80,6 @@ class CubeP : public Mesh
 {
 public :
 	CubeP();
-	CubeP(float sizeX, float sizeY, float sizeZ);
-	void InnerRender() const;
-public:
-	vec3 size;
-};
-
-// ============================================
-class SphereP : public Mesh
-{
-public:
-	SphereP();
-	SphereP(float radius);
-	void InnerRender() const;
-public:
-	float radius;
-};
-
-// ============================================
-class CylinderP : public Mesh
-{
-public:
-	CylinderP();
-	CylinderP(float radius, float height);
-	void InnerRender() const;
-public:
-	float radius;
-	float height;
-};
-
-// ============================================
-class Line : public Mesh
-{
-public:
-	Line();
-	Line(float x, float y, float z);
-	void InnerRender() const;
-public:
-	vec3 origin;
-	vec3 destination;
 };
 
 // ============================================
@@ -113,11 +87,34 @@ class PlaneP : public Mesh
 {
 public:
 	PlaneP();
-	PlaneP(float x, float y, float z, float d);
-	void InnerRender() const;
+};
+
+// ============================================
+class SphereP : public Mesh
+{
 public:
-	vec3 normal;
-	float constant;
+	SphereP();
+	SphereP(float _radius, uint _meshRings, uint _quads);
+	void InnerRender() const;
+
+public:
+	float radius;
+	uint meshRings;
+	uint quads;
+};
+
+// ============================================
+class CylinderP : public Mesh
+{
+public:
+	CylinderP();
+	CylinderP(float _radius, float _height, uint _sides);
+	void CalcGeometry();
+
+public:
+	float radius;
+	float height;
+	uint sides;
 };
 
 // ============================================
@@ -125,21 +122,17 @@ class PyramidP : public Mesh
 {
 public:
 	PyramidP();
-	PyramidP(float baseX, float baseZ, float height);
-	void InnerRender() const;
-public:
-	vec2 base;
-	float height;
 };
 
-class CustomMesh : public Mesh
+// ============================================
+class Grid : public Mesh
 {
 public:
-	CustomMesh();
-	CustomMesh(MeshData* _data);
-	void InnerRender() const;
+	Grid();
+	Grid(float x, float y, float z, float d);
+	void Render() const;
 public:
-	MeshData* data;
+	vec3 normal;
+	float constant;
 };
-
 #endif // !__MESH_H__

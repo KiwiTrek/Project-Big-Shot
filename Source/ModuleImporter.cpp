@@ -28,10 +28,14 @@ bool ModuleImporter::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	//ImportScene("Assets/warrior.fbx");
-	ImportScene("Assets/BakerHouse.fbx");
-
 	return ret;
+}
+
+bool ModuleImporter::Start()
+{
+	//ImportScene("Assets/warrior.fbx");
+	//ImportScene("Assets/BakerHouse.fbx");
+	return true;
 }
 
 // Called before quitting
@@ -58,7 +62,7 @@ uint ModuleImporter::ImportScene(const char* path)
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
-			App->sceneIntro->customMeshes.push_back(ImportModel(scene->mMeshes[i]));
+			ImportModel(scene->mMeshes[i]);
 		}
 		aiReleaseImport(scene);
 	}
@@ -70,27 +74,19 @@ uint ModuleImporter::ImportScene(const char* path)
 	return scene->mNumMeshes;
 }
 
-CustomMesh* ModuleImporter::ImportModel(aiMesh* mesh)
+Mesh* ModuleImporter::ImportModel(aiMesh* mesh)
 {
-	MeshData* tmp = new MeshData;
-	tmp->num_vertex = mesh->mNumVertices;
-	tmp->vertices = new float[tmp->num_vertex * 3];
-	memcpy(tmp->vertices, mesh->mVertices, sizeof(float) * tmp->num_vertex * 3);
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Loaded new mesh with %d vertices", tmp->num_vertex));
+	Mesh* m = new Mesh();
+	m->vertexNum = mesh->mNumVertices;
+	m->vertices = new float[m->vertexNum * 3];
+	memcpy(m->vertices, mesh->mVertices, sizeof(float) * m->vertexNum * 3);
+
+	if (App->gui != nullptr) App->gui->LogConsole(LOG("Loaded new mesh with %d vertices", m->vertexNum));
 
 	if (mesh->HasFaces())
 	{
-		//if (mesh->HasNormals())
-		//{
-		//	tmp->num_normals = mesh->mNumVertices;
-		//	for (int k = 0; k < tmp->num_normals; k++)
-		//	{
-		//		tmp->normals[k].Set((float)mesh->mNormals[k].x, (float)mesh->mNormals[k].y, (float)mesh->mNormals[k].z);
-		//	}
-		//}
-
-		tmp->num_index = mesh->mNumFaces * 3;
-		tmp->indices = new uint[tmp->num_index];
+		m->indexNum = mesh->mNumFaces * 3;
+		m->indices = new uint[m->indexNum];
 		for (uint j = 0; j < mesh->mNumFaces; j++)
 		{
 			if (mesh->mFaces[j].mNumIndices != 3)
@@ -100,11 +96,55 @@ CustomMesh* ModuleImporter::ImportModel(aiMesh* mesh)
 			}
 			else
 			{
-				memcpy(&tmp->indices[j * 3], mesh->mFaces[j].mIndices, sizeof(uint) * 3);
+				memcpy(&m->indices[j * 3], mesh->mFaces[j].mIndices, sizeof(uint) * 3);
 			}
 		}
 
-		CustomMesh* m = new CustomMesh(tmp);
+		m->texCoords = new float[m->vertexNum * 2]();
+		m->colors = new float[m->indexNum * 4]();	//RGBA
+		m->normals = new float[mesh->mNumVertices * 3]();
+
+		int t = 0;
+
+		for (uint v = 0, n = 0, tx = 0, c = 0; v < mesh->mNumVertices; v++, n += 3, c += 4, tx += 2)
+		{
+			if (mesh->HasNormals())
+			{
+				m->normals[n] = mesh->mNormals[v].x;
+				m->normals[n + 1] = mesh->mNormals[v].y;
+				m->normals[n + 2] = mesh->mNormals[v].z;
+			}
+
+			if (mesh->HasVertexColors(v))
+			{
+				m->colors[c] = mesh->mColors[v]->r;
+				m->colors[c + 1] = mesh->mColors[v]->g;
+				m->colors[c + 2] = mesh->mColors[v]->b;
+				m->colors[c + 3] = mesh->mColors[v]->a;
+			}
+			else
+			{
+				m->colors[c] = 0.0f;
+				m->colors[c + 1] = 0.0f;
+				m->colors[c + 2] = 0.0f;
+				m->colors[c + 3] = 0.0f;
+			}
+
+			if (mesh->mTextureCoords[0])
+			{
+				m->texCoords[tx] = mesh->mTextureCoords[0][v].x;
+				m->texCoords[tx + 1] = mesh->mTextureCoords[0][v].y;
+			}
+			else
+			{
+				m->texCoords[tx] = 0.0f;
+				m->texCoords[tx + 1] = 0.0f;
+			}
+			t = tx;
+		}
+
+		m->GenerateBuffers();
+
 		listMesh.push_back(m);
 		return m;
 	}

@@ -141,10 +141,6 @@ update_status ModuleInput::PreUpdate()
 				if (tmp != nullptr)
 				{
 					int c = App->importer->ImportScene(tmp);
-					for (int i = 0; i < c; i++)
-					{
-						App->renderer3D->InitMesh(App->sceneIntro->customMeshes.at(App->sceneIntro->customMeshes.size() - c + i));
-					}
 				}
 				SDL_free(tmp);
 				break;

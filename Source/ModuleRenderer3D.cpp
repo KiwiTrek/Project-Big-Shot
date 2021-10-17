@@ -118,71 +118,12 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
-
-		CreateDefaultText();
 	}
 
 	// Projection matrix for
 	OnResize(App->window->GetWidth(), App->window->GetHeight());
 
-	// Loading Meshes
-	ret = InitMeshes(App->importer->listMesh);
-
 	return ret;
-}
-
-bool ModuleRenderer3D::InitMeshes(std::vector<Mesh*> list)
-{
-	std::vector<Mesh*>::iterator item = list.begin();
-
-	while (item != list.end())
-	{
-		if ((*item)->GetType() == MeshTypes::Custom_Mesh) InitMesh((CustomMesh*)(*item));
-		if ((*item)->GetType() != MeshTypes::Primitive_Plane) InitTex((*item));
-		++item;
-	}
-
-	return true;
-}
-
-bool ModuleRenderer3D::InitMesh(CustomMesh* m)
-{
-	glGenBuffers(1, &m->data->id_vertex);
-	glGenBuffers(1, &m->data->id_index);
-
-	glBindBuffer(GL_ARRAY_BUFFER, m->data->id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->data->num_vertex * 3, m->data->vertices, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->data->id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m->data->num_index, m->data->indices, GL_STATIC_DRAW);
-	return true;
-}
-
-bool ModuleRenderer3D::InitTex(Mesh* m)
-{
-	if (m->texture.data != nullptr)
-	{
-		//Shenanigans
-		return false;
-	}
-	else
-	{
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glGenTextures(1, &m->texture.id);
-		glBindTexture(GL_TEXTURE_2D, m->texture.id);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerTex);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	return true;
 }
 
 // PreUpdate: clear buffer
@@ -226,6 +167,8 @@ void ModuleRenderer3D::Render()
 	while (item != App->importer->listMesh.end())
 	{
 		(*item)->wire = wireframe;
+		(*item)->drawFaceNormals = faceNormals;
+		(*item)->drawVertexNormals = vecNormals;
 		(*item)->Render();
 		++item;
 	}
@@ -252,30 +195,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-bool ModuleRenderer3D::CreateDefaultText()
-{
-	for (int i = 0; i < CHECKERS_HEIGHT; ++i)
-	{
-		for (int j = 0; j < CHECKERS_WIDTH; ++j)
-		{
-			if (i + j == 0 || (i + j) % 2 == 0)
-			{
-				checkerTex[i][j][0] = 0;
-				checkerTex[i][j][1] = 0;
-				checkerTex[i][j][2] = 0;
-			}
-			else
-			{
-				checkerTex[i][j][0] = 255;
-				checkerTex[i][j][1] = 255;
-				checkerTex[i][j][2] = 255;
-			}
-			checkerTex[i][j][3] = 255;
-		}
-	}
-	return true;
 }
 
 bool ModuleRenderer3D::GetVSync()
@@ -351,4 +270,24 @@ void ModuleRenderer3D::ToggleTexture2D()
 bool ModuleRenderer3D::IsTexture2D()
 {
 	return texture2D;
+}
+
+void ModuleRenderer3D::ToggleFaceNormals()
+{
+	faceNormals = !faceNormals;
+}
+
+bool ModuleRenderer3D::IsFaceNormals()
+{
+	return faceNormals;
+}
+
+void ModuleRenderer3D::ToggleVertexNormals()
+{
+	vecNormals = !vecNormals;
+}
+
+bool ModuleRenderer3D::IsVertexNormals()
+{
+	return vecNormals;
 }

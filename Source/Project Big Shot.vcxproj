@@ -236,6 +236,7 @@
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="RenderGlobals.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
