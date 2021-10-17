@@ -6,7 +6,6 @@
 Mesh::Mesh() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(MeshTypes::Custom_Mesh), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
 normalsBuf(-1), textureBuf(-1), textureID(-1), texCoords(nullptr), normals(nullptr), colors(nullptr), texture(nullptr), drawFaceNormals(false), drawVertexNormals(false)
 {
-	SetTexture(nullptr);
 }
 
 Mesh::~Mesh()
@@ -102,10 +101,10 @@ bool Mesh::SetTexture(Texture* texture)
 // ------------------------------------------------------------
 void Mesh::SetDefaultTexture()
 {
-	int checkersH = 64;
-	int checkersW = 64;
+	int checkersH = 32;
+	int checkersW = 32;
 
-	GLubyte checkerTex[64][64][4];
+	GLubyte checkerTex[32][32][4];
 
 	for (int i = 0; i < checkersH; ++i)
 	{
@@ -370,6 +369,7 @@ CubeP::CubeP() : Mesh()
 	indexNum = 36;
 
 	GenerateBuffers();
+	SetTexture(nullptr);
 }
 
 // PLANE ==============================================
@@ -400,6 +400,7 @@ PlaneP::PlaneP() : Mesh()
 	indexNum = 6;
 
 	GenerateBuffers();
+	SetTexture(nullptr);
 }
 
 // SPHERE ============================================
@@ -552,6 +553,8 @@ void CylinderP::CalcGeometry()
 	indicesTMP.push_back(sides + 2);
 	indicesTMP.push_back(2 * sides + 1);
 
+	//TODO: Texcoords
+
 	vertexNum = verticesTMP.size();
 	vertices = new float[vertexNum]();
 
@@ -572,6 +575,7 @@ void CylinderP::CalcGeometry()
 	indicesTMP.clear();
 
 	GenerateBuffers();
+	SetTexture(nullptr);
 }
 
 // PYRAMID ===========================================
@@ -601,10 +605,13 @@ PyramidP::PyramidP() : Mesh()
 		1, 3, 4,  1, 2, 3 //Bottom
 	};
 
+	//TODO: Texcoords
+
 	vertexNum = 5;
 	indexNum = 18;
 
 	GenerateBuffers();
+	SetTexture(nullptr);
 }
 
 // GRID ==============================================

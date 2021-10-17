@@ -30,7 +30,6 @@ public:
 	void			GenerateBuffers();
 
 	bool			SetTexture(Texture* texture);
-	void			SetDefaultTexture();
 	void			RemoveTexture();
 
 	virtual void	Render() const;
@@ -72,6 +71,7 @@ public:
 	bool drawFaceNormals;
 
 protected:
+	void			SetDefaultTexture();
 	MeshTypes type;
 };
 

@@ -34,7 +34,7 @@ bool ModuleImporter::Init()
 bool ModuleImporter::Start()
 {
 	//ImportScene("Assets/warrior.fbx");
-	//ImportScene("Assets/BakerHouse.fbx");
+	ImportScene("Assets/BakerHouse.fbx");
 	return true;
 }
 
@@ -144,6 +144,7 @@ Mesh* ModuleImporter::ImportModel(aiMesh* mesh)
 		}
 
 		m->GenerateBuffers();
+		m->SetTexture(nullptr);
 
 		listMesh.push_back(m);
 		return m;
