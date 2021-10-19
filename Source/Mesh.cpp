@@ -73,7 +73,7 @@ void Mesh::GenerateBuffers()
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -101,28 +101,20 @@ bool Mesh::SetTexture(Texture* texture)
 // ------------------------------------------------------------
 void Mesh::SetDefaultTexture()
 {
-	int checkersH = 32;
-	int checkersW = 32;
+	int checkersH = 128;
+	int checkersW = 128;
 
-	GLubyte checkerTex[32][32][4];
+	GLubyte checkerTex[128][128][4];
 
 	for (int i = 0; i < checkersH; ++i)
 	{
 		for (int j = 0; j < checkersW; ++j)
 		{
-			if (i + j == 0 || (i + j) % 2 == 0)
-			{
-				checkerTex[i][j][0] = 0;
-				checkerTex[i][j][1] = 0;
-				checkerTex[i][j][2] = 0;
-			}
-			else
-			{
-				checkerTex[i][j][0] = 255;
-				checkerTex[i][j][1] = 255;
-				checkerTex[i][j][2] = 255;
-			}
-			checkerTex[i][j][3] = 255;
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerTex[i][j][0] = (GLubyte)c;
+			checkerTex[i][j][1] = (GLubyte)c;
+			checkerTex[i][j][2] = (GLubyte)c;
+			checkerTex[i][j][3] = (GLubyte)255;
 		}
 	}
 	
@@ -344,8 +336,8 @@ CubeP::CubeP() : Mesh()
 		// Faces
 		0,1,2, 2,3,0, //Bottom
 		3,2,6, 6,7,3, //Front
-		7,4,0, 0,3,7, //Left
 		2,1,5, 5,6,2, //Right
+		7,4,0, 0,3,7, //Left
 		1,0,4, 4,5,1, //Back
 		5,4,7, 7,6,5 //Top
 	};
