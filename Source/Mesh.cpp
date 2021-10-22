@@ -85,7 +85,7 @@ bool Mesh::SetTexture(Texture* texture)
 {
 	if (texture != nullptr && texture->data != nullptr)
 	{
-		texture = texture;
+		this->texture = texture;
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->width, texture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->data);
 		glBindTexture(GL_TEXTURE_2D, 0);

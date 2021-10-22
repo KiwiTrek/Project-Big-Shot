@@ -7,6 +7,7 @@
 
 class Application;
 struct aiMesh;
+struct aiScene;
 
 class ModuleImporter : public Module
 {
@@ -23,14 +24,16 @@ public:
 
 	uint ImportScene(const char* path);
 	Mesh* ImportModel(aiMesh* mesh);
+	Texture* LoadTexture(const char* path);
+	Texture* LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path);
 	void AddPrimitive(Mesh* p);
+	void SplitPath(const char* fullPath, std::string* path, std::string* fileName);
+	std::string NormalizePath(const char* path);
+	std::string AssetsPathCorrection(const char* path);
 
 public:
 
 	std::vector<Mesh*> listMesh;
-
-private:
-
 };
 
 #endif // !__MODULE_FILE_SYSTEM_H__

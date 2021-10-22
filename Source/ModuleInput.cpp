@@ -137,12 +137,25 @@ update_status ModuleInput::PreUpdate()
 
 			case SDL_DROPFILE:
 			{
-				char* tmp = e.drop.file;
-				if (tmp != nullptr)
+				std::string tmp;
+				tmp.assign(e.drop.file);
+				if (tmp.empty() != true)
 				{
-					int c = App->importer->ImportScene(tmp);
+					if (tmp.find(".fbx") != std::string::npos)
+					{
+						App->importer->ImportScene(tmp.c_str());
+					}
+					else if(tmp.find(".png") != std::string::npos)
+					{
+						std::vector<Mesh*>::iterator m = App->importer->listMesh.begin();
+
+						while (m != App->importer->listMesh.end())
+						{
+							(*m)->SetTexture(App->importer->LoadTexture(tmp.c_str()));
+							++m;
+						}
+					}
 				}
-				SDL_free(tmp);
 				break;
 			}
 		}

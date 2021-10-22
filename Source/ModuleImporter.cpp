@@ -2,6 +2,9 @@
 #include "Application.h"
 #include "ModuleImporter.h"
 #include "ModuleSceneIntro.h"
+#include "il.h"
+#include "ilu.h"
+#include "ilut.h"
 
 #include "cimport.h"
 #include "scene.h"
@@ -27,6 +30,11 @@ bool ModuleImporter::Init()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
+
+	// DevIL
+	ilInit();
+	iluInit();
+	ilutRenderer(ILUT_OPENGL);
 
 	return ret;
 }
@@ -54,6 +62,79 @@ void ModuleImporter::AddPrimitive(Mesh* p)
 	listMesh.push_back(p);
 }
 
+Texture* ModuleImporter::LoadTexture(const char* path)
+{
+	uint id = 0;
+	ilGenImages(1, &id);
+	ilBindImage(id);
+
+	std::string p;
+	std::string name;
+	SplitPath(path, &p, &name);
+	std::string nPath = NormalizePath(path);
+	std::string rPath = AssetsPathCorrection(nPath.c_str());
+
+	ilEnable(IL_ORIGIN_SET);
+	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+
+	Texture* texture = new Texture();
+
+	if(id ==0)
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("Error generation the image buffer: %s, %d",path,ilGetError()));
+
+	ILenum fileFormat = IL_PNG;
+
+	// TODO:: Change to ilLoadL
+	if (ilLoad(fileFormat, rPath.c_str()) == IL_FALSE)
+	{
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("Error loading the texture %s: %d, %s", path, ilGetError(),iluErrorString(ilGetError())));
+		if (ilLoadImage(rPath.c_str()) == IL_FALSE)
+		{
+			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error loading the texture from %s", path));
+		}
+	}
+
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+
+	ILenum error = ilGetError();
+
+	if (error != IL_NO_ERROR)
+	{
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("Texture error: %d, %s", error,iluErrorString(error)));
+	}
+	else
+	{
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("Texture loaded successfully from: %s",path));
+
+		texture->id = id;
+		texture->name = name;
+		texture->data = ilGetData();
+		texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+		texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+		texture->path = nPath;
+	}
+
+	return texture;
+}
+
+Texture* ModuleImporter::LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path)
+{
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	aiString texPath;
+	aiGetMaterialTexture(material, aiTextureType::aiTextureType_DIFFUSE, mesh->mMaterialIndex, &texPath);
+
+	Texture* texture = new Texture();
+
+	if (texPath.length != 0)
+	{
+		texture = LoadTexture(path);
+		texture->name = texPath.C_Str();
+		texture->path = path;
+		return texture;
+	}
+	return nullptr;
+}
+
 uint ModuleImporter::ImportScene(const char* path)
 {
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -62,7 +143,9 @@ uint ModuleImporter::ImportScene(const char* path)
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
-			ImportModel(scene->mMeshes[i]);
+			Mesh* m = ImportModel(scene->mMeshes[i]);
+			m->SetTexture(LoadTexture(scene, scene->mMeshes[i], path));
+			m->GenerateBuffers();
 		}
 		aiReleaseImport(scene);
 	}
@@ -143,12 +226,58 @@ Mesh* ModuleImporter::ImportModel(aiMesh* mesh)
 			t = tx;
 		}
 
-		m->GenerateBuffers();
-		m->SetTexture(nullptr);
-
 		listMesh.push_back(m);
 		return m;
 	}
 
 	return nullptr;
+}
+
+void ModuleImporter::SplitPath(const char* fullPath, std::string* path, std::string* fileName)
+{
+	if (fullPath != nullptr)
+	{
+		std::string full(fullPath);
+		size_t pos_separator = full.find_last_of("\\/");
+		size_t pos_dot = full.find_last_of(".");
+
+		if (path != nullptr)
+		{
+			if (pos_separator < full.length())
+				*path = full.substr(0, pos_separator + 1).c_str();
+			else
+				path->clear();
+		}
+
+		if (fileName != nullptr)
+		{
+			if (pos_separator < full.length())
+				*fileName = full.substr(pos_separator + 1, std::string::npos);
+		}
+	}
+}
+
+std::string ModuleImporter::NormalizePath(const char* path)
+{
+	std::string newPath(path);
+	for (int i = 0; i < newPath.size(); ++i)
+	{
+		if (newPath[i] == '\\') newPath[i] = '/';
+	}
+	return newPath;
+}
+
+std::string ModuleImporter::AssetsPathCorrection(const char* path)
+{
+	std::string newPath(path);
+	std::size_t pos = newPath.find("Assets");
+	if(pos>newPath.size())
+	{
+		if (App->gui != nullptr) App->gui->LogConsole(LOG("Trying to load file out of the working directory!"));
+	}
+	else
+	{
+		newPath = newPath.substr(pos);
+	}
+	return newPath;
 }
