@@ -27,9 +27,12 @@ bool ModuleGuiManager::Start()
     ImGui::CreateContext();
     ImGuiIO& ioHandler = ImGui::GetIO(); (void)ioHandler;
     ioHandler.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    ioHandler.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     ImGui::StyleColorsLight();
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
     ImGui_ImplOpenGL3_Init("#version 460");
+
+    //TODO: Setup Style
 
     about = new PanelAbout(App);
     console = new PanelConsole(App);
@@ -51,6 +54,9 @@ update_status ModuleGuiManager::PreUpdate()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(App->window->window);
     ImGui::NewFrame();
+
+    ImGuiIO& io = ImGui::GetIO();
+    usingKeyboard = io.WantCaptureKeyboard;
 
     return update_status::UPDATE_CONTINUE;
 }

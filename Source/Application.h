@@ -57,9 +57,9 @@ public:
 	//void SaveConfig() const;
 
 	void SetAppName(std::string _name);
-	const char* GetAppName();
+	std::string GetAppName();
 	void SetOrgName(std::string _name);
-	const char* GetOrgName();
+	std::string GetOrgName();
 	void SetFpsLimit(int _limit);
 	int GetFpsLimit();
 	float GetFps();

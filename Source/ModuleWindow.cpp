@@ -56,7 +56,7 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(App->GetAppName(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(App->GetAppName().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if(window == NULL)
 		{
@@ -113,6 +113,7 @@ void ModuleWindow::SetWidth(int w)
 {
 	screenWidth = w;
 	SDL_SetWindowSize(window,screenWidth,screenHeight);
+	App->renderer3D->OnResize(screenWidth, screenHeight);
 }
 
 int ModuleWindow::GetHeight()
@@ -124,6 +125,7 @@ void ModuleWindow::SetHeight(int h)
 {
 	screenHeight = h;
 	SDL_SetWindowSize(window, screenWidth, screenHeight);
+	App->renderer3D->OnResize(screenWidth, screenHeight);
 }
 
 void ModuleWindow::GetMaxWindow(int& w, int& h)

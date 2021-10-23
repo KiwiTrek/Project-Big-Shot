@@ -237,7 +237,7 @@ void Mesh::InnerRender() const
 // ------------------------------------------------------------
 void Mesh::DrawVertexNormals() const
 {
-	if (normalsBuf == -1)
+	if (normalsBuf == -1 || normals == nullptr)
 		return;
 
 	float normal_lenght = 0.5f;
@@ -262,7 +262,7 @@ void Mesh::DrawVertexNormals() const
 // ------------------------------------------------------------
 void Mesh::DrawFaceNormals() const
 {
-	if (normalsBuf == -1)
+	if (normalsBuf == -1 || normals == nullptr)
 		return;
 
 	//vertices normals
@@ -594,7 +594,17 @@ PyramidP::PyramidP() : Mesh()
 		1, 3, 4,  1, 2, 3 //Bottom
 	};
 
-	//TODO: Texcoords
+	texCoords = new float[10]
+	{
+		//High vertex
+		0.5f, 1.0f,
+
+		//Low vertices
+		0.0f, 0.0f, //Bottom Left
+		1.0f, 0.0f, //Bottom Right
+		0.0f, 0.0f, //Top Right
+		1.0f, 0.0f,
+	};
 
 	vertexNum = 5;
 	indexNum = 18;

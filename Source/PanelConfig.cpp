@@ -15,6 +15,7 @@ update_status PanelConfig::Update()
     ImGui::Begin("Configuration");
     if (ImGui::BeginMenu("Options"))
     {
+        //TODO: JSON Parser
         if (ImGui::MenuItem("Set Defaults"))
         {
 
@@ -34,16 +35,17 @@ update_status PanelConfig::Update()
     if (ImGui::CollapsingHeader("Application"))
     {
         //TODO: ImGui::InputText does not work
-        static char appName[120];
-        strcpy_s(appName, 120, App->GetAppName());
-        if (ImGui::InputText("App Name", appName, IM_ARRAYSIZE(appName), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+        ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
+        flags &= ~ImGuiInputTextFlags_ReadOnly;
+
+        std::string appName = App->GetAppName();
+        if (ImGui::InputText("Project Name", &appName, flags))
         {
             App->SetAppName(appName);
         }
 
-        static char orgName[120];
-        strcpy_s(orgName, 120, App->GetOrgName());
-        if (ImGui::InputText("Organization", orgName, IM_ARRAYSIZE(orgName), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+        std::string orgName = App->GetOrgName();
+        if (ImGui::InputText("Organization", &orgName, flags))
         {
             App->SetOrgName(orgName);
         }
@@ -149,7 +151,7 @@ update_status PanelConfig::Update()
         {
             App->renderer3D->SetVSync(vSync);
         }
-
+        ImGui::SameLine();
         bool wireframe = App->renderer3D->IsWireframe();
         if (ImGui::Checkbox("Wireframe", &wireframe))
         {
@@ -161,7 +163,7 @@ update_status PanelConfig::Update()
         {
             App->renderer3D->ToggleDepthTest();
         }
-
+        ImGui::SameLine();
         bool cullFace = App->renderer3D->IsCullFace();
         if (ImGui::Checkbox("Cull Face", &cullFace))
         {
@@ -173,7 +175,7 @@ update_status PanelConfig::Update()
         {
             App->renderer3D->ToggleLighting();
         }
-
+        ImGui::SameLine();
         bool colorMaterial = App->renderer3D->IsColorMaterial();
         if (ImGui::Checkbox("Color Material", &colorMaterial))
         {
@@ -184,6 +186,18 @@ update_status PanelConfig::Update()
         if (ImGui::Checkbox("Texture 2D", &texture2D))
         {
             App->renderer3D->ToggleTexture2D();
+        }
+        ImGui::SameLine();
+        bool faceNormals = App->renderer3D->IsFaceNormals();
+        if (ImGui::Checkbox("Face Normals", &faceNormals))
+        {
+            App->renderer3D->ToggleFaceNormals();
+        }
+
+        bool vertexNormals = App->renderer3D->IsVertexNormals();
+        if (ImGui::Checkbox("Vertex Normals", &vertexNormals))
+        {
+            App->renderer3D->ToggleVertexNormals();
         }
     }
 
@@ -198,7 +212,7 @@ update_status PanelConfig::Update()
         int mouseMotionX, mouseMotionY;
         mouseMotionX = App->input->GetMouseXMotion();
         mouseMotionY = App->input->GetMouseYMotion();
-        IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%.2f,%.2f", mouseMotionX, mouseMotionY);
+        IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%d,%d", mouseMotionX, mouseMotionY);
         ImGui::Separator();
         if (ImGui::Button("Clear", ImVec2(ImGui::CalcItemWidth(), 20)))
         {

@@ -531,6 +531,9 @@
     <ClInclude Include="Texture.h">
       <Filter>Sources\3D Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="External\imgui\include\imgui_stdlib.h">
+      <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -739,6 +742,9 @@
     </ClCompile>
     <ClCompile Include="ModuleImporter.cpp">
       <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="External\imgui\include\imgui_stdlib.cpp">
+      <Filter>Sources\Tools\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -177,9 +177,9 @@ void Application::SetAppName(std::string _name)
 		window->SetTitle(_name.c_str());
 	}
 }
-const char* Application::GetAppName()
+std::string Application::GetAppName()
 {
-	return appName.c_str();
+	return appName;
 }
 
 void Application::SetOrgName(std::string _name)
@@ -189,9 +189,9 @@ void Application::SetOrgName(std::string _name)
 		orgName = _name;
 	}
 }
-const char* Application::GetOrgName()
+std::string Application::GetOrgName()
 {
-	return orgName.c_str();
+	return orgName;
 }
 
 void Application::SetFpsLimit(int _limit)

@@ -55,8 +55,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86;$(ProjectDir)External\imgui\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -77,8 +77,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86;$(ProjectDir)External\imgui\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -139,6 +139,7 @@
     <ClInclude Include="External\imgui\include\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="External\imgui\include\imgui_impl_sdl.h" />
     <ClInclude Include="External\imgui\include\imgui_internal.h" />
+    <ClInclude Include="External\imgui\include\imgui_stdlib.h" />
     <ClInclude Include="External\imgui\include\imstb_rectpack.h" />
     <ClInclude Include="External\imgui\include\imstb_textedit.h" />
     <ClInclude Include="External\imgui\include\imstb_truetype.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="External\imgui\include\imgui_draw.cpp" />
     <ClCompile Include="External\imgui\include\imgui_impl_opengl3.cpp" />
     <ClCompile Include="External\imgui\include\imgui_impl_sdl.cpp" />
+    <ClCompile Include="External\imgui\include\imgui_stdlib.cpp" />
     <ClCompile Include="External\imgui\include\imgui_tables.cpp" />
     <ClCompile Include="External\imgui\include\imgui_widgets.cpp" />
     <ClCompile Include="External\MathGeoLib\include\Algorithm\GJK.cpp" />
