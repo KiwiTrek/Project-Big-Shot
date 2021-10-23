@@ -22,14 +22,13 @@ public:
 	bool Start();
 	bool CleanUp();
 
-	uint ImportScene(const char* path);
+	void ImportScene(const char* path);
 	Mesh* ImportModel(aiMesh* mesh);
 	Texture* LoadTexture(const char* path);
 	Texture* LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path);
 	void AddPrimitive(Mesh* p);
 	void SplitPath(const char* fullPath, std::string* path, std::string* fileName);
-	std::string NormalizePath(const char* path);
-	std::string AssetsPathCorrection(const char* path);
+	std::string UnifyPath(const char* path, const char* subDir, const char* name);
 
 public:
 

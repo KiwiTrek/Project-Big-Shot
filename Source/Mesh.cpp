@@ -66,18 +66,6 @@ void Mesh::GenerateBuffers()
 	glGenBuffers(1, &indexBuf);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indexNum, indices, GL_STATIC_DRAW);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // ------------------------------------------------------------
@@ -86,8 +74,17 @@ bool Mesh::SetTexture(Texture* texture)
 	if (texture != nullptr && texture->data != nullptr)
 	{
 		this->texture = texture;
+		glGenTextures(1, &textureID);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->width, texture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->data);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, texture->format, texture->width, texture->height, 0, texture->formatUnsigned, GL_UNSIGNED_BYTE, texture->data);
+
+		//glGenerateMipmap(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		return true;
 	}
@@ -360,8 +357,8 @@ CubeP::CubeP() : Mesh()
 	vertexNum = 8;
 	indexNum = 36;
 
-	GenerateBuffers();
 	SetTexture(nullptr);
+	GenerateBuffers();
 }
 
 // PLANE ==============================================
@@ -391,8 +388,8 @@ PlaneP::PlaneP() : Mesh()
 	vertexNum = 4;
 	indexNum = 6;
 
-	GenerateBuffers();
 	SetTexture(nullptr);
+	GenerateBuffers();
 }
 
 // SPHERE ============================================
@@ -566,8 +563,8 @@ void CylinderP::CalcGeometry()
 	verticesTMP.clear();
 	indicesTMP.clear();
 
-	GenerateBuffers();
 	SetTexture(nullptr);
+	GenerateBuffers();
 }
 
 // PYRAMID ===========================================
@@ -602,8 +599,8 @@ PyramidP::PyramidP() : Mesh()
 	vertexNum = 5;
 	indexNum = 18;
 
-	GenerateBuffers();
 	SetTexture(nullptr);
+	GenerateBuffers();
 }
 
 // GRID ==============================================

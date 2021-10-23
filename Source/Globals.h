@@ -70,5 +70,8 @@ enum class update_status
 
 // Configuration -----------
 #define SCREEN_SIZE 1
+#define ASSETS_FOLDER "Assets/"
+#define MODELS_FOLDER "Models/"
+#define TEXTURES_FOLDER "Textures/"
 
 #endif // !__GLOBALS_H__
