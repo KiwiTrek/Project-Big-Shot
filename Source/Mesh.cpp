@@ -313,19 +313,40 @@ CubeP::CubeP() : Mesh()
 {
 	type = MeshTypes::Primitive_Cube;
 
-	vertices = new float[24]
+	vertices = new float[72]
 	{
 		//Low vertices
-		-0.5f, -0.5f, -0.5f, //Bottom Left
-		0.5f, -0.5f, -0.5f, //Bottom Right
-		0.5f, -0.5f, 0.5f, //Top Right
-		-0.5f, -0.5f, 0.5f, //Top Left
+		-0.5f, -0.5f, -0.5f, //Bottom Left			1
+		0.5f, -0.5f, -0.5f, //Bottom Right			2
+		0.5f, -0.5f, 0.5f, //Top Right				3
+		-0.5f, -0.5f, 0.5f, //Top Left				4
 
 		//High vertices
-		-0.5f, 0.5f, -0.5f, //Bottom Left
-		0.5f, 0.5f, -0.5f, //Bottom Right
-		0.5f, 0.5f, 0.5f, //Top Right
-		-0.5f, 0.5f, 0.5f, //Top Left
+		-0.5f, 0.5f, -0.5f, //Bottom Left			5
+		0.5f, 0.5f, -0.5f, //Bottom Right			6
+		0.5f, 0.5f, 0.5f, //Top Right				7
+		-0.5f, 0.5f, 0.5f, //Top Left				8
+
+		// Extra points for texcoords
+		-0.5f, -0.5f, 0.5f, //Top Left				5
+		-0.5f, -0.5f, -0.5f, //Bottom Left			1
+		-0.5f, -0.5f, 0.5f, //Top Left				4
+		0.5f, 0.5f, 0.5f, //Top Right				8
+
+		-0.5f, -0.5f, 0.5f, //Top Left				5
+		-0.5f, 0.5f, -0.5f, //Bottom Left			6
+		0.5f, -0.5f, -0.5f, //Bottom Right			2
+		-0.5f, -0.5f, -0.5f, //Bottom Left			1
+
+		0.5f, -0.5f, -0.5f, //Bottom Right			2
+		0.5f, 0.5f, -0.5f, //Bottom Right			6
+		0.5f, 0.5f, -0.5f, //Bottom Right			7
+		0.5f, -0.5f, 0.5f, //Top Right				3
+
+		-0.5f, -0.5f, 0.5f, //Top Left				4
+		0.5f, -0.5f, 0.5f, //Top Right				3
+		0.5f, 0.5f, 0.5f, //Top Right				7
+		0.5f, 0.5f, 0.5f, //Top Right				8
 	};
 
 	indices = new uint[36]
@@ -339,22 +360,40 @@ CubeP::CubeP() : Mesh()
 		5,4,7, 7,6,5 //Top
 	};
 
-	texCoords = new float[16]
+	texCoords = new float[48]
 	{
-		//Low vertices
-		0.0f, 0.0f, //Bottom Left
-		1.0f, 0.0f, //Bottom Right
-		1.0f, 1.0f, //Top Right
-		0.0f, 1.0f, //Top Left
+		0.0f, 0.5f, //Top Left			5
+		0.25f, 0.5f, //Bottom Left		1
+		0.25f, 0.25f, //Top Left		4
+		0.0f, 0.25f, //Top Right		8
 
-		//High vertices
-		0.0f, 1.0f, //Bottom Left
-		1.0f, 1.0f, //Bottom Right
-		1.0f, 0.0f, //Top Right
-		0.0f, 0.0f //Top Left
+		0.25f, 0.5f, //Bottom Left		1
+		0.5f, 0.5f, //Bottom Right		2
+		0.5f, 0.25f, //Top Right		3
+		0.25f, 0.25f, //Top Left		4
+
+		0.5f, 0.5f, //Bottom Right		2
+		0.75f, 0.5f, //Bottom Right		6
+		0.75f, 0.25f, //Bottom Right	7
+		0.5f, 0.25f, //Top Right		3
+
+		1.0f, 0.5f, //Bottom Left		5
+		0.75f, 0.5f, //Bottom Right		6
+		0.75f, 0.25f, //Top Right		7
+		1.0f, 0.25f, //Top Left			8
+
+		0.25f, 0.75f, //Top Left		5
+		0.5f, 0.75f, //Bottom Left		6
+		0.5f, 0.5f, //Bottom Right		2
+		0.25f, 0.5f, //Bottom Left		1
+
+		0.25f, 0.25f, //Top Left		4
+		0.5f, 0.25f, //Top Right		3
+		0.5f, 0.0f, //Top Right			7
+		0.25f, 0.0f, //Top Right		8
 	};
 
-	vertexNum = 8;
+	vertexNum = 24;
 	indexNum = 36;
 
 	SetTexture(nullptr);
