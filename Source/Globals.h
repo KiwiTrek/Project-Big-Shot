@@ -2,6 +2,7 @@
 #define __GLOBALS_H__
 
 #include "ConsoleBuffer.h"
+#include "MathGeoLib.h"
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__)
 
@@ -47,13 +48,25 @@ enum class update_status
 
 // ImGui Globals
 #define IMGUI_BLACK ImVec4(0.0f,0.0f,0.0f,1.f)
-#define IMGUI_LIGHT_GREY ImVec4(0.8f,0.8f,0.8f,1.f)
+#define IMGUI_LIGHT_GREY ImVec4(0.84f,0.84f,0.84f,1.f)
 #define IMGUI_GREY ImVec4(0.6f,0.6f,0.6f,1.f)
 #define IMGUI_BLUE ImVec4(0.2f,0.2f,1.f,1.f)
 #define IMGUI_GREEN ImVec4(0.f,1.f,0.f,1.f)
 #define IMGUI_YELLOW ImVec4(1.f,1.f,0.f,1.f)
 #define IMGUI_RED ImVec4(1.f,0.f,0.f,1.f)
 #define IMGUI_WHITE ImVec4(1.f,1.f,1.f,1.f)
+
+#define IMGUI_DARK_PINK ImVec4(0.33f,0.24f,0.33f,1.f)
+#define IMGUI_PINK ImVec4(0.67f,0.23f,0.46f,1.f)
+#define IMGUI_LIGHT_PINK ImVec4(0.8f,0.6f,0.7f,1.f)
+#define IMGUI_DARK_PURPLE ImVec4(0.24f,0.2f,0.34f,1.f)
+#define IMGUI_PURPLE ImVec4(0.45f,0.07f,0.69f,1.f)
+#define IMGUI_LIGHT_PURPLE ImVec4(0.67f, 0.57f, 0.91f, 1.0f)
+#define IMGUI_DARK_YELLOW ImVec4(0.75f,0.75f,0.f,1.0f)
+#define IMGUI_YELLOW ImVec4(1.f,1.f,0.f,1.f)
+#define IMGUI_LIGHT_GREEN ImVec4(0.36f, 0.62f, 0.58f, 1.0f)
+
+
 #define IMGUI_PRINT(color, field, format, ...) \
     ImGui::Text(field); \
     ImGui::SameLine(); \

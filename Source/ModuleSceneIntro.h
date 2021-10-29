@@ -10,6 +10,7 @@
 class PyramidP;
 class CubeP;
 class Mesh;
+class Gameobject;
 
 class ModuleSceneIntro : public Module
 {
@@ -24,8 +25,8 @@ public:
 	bool CleanUp();
 
 public:
-	CubeP* c;
-	PyramidP* pyd;
+	Gameobject* c;
+	Gameobject* pyd;
 	float rotation;
 };
 

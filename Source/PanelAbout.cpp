@@ -17,11 +17,12 @@ update_status PanelAbout::Update()
 
     ImGui::Begin("About");
     ImGui::SetWindowFontScale(1.2f);
-    ImGui::TextColored(IMGUI_BLUE, "Project Big Shot");
+    ImGui::TextColored(IMGUI_WHITE, "Project"); ImGui::SameLine(); ImGui::TextColored(IMGUI_LIGHT_PINK, "Big"); ImGui::SameLine(); ImGui::TextColored(IMGUI_YELLOW, "Shot");
     ImGui::SetWindowFontScale(1);
+    ImGui::Separator();
     ImGui::TextWrapped("Engine created for the 'Game Engines' subject in the Bachelor's degree in Video Game Design and Development at the CITM-UPC center, Barcelona.");
     ImGui::Text("By:");
-    IMGUI_BULLET(IMGUI_BLUE, "Guillem Alava ", "(https://github.com/WillyTrek19)");
+    IMGUI_BULLET(IMGUI_YELLOW, "Guillem Alava ", "(https://github.com/WillyTrek19)");
     if (ImGui::IsItemHovered())
     {
         App->input->isHovering = true;
@@ -31,7 +32,7 @@ update_status PanelAbout::Update()
         App->RequestBrowser("https://github.com/WillyTrek19");
     }
 
-    IMGUI_BULLET(IMGUI_BLUE, "Sergi Colomer ", "(https://github.com/Lladruc37)");
+    IMGUI_BULLET(IMGUI_YELLOW, "Sergi Colomer ", "(https://github.com/Lladruc37)");
     if (ImGui::IsItemHovered())
     {
         App->input->isHovering = true;
@@ -42,16 +43,15 @@ update_status PanelAbout::Update()
     }
 
     ImGui::Separator();
-    ImGui::TextColored(IMGUI_BLUE, "3rd Party Libraries used:");
+    ImGui::TextColored(IMGUI_YELLOW, "3rd Party Libraries used:");
     int major, minor, patch;
     App->GetSDLVersion(major, minor, patch);
-    IMGUI_BULLET(IMGUI_BLACK, "SDL", "%d.%d.%d", major, minor, patch);
-    ImGui::BulletText("Glew 7.0");
-    ImGui::BulletText("GPU Detect (2015)");
-    ImGui::BulletText("imgui v1.85");
-    ImGui::BulletText("MathGeoLib 1.5");
-    ImGui::BulletText("Assimp 4.0.1");
-    ImGui::BulletText("DevIL 1.8.0");
+    IMGUI_BULLET(IMGUI_YELLOW, "SDL", "%d.%d.%d", major, minor, patch);
+    IMGUI_BULLET(IMGUI_YELLOW, "Glew", "7.0");    ImGui::BulletText("GPU Detect (2015)");
+    IMGUI_BULLET(IMGUI_YELLOW, "imgui", "v1.85");
+    IMGUI_BULLET(IMGUI_YELLOW, "MathGeoLib", "1.5");
+    IMGUI_BULLET(IMGUI_YELLOW, "Assimp", "4.0.1");
+    IMGUI_BULLET(IMGUI_YELLOW, "DevIL", "1.8.0");
 
     ImGui::Separator();
     ImGui::TextWrapped("License:");

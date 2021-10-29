@@ -3,7 +3,7 @@
 
 #include "Module.h"
 #include "SDL.h"
-#include "Mesh.h"
+#include "Gameobject.h"
 
 class Application;
 struct aiMesh;
@@ -23,16 +23,18 @@ public:
 	bool CleanUp();
 
 	void ImportScene(const char* path);
+	Material* LoadTexture(const char* path);
+	Material* LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path);
+	void AddGameobject(Gameobject* g);
+
+private:
 	Mesh* ImportModel(aiMesh* mesh);
-	Texture* LoadTexture(const char* path);
-	Texture* LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path);
-	void AddPrimitive(Mesh* p);
 	void SplitPath(const char* fullPath, std::string* path, std::string* fileName);
 	std::string UnifyPath(const char* path, const char* subDir, const char* name);
 
 public:
 
-	std::vector<Mesh*> listMesh;
+	std::vector<Gameobject*> gameobjectList;
 };
 
 #endif // !__MODULE_FILE_SYSTEM_H__

@@ -3,50 +3,44 @@
 
 #include "glmath.h"
 #include "Color.h"
-#include "Texture.h"
+#include "ComponentMaterial.h"
 #include <vector>
 
-enum MeshTypes
+class Gameobject;
+
+enum class MeshTypes
 {
+	NONE,
 	Primitive_Grid,
-	Primitive_Point,
-	Primitive_Line,
+	//Primitive_Point,
+	//Primitive_Line,
 	Primitive_Plane,
 	Primitive_Cube,
 	Primitive_Sphere,
 	Primitive_Cylinder,
 	Primitive_Pyramid,
-	Custom_Mesh,
-	Mult_Mesh,
+	//Custom_Mesh,
+	//Mult_Mesh,
 };
 
-class Mesh
+class Mesh : public Component
 {
 public:
 
-	Mesh();
-	virtual	~Mesh();
-
-	void			GenerateBuffers();
-
-	bool			SetTexture(Texture* texture);
-	void			RemoveTexture();
+	Mesh(bool active = true);
+	virtual ~Mesh();
 
 	virtual void	Render() const;
 	virtual void	InnerRender() const;
 	void			DrawVertexNormals() const;
 	void			DrawFaceNormals() const;
-
-	void			SetPos(float x, float y, float z);
-	void			SetRotation(float angle, const vec3 &u);
-	void			Scale(float x, float y, float z);
+	void GenerateBuffers();
 
 	MeshTypes		GetType() const;
 
 public:
 	
 	Color color;
-	mat4x4 transform;
 	bool axis,wire;
 
 	uint indexBuf = -1; // index in VRAM
@@ -61,9 +55,6 @@ public:
 	uint normalsBuf = -1;
 	float* normals = nullptr;
 
-	uint textureBuf = -1;
-	uint textureID = -1;
-	Texture* texture = nullptr;
 	float* texCoords = nullptr;
 	float* colors = nullptr;
 
@@ -71,30 +62,29 @@ public:
 	bool drawFaceNormals;
 
 protected:
-	void			SetDefaultTexture();
-	MeshTypes type;
+	MeshTypes mType;
 };
 
 // ============================================
 class CubeP : public Mesh
 {
 public :
-	CubeP();
+	CubeP(bool active = true);
 };
 
 // ============================================
 class PlaneP : public Mesh
 {
 public:
-	PlaneP();
+	PlaneP(bool active = true);
 };
 
 // ============================================
 class SphereP : public Mesh
 {
 public:
-	SphereP();
-	SphereP(float _radius, uint _meshRings, uint _quads);
+	SphereP(bool active = true);
+	SphereP(float _radius, uint _meshRings, uint _quads, bool active = true);
 	void InnerRender() const;
 
 public:
@@ -107,8 +97,8 @@ public:
 class CylinderP : public Mesh
 {
 public:
-	CylinderP();
-	CylinderP(float _radius, float _height, uint _sides);
+	CylinderP(bool active = true);
+	CylinderP( float _radius, float _height, uint _sides, bool active = true);
 	void CalcGeometry();
 
 public:
@@ -121,15 +111,15 @@ public:
 class PyramidP : public Mesh
 {
 public:
-	PyramidP();
+	PyramidP(bool active = true);
 };
 
 // ============================================
 class Grid : public Mesh
 {
 public:
-	Grid();
-	Grid(float x, float y, float z, float d);
+	Grid(bool active = true);
+	Grid(float x, float y, float z, float d, bool active = true);
 	void Render() const;
 public:
 	vec3 normal;

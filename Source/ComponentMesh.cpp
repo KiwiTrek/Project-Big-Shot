@@ -1,11 +1,12 @@
 #include "Globals.h"
 #include "RenderGlobals.h"
-#include "Mesh.h"
+#include "Gameobject.h"
 
 // ------------------------------------------------------------
-Mesh::Mesh() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(MeshTypes::Custom_Mesh), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
-normalsBuf(-1), textureBuf(-1), textureID(-1), texCoords(nullptr), normals(nullptr), colors(nullptr), texture(nullptr), drawFaceNormals(false), drawVertexNormals(false)
+Mesh::Mesh(bool active) : Component(type,active), color(White), wire(false), axis(false), mType(MeshTypes::NONE), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
+normalsBuf(-1), texCoords(nullptr), normals(nullptr), colors(nullptr), drawFaceNormals(false), drawVertexNormals(false)
 {
+	type = ComponentTypes::MESH;
 }
 
 Mesh::~Mesh()
@@ -30,23 +31,27 @@ Mesh::~Mesh()
 
 	delete texCoords;
 	texCoords = nullptr;
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDeleteBuffers(1, &textureBuf);
-	glDeleteTextures(1, &textureID);
-
-	texture = nullptr;
 }
 
 // ------------------------------------------------------------
 MeshTypes Mesh::GetType() const
 {
-	return type;
+	return mType;
 }
 
-// ------------------------------------------------------------
 void Mesh::GenerateBuffers()
 {
+	Material* mat = nullptr;
+	std::vector<Component*>::iterator c = owner->components.begin();
+	while (c != owner->components.end())
+	{
+		if ((*c)->type == ComponentTypes::MATERIAL)
+		{
+			mat = (Material*)(*c);
+		}
+		c++;
+	}
+
 	//Vertex
 	glGenBuffers(1, (GLuint*)&vertexBuf);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
@@ -57,83 +62,34 @@ void Mesh::GenerateBuffers()
 	glBindBuffer(GL_NORMAL_ARRAY, normalsBuf);
 	glBufferData(GL_NORMAL_ARRAY, sizeof(float) * vertexNum * 3, normals, GL_STATIC_DRAW);
 
-	//Textures
-	glGenBuffers(1, &textureBuf);
-	glBindBuffer(GL_ARRAY_BUFFER, textureBuf);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexNum* 2, texCoords, GL_STATIC_DRAW);
-
 	//Indices
 	glGenBuffers(1, &indexBuf);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indexNum, indices, GL_STATIC_DRAW);
-}
 
-// ------------------------------------------------------------
-bool Mesh::SetTexture(Texture* texture)
-{
-	if (texture != nullptr && texture->data != nullptr)
+	if (mat != nullptr)
 	{
-		this->texture = texture;
-		glGenTextures(1, &textureID);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, texture->format, texture->width, texture->height, 0, texture->formatUnsigned, GL_UNSIGNED_BYTE, texture->data);
-
-		//glGenerateMipmap(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		return true;
-	}
-	else
-	{
-		SetDefaultTexture();
-		return false;
+		//Textures
+		glGenBuffers(1, &mat->textureBuf);
+		glBindBuffer(GL_ARRAY_BUFFER, mat->textureBuf);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexNum * 2, texCoords, GL_STATIC_DRAW);
 	}
 }
-
-// ------------------------------------------------------------
-void Mesh::SetDefaultTexture()
-{
-	int checkersH = 128;
-	int checkersW = 128;
-
-	GLubyte checkerTex[128][128][4];
-
-	for (int i = 0; i < checkersH; ++i)
-	{
-		for (int j = 0; j < checkersW; ++j)
-		{
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerTex[i][j][0] = (GLubyte)c;
-			checkerTex[i][j][1] = (GLubyte)c;
-			checkerTex[i][j][2] = (GLubyte)c;
-			checkerTex[i][j][3] = (GLubyte)255;
-		}
-	}
-	
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkersW, checkersH, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerTex);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-// ------------------------------------------------------------
-void Mesh::RemoveTexture(){}
 
 // ------------------------------------------------------------
 void Mesh::Render() const
 {
+	Material* mat = nullptr;
+	std::vector<Component*>::iterator c = owner->components.begin();
+	while (c != owner->components.end())
+	{
+		if ((*c)->type == ComponentTypes::MATERIAL)
+		{
+			mat = (Material*)(*c);
+		}
+		c++;
+	}
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -146,16 +102,20 @@ void Mesh::Render() const
 	glBindBuffer(GL_NORMAL_ARRAY, normalsBuf);
 	glNormalPointer(GL_FLOAT, 0, NULL);
 
-	//textures
-	glBindBuffer(GL_ARRAY_BUFFER, textureBuf);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	if (mat != nullptr)
+	{
+		//textures
+		glBindBuffer(GL_ARRAY_BUFFER, mat->textureBuf);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		glBindTexture(GL_TEXTURE_2D, mat->id);
+	}
 
 	//indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
 
+
 	glPushMatrix();
-	glMultMatrixf(transform.M);
+	glMultMatrixf((float*)&owner->GetTransform()->GetGlobalTransform());
 
 	if (axis == true)
 	{
@@ -191,12 +151,12 @@ void Mesh::Render() const
 
 	glColor3f(color.r, color.g, color.b);
 
-	if(wire)
+	if (wire)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if (type == Primitive_Sphere)
+	if (mType == MeshTypes::Primitive_Sphere)
 	{
 		InnerRender();
 	}
@@ -290,28 +250,10 @@ void Mesh::DrawFaceNormals() const
 	glEnd();
 }
 
-// ------------------------------------------------------------
-void Mesh::SetPos(float x, float y, float z)
-{
-	transform.translate(x, y, z);
-}
-
-// ------------------------------------------------------------
-void Mesh::SetRotation(float angle, const vec3 &u)
-{
-	transform.rotate(angle, u);
-}
-
-// ------------------------------------------------------------
-void Mesh::Scale(float x, float y, float z)
-{
-	transform.scale(x, y, z);
-}
-
 // CUBE ===============================================
-CubeP::CubeP() : Mesh()
+CubeP::CubeP(bool active) : Mesh(active)
 {
-	type = MeshTypes::Primitive_Cube;
+	mType = MeshTypes::Primitive_Cube;
 
 	vertices = new float[72]
 	{
@@ -395,15 +337,12 @@ CubeP::CubeP() : Mesh()
 
 	vertexNum = 24;
 	indexNum = 36;
-
-	SetTexture(nullptr);
-	GenerateBuffers();
 }
 
 // PLANE ==============================================
-PlaneP::PlaneP() : Mesh()
+PlaneP::PlaneP(bool active) : Mesh(active)
 {
-	type = MeshTypes::Primitive_Plane;
+	mType = MeshTypes::Primitive_Plane;
 
 	vertices = new float[12]
 	{
@@ -426,20 +365,17 @@ PlaneP::PlaneP() : Mesh()
 
 	vertexNum = 4;
 	indexNum = 6;
-
-	SetTexture(nullptr);
-	GenerateBuffers();
 }
 
 // SPHERE ============================================
-SphereP::SphereP() : Mesh(), radius(1), meshRings(12), quads(24)
+SphereP::SphereP(bool active) : Mesh(active), radius(1), meshRings(12), quads(24)
 {
-	type = MeshTypes::Primitive_Sphere;
+	mType = MeshTypes::Primitive_Sphere;
 }
 
-SphereP::SphereP(float _radius, uint _meshRings, uint _quads) : Mesh(), radius(_radius), meshRings(_meshRings), quads(_quads)
+SphereP::SphereP(float _radius, uint _meshRings, uint _quads, bool active) : Mesh(active), radius(_radius), meshRings(_meshRings), quads(_quads)
 {
-	type = MeshTypes::Primitive_Sphere;
+	mType = MeshTypes::Primitive_Sphere;
 }
 
 void SphereP::InnerRender() const
@@ -475,15 +411,15 @@ void SphereP::InnerRender() const
 }
 
 // CYLINDER ==========================================
-CylinderP::CylinderP() : Mesh(), radius(1), height(1), sides(16)
+CylinderP::CylinderP(bool active) : Mesh(active), radius(1), height(1), sides(16)
 {
-	type = MeshTypes::Primitive_Cylinder;
+	mType = MeshTypes::Primitive_Cylinder;
 	CalcGeometry();
 }
 
-CylinderP::CylinderP(float _radius, float _height, uint _sides) : Mesh(), radius(_radius), height(_height), sides(_sides)
+CylinderP::CylinderP(float _radius, float _height, uint _sides, bool active) : Mesh(active), radius(_radius), height(_height), sides(_sides)
 {
-	type = MeshTypes::Primitive_Cylinder;
+	mType = MeshTypes::Primitive_Cylinder;
 	CalcGeometry();
 }
 
@@ -601,15 +537,12 @@ void CylinderP::CalcGeometry()
 
 	verticesTMP.clear();
 	indicesTMP.clear();
-
-	SetTexture(nullptr);
-	GenerateBuffers();
 }
 
 // PYRAMID ===========================================
-PyramidP::PyramidP() : Mesh()
+PyramidP::PyramidP(bool active) : Mesh(active)
 {
-	type = MeshTypes::Primitive_Pyramid;
+	mType = MeshTypes::Primitive_Pyramid;
 
 	vertices = new float[15]
 	{
@@ -647,20 +580,17 @@ PyramidP::PyramidP() : Mesh()
 
 	vertexNum = 5;
 	indexNum = 18;
-
-	SetTexture(nullptr);
-	GenerateBuffers();
 }
 
 // GRID ==============================================
-Grid::Grid() : Mesh(), normal(0, 1, 0), constant(1)
+Grid::Grid(bool active) : Mesh(active), normal(0, 1, 0), constant(1)
 {
-	type = MeshTypes::Primitive_Grid;
+	mType = MeshTypes::Primitive_Grid;
 }
 
-Grid::Grid(float x, float y, float z, float d) : Mesh(), normal(x, y, z), constant(d)
+Grid::Grid(float x, float y, float z, float d, bool active) : Mesh(active), normal(x, y, z), constant(d)
 {
-	type = MeshTypes::Primitive_Grid;
+	mType = MeshTypes::Primitive_Grid;
 }
 
 void Grid::Render() const

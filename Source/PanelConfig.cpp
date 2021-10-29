@@ -13,24 +13,6 @@ PanelConfig::~PanelConfig()
 update_status PanelConfig::Update()
 {
     ImGui::Begin("Configuration");
-    if (ImGui::BeginMenu("Options"))
-    {
-        //TODO: JSON Parser
-        if (ImGui::MenuItem("Set Defaults"))
-        {
-
-        }
-        if (ImGui::MenuItem("Save"))
-        {
-
-        }
-        if (ImGui::MenuItem("Load"))
-        {
-
-        }
-
-        ImGui::EndMenu();
-    }
 
     if (ImGui::CollapsingHeader("Application"))
     {
@@ -87,7 +69,7 @@ update_status PanelConfig::Update()
 
         ImGui::Text("Refresh rate:");
         ImGui::SameLine();
-        ImGui::TextColored(IMGUI_BLUE, "%u", App->window->GetRefreshRate());
+        ImGui::TextColored(IMGUI_YELLOW, "%u", App->window->GetRefreshRate());
         ImGui::Separator();
         bool fullscreen = App->window->IsFullscreen();
         if (ImGui::Checkbox("Fullscreen", &fullscreen))
@@ -115,36 +97,36 @@ update_status PanelConfig::Update()
     {
         int major, minor, patch;
         App->GetSDLVersion(major, minor, patch);
-        IMGUI_PRINT(IMGUI_BLUE, "SDL Version:", "%d.%d.%d", major, minor, patch);
+        IMGUI_PRINT(IMGUI_YELLOW, "SDL Version:", "%d.%d.%d", major, minor, patch);
         ImGui::Separator();
         int count, size;
         App->GetCPU(count, size);
-        IMGUI_PRINT(IMGUI_BLUE, "CPUs:", "%d (%dKb)", count, size);
+        IMGUI_PRINT(IMGUI_YELLOW, "CPUs:", "%d (%dKb)", count, size);
         float ram = App->GetRAM();
-        IMGUI_PRINT(IMGUI_BLUE, "RAM:", "%.2fGb", ram);
+        IMGUI_PRINT(IMGUI_YELLOW, "RAM:", "%.2fGb", ram);
         ImGui::Separator();
         bool threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42;
         App->GetCaps(threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42);
-        IMGUI_PRINT(IMGUI_BLUE, "Caps:", "%s%s%s%s%s%s", threeD ? "3DNow, " : "", altiVec ? "AltiVec, " : "", avx ? "AVX, " : "", avx2 ? "AVX2, " : "", mmx ? "MMX, " : "", rdtsc ? "RDTSC, " : "");
-        IMGUI_PRINT(IMGUI_BLUE, "", "%s%s%s%s%s", sse ? "SSE, " : "", sse2 ? "SSE2, " : "", sse3 ? "SSE3, " : "", sse41 ? "SSE41, " : "", sse42 ? "SSE42" : "");
+        IMGUI_PRINT(IMGUI_YELLOW, "Caps:", "%s%s%s%s%s%s", threeD ? "3DNow, " : "", altiVec ? "AltiVec, " : "", avx ? "AVX, " : "", avx2 ? "AVX2, " : "", mmx ? "MMX, " : "", rdtsc ? "RDTSC, " : "");
+        IMGUI_PRINT(IMGUI_YELLOW, "", "%s%s%s%s%s", sse ? "SSE, " : "", sse2 ? "SSE2, " : "", sse3 ? "SSE3, " : "", sse41 ? "SSE41, " : "", sse42 ? "SSE42" : "");
 
         ImGui::Separator();
         uint vendorId, deviceId;
         char brand[250];
         float videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
         App->GetGPU(vendorId, deviceId, brand, videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
-        IMGUI_PRINT(IMGUI_BLUE, "GPU: ", "VendorId: %d - DeviceId: %d", vendorId, deviceId);
-        IMGUI_PRINT(IMGUI_BLUE, "Brand: ", brand);
-        IMGUI_PRINT(IMGUI_BLUE, "VRAM Budget: ", "%.1f Mb", videoMemBudget);
-        IMGUI_PRINT(IMGUI_BLUE, "VRAM Usage: ", "%.1f Mb", videoMemCurrent);
-        IMGUI_PRINT(IMGUI_BLUE, "VRAM Available: ", "%.1f Mb", videoMemAvailable);
-        IMGUI_PRINT(IMGUI_BLUE, "VRAM Reserved: ", "%.1f Mb", videoMemReserved);
+        IMGUI_PRINT(IMGUI_YELLOW, "GPU: ", "VendorId: %d - DeviceId: %d", vendorId, deviceId);
+        IMGUI_PRINT(IMGUI_YELLOW, "Brand: ", brand);
+        IMGUI_PRINT(IMGUI_YELLOW, "VRAM Budget: ", "%.1f Mb", videoMemBudget);
+        IMGUI_PRINT(IMGUI_YELLOW, "VRAM Usage: ", "%.1f Mb", videoMemCurrent);
+        IMGUI_PRINT(IMGUI_YELLOW, "VRAM Available: ", "%.1f Mb", videoMemAvailable);
+        IMGUI_PRINT(IMGUI_YELLOW, "VRAM Reserved: ", "%.1f Mb", videoMemReserved);
 
     }
 
     if (ImGui::CollapsingHeader("Render"))
     {
-        IMGUI_PRINT(IMGUI_BLUE, "Video Driver:", "%s", App->renderer3D->GetVideoDriver());
+        IMGUI_PRINT(IMGUI_YELLOW, "Video Driver:", "%s", App->renderer3D->GetVideoDriver());
 
         bool vSync = App->renderer3D->GetVSync();
         if (ImGui::Checkbox("VSync", &vSync))
@@ -206,13 +188,13 @@ update_status PanelConfig::Update()
         int mouseX, mouseY;
         mouseX = App->input->GetMouseX();
         mouseY = App->input->GetMouseY();
-        IMGUI_PRINT(IMGUI_BLUE, "Mouse Position: ", "%d,%d", mouseX, mouseY);
+        IMGUI_PRINT(IMGUI_YELLOW, "Mouse Position: ", "%d,%d", mouseX, mouseY);
         int mousewheel = App->input->GetMouseZ();
-        IMGUI_PRINT(IMGUI_BLUE, "Mousewheel: ", "%d", mousewheel);
+        IMGUI_PRINT(IMGUI_YELLOW, "Mousewheel: ", "%d", mousewheel);
         int mouseMotionX, mouseMotionY;
         mouseMotionX = App->input->GetMouseXMotion();
         mouseMotionY = App->input->GetMouseYMotion();
-        IMGUI_PRINT(IMGUI_BLUE, "Mouse Motion: ", "%d,%d", mouseMotionX, mouseMotionY);
+        IMGUI_PRINT(IMGUI_YELLOW, "Mouse Motion: ", "%d,%d", mouseMotionX, mouseMotionY);
         ImGui::Separator();
         if (ImGui::Button("Clear", ImVec2(ImGui::CalcItemWidth(), 20)))
         {
@@ -223,6 +205,26 @@ update_status PanelConfig::Update()
         ImGui::SetScrollHereY(1.0f);
         ImGui::EndChild();
     }
+
+    if (ImGui::BeginMenu("Options"))
+    {
+        //TODO: JSON Parser
+        if (ImGui::MenuItem("Set Defaults"))
+        {
+
+        }
+        if (ImGui::MenuItem("Save"))
+        {
+
+        }
+        if (ImGui::MenuItem("Load"))
+        {
+
+        }
+
+        ImGui::EndMenu();
+    }
+
     ImGui::End();
     return update_status::UPDATE_CONTINUE;
 }

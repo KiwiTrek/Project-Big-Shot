@@ -58,12 +58,12 @@ bool ModuleImporter::CleanUp()
 	return true;
 }
 
-void ModuleImporter::AddPrimitive(Mesh* p)
+void ModuleImporter::AddGameobject(Gameobject* g)
 {
-	listMesh.push_back(p);
+	gameobjectList.push_back(g);
 }
 
-Texture* ModuleImporter::LoadTexture(const char* path)
+Material* ModuleImporter::LoadTexture(const char* path)
 {
 	uint id = 0;
 	ilGenImages(1, &id);
@@ -75,7 +75,7 @@ Texture* ModuleImporter::LoadTexture(const char* path)
 	ilEnable(IL_ORIGIN_SET);
 	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 
-	Texture* texture = new Texture();
+	Material* texture = new Material();
 
 	if(id ==0)
 		if (App->gui != nullptr) App->gui->LogConsole(LOG("Error generation the image buffer: %s, %d",path,ilGetError()));
@@ -117,13 +117,13 @@ Texture* ModuleImporter::LoadTexture(const char* path)
 	return texture;
 }
 
-Texture* ModuleImporter::LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path)
+Material* ModuleImporter::LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path)
 {
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	aiString texPath;
 	aiGetMaterialTexture(material, aiTextureType::aiTextureType_DIFFUSE, mesh->mMaterialIndex, &texPath);
 
-	Texture* texture = new Texture();
+	Material* texture = new Material();
 
 	if (texPath.length != 0)
 	{
@@ -143,8 +143,11 @@ void ModuleImporter::ImportScene(const char* path)
 		for (uint i = 0; i < scene->mNumMeshes; i++)
 		{
 			Mesh* m = ImportModel(scene->mMeshes[i]);
-			m->SetTexture(LoadTexture(scene, scene->mMeshes[i], path));
-			m->GenerateBuffers();
+			Gameobject* g = new Gameobject("Imported Model");
+			g->CreateComponent(m);
+			Material* mat = (Material*)g->CreateComponent(ComponentTypes::MATERIAL);
+			mat->SetTexture(LoadTexture(scene, scene->mMeshes[i], path));
+			gameobjectList.push_back(g);
 		}
 		aiReleaseImport(scene);
 	}
@@ -223,7 +226,6 @@ Mesh* ModuleImporter::ImportModel(aiMesh* mesh)
 			t = tx;
 		}
 
-		listMesh.push_back(m);
 		return m;
 	}
 

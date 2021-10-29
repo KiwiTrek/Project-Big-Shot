@@ -131,8 +131,11 @@ update_status ModuleInput::PreUpdate()
 
 			case SDL_WINDOWEVENT:
 			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				if (e.window.event == SDL_WINDOWEVENT_RESIZED)
+				{
+					App->window->SetWidth(e.window.data1);
+					App->window->SetHeight(e.window.data2);
+				}
 				break;
 			}
 
@@ -148,12 +151,26 @@ update_status ModuleInput::PreUpdate()
 					}
 					else if(tmp.find(".png") != std::string::npos)
 					{
-						std::vector<Mesh*>::iterator m = App->importer->listMesh.begin();
+						std::vector<Gameobject*>::iterator g = App->importer->gameobjectList.begin();
 
-						while (m != App->importer->listMesh.end())
+						while (g != App->importer->gameobjectList.end())
 						{
-							(*m)->SetTexture(App->importer->LoadTexture(tmp.c_str()));
-							++m;
+							Material* mat = nullptr;
+							std::vector<Component*>::iterator c = (*g)->components.begin();
+							while (c != (*g)->components.end())
+							{
+								if ((*c)->type == ComponentTypes::MATERIAL)
+								{
+									mat = (Material*)(*c);
+								}
+								c++;
+							}
+
+							if (mat != nullptr)
+							{
+								mat->SetTexture(App->importer->LoadTexture(tmp.c_str()));
+							}
+							++g;
 						}
 					}
 				}

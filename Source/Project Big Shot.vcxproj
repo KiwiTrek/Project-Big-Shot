@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="ConsoleBuffer.h" />
     <ClInclude Include="External\Assimp\include\ai_assert.h" />
     <ClInclude Include="External\Assimp\include\anim.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="External\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="External\MathGeoLib\include\Math\vec2d.h" />
     <ClInclude Include="External\MathGeoLib\include\Time\Clock.h" />
+    <ClInclude Include="Gameobject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Math.h" />
@@ -235,14 +237,16 @@
     <ClInclude Include="PanelConfig.h" />
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PerfTimer.h" />
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="RenderGlobals.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="ComponentTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="External\GPUDetect\include\DeviceId.cpp" />
     <ClCompile Include="External\imgui\include\imgui.cpp" />
     <ClCompile Include="External\imgui\include\imgui_demo.cpp" />
@@ -294,6 +298,7 @@
     <ClCompile Include="External\MathGeoLib\include\Math\SSEMath.cpp" />
     <ClCompile Include="External\MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="External\MathGeoLib\include\Time\Clock.cpp" />
+    <ClCompile Include="Gameobject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
@@ -309,8 +314,9 @@
     <ClCompile Include="PanelConfig.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="ComponentTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="External\Assimp\include\color4.inl" />

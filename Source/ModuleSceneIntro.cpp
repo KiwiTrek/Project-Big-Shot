@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
+#include "Gameobject.h"
 #include "ModuleSceneIntro.h"
-#include "Mesh.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -25,25 +25,30 @@ bool ModuleSceneIntro::Init()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	Grid* g = new Grid(0, 1, 0, 0);
-	g->axis = true;
-	App->importer->AddPrimitive(g);
+	Gameobject* g = new Gameobject("Grid");
+	g->CreatePrimitive(MeshTypes::Primitive_Grid);
+	g->SetAxis(true);
+	App->importer->AddGameobject(g);
 
-	c = new CubeP();
-	c->SetPos(-2, 0, -3);
-	App->importer->AddPrimitive(c);
+	c = new Gameobject("Cube");
+	c->CreatePrimitive(MeshTypes::Primitive_Cube);
+	c->GetTransform()->SetPos(-2, 0, -3);
+	App->importer->AddGameobject(c);
 
-	pyd = new PyramidP();
-	pyd->SetPos(2, 0, -3);
-	App->importer->AddPrimitive(pyd);
+	pyd = new Gameobject("Pyramid");
+	pyd->CreatePrimitive(MeshTypes::Primitive_Pyramid);
+	pyd->GetTransform()->SetPos(2, 0, -3);
+	App->importer->AddGameobject(pyd);
 
-	SphereP* s = new SphereP();
-	s->SetPos(0, 0, -3);
-	App->importer->AddPrimitive(s);
+	//Gameobject* s = new Gameobject("Sphere");
+	//s->CreatePrimitive(MeshTypes::Primitive_Sphere);
+	//s->GetTransform()->SetPos(0, 0, -3);
+	//App->importer->AddGameobject(s);
 
-	CylinderP* cyl = new CylinderP();
-	cyl->SetPos(0, 0, -6);
-	App->importer->AddPrimitive(cyl);
+	//Gameobject* cyl = new Gameobject("Cyinder");
+	//cyl->CreatePrimitive(MeshTypes::Primitive_Cylinder);
+	//cyl->GetTransform()->SetPos(0, 0, -6);
+	//App->importer->AddGameobject(cyl);
 	
 	return true;
 }
@@ -63,8 +68,8 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		rotation = 0.0f;
 	}
-	pyd->SetRotation(rotation, vec3(0, 1, 0));
-	c->SetRotation(rotation, vec3(0, 1, 0));
+	//c->GetTransform()->SetRot(0, rotation, 0);
+	//pyd->GetTransform()->SetRot(0, rotation, 0);
 
 	return update_status::UPDATE_CONTINUE;
 }

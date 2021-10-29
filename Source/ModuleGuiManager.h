@@ -29,6 +29,7 @@ public:
 	bool CleanUp();
 
 	void AddPanel(Panel* panel);
+	void SetupStyle();
 
 	update_status MenuBar();
 

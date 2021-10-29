@@ -162,14 +162,28 @@ update_status ModuleRenderer3D::PostUpdate()
 
 void ModuleRenderer3D::Render()
 {
-	std::vector<Mesh*>::iterator item = App->importer->listMesh.begin();
+	std::vector<Gameobject*>::iterator item = App->importer->gameobjectList.begin();
 
-	while (item != App->importer->listMesh.end())
+	while (item != App->importer->gameobjectList.end())
 	{
-		(*item)->wire = wireframe;
-		(*item)->drawFaceNormals = faceNormals;
-		(*item)->drawVertexNormals = vecNormals;
-		(*item)->Render();
+		Mesh* m = nullptr;
+		std::vector<Component*>::iterator c = (*item)->components.begin();
+		while (c != (*item)->components.end())
+		{
+			if ((*c)->type == ComponentTypes::MESH)
+			{
+				m = (Mesh*)(*c);
+			}
+			c++;
+		}
+
+		if (m != nullptr)
+		{
+			m->wire = wireframe;
+			m->drawFaceNormals = faceNormals;
+			m->drawVertexNormals = vecNormals;
+			m->Render();
+		}
 		++item;
 	}
 }

@@ -67,6 +67,7 @@ bool ModuleWindow::Init()
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
+			SetBrightness(SDL_GetWindowBrightness(window));
 		}
 	}
 
@@ -174,6 +175,10 @@ void ModuleWindow::SetFullscreen(bool f)
 			{
 				if (App->gui != nullptr) App->gui->LogConsole(LOG("Could not switch to fullscreen: %s\n", SDL_GetError()));
 			}
+			int w, h;
+			GetMaxWindow(w, h);
+			SetHeight(h);
+			SetWidth(w);
 			fullscreenDesktop = false;
 		}
 		else
@@ -182,6 +187,8 @@ void ModuleWindow::SetFullscreen(bool f)
 			{
 				if (App->gui != nullptr) App->gui->LogConsole(LOG("Could not switch to windowed: %s\n", SDL_GetError()));
 			}
+			SetWidth(1024);
+			SetHeight(768);
 		}
 	}
 }

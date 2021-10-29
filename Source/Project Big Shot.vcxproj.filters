@@ -72,7 +72,7 @@
     <ClInclude Include="Globals.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
+    <ClInclude Include="ComponentMesh.h">
       <Filter>Sources\3D Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
@@ -528,11 +528,20 @@
     <ClInclude Include="External\DevIL\include\il_wrap.h">
       <Filter>Sources\Tools\DevIL</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="ComponentMaterial.h">
       <Filter>Sources\3D Helpers</Filter>
     </ClInclude>
     <ClInclude Include="External\imgui\include\imgui_stdlib.h">
       <Filter>Sources\Tools\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameobject.h">
+      <Filter>Sources\3D Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\3D Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\3D Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -551,7 +560,7 @@
     <ClCompile Include="glmath.cpp">
       <Filter>Sources\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="ComponentMesh.cpp">
       <Filter>Sources\3D Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
@@ -745,6 +754,15 @@
     </ClCompile>
     <ClCompile Include="External\imgui\include\imgui_stdlib.cpp">
       <Filter>Sources\Tools\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameobject.cpp">
+      <Filter>Sources\3D Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>Sources\3D Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\3D Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
