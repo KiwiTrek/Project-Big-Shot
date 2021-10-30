@@ -4,7 +4,7 @@
 
 PanelConsole::PanelConsole(Application* app, bool start_enabled) : Panel(app, start_enabled)
 {
-    name = "console";
+    name = "Console";
 }
 
 PanelConsole::~PanelConsole()
@@ -12,9 +12,13 @@ PanelConsole::~PanelConsole()
 
 update_status PanelConsole::Update()
 {
-    ImGui::Begin("Console");
+    ImGui::Begin(name.c_str());
     ImGui::TextUnformatted(App->gui->LogConsoleText.begin());
-    ImGui::SetScrollHereY(1.0f);
+    if (update)
+    {
+        update = false;
+        ImGui::SetScrollHereY(1.0f);
+    }
     ImGui::End();
     return update_status::UPDATE_CONTINUE;
 }

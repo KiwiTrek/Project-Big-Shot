@@ -6,7 +6,7 @@
 class PanelConfig :public Panel
 {
 public:
-    PanelConfig(Application* app, bool start_enabled = true);
+    PanelConfig(Application* app, bool start_enabled = false);
     ~PanelConfig();
 
     update_status Update();

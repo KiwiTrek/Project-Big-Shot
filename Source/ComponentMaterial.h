@@ -5,7 +5,7 @@
 #include <string>
 
 typedef unsigned char GLubyte;
-class Gameobject;
+class GameObject;
 
 class Material : public Component
 {

@@ -8,6 +8,14 @@
 
 const char* log(const char file[], int line, const char* format, ...);
 
+#define LOG_CONSOLE(format, ...) \
+	{\
+		if (App->gui != nullptr) \
+		{\
+			App->gui->LogConsole(log(__FILE__, __LINE__, format, __VA_ARGS__)); \
+		}\
+	}
+
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 
 #define DEGTORAD 0.0174532925199432957f

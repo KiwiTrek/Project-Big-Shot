@@ -5,7 +5,7 @@
 
 PanelAbout::PanelAbout(Application* app, bool start_enabled) : Panel(app, start_enabled)
 {
-    name = "about";
+    name = "About";
 }
 
 PanelAbout::~PanelAbout()
@@ -15,7 +15,7 @@ update_status PanelAbout::Update()
 {
     App->input->isHovering = false;
 
-    ImGui::Begin("About");
+    ImGui::Begin(name.c_str());
     ImGui::SetWindowFontScale(1.2f);
     ImGui::TextColored(IMGUI_WHITE, "Project"); ImGui::SameLine(); ImGui::TextColored(IMGUI_LIGHT_PINK, "Big"); ImGui::SameLine(); ImGui::TextColored(IMGUI_YELLOW, "Shot");
     ImGui::SetWindowFontScale(1);

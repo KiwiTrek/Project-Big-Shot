@@ -10,6 +10,8 @@ public:
     ~PanelConsole();
 
     update_status Update();
+public:
+    bool update;
 };
 
 #endif // !__PANEL_CONSOLE_H__

@@ -22,7 +22,7 @@ ModuleCamera3D::~ModuleCamera3D()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Setting up the camera"));
+	LOG_CONSOLE("Setting up the camera");
 	bool ret = true;
 
 	return ret;
@@ -31,7 +31,7 @@ bool ModuleCamera3D::Start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Cleaning camera"));
+	LOG_CONSOLE("Cleaning camera");
 
 	return true;
 }
@@ -106,7 +106,55 @@ update_status ModuleCamera3D::Update(float dt)
 
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN)
+	{
+		Transform* t = App->scene->selectedGameObject->GetTransform();
+		
+		newPos = vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z);
+		LookAt(vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z));
+	}
 
+	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_STATE::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_STATE::KEY_REPEAT)
+	{
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+		{
+			// Mouse motion ----------------
+			int dx = -App->input->GetMouseXMotion();
+			int dy = -App->input->GetMouseYMotion();
+
+			float Sensitivity = 0.25f;
+
+			Position -= Reference;
+
+			if (dx != 0)
+			{
+				float DeltaX = (float)dx * Sensitivity;
+
+				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			}
+
+			if (dy != 0)
+			{
+				float DeltaY = (float)dy * Sensitivity;
+
+				Y = rotate(Y, DeltaY, X);
+				Z = rotate(Z, DeltaY, X);
+
+				if (Y.y < 0.0f)
+				{
+					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+					Y = cross(Z, X);
+				}
+			}
+			Position = Reference + Z * length(Position);
+			currentDist = length(Position);
+
+			float3 focusedPos = App->scene->selectedGameObject->GetTransform()->GetPos();
+			LookAt(vec3(focusedPos.x, focusedPos.y, focusedPos.z));
+		}
+	}
 
 	Position += newPos;
 	Reference += newPos;

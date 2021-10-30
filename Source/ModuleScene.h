@@ -10,24 +10,31 @@
 class PyramidP;
 class CubeP;
 class Mesh;
-class Gameobject;
+class GameObject;
 
-class ModuleSceneIntro : public Module
+class ModuleScene : public Module
 {
 public:
-	ModuleSceneIntro(Application* app, bool start_enabled = true);
-	~ModuleSceneIntro();
+	ModuleScene(Application* app, bool start_enabled = true);
+	~ModuleScene();
 
 	bool Init();
 	bool Start();
 	update_status Update(float dt);
 	update_status PostUpdate();
+
+	GameObject* GetSceneRoot() { return root; }
 	bool CleanUp();
 
 public:
-	Gameobject* c;
-	Gameobject* pyd;
+	GameObject* selectedGameObject = nullptr;
+
+	//TESTING PURPOSES
+	GameObject* c;
+	GameObject* pyd;
 	float rotation;
+private:
+	GameObject* root;
 };
 
 #endif // !__MODULE_SCENE_INTRO_H__

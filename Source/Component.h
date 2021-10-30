@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 
-class Gameobject;
+class GameObject;
 
 enum ComponentTypes
 {
@@ -33,7 +33,7 @@ public:
 
 public:
 	ComponentTypes type;
-	Gameobject* owner;
+	GameObject* owner;
 
 private:
 	bool active;

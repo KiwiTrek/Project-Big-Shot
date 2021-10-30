@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "RenderGlobals.h"
 #include "ModuleRenderer3D.h"
-#include "ModuleImporter.h"
+#include "ModuleGameObjects.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -16,7 +16,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Creating 3D Renderer context"));
+	LOG_CONSOLE("Creating 3D Renderer context");
 	bool ret = true;
 	
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -30,7 +30,7 @@ bool ModuleRenderer3D::Init()
 	context = SDL_GL_CreateContext(App->window->window);
 	if(context == NULL)
 	{
-		if (App->gui != nullptr) App->gui->LogConsole(LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError()));
+		LOG_CONSOLE("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	
@@ -40,22 +40,22 @@ bool ModuleRenderer3D::Init()
 
 		if (err != GLEW_OK)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Glew Init Error: %s\n", glewGetErrorString(err)));
+			LOG_CONSOLE("Glew Init Error: %s\n", glewGetErrorString(err));
 		}
 		else
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Using Glew %s", glewGetString(GLEW_VERSION)));
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Vendor: %s", glGetString(GL_VENDOR)));
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Renderer: %s", glGetString(GL_RENDERER)));
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("OpenGL version supported %s", glGetString(GL_VERSION)));
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION)));
+			LOG_CONSOLE("Using Glew %s", glewGetString(GLEW_VERSION));
+			LOG_CONSOLE("Vendor: %s", glGetString(GL_VENDOR));
+			LOG_CONSOLE("Renderer: %s", glGetString(GL_RENDERER));
+			LOG_CONSOLE("OpenGL version supported %s", glGetString(GL_VERSION));
+			LOG_CONSOLE("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
 
 
 		//Use Vsync
 		if (vSync && SDL_GL_SetSwapInterval(1) < 0)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError()));
+			LOG_CONSOLE("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 		}
 
 		//Initialize Projection Matrix
@@ -66,7 +66,7 @@ bool ModuleRenderer3D::Init()
 		err = glGetError();
 		if(err != GL_NO_ERROR)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(err)));
+			LOG_CONSOLE("Error initializing OpenGL! %s\n", gluErrorString(err));
 			ret = false;
 		}
 
@@ -78,7 +78,7 @@ bool ModuleRenderer3D::Init()
 		err = glGetError();
 		if(err != GL_NO_ERROR)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(err)));
+			LOG_CONSOLE("Error initializing OpenGL! %s\n", gluErrorString(err));
 			ret = false;
 		}
 		
@@ -93,7 +93,7 @@ bool ModuleRenderer3D::Init()
 		err = glGetError();
 		if(err != GL_NO_ERROR)
 		{
-			if (App->gui != nullptr) App->gui->LogConsole(LOG("Error initializing OpenGL! %s\n", gluErrorString(err)));
+			LOG_CONSOLE("Error initializing OpenGL! %s\n", gluErrorString(err));
 			ret = false;
 		}
 		
@@ -160,38 +160,10 @@ update_status ModuleRenderer3D::PostUpdate()
 	return update_status::UPDATE_CONTINUE;
 }
 
-void ModuleRenderer3D::Render()
-{
-	std::vector<Gameobject*>::iterator item = App->importer->gameobjectList.begin();
-
-	while (item != App->importer->gameobjectList.end())
-	{
-		Mesh* m = nullptr;
-		std::vector<Component*>::iterator c = (*item)->components.begin();
-		while (c != (*item)->components.end())
-		{
-			if ((*c)->type == ComponentTypes::MESH)
-			{
-				m = (Mesh*)(*c);
-			}
-			c++;
-		}
-
-		if (m != nullptr)
-		{
-			m->wire = wireframe;
-			m->drawFaceNormals = faceNormals;
-			m->drawVertexNormals = vecNormals;
-			m->Render();
-		}
-		++item;
-	}
-}
-
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Destroying 3D Renderer"));
+	LOG_CONSOLE("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);
 
@@ -259,6 +231,16 @@ bool ModuleRenderer3D::IsCullFace()
 void ModuleRenderer3D::ToggleLighting()
 {
 	lighting = !lighting;
+}
+
+bool ModuleRenderer3D::IsAxis()
+{
+	return axis;
+}
+
+void ModuleRenderer3D::ToggleAxis()
+{
+	axis = !axis;
 }
 
 bool ModuleRenderer3D::IsLighting()

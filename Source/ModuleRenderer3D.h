@@ -21,7 +21,6 @@ public:
 	bool Init();
 	update_status PreUpdate();
 	update_status PostUpdate();
-	void Render();
 	bool CleanUp();
 
 	void OnResize(int width, int height);
@@ -33,6 +32,8 @@ public:
 	void ToggleCullFace();
 	bool IsLighting();
 	void ToggleLighting();
+	bool IsAxis();
+	void ToggleAxis();
 	bool IsColorMaterial();
 	void ToggleColorMaterial();
 	bool IsTexture2D();
@@ -53,6 +54,7 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
 private:
+	bool axis = false;
 	bool vSync = false;
 	bool wireframe = false;
 	bool depthTest = true;

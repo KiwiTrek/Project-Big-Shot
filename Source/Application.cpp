@@ -7,10 +7,11 @@ Application::Application(ConsoleBuffer* _buff)
 	gui = new ModuleGuiManager(this);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	sceneIntro = new ModuleSceneIntro(this);
+	scene = new ModuleScene(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	importer = new ModuleImporter(this);
+	gameObjects = new ModuleGameObjects(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -23,7 +24,8 @@ Application::Application(ConsoleBuffer* _buff)
 	AddModule(importer);
 	
 	// Scenes
-	AddModule(sceneIntro);
+	AddModule(scene);
+	AddModule(gameObjects);
 
 	AddModule(gui);
 	AddModule(renderer3D);

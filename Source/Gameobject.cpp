@@ -2,13 +2,13 @@
 #include "RenderGlobals.h"
 #include "Gameobject.h"
 
-Gameobject::Gameobject(std::string n, bool active) : active(active)
+GameObject::GameObject(std::string n, bool active) : active(active), parent(nullptr)
 {
 	name = n;
 	CreateComponent(ComponentTypes::TRANSFORM);
 }
 
-Gameobject::~Gameobject()
+GameObject::~GameObject()
 {
 	name.clear();
 
@@ -20,7 +20,7 @@ Gameobject::~Gameobject()
 	}
 }
 
-void Gameobject::Update()
+void GameObject::Update()
 {
 	if (!active)
 	{
@@ -35,14 +35,26 @@ void Gameobject::Update()
 	}
 }
 
-Component* Gameobject::CreateComponent(ComponentTypes t, MeshTypes mType)
+Component* GameObject::CreateComponent(ComponentTypes cType, MeshTypes mType, Transform* t)
 {
 	Component* c = nullptr;
-	switch (t)
+	switch (cType)
 	{
 	case TRANSFORM:
 	{
-		c = new Transform();
+		if (this->GetTransform() != nullptr)
+		{
+			RemoveComponent(this->GetTransform());
+		}
+
+		if (t != nullptr)
+		{
+			c = t;
+		}
+		else
+		{
+			c = new Transform();
+		}
 		break;
 	}
 	case MESH:
@@ -103,13 +115,30 @@ Component* Gameobject::CreateComponent(ComponentTypes t, MeshTypes mType)
 	return c;
 }
 
-void Gameobject::CreateComponent(Component* c)
+void GameObject::CreateComponent(Component* c)
 {
 	c->owner = this;
 	components.push_back(c);
 }
 
-void Gameobject::SetAxis(bool value)
+bool GameObject::RemoveComponent(Component* c)
+{
+	bool ret = false;
+
+	for (size_t i = 0; i < components.size(); i++)
+	{
+		if (components[i] == c) {
+			delete components[i];
+			components.erase(components.begin() + i);
+			c = nullptr;
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+void GameObject::SetAxis(bool value)
 {
 	Mesh* m = nullptr;
 	std::vector<Component*>::iterator c = components.begin();
@@ -128,20 +157,20 @@ void Gameobject::SetAxis(bool value)
 	}
 }
 
-void Gameobject::CreatePrimitive(MeshTypes type)
+void GameObject::CreatePrimitive(MeshTypes type)
 {
-	if (type != MeshTypes::Primitive_Sphere || type != MeshTypes::Primitive_Grid)
+	if (type != MeshTypes::Primitive_Sphere && type != MeshTypes::Primitive_Grid)
 	{
 		CreateComponent(ComponentTypes::MATERIAL);
 	}
 	Mesh* m = (Mesh*)CreateComponent(ComponentTypes::MESH, type);
-	if (type != MeshTypes::Primitive_Sphere || type != MeshTypes::Primitive_Grid)
+	if (type != MeshTypes::Primitive_Sphere && type != MeshTypes::Primitive_Grid)
 	{
 		m->GenerateBuffers();
 	}
 }
 
-Transform* Gameobject::GetTransform()
+Transform* GameObject::GetTransform()
 {
 	Transform* t = nullptr;
 	std::vector<Component*>::iterator c = components.begin();
@@ -154,4 +183,64 @@ Transform* Gameobject::GetTransform()
 		++c;
 	}
 	return t;
+}
+
+void GameObject::AddChild(GameObject* c)
+{
+	children.push_back(c);
+}
+
+int GameObject::GetChildNum()
+{
+	return children.size();
+}
+
+GameObject* GameObject::GetChildAt(int index)
+{
+	return children[index];
+}
+
+GameObject* GameObject::GetParent()
+{
+	return parent;
+}
+
+void GameObject::SetParent(GameObject* p)
+{
+	parent = p;
+}
+
+bool GameObject::RemoveChild(GameObject* gameObject)
+{
+	bool ret = false;
+	for (size_t i = 0; i < children.size(); i++)
+	{
+		if (children[i] == gameObject)
+		{
+			children.erase(children.begin() + i);
+			ret = true;
+		}
+	}
+	return ret;
+}
+
+void GameObject::DeleteChildren()
+{
+	for (size_t i = 0; i < children.size(); i++)
+	{
+		children[i]->DeleteChildren();
+		children[i] = nullptr;
+	}
+
+	this->~GameObject();
+}
+
+void GameObject::UpdateChildrenTransforms()
+{
+	GetTransform()->UpdateLocalTransform();
+
+	for (size_t i = 0; i < children.size(); i++)
+	{
+		children[i]->GetTransform()->UpdateGlobalTransform(GetTransform()->GetGlobalTransform());
+	}
 }

@@ -6,7 +6,7 @@
 #include "ComponentMaterial.h"
 #include <vector>
 
-class Gameobject;
+class GameObject;
 
 enum class MeshTypes
 {

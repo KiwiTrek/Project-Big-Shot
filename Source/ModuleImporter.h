@@ -8,6 +8,7 @@
 class Application;
 struct aiMesh;
 struct aiScene;
+struct aiNode;
 
 class ModuleImporter : public Module
 {
@@ -22,19 +23,17 @@ public:
 	bool Start();
 	bool CleanUp();
 
-	void ImportScene(const char* path);
+	std::string GetFileName(const char* path);
+	void ImportScene(const char* path, const char* rootName);
 	Material* LoadTexture(const char* path);
-	Material* LoadTexture(const aiScene* scene, aiMesh* mesh, const char* path);
-	void AddGameobject(Gameobject* g);
+	Material* LoadTexture(const aiScene* scene, aiNode* n, const char* path);
+	Transform* LoadTransform(aiNode* n);
 
 private:
-	Mesh* ImportModel(aiMesh* mesh);
+	Mesh* ImportModel(const aiScene* scene, aiNode* node, const char* path);
+	GameObject* ImportChild(const aiScene* scene, aiNode* n, aiNode* parentN, GameObject* parentGameObject, const char* path, const char* rootName = nullptr);
 	void SplitPath(const char* fullPath, std::string* path, std::string* fileName);
 	std::string UnifyPath(const char* path, const char* subDir, const char* name);
-
-public:
-
-	std::vector<Gameobject*> gameobjectList;
 };
 
 #endif // !__MODULE_FILE_SYSTEM_H__

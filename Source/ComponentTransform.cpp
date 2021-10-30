@@ -8,6 +8,7 @@ Transform::Transform(bool active) : Component(type, active)
 	pos = float3::zero;
 	rot = Quat::identity;
 	scale = float3::one;
+
 	lTransform = float4x4::FromTRS(pos, rot, scale);
 	gTransform = lTransform;
 }
@@ -19,6 +20,7 @@ Transform::Transform(float3 p, Quat r, float3 s, bool active) : Component(type, 
 	pos = p;
 	rot = r;
 	scale = s;
+
 	lTransform = float4x4::FromTRS(pos, rot, scale);
 	gTransform = lTransform;
 }
@@ -28,6 +30,7 @@ Transform::~Transform()
 	pos.zero;
 	rot.identity;
 	scale.zero;
+
 	lTransform.zero;
 	gTransform.zero;
 }
@@ -37,6 +40,7 @@ void Transform::Reset()
 	pos = float3::zero;
 	rot = Quat::identity;
 	scale = float3::one;
+
 	lTransform = float4x4::FromTRS(pos, rot, scale);
 	gTransform = lTransform;
 }
@@ -83,7 +87,7 @@ float3 Transform::GetPos()
 }
 void Transform::SetRot(float x, float y, float z)
 {
-	rot = Quat::FromEulerXYX(x * DEGTORAD, y * DEGTORAD, z * DEGTORAD);
+	rot = Quat::FromEulerXYZ(x * DEGTORAD, y * DEGTORAD, z * DEGTORAD);
 	UpdateLocalTransform();
 }
 void Transform::SetRot(Quat q)

@@ -12,10 +12,12 @@ ModuleGuiManager::ModuleGuiManager(Application* app, bool start_enabled) : Modul
     about = new PanelAbout(App);
     console = new PanelConsole(App);
     config = new PanelConfig(App);
+    hierarchy = new PanelHierarchy(App);
 
     AddPanel(about);
     AddPanel(console);
     AddPanel(config);
+    AddPanel(hierarchy);
 }
 
 ModuleGuiManager::~ModuleGuiManager()
@@ -33,10 +35,11 @@ bool ModuleGuiManager::Start()
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& ioHandler = ImGui::GetIO(); (void)ioHandler;
-    ioHandler.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    ioHandler.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    ioHandler.ConfigFlags |= ImGuiConfigFlags_NavEnableSetMousePos;
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableSetMousePos;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
     ImGui_ImplOpenGL3_Init("#version 460");
 
@@ -90,7 +93,6 @@ update_status ModuleGuiManager::Update(float dt)
     ImGui::PopStyleVar(3);
 
     status = MenuBar();
-
     std::vector<Panel*>::iterator item = list_panels.begin();
 
     while (item != list_panels.end() && status == update_status::UPDATE_CONTINUE)
@@ -111,7 +113,17 @@ update_status ModuleGuiManager::PostUpdate()
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    SDL_GL_MakeCurrent(App->window->window, App->renderer3D->context);
+
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        SDL_Window* backupWindow = SDL_GL_GetCurrentWindow();
+        SDL_GLContext backupContext = SDL_GL_GetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        SDL_GL_MakeCurrent(backupWindow, backupContext);
+    }
+
     return update_status::UPDATE_CONTINUE;
 }
 
@@ -145,7 +157,7 @@ update_status ModuleGuiManager::MenuBar()
         {
             ImGui::MenuItem("Configuration", "F1", &config->active);
             ImGui::MenuItem("Console", "F12", &console->active);
-
+            ImGui::MenuItem("Hierarchy", "F2", &hierarchy->active);
             ImGui::EndMenu();
         }
 
@@ -181,6 +193,7 @@ update_status ModuleGuiManager::MenuBar()
 void ModuleGuiManager::LogConsole(const char* buff)
 {
     LogConsoleText.appendf(buff);
+    console->update = true;
 }
 
 void ModuleGuiManager::SetupStyle()

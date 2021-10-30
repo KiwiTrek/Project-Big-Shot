@@ -1,7 +1,7 @@
 #ifndef __COMPONENT_TRANSFORM_H__
 #define __COMPONENT_TRANSFORM_H__
 
-class Gameobject;
+class GameObject;
 
 class Transform : public Component
 {

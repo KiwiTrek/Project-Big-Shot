@@ -35,25 +35,16 @@ int main(int argc, char ** argv)
 
 		case main_states::MAIN_START:
 
-			if (App->gui != nullptr)
-			{
-				App->gui->LogConsole(LOG("-------------- Application Init --------------"));
-			}
+			LOG_CONSOLE("-------------- Application Init --------------");
 			if (App->Init() == false)
 			{
-				if (App->gui != nullptr)
-				{
-					App->gui->LogConsole(LOG("Application Init exits with ERROR"));
-				}
+				LOG_CONSOLE("Application Init exits with ERROR");
 				state = main_states::MAIN_EXIT;
 			}
 			else
 			{
 				state = main_states::MAIN_UPDATE;
-				if (App->gui != nullptr)
-				{
-					App->gui->LogConsole(LOG("-------------- Application Update --------------"));
-				}
+				LOG_CONSOLE("-------------- Application Update --------------");
 			}
 
 			break;
@@ -64,10 +55,7 @@ int main(int argc, char ** argv)
 
 			if (update_return == update_status::UPDATE_ERROR)
 			{
-				if (App->gui != nullptr)
-				{
-					App->gui->LogConsole(LOG("Application Update exits with ERROR"));
-				}
+				LOG_CONSOLE("Application Update exits with ERROR");
 				state = main_states::MAIN_EXIT;
 			}
 
@@ -78,16 +66,10 @@ int main(int argc, char ** argv)
 
 		case main_states::MAIN_FINISH:
 
-			if (App->gui != nullptr)
-			{
-				App->gui->LogConsole(LOG("-------------- Application CleanUp --------------"));
-			}
+			LOG_CONSOLE("-------------- Application CleanUp --------------");
 			if (App->CleanUp() == false)
 			{
-				if (App->gui != nullptr)
-				{
-					App->gui->LogConsole(LOG("Application CleanUp exits with ERROR"));
-				}
+				LOG_CONSOLE("Application CleanUp exits with ERROR");
 			}
 			else
 				main_return = EXIT_SUCCESS;

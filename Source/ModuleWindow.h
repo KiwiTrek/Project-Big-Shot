@@ -4,6 +4,9 @@
 #include "Module.h"
 #include "SDL.h"
 
+#define DEFAULT_WIDTH 1600
+#define DEFAULT_HEIGHT 900
+
 class Application;
 
 class ModuleWindow : public Module
@@ -44,8 +47,8 @@ public:
 	SDL_Surface* screen_surface;
 
 private:
-	int screenWidth = 1024;
-	int screenHeight = 768;
+	int screenWidth = DEFAULT_WIDTH;
+	int screenHeight = DEFAULT_HEIGHT;
 	bool fullscreen = false;
 	bool resizable = true;
 	bool borderless = false;

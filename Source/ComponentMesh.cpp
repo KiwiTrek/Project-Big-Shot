@@ -113,9 +113,10 @@ void Mesh::Render() const
 	//indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuf);
 
+	float4x4 t = owner->GetTransform()->GetGlobalTransform();
 
 	glPushMatrix();
-	glMultMatrixf((float*)&owner->GetTransform()->GetGlobalTransform());
+	glMultMatrixf((float*)&t.Transposed());
 
 	if (axis == true)
 	{

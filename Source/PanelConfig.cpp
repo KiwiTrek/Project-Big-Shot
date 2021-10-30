@@ -4,7 +4,7 @@
 
 PanelConfig::PanelConfig(Application* app, bool start_enabled) : Panel(app, start_enabled), fpsHist(100), msHist(100)
 {
-    name = "console";
+    name = "Configuration";
 }
 
 PanelConfig::~PanelConfig()
@@ -12,7 +12,7 @@ PanelConfig::~PanelConfig()
 
 update_status PanelConfig::Update()
 {
-    ImGui::Begin("Configuration");
+    ImGui::Begin(name.c_str());
 
     if (ImGui::CollapsingHeader("Application"))
     {
@@ -158,24 +158,30 @@ update_status PanelConfig::Update()
             App->renderer3D->ToggleLighting();
         }
         ImGui::SameLine();
+        bool axis = App->renderer3D->IsAxis();
+        if (ImGui::Checkbox("Show Axis", &axis))
+        {
+            App->renderer3D->ToggleAxis();
+        }
+
         bool colorMaterial = App->renderer3D->IsColorMaterial();
         if (ImGui::Checkbox("Color Material", &colorMaterial))
         {
             App->renderer3D->ToggleColorMaterial();
         }
-
+        ImGui::SameLine();
         bool texture2D = App->renderer3D->IsTexture2D();
         if (ImGui::Checkbox("Texture 2D", &texture2D))
         {
             App->renderer3D->ToggleTexture2D();
         }
-        ImGui::SameLine();
+
         bool faceNormals = App->renderer3D->IsFaceNormals();
         if (ImGui::Checkbox("Face Normals", &faceNormals))
         {
             App->renderer3D->ToggleFaceNormals();
         }
-
+        ImGui::SameLine();
         bool vertexNormals = App->renderer3D->IsVertexNormals();
         if (ImGui::Checkbox("Vertex Normals", &vertexNormals))
         {

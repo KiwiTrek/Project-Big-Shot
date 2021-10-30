@@ -15,6 +15,7 @@
 #include "PanelAbout.h"
 #include "PanelConsole.h"
 #include "PanelConfig.h"
+#include "PanelHierarchy.h"
 
 class ModuleGuiManager : public Module
 {
@@ -41,6 +42,7 @@ public:
 	PanelAbout* about;
 	PanelConsole* console;
 	PanelConfig* config;
+	PanelHierarchy* hierarchy;
 
 	bool demo;
 	bool usingKeyboard;

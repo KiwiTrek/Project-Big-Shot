@@ -11,22 +11,39 @@
 
 class Component;
 
-class Gameobject
+class GameObject
 {
 public:
-	Gameobject(std::string n, bool active = true);
-	~Gameobject();
+	GameObject(std::string n, bool active = true);
+	~GameObject();
 	void Update();
-	Component* CreateComponent(ComponentTypes t, MeshTypes mTypes = MeshTypes::NONE);
+
+	Component* CreateComponent(ComponentTypes cType, MeshTypes mType = MeshTypes::NONE, Transform* t = nullptr);
+
 	void CreateComponent(Component* c);
+	bool RemoveComponent(Component* c);
+
+	void AddChild(GameObject* c);
+	int GetChildNum();
+	GameObject* GetChildAt(int index);
+	GameObject* GetParent();
+	void SetParent(GameObject* p);
+	bool RemoveChild(GameObject* gameObject);
+	void DeleteChildren();
+	void UpdateChildrenTransforms();
+
 	void SetAxis(bool value);
 	void CreatePrimitive(MeshTypes type);
+
 	Transform* GetTransform();
 
 public:
 	bool active;
 	std::string name;
 	std::vector<Component*> components;
+
+	GameObject* parent;
+	std::vector<GameObject*> children;
 };
 
 #endif // !__GAMEOBJECT_H__

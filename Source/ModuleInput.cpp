@@ -21,13 +21,13 @@ ModuleInput::~ModuleInput()
 // Called before render is available
 bool ModuleInput::Init()
 {
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Init SDL input event system"));
+	LOG_CONSOLE("Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		if (App->gui != nullptr) App->gui->LogConsole(LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError()));
+		LOG_CONSOLE("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
@@ -114,19 +114,25 @@ update_status ModuleInput::PreUpdate()
 		switch(e.type)
 		{
 			case SDL_MOUSEWHEEL:
-			mouse_z = e.wheel.y;
+			{
+				mouse_z = e.wheel.y;
+			}
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
+			{
+				mouse_x = e.motion.x / SCREEN_SIZE;
+				mouse_y = e.motion.y / SCREEN_SIZE;
 
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+				mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
+				mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			}
 			break;
 
 			case SDL_QUIT:
-			quit = true;
+			{
+				quit = true;
+			}
 			break;
 
 			case SDL_WINDOWEVENT:
@@ -147,17 +153,16 @@ update_status ModuleInput::PreUpdate()
 				{
 					if (tmp.find(".fbx") != std::string::npos)
 					{
-						App->importer->ImportScene(tmp.c_str());
+						std::string fileName = App->importer->GetFileName(tmp.c_str());
+						App->importer->ImportScene(tmp.c_str(), fileName.c_str());
 					}
 					else if(tmp.find(".png") != std::string::npos)
 					{
-						std::vector<Gameobject*>::iterator g = App->importer->gameobjectList.begin();
-
-						while (g != App->importer->gameobjectList.end())
+						if (App->scene->selectedGameObject != nullptr && App->scene->selectedGameObject != App->scene->GetSceneRoot())
 						{
 							Material* mat = nullptr;
-							std::vector<Component*>::iterator c = (*g)->components.begin();
-							while (c != (*g)->components.end())
+							std::vector<Component*>::iterator c = App->scene->selectedGameObject->components.begin();
+							while (c != App->scene->selectedGameObject->components.end())
 							{
 								if ((*c)->type == ComponentTypes::MATERIAL)
 								{
@@ -170,7 +175,17 @@ update_status ModuleInput::PreUpdate()
 							{
 								mat->SetTexture(App->importer->LoadTexture(tmp.c_str()));
 							}
-							++g;
+						}
+						else
+						{
+							if (App->scene->selectedGameObject != App->scene->GetSceneRoot())
+							{
+								LOG_CONSOLE("Error: Cannot assign material to scene root. Select object containing component Mesh");
+							}
+							else
+							{
+								LOG_CONSOLE("Error: No mesh component detected in selected Game Object. Consider selecting children");
+							}
 						}
 					}
 				}
@@ -179,8 +194,7 @@ update_status ModuleInput::PreUpdate()
 		}
 	}
 
-	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_STATE::KEY_UP)
-		return update_status::UPDATE_STOP;
+	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_STATE::KEY_UP) return update_status::UPDATE_STOP;
 
 	if (isHovering)
 	{
@@ -199,7 +213,7 @@ update_status ModuleInput::PreUpdate()
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Quitting SDL input event subsystem"));
+	LOG_CONSOLE("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }
