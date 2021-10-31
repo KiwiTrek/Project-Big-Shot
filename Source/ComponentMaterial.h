@@ -14,9 +14,12 @@ public:
     Material(std::string n, std::string p, uint texId,uint texBuf, int f, uint fUnsigned, GLubyte* data, int w, int h, bool active);
     ~Material();
     bool SetTexture(Material* texture);
+    void DrawInspector();
 
 private:
     void SetDefaultTexture();
+    void BindTexture(GLubyte* texData);
+    GLubyte* CheckersTexture();
 
 public:
     std::string name = "defaultTex";
@@ -30,6 +33,8 @@ public:
     GLubyte* data = nullptr;
     int width = -1;
     int height = -1;
+
+    bool checkers = false;
 };
 
 #endif //!__COMPONENT_MATERIAL_H__

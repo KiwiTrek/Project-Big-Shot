@@ -12,7 +12,7 @@ PanelConfig::~PanelConfig()
 
 update_status PanelConfig::Update()
 {
-    ImGui::Begin(name.c_str());
+    ImGui::Begin(name.c_str(), &active);
 
     if (ImGui::CollapsingHeader("Application"))
     {
@@ -174,18 +174,6 @@ update_status PanelConfig::Update()
         if (ImGui::Checkbox("Texture 2D", &texture2D))
         {
             App->renderer3D->ToggleTexture2D();
-        }
-
-        bool faceNormals = App->renderer3D->IsFaceNormals();
-        if (ImGui::Checkbox("Face Normals", &faceNormals))
-        {
-            App->renderer3D->ToggleFaceNormals();
-        }
-        ImGui::SameLine();
-        bool vertexNormals = App->renderer3D->IsVertexNormals();
-        if (ImGui::Checkbox("Vertex Normals", &vertexNormals))
-        {
-            App->renderer3D->ToggleVertexNormals();
         }
     }
 

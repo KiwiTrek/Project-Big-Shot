@@ -148,6 +148,13 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 		g->SetParent(parentGameObject);
 	}
 
+	Transform* t = (Transform*)g->CreateComponent(ComponentTypes::TRANSFORM, MeshTypes::NONE, LoadTransform(n));
+	if (t->GetScale().x >= 100.0f)
+	{
+		t->SetScale(1.0f, 1.0f, 1.0f);
+		t->UpdateLocalTransform();
+	}
+
 	if (n->mMeshes != nullptr)
 	{
 		g->name = n->mName.C_Str();
@@ -158,10 +165,6 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 		Mesh* mesh = ImportModel(scene, n, path);
 		g->CreateComponent(mesh);
 		mesh->GenerateBuffers();
-
-		Transform* t = (Transform*)g->CreateComponent(ComponentTypes::TRANSFORM, MeshTypes::NONE, LoadTransform(n));
-		t->SetRot(0, 90, 0);
-		t->SetScale(1.0f, 1.0f, 1.0f);
 	}
 
 	for (size_t i = 0; i < n->mNumChildren; i++)

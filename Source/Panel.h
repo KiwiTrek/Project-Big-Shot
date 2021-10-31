@@ -30,6 +30,11 @@ public:
 		return update_status::UPDATE_CONTINUE;
 	}
 
+	virtual bool RightClickMenu()
+	{
+		return true;
+	}
+
 	virtual bool CleanUp()
 	{
 		return true;

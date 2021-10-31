@@ -185,6 +185,18 @@ Transform* GameObject::GetTransform()
 	return t;
 }
 
+void GameObject::UpdateChildrenTransforms()
+{
+	Transform* t = GetTransform();
+	t->UpdateGlobalTransform();
+
+	for (size_t i = 0; i < children.size(); i++)
+	{
+		children[i]->GetTransform()->UpdateGlobalTransform(t->GetGlobalTransform());
+		children[i]->UpdateChildrenTransforms();
+	}
+}
+
 void GameObject::AddChild(GameObject* c)
 {
 	children.push_back(c);
@@ -233,14 +245,4 @@ void GameObject::DeleteChildren()
 	}
 
 	this->~GameObject();
-}
-
-void GameObject::UpdateChildrenTransforms()
-{
-	GetTransform()->UpdateLocalTransform();
-
-	for (size_t i = 0; i < children.size(); i++)
-	{
-		children[i]->GetTransform()->UpdateGlobalTransform(GetTransform()->GetGlobalTransform());
-	}
 }

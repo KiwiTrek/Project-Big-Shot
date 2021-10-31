@@ -7,9 +7,6 @@
 
 #define BOUNCER_TIME 200
 
-class PyramidP;
-class CubeP;
-class Mesh;
 class GameObject;
 
 class ModuleScene : public Module
@@ -26,13 +23,6 @@ public:
 	GameObject* GetSceneRoot() { return root; }
 	bool CleanUp();
 
-public:
-	GameObject* selectedGameObject = nullptr;
-
-	//TESTING PURPOSES
-	GameObject* c;
-	GameObject* pyd;
-	float rotation;
 private:
 	GameObject* root;
 };

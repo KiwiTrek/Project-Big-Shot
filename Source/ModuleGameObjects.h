@@ -22,6 +22,7 @@ public:
 
 public:
 	std::vector<GameObject*> gameobjectList;
+	GameObject* selectedGameObject = nullptr;
 
 private:
 	void RenderChildren(GameObject* parent);

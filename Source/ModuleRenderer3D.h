@@ -41,10 +41,6 @@ public:
 	const char* GetVideoDriver();
 	void ToggleWireframe();
 	bool IsWireframe();
-	void ToggleFaceNormals();
-	bool IsFaceNormals();
-	void ToggleVertexNormals();
-	bool IsVertexNormals();
 
 public:
 

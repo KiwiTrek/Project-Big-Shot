@@ -9,6 +9,8 @@ public:
 	Transform(bool active = true);
 	Transform(float3 p, Quat r, float3 s,bool active = true);
 	~Transform();
+	void DrawInspector();
+	
 	void Reset();
 	void SetPos(float x, float y, float z);
 	void SetPos(float3 p);
@@ -21,13 +23,16 @@ public:
 	float3 GetScale();
 	float4x4 GetGlobalTransform();
 	float4x4 GetLocalTransform();
-	void UpdateGlobalTransform(float4x4 parent);
+	void UpdateGlobalTransform();
+	void UpdateGlobalTransform(float4x4 pGlobalTransform);
 	void UpdateLocalTransform();
 
 private:
 	float3 pos;
 	Quat rot;
+	float3 eulerRot;
 	float3 scale;
+	float4x4 gParentTransform;
 	float4x4 gTransform;
 	float4x4 lTransform;
 };

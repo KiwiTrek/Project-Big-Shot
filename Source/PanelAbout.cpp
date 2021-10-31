@@ -15,7 +15,7 @@ update_status PanelAbout::Update()
 {
     App->input->isHovering = false;
 
-    ImGui::Begin(name.c_str());
+    ImGui::Begin(name.c_str(), &active);
     ImGui::SetWindowFontScale(1.2f);
     ImGui::TextColored(IMGUI_WHITE, "Project"); ImGui::SameLine(); ImGui::TextColored(IMGUI_LIGHT_PINK, "Big"); ImGui::SameLine(); ImGui::TextColored(IMGUI_YELLOW, "Shot");
     ImGui::SetWindowFontScale(1);

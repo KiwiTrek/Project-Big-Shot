@@ -48,11 +48,9 @@ update_status ModuleGameObjects::PostUpdate()
 			RenderChildren((*item));
 		}
 
-		if (m != nullptr)
+		if (m != nullptr && m->IsActive())
 		{
 			m->wire = App->renderer3D->IsWireframe();
-			m->drawFaceNormals = App->renderer3D->IsFaceNormals();
-			m->drawVertexNormals = App->renderer3D->IsVertexNormals();
 			m->Render();
 		}
 
@@ -86,15 +84,13 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 			RenderChildren((*item));
 		}
 
-		if (m != nullptr)
+		if (m != nullptr && m->IsActive())
 		{
 			if (m->GetType() != MeshTypes::Primitive_Grid)
 			{
 				m->axis = App->renderer3D->IsAxis();
 			}
 			m->wire = App->renderer3D->IsWireframe();
-			m->drawFaceNormals = App->renderer3D->IsFaceNormals();
-			m->drawVertexNormals = App->renderer3D->IsVertexNormals();
 			m->Render();
 		}
 
@@ -124,6 +120,14 @@ void ModuleGameObjects::RemoveGameobject(GameObject* g)
 	else if (g->GetParent()->RemoveChild(g))
 	{
 		g->DeleteChildren();
+	}
+
+	for (size_t i = 0; i < gameobjectList.size(); i++)
+	{
+		if (gameobjectList[i] == g)
+		{
+			gameobjectList.erase(gameobjectList.begin() + i);
+		}
 	}
 
 	delete g;

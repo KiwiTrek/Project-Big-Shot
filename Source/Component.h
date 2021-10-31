@@ -2,6 +2,7 @@
 #define __COMPONENT_H__
 
 #include "Globals.h"
+#include "imgui.h"
 
 class GameObject;
 
@@ -25,17 +26,17 @@ public:
 	virtual void Update()
 	{}
 
-	virtual void Enable()
+	virtual void DrawInspector()
 	{}
 
-	virtual void Disable()
-	{}
+	virtual bool IsActive() { return active; }
+	virtual void ToggleActive() { active = !active; }
 
 public:
 	ComponentTypes type;
 	GameObject* owner;
 
-private:
+protected:
 	bool active;
 };
 

@@ -2,13 +2,9 @@
 
 #include "Application.h"
 #include "ModuleGuiManager.h"
-#include "ModuleScene.h"
+#include "ModuleGameObjects.h"
 
 #include "Gameobject.h"
-#include "Component.h"
-#include "ComponentMaterial.h"
-#include "ComponentMesh.h"
-#include "ComponentTransform.h"
 
 PanelHierarchy::PanelHierarchy(Application* app, bool start_enabled) : Panel(app, start_enabled)
 {
@@ -20,9 +16,25 @@ PanelHierarchy::~PanelHierarchy()
 
 update_status PanelHierarchy::Update()
 {
-	ImGui::Begin(name.c_str());
+	ImGui::Begin(name.c_str(), &active, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	GameObject* root = App->scene->GetSceneRoot();
 	DisplayChild(root);
+
+	if (App->gameObjects->selectedGameObject != nullptr && ImGui::IsWindowFocused())
+	{
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_DOWN)
+		{
+			//TODO: Right Click to hierarchy options
+			RightClickMenu();
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_STATE::KEY_DOWN)
+		{
+			App->gameObjects->RemoveGameobject(App->gameObjects->selectedGameObject);
+			App->gameObjects->selectedGameObject = nullptr;
+		}
+	}
+
 	ImGui::End();
 
     return update_status::UPDATE_CONTINUE;
@@ -35,13 +47,13 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 	if (g->GetChildNum() > 0)
 	{
 		if (g == App->scene->GetSceneRoot()) flags |= ImGuiTreeNodeFlags_DefaultOpen;
-		if (g == App->scene->selectedGameObject) flags |= ImGuiTreeNodeFlags_Selected;
+		if (g == App->gameObjects->selectedGameObject) flags |= ImGuiTreeNodeFlags_Selected;
 
 		if (ImGui::TreeNodeEx(g->name.c_str(), flags))
 		{
 			if (ImGui::IsItemClicked())
 			{
-				App->scene->selectedGameObject = g;
+				App->gameObjects->selectedGameObject = g;
 			}
 
 			for (int i = 0; i < g->GetChildNum(); i++)
@@ -55,15 +67,26 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 	{
 		flags |= ImGuiTreeNodeFlags_Leaf;
 
-		if (g == App->scene->selectedGameObject) flags |= ImGuiTreeNodeFlags_Selected;
+		if (g == App->gameObjects->selectedGameObject) flags |= ImGuiTreeNodeFlags_Selected;
 
 		if (ImGui::TreeNodeEx(g->name.c_str(), flags))
 		{
 			if (ImGui::IsItemClicked())
 			{
-				App->scene->selectedGameObject = g;
+				App->gameObjects->selectedGameObject = g;
 			}
 			ImGui::TreePop();
 		}
 	}
+}
+
+bool PanelHierarchy::RightClickMenu()
+{
+	/*TODO: Popup menu: (FOR SOME REASON IT DOESNT WORK ;;)
+	* - Move Up/Down in hierarchy
+	* - Delete (Same as pressing DELETE)
+	* - Create Empty GameObject child
+	* (If it doesnt work, create menu as "Options" in config -> Lin 203)
+	*/
+	return true;
 }

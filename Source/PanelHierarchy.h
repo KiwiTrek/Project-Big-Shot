@@ -13,6 +13,7 @@ public:
 
     update_status Update();
     void DisplayChild(GameObject* g);
+    bool RightClickMenu();
 };
 
 #endif // !__PANEL_HIERARCHY_H__

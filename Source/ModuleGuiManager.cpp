@@ -13,11 +13,13 @@ ModuleGuiManager::ModuleGuiManager(Application* app, bool start_enabled) : Modul
     console = new PanelConsole(App);
     config = new PanelConfig(App);
     hierarchy = new PanelHierarchy(App);
+    inspector = new PanelInspector(App);
 
     AddPanel(about);
     AddPanel(console);
     AddPanel(config);
     AddPanel(hierarchy);
+    AddPanel(inspector);
 }
 
 ModuleGuiManager::~ModuleGuiManager()

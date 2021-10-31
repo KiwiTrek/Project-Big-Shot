@@ -158,11 +158,11 @@ update_status ModuleInput::PreUpdate()
 					}
 					else if(tmp.find(".png") != std::string::npos)
 					{
-						if (App->scene->selectedGameObject != nullptr && App->scene->selectedGameObject != App->scene->GetSceneRoot())
+						if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 						{
 							Material* mat = nullptr;
-							std::vector<Component*>::iterator c = App->scene->selectedGameObject->components.begin();
-							while (c != App->scene->selectedGameObject->components.end())
+							std::vector<Component*>::iterator c = App->gameObjects->selectedGameObject->components.begin();
+							while (c != App->gameObjects->selectedGameObject->components.end())
 							{
 								if ((*c)->type == ComponentTypes::MATERIAL)
 								{
@@ -178,7 +178,7 @@ update_status ModuleInput::PreUpdate()
 						}
 						else
 						{
-							if (App->scene->selectedGameObject != App->scene->GetSceneRoot())
+							if (App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 							{
 								LOG_CONSOLE("Error: Cannot assign material to scene root. Select object containing component Mesh");
 							}

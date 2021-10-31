@@ -30,16 +30,16 @@ public:
 	Mesh(bool active = true);
 	virtual ~Mesh();
 
-	virtual void	Render() const;
-	virtual void	InnerRender() const;
-	void			DrawVertexNormals() const;
-	void			DrawFaceNormals() const;
+	virtual void Render() const;
+	virtual void InnerRender() const;
+	void DrawInspector();
+	void DrawVertexNormals() const;
+	void DrawFaceNormals() const;
 	void GenerateBuffers();
 
-	MeshTypes		GetType() const;
+	MeshTypes GetType() const;
 
 public:
-	
 	Color color;
 	bool axis,wire;
 

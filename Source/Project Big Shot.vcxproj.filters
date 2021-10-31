@@ -549,6 +549,9 @@
     <ClInclude Include="ModuleScene.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
+    <ClInclude Include="PanelInspector.h">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -775,6 +778,9 @@
     </ClCompile>
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelInspector.cpp">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

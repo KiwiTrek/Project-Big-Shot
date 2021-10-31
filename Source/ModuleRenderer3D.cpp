@@ -267,23 +267,3 @@ bool ModuleRenderer3D::IsTexture2D()
 {
 	return texture2D;
 }
-
-void ModuleRenderer3D::ToggleFaceNormals()
-{
-	faceNormals = !faceNormals;
-}
-
-bool ModuleRenderer3D::IsFaceNormals()
-{
-	return faceNormals;
-}
-
-void ModuleRenderer3D::ToggleVertexNormals()
-{
-	vecNormals = !vecNormals;
-}
-
-bool ModuleRenderer3D::IsVertexNormals()
-{
-	return vecNormals;
-}

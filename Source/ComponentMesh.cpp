@@ -2,6 +2,9 @@
 #include "RenderGlobals.h"
 #include "Gameobject.h"
 
+#include "Component.h"
+#include "ComponentMesh.h"
+
 // ------------------------------------------------------------
 Mesh::Mesh(bool active) : Component(type,active), color(White), wire(false), axis(false), mType(MeshTypes::NONE), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
 normalsBuf(-1), texCoords(nullptr), normals(nullptr), colors(nullptr), drawFaceNormals(false), drawVertexNormals(false)
@@ -39,6 +42,7 @@ MeshTypes Mesh::GetType() const
 	return mType;
 }
 
+// ------------------------------------------------------------
 void Mesh::GenerateBuffers()
 {
 	Material* mat = nullptr;
@@ -73,6 +77,24 @@ void Mesh::GenerateBuffers()
 		glGenBuffers(1, &mat->textureBuf);
 		glBindBuffer(GL_ARRAY_BUFFER, mat->textureBuf);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexNum * 2, texCoords, GL_STATIC_DRAW);
+	}
+}
+
+// ------------------------------------------------------------
+void Mesh::DrawInspector()
+{
+	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::Checkbox("Enabled", &active);
+		ImGui::Spacing();
+
+		IMGUI_PRINT(IMGUI_YELLOW, "Vertices:", "%d", vertexNum);
+		IMGUI_PRINT(IMGUI_YELLOW, "Indices:", "%d", indices);
+		ImGui::Spacing();
+
+		ImGui::Checkbox("Vertex Normals", &drawVertexNormals);
+		ImGui::SameLine();
+		ImGui::Checkbox("Face Normals", &drawFaceNormals);
 	}
 }
 
@@ -207,7 +229,7 @@ void Mesh::DrawVertexNormals() const
 	glBegin(GL_LINES);
 	for (size_t i = 0, c = 0; i < vertexNum * 3; i += 3, c += 4)
 	{
-		glColor3f(0.85f, 0.0f, 0.85f);
+		glColor4f(1.f, 0.0f, 0.0f, 1.f);
 		//glColor4f(colors[c], colors[c + 1], colors[c + 2], colors[c + 3]);
 		glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
 
@@ -216,7 +238,7 @@ void Mesh::DrawVertexNormals() const
 			vertices[i + 2] + (normals[i + 2]) * normal_lenght);
 	}
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnd();
 }
 
@@ -230,7 +252,7 @@ void Mesh::DrawFaceNormals() const
 	glBegin(GL_LINES);
 	for (size_t i = 0; i < vertexNum * 3; i += 3)
 	{
-		glColor3f(0.0f, 0.85f, 1.0f);
+		glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
 		float vx = (vertices[i] + vertices[i + 3] + vertices[i + 6]) / 3;
 		float vy = (vertices[i + 1] + vertices[i + 4] + vertices[i + 7]) / 3;
 		float vz = (vertices[i + 2] + vertices[i + 5] + vertices[i + 8]) / 3;
@@ -246,7 +268,7 @@ void Mesh::DrawFaceNormals() const
 			vz + (normals[i + 2]) * 0.5f);
 	}
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 	glEnd();
 }
