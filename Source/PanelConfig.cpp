@@ -223,6 +223,14 @@ update_status PanelConfig::Update()
     return update_status::UPDATE_CONTINUE;
 }
 
+bool PanelConfig::CleanUp()
+{
+    fpsHist.clear();
+    msHist.clear();
+
+    return true;
+}
+
 void PanelConfig::UpdateHistogram()
 {
     static uint count = 0;

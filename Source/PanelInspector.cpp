@@ -21,10 +21,15 @@ PanelInspector::~PanelInspector()
 update_status PanelInspector::Update()
 {
 	ImGui::Begin(name.c_str(), &active, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-	if (App->gameObjects->selectedGameObject != nullptr)
+	GameObject* g = App->gameObjects->selectedGameObject;
+	if (g != nullptr)
 	{
-		std::vector<Component*>::iterator item = App->gameObjects->selectedGameObject->components.begin();
-		while (item != App->gameObjects->selectedGameObject->components.end())
+		std::string name = g->name;
+		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
+		flags &= ~ImGuiInputTextFlags_ReadOnly;
+		ImGui::InputText("Name",&name,flags);
+		std::vector<Component*>::iterator item = g->components.begin();
+		while (item != g->components.end())
 		{
 			(*item)->DrawInspector();
 			item++;

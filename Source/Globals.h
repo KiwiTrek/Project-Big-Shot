@@ -10,7 +10,7 @@ const char* log(const char file[], int line, const char* format, ...);
 
 #define LOG_CONSOLE(format, ...) \
 	{\
-		if (App->gui != nullptr) \
+		if (App->gui != nullptr && App->gui->console != nullptr) \
 		{\
 			App->gui->LogConsole(log(__FILE__, __LINE__, format, __VA_ARGS__)); \
 		}\

@@ -31,7 +31,10 @@ bool ModuleCamera3D::Start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
-	LOG_CONSOLE("Cleaning camera");
+	LOG("Cleaning camera");
+
+	ViewMatrix.~mat4x4();
+	ViewMatrixInverse.~mat4x4();
 
 	return true;
 }

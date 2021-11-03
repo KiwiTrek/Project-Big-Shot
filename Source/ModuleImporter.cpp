@@ -51,7 +51,7 @@ bool ModuleImporter::Start()
 // Called before quitting
 bool ModuleImporter::CleanUp()
 {
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Destroying File System"));
+	LOG("Destroying File System");
 
 	// detach log stream
 	aiDetachAllLogStreams();
@@ -202,7 +202,7 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 	m->vertices = new float[m->vertexNum * 3];
 	memcpy(m->vertices, aiMesh->mVertices, sizeof(float) * m->vertexNum * 3);
 
-	if (App->gui != nullptr) App->gui->LogConsole(LOG("Loaded new mesh with %d vertices", m->vertexNum));
+	LOG_CONSOLE("Loaded new mesh with %d vertices", m->vertexNum);
 
 	if (aiMesh->HasFaces())
 	{
@@ -213,7 +213,7 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 			if (aiMesh->mFaces[j].mNumIndices != 3)
 			{
 				// Quad
-				if (App->gui != nullptr) App->gui->LogConsole(LOG("WARNING, geometry face with != 3 indices!"));
+				LOG_CONSOLE("WARNING, geometry face with != 3 indices!");
 			}
 			else
 			{

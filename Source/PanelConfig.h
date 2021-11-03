@@ -10,6 +10,7 @@ public:
     ~PanelConfig();
 
     update_status Update();
+    bool CleanUp();
     void UpdateHistogram();
 
 public:

@@ -100,6 +100,17 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 
 bool ModuleGameObjects::CleanUp()
 {
+	selectedGameObject = nullptr;
+
+	std::vector<GameObject*>::reverse_iterator g = gameobjectList.rbegin();
+	while (g != gameobjectList.rend())
+	{
+		(*g)->CleanUp();
+		delete (*g);
+		g++;
+	}
+	gameobjectList.clear();
+
     return true;
 }
 

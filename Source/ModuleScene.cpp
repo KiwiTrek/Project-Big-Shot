@@ -40,7 +40,7 @@ bool ModuleScene::Start()
 
 bool ModuleScene::CleanUp()
 {
-	LOG_CONSOLE("Unloading Intro scene");
+	LOG("Unloading Intro scene");
 
 	return true;
 }

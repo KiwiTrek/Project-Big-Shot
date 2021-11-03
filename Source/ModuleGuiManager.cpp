@@ -131,9 +131,26 @@ update_status ModuleGuiManager::PostUpdate()
 
 bool ModuleGuiManager::CleanUp()
 {
+    std::vector<Panel*>::reverse_iterator panel = list_panels.rbegin();
+    while (panel != list_panels.rend())
+    {
+        (*panel)->CleanUp();
+        panel++;
+    }
+    list_panels.clear();
+
+    about = nullptr;
+    console = nullptr;
+    config = nullptr;
+    hierarchy = nullptr;
+    inspector = nullptr;
+    LogInputText.clear();
+    LogConsoleText.clear();
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
+
     return true;
 }
 
@@ -160,6 +177,46 @@ update_status ModuleGuiManager::MenuBar()
             ImGui::MenuItem("Configuration", "F1", &config->active);
             ImGui::MenuItem("Console", "F12", &console->active);
             ImGui::MenuItem("Hierarchy", "F2", &hierarchy->active);
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Create"))
+        {
+            if (ImGui::MenuItem("Cube"))
+            {
+                GameObject* c = new GameObject("Cube");
+                c->CreatePrimitive(MeshTypes::Primitive_Cube);
+                c->SetAxis(true);
+                App->gameObjects->AddGameobject(c);
+            }
+            if (ImGui::MenuItem("Plane"))
+            {
+                GameObject* pl = new GameObject("Plane");
+                pl->CreatePrimitive(MeshTypes::Primitive_Plane);
+                pl->SetAxis(true);
+                App->gameObjects->AddGameobject(pl);
+            }
+            if (ImGui::MenuItem("Sphere"))
+            {
+                GameObject* s = new GameObject("Sphere");
+                s->CreatePrimitive(MeshTypes::Primitive_Sphere);
+                s->SetAxis(true);
+                App->gameObjects->AddGameobject(s);
+            }
+            if (ImGui::MenuItem("Cylinder"))
+            {
+                GameObject* cyl = new GameObject("Cylinder");
+                cyl->CreatePrimitive(MeshTypes::Primitive_Cylinder);
+                cyl->SetAxis(true);
+                App->gameObjects->AddGameobject(cyl);
+            }
+            if (ImGui::MenuItem("Pyramid"))
+            {
+                GameObject* p = new GameObject("Pyramid");
+                p->CreatePrimitive(MeshTypes::Primitive_Pyramid);
+                p->SetAxis(true);
+                App->gameObjects->AddGameobject(p);
+            }
             ImGui::EndMenu();
         }
 

@@ -16,6 +16,7 @@ ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, sta
 ModuleInput::~ModuleInput()
 {
 	delete[] keyboard;
+	keyboard = nullptr;
 }
 
 // Called before render is available
@@ -213,7 +214,7 @@ update_status ModuleInput::PreUpdate()
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
-	LOG_CONSOLE("Quitting SDL input event subsystem");
+	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

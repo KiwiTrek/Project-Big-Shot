@@ -37,12 +37,12 @@ Application::Application(ConsoleBuffer* _buff)
 Application::~Application()
 {
 	std::vector<Module*>::reverse_iterator item = list_modules.rbegin();
-
 	while(item != list_modules.rend())
 	{
 		delete *item;
 		++item;
 	}
+	list_modules.clear();
 }
 
 bool Application::Init()

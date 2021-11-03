@@ -11,6 +11,7 @@ GameObject::GameObject(std::string n, bool active) : active(active), parent(null
 GameObject::~GameObject()
 {
 	name.clear();
+	parent = nullptr;
 
 	std::vector<Component*>::iterator c = components.begin();
 	while (c != components.end())
@@ -18,6 +19,7 @@ GameObject::~GameObject()
 		delete *c;
 		++c;
 	}
+	components.clear();
 }
 
 void GameObject::Update()
@@ -236,13 +238,23 @@ bool GameObject::RemoveChild(GameObject* gameObject)
 	return ret;
 }
 
-void GameObject::DeleteChildren()
+void GameObject::DeleteChildren(bool isOriginal)
 {
 	for (size_t i = 0; i < children.size(); i++)
 	{
-		children[i]->DeleteChildren();
+		children[i]->DeleteChildren(false);
 		children[i] = nullptr;
 	}
 
-	this->~GameObject();
+	if (!isOriginal)
+	{
+		this->~GameObject();
+	}
+}
+
+bool GameObject::CleanUp()
+{
+	DeleteChildren();
+
+	return true;
 }

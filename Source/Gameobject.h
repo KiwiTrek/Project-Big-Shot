@@ -17,6 +17,7 @@ public:
 	GameObject(std::string n, bool active = true);
 	~GameObject();
 	void Update();
+	bool CleanUp();
 
 	Component* CreateComponent(ComponentTypes cType, MeshTypes mType = MeshTypes::NONE, Transform* t = nullptr);
 
@@ -29,7 +30,7 @@ public:
 	GameObject* GetParent();
 	void SetParent(GameObject* p);
 	bool RemoveChild(GameObject* gameObject);
-	void DeleteChildren();
+	void DeleteChildren(bool isOriginal = true);
 	void UpdateChildrenTransforms();
 
 	void SetAxis(bool value);
