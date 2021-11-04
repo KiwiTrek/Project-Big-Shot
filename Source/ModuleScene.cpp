@@ -24,10 +24,9 @@ bool ModuleScene::Init()
 	root = new GameObject("sceneRoot");
 	App->gameObjects->selectedGameObject = root;
 
-	GameObject* g = new GameObject("Grid");
-	g->CreatePrimitive(MeshTypes::Primitive_Grid);
-	g->SetAxis(true);
-	App->gameObjects->AddGameobject(g);
+	grid = new GameObject("Grid");
+	grid->CreatePrimitive(MeshTypes::Primitive_Grid);
+	grid->SetAxis(true);
 
 	return ret;
 }
@@ -41,6 +40,10 @@ bool ModuleScene::Start()
 bool ModuleScene::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	root->children.clear();
+	delete root;
+	root = nullptr;
 
 	return true;
 }

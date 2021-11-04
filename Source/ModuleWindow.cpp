@@ -79,6 +79,9 @@ bool ModuleWindow::CleanUp()
 {
 	LOG("Destroying SDL window and quitting all SDL systems");
 
+
+	SDL_FreeSurface(screen_surface);
+
 	//Destroy window
 	if(window != NULL)
 	{

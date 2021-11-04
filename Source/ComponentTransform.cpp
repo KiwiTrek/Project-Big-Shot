@@ -74,49 +74,51 @@ void Transform::UpdateLocalTransform()
 
 void Transform::DrawInspector()
 {
-	//TODO: Shouldn't be able to edit grid & scene root
-	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	if (owner->parent != nullptr)
 	{
-		float position4f[4] = { pos.x, pos.y, pos.z, 1.0f };
-		if (ImGui::DragFloat3("Position", position4f, 0.1f, -10000.0f, 10000.0f))
+		if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			SetPos(position4f[0], position4f[1], position4f[2]);
-			UpdateGlobalTransform();
-			owner->UpdateChildrenTransforms();
+			float position4f[4] = { pos.x, pos.y, pos.z, 1.0f };
+			if (ImGui::DragFloat3("Position", position4f, 0.1f, -10000.0f, 10000.0f))
+			{
+				SetPos(position4f[0], position4f[1], position4f[2]);
+				UpdateGlobalTransform();
+				owner->UpdateChildrenTransforms();
+			}
+
+			float rotation4f[4] = { eulerRot.x, eulerRot.y, eulerRot.z, 1.0f };
+			if (ImGui::DragFloat3("Rotation", rotation4f, 0.1f, -360.0f, 360.0f))
+			{
+				SetRot(rotation4f[0], rotation4f[1], rotation4f[2]);
+				UpdateGlobalTransform();
+				owner->UpdateChildrenTransforms();
+			}
+
+			float scale4f[4] = { scale.x, scale.y, scale.z, 1.0f };
+			if (ImGui::DragFloat3("Scale", scale4f, 0.01f, -10000.0f, 10000.0f))
+			{
+				SetScale(scale4f[0], scale4f[1], scale4f[2]);
+				UpdateGlobalTransform();
+				owner->UpdateChildrenTransforms();
+			};
+
+			float scaleMult = scale.x;
+			if (ImGui::DragFloat("Scale Multiplier", &scaleMult, 0.01f, 0.0f, 10.0f))
+			{
+				SetScale(float3(scaleMult, scaleMult, scaleMult));
+				UpdateGlobalTransform();
+				owner->UpdateChildrenTransforms();
+			}
+
+			ImGui::Spacing();
+
+			if (ImGui::Button("Reset"))
+			{
+				Reset();
+			}
+
+			ImGui::Spacing();
 		}
-
-		float rotation4f[4] = { eulerRot.x, eulerRot.y, eulerRot.z, 1.0f };
-		if (ImGui::DragFloat3("Rotation", rotation4f, 0.1f, -360.0f, 360.0f))
-		{
-			SetRot(rotation4f[0], rotation4f[1], rotation4f[2]);
-			UpdateGlobalTransform();
-			owner->UpdateChildrenTransforms();
-		}
-
-		float scale4f[4] = { scale.x, scale.y, scale.z, 1.0f };
-		if (ImGui::DragFloat3("Scale", scale4f, 0.01f, -10000.0f, 10000.0f))
-		{
-			SetScale(scale4f[0], scale4f[1], scale4f[2]);
-			UpdateGlobalTransform();
-			owner->UpdateChildrenTransforms();
-		};
-
-		float scaleMult = scale.x;
-		if (ImGui::DragFloat("Scale Multiplier", &scaleMult, 0.01f, 0.0f, 10.0f))
-		{
-			SetScale(float3(scaleMult, scaleMult, scaleMult));
-			UpdateGlobalTransform();
-			owner->UpdateChildrenTransforms();
-		}
-
-		ImGui::Spacing();
-
-		if (ImGui::Button("Reset"))
-		{
-			Reset();
-		}
-
-		ImGui::Spacing();
 	}
 }
 

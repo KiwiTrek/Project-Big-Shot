@@ -43,6 +43,21 @@ Application::~Application()
 		++item;
 	}
 	list_modules.clear();
+
+	appName.clear();
+	orgName.clear();
+
+	window = nullptr;
+	input = nullptr;
+	scene = nullptr;
+	renderer3D = nullptr;
+	camera = nullptr;
+	gui = nullptr;
+	importer = nullptr;
+	gameObjects = nullptr;
+	buff->initBuff = nullptr;
+	buff->initBuff2 = nullptr;
+	buff = nullptr;
 }
 
 bool Application::Init()

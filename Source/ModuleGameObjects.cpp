@@ -25,6 +25,25 @@ bool ModuleGameObjects::Start()
 
 update_status ModuleGameObjects::PostUpdate()
 {
+
+	std::vector<Component*>::iterator gridComponent = App->scene->grid->components.begin();
+	Mesh* gridMesh = nullptr;
+	while (gridComponent != App->scene->grid->components.end())
+	{
+		if ((*gridComponent)->type == ComponentTypes::MESH)
+		{
+			gridMesh = (Mesh*)(*gridComponent);
+			break;
+		}
+		gridComponent++;
+	}
+
+	if (gridMesh != nullptr && gridMesh->IsActive())
+	{
+		gridMesh->wire = App->renderer3D->IsWireframe();
+		gridMesh->Render();
+	}
+
 	std::vector<GameObject*>::iterator item = gameobjectList.begin();
 
 	while (item != gameobjectList.end())
@@ -39,6 +58,7 @@ update_status ModuleGameObjects::PostUpdate()
 				if ((*c)->type == ComponentTypes::MESH)
 				{
 					m = (Mesh*)(*c);
+					break;
 				}
 				c++;
 			}

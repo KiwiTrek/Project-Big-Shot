@@ -4,8 +4,8 @@
 #include "Module.h"
 #include "SDL.h"
 
-#define DEFAULT_WIDTH 1600
-#define DEFAULT_HEIGHT 900
+#define DEFAULT_WIDTH 1028
+#define DEFAULT_HEIGHT 720
 
 class Application;
 

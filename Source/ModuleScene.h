@@ -25,6 +25,9 @@ public:
 
 private:
 	GameObject* root;
+
+public:
+	GameObject* grid;
 };
 
 #endif // !__MODULE_SCENE_INTRO_H__

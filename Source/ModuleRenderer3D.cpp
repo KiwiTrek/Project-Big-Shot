@@ -165,6 +165,10 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG_CONSOLE("Destroying 3D Renderer");
 
+	NormalMatrix.~mat3x3();
+	ModelMatrix.~mat4x4();
+	ViewMatrix.~mat4x4();
+	ProjectionMatrix.~mat4x4();
 	SDL_GL_DeleteContext(context);
 
 	return true;

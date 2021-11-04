@@ -246,6 +246,8 @@ void GameObject::DeleteChildren(bool isOriginal)
 		children[i] = nullptr;
 	}
 
+	children.clear();
+
 	if (!isOriginal)
 	{
 		this->~GameObject();
