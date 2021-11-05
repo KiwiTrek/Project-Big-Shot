@@ -36,6 +36,7 @@ public:
 	update_status MenuBar();
 
 	void LogConsole(const char* buff);
+	const char* GetImGuiVersion();
 
 public:
 	std::vector<Panel*> list_panels;

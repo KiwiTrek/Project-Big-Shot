@@ -74,7 +74,7 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	if (gui != nullptr) gui->LogConsole(LOG("Application Start --------------"));
+	if (gui != nullptr) gui->LogConsole(LOG("-------------- Application Start --------------"));
 	item = list_modules.begin();
 
 	while(item != list_modules.end() && ret == true)

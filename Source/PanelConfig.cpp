@@ -10,6 +10,20 @@ PanelConfig::PanelConfig(Application* app, bool start_enabled) : Panel(app, star
 PanelConfig::~PanelConfig()
 {}
 
+bool PanelConfig::Start()
+{
+    App->GetSDLVersion(sdlMajor, sdlMinor, sdlPatch);
+    App->GetCPU(cpuCount, cpuSize);
+    ramSize = App->GetRAM();
+    App->GetCaps(threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42);
+    App->GetGPU(gpuVendorId, gpuDeviceId, gpuBrand, videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
+    App->importer->GetAssimpVersion(assimpMajor, assimpMinor, assimpPatch);
+    glewVersion = App->renderer3D->GetGlewVersion();
+    glVersion = App->renderer3D->GetOpenGLVersion();
+    imguiVersion = App->gui->GetImGuiVersion();
+    return true;
+}
+
 update_status PanelConfig::Update()
 {
     ImGui::Begin(name.c_str(), &active);
@@ -93,35 +107,33 @@ update_status PanelConfig::Update()
         }
     }
 
-    if (ImGui::CollapsingHeader("Hardware"))
+    if (ImGui::CollapsingHeader("Hardware & Software"))
     {
-        int major, minor, patch;
-        App->GetSDLVersion(major, minor, patch);
-        IMGUI_PRINT(IMGUI_YELLOW, "SDL Version:", "%d.%d.%d", major, minor, patch);
-        ImGui::Separator();
-        int count, size;
-        App->GetCPU(count, size);
-        IMGUI_PRINT(IMGUI_YELLOW, "CPUs:", "%d (%dKb)", count, size);
-        float ram = App->GetRAM();
-        IMGUI_PRINT(IMGUI_YELLOW, "RAM:", "%.2fGb", ram);
-        ImGui::Separator();
-        bool threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42;
-        App->GetCaps(threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42);
+        ImGui::TextColored(IMGUI_YELLOW, "Hardware");
+        IMGUI_PRINT(IMGUI_YELLOW, "CPUs:", "%d (%dKb)", cpuCount, cpuSize);
+        IMGUI_PRINT(IMGUI_YELLOW, "RAM:", "%.2fGb", ramSize);
+        ImGui::Spacing();
         IMGUI_PRINT(IMGUI_YELLOW, "Caps:", "%s%s%s%s%s%s", threeD ? "3DNow, " : "", altiVec ? "AltiVec, " : "", avx ? "AVX, " : "", avx2 ? "AVX2, " : "", mmx ? "MMX, " : "", rdtsc ? "RDTSC, " : "");
         IMGUI_PRINT(IMGUI_YELLOW, "", "%s%s%s%s%s", sse ? "SSE, " : "", sse2 ? "SSE2, " : "", sse3 ? "SSE3, " : "", sse41 ? "SSE41, " : "", sse42 ? "SSE42" : "");
-
-        ImGui::Separator();
-        uint vendorId, deviceId;
-        char brand[250];
-        float videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
-        App->GetGPU(vendorId, deviceId, brand, videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved);
-        IMGUI_PRINT(IMGUI_YELLOW, "GPU: ", "VendorId: %d - DeviceId: %d", vendorId, deviceId);
-        IMGUI_PRINT(IMGUI_YELLOW, "Brand: ", brand);
+        ImGui::Spacing();
+        IMGUI_PRINT(IMGUI_YELLOW, "GPU: ", "VendorId: %d - DeviceId: %d", gpuVendorId, gpuDeviceId);
+        IMGUI_PRINT(IMGUI_YELLOW, "Brand: ", gpuBrand);
         IMGUI_PRINT(IMGUI_YELLOW, "VRAM Budget: ", "%.1f Mb", videoMemBudget);
         IMGUI_PRINT(IMGUI_YELLOW, "VRAM Usage: ", "%.1f Mb", videoMemCurrent);
         IMGUI_PRINT(IMGUI_YELLOW, "VRAM Available: ", "%.1f Mb", videoMemAvailable);
         IMGUI_PRINT(IMGUI_YELLOW, "VRAM Reserved: ", "%.1f Mb", videoMemReserved);
 
+        ImGui::Separator();
+
+        ImGui::TextColored(IMGUI_YELLOW, "Software (3rd party libraries):");
+        IMGUI_BULLET(IMGUI_YELLOW, "SDL", "%d.%d.%d", sdlMajor, sdlMinor, sdlPatch);
+        IMGUI_BULLET(IMGUI_YELLOW, "OpenGL", "%s", glewVersion.c_str());
+        IMGUI_BULLET(IMGUI_YELLOW, "Glew", "%s", glewVersion.c_str());
+        ImGui::BulletText("GPU Detect (2015)");
+        IMGUI_BULLET(IMGUI_YELLOW, "imgui", "%s", imguiVersion.c_str());
+        IMGUI_BULLET(IMGUI_YELLOW, "MathGeoLib", "1.5");
+        IMGUI_BULLET(IMGUI_YELLOW, "Assimp", "%d.%d.%d", assimpMajor, assimpMinor, assimpPatch);
+        IMGUI_BULLET(IMGUI_YELLOW, "DevIL", "1.8.0");
     }
 
     if (ImGui::CollapsingHeader("Render"))

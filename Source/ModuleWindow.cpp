@@ -79,7 +79,6 @@ bool ModuleWindow::CleanUp()
 {
 	LOG("Destroying SDL window and quitting all SDL systems");
 
-
 	SDL_FreeSurface(screen_surface);
 
 	//Destroy window
@@ -245,6 +244,8 @@ void ModuleWindow::SetFullscreenDesktop(bool fd)
 			{
 				LOG_CONSOLE("Could not switch to windowed: %s\n", SDL_GetError());
 			}
+			SetWidth(DEFAULT_WIDTH);
+			SetHeight(DEFAULT_HEIGHT);
 		}
 	}
 }

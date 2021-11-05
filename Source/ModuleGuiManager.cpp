@@ -35,6 +35,8 @@ ModuleGuiManager::~ModuleGuiManager()
 
 bool ModuleGuiManager::Start()
 {
+    bool status = true;
+    LOG_CONSOLE("Initializing Editor windows");
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -51,7 +53,15 @@ bool ModuleGuiManager::Start()
 
     demo = false;
 
-    return true;
+    std::vector<Panel*>::iterator item = list_panels.begin();
+
+    while (item != list_panels.end() && status)
+    {
+        status = (*item)->Start();
+        ++item;
+    }
+
+    return status;
 }
 
 update_status ModuleGuiManager::PreUpdate()
@@ -161,6 +171,21 @@ void ModuleGuiManager::AddPanel(Panel* panel)
 
 update_status ModuleGuiManager::MenuBar()
 {
+    if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_STATE::KEY_DOWN)
+    {
+        config->active = !config->active;
+    }
+
+    if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_STATE::KEY_DOWN)
+    {
+        hierarchy->active = !hierarchy->active;
+    }
+
+    if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_STATE::KEY_DOWN)
+    {
+        console->active = !console->active;
+    }
+
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -175,47 +200,51 @@ update_status ModuleGuiManager::MenuBar()
         if (ImGui::BeginMenu("View"))
         {
             ImGui::MenuItem("Configuration", "F1", &config->active);
-            ImGui::MenuItem("Console", "F12", &console->active);
             ImGui::MenuItem("Hierarchy", "F2", &hierarchy->active);
+            ImGui::MenuItem("Console", "F10", &console->active);
             ImGui::EndMenu();
         }
 
         if (ImGui::BeginMenu("Create"))
         {
-            if (ImGui::MenuItem("Cube"))
+            if (ImGui::BeginMenu("GameObject"))
             {
-                GameObject* c = new GameObject("Cube");
-                c->CreatePrimitive(MeshTypes::Primitive_Cube);
-                c->SetAxis(true);
-                App->gameObjects->AddGameobject(c);
-            }
-            if (ImGui::MenuItem("Plane"))
-            {
-                GameObject* pl = new GameObject("Plane");
-                pl->CreatePrimitive(MeshTypes::Primitive_Plane);
-                pl->SetAxis(true);
-                App->gameObjects->AddGameobject(pl);
-            }
-            if (ImGui::MenuItem("Sphere"))
-            {
-                GameObject* s = new GameObject("Sphere");
-                s->CreatePrimitive(MeshTypes::Primitive_Sphere);
-                s->SetAxis(true);
-                App->gameObjects->AddGameobject(s);
-            }
-            if (ImGui::MenuItem("Cylinder"))
-            {
-                GameObject* cyl = new GameObject("Cylinder");
-                cyl->CreatePrimitive(MeshTypes::Primitive_Cylinder);
-                cyl->SetAxis(true);
-                App->gameObjects->AddGameobject(cyl);
-            }
-            if (ImGui::MenuItem("Pyramid"))
-            {
-                GameObject* p = new GameObject("Pyramid");
-                p->CreatePrimitive(MeshTypes::Primitive_Pyramid);
-                p->SetAxis(true);
-                App->gameObjects->AddGameobject(p);
+                if (ImGui::MenuItem("Cube"))
+                {
+                    GameObject* c = new GameObject("Cube");
+                    c->CreatePrimitive(MeshTypes::Primitive_Cube);
+                    c->SetAxis(true);
+                    App->gameObjects->AddGameobject(c);
+                }
+                if (ImGui::MenuItem("Plane"))
+                {
+                    GameObject* pl = new GameObject("Plane");
+                    pl->CreatePrimitive(MeshTypes::Primitive_Plane);
+                    pl->SetAxis(true);
+                    App->gameObjects->AddGameobject(pl);
+                }
+                if (ImGui::MenuItem("Sphere"))
+                {
+                    GameObject* s = new GameObject("Sphere");
+                    s->CreatePrimitive(MeshTypes::Primitive_Sphere);
+                    s->SetAxis(true);
+                    App->gameObjects->AddGameobject(s);
+                }
+                if (ImGui::MenuItem("Cylinder"))
+                {
+                    GameObject* cyl = new GameObject("Cylinder");
+                    cyl->CreatePrimitive(MeshTypes::Primitive_Cylinder);
+                    cyl->SetAxis(true);
+                    App->gameObjects->AddGameobject(cyl);
+                }
+                if (ImGui::MenuItem("Pyramid"))
+                {
+                    GameObject* p = new GameObject("Pyramid");
+                    p->CreatePrimitive(MeshTypes::Primitive_Pyramid);
+                    p->SetAxis(true);
+                    App->gameObjects->AddGameobject(p);
+                }
+                ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
@@ -253,6 +282,11 @@ void ModuleGuiManager::LogConsole(const char* buff)
 {
     LogConsoleText.appendf(buff);
     console->update = true;
+}
+
+const char* ModuleGuiManager::GetImGuiVersion()
+{
+    return IMGUI_VERSION;
 }
 
 void ModuleGuiManager::SetupStyle()
@@ -312,7 +346,7 @@ void ModuleGuiManager::SetupStyle()
     colors[ImGuiCol_Tab] = IMGUI_PURPLE;
     colors[ImGuiCol_TabHovered] = IMGUI_LIGHT_PURPLE;
     colors[ImGuiCol_TabActive] = IMGUI_LIGHT_PURPLE;
-    colors[ImGuiCol_TabUnfocused] = IMGUI_WHITE;
+    colors[ImGuiCol_TabUnfocused] = colors[ImGuiCol_Tab];
     colors[ImGuiCol_TabUnfocusedActive] = colors[ImGuiCol_TabActive];
     colors[ImGuiCol_DockingPreview] = IMGUI_LIGHT_GREEN;
     colors[ImGuiCol_DockingEmptyBg] = IMGUI_WHITE;

@@ -85,12 +85,12 @@ void Mesh::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::Checkbox("Enabled", &active);
-		ImGui::Spacing();
+		ImGui::Checkbox("Enable Mesh", &active);
+		ImGui::Separator();
 
 		IMGUI_PRINT(IMGUI_YELLOW, "Vertices:", "%d", vertexNum);
 		IMGUI_PRINT(IMGUI_YELLOW, "Indices:", "%d", indices);
-		ImGui::Spacing();
+		ImGui::Separator();
 
 		ImGui::Checkbox("Vertex Normals", &drawVertexNormals);
 		ImGui::SameLine();
@@ -124,7 +124,7 @@ void Mesh::Render() const
 	glBindBuffer(GL_NORMAL_ARRAY, normalsBuf);
 	glNormalPointer(GL_FLOAT, 0, NULL);
 
-	if (mat != nullptr)
+	if (mat != nullptr && mat->IsActive())
 	{
 		//textures
 		glBindBuffer(GL_ARRAY_BUFFER, mat->textureBuf);

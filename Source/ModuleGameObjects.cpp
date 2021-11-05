@@ -69,6 +69,7 @@ update_status ModuleGameObjects::PostUpdate()
 		if (m != nullptr && m->IsActive())
 		{
 			m->wire = App->renderer3D->IsWireframe();
+			m->axis = App->renderer3D->IsAxis();
 			m->Render();
 		}
 
@@ -117,6 +118,8 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 bool ModuleGameObjects::CleanUp()
 {
 	selectedGameObject = nullptr;
+
+	LOG("Deleting Game Objects");
 
 	std::vector<GameObject*>::reverse_iterator g = gameobjectList.rbegin();
 	while (g != gameobjectList.rend())

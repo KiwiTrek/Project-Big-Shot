@@ -26,6 +26,7 @@ update_status PanelAbout::Update()
     if (ImGui::IsItemHovered())
     {
         App->input->isHovering = true;
+        ImGui::SetTooltip("Go to link");
     }
     if (ImGui::IsItemClicked())
     {
@@ -44,20 +45,9 @@ update_status PanelAbout::Update()
     }
 
     ImGui::Separator();
-    ImGui::TextColored(IMGUI_YELLOW, "3rd Party Libraries used:");
-    int major, minor, patch;
-    App->GetSDLVersion(major, minor, patch);
-    IMGUI_BULLET(IMGUI_YELLOW, "SDL", "%d.%d.%d", major, minor, patch);
-    IMGUI_BULLET(IMGUI_YELLOW, "Glew", "7.0");    ImGui::BulletText("GPU Detect (2015)");
-    IMGUI_BULLET(IMGUI_YELLOW, "imgui", "v1.85");
-    IMGUI_BULLET(IMGUI_YELLOW, "MathGeoLib", "1.5");
-    IMGUI_BULLET(IMGUI_YELLOW, "Assimp", "4.0.1");
-    IMGUI_BULLET(IMGUI_YELLOW, "DevIL", "1.8.0");
-
-    ImGui::Separator();
     ImGui::TextWrapped("License:");
     ImGui::Spacing();
-    ImGui::TextWrapped("MIT License");
+    ImGui::TextColored(IMGUI_YELLOW, "MIT License");
     ImGui::Spacing();
     ImGui::Spacing();
     ImGui::TextWrapped("Copyright (c) 2021 Guillem Alava & Sergi Colomer");

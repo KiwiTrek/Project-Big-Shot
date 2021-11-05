@@ -20,25 +20,14 @@ update_status PanelHierarchy::Update()
 	GameObject* root = App->scene->GetSceneRoot();
 	DisplayChild(root);
 
-
-
-
-
 	//if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_DOWN)
 	//{
 		//TODO: Right Click to hierarchy options
 		RightClickMenu();
 	//}
 
-
-
-
-
-
 	if (App->gameObjects->selectedGameObject != nullptr && ImGui::IsWindowFocused())
 	{
-
-
 		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_STATE::KEY_DOWN)
 		{
 			App->gameObjects->RemoveGameobject(App->gameObjects->selectedGameObject);
@@ -93,12 +82,7 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 
 bool PanelHierarchy::RightClickMenu()
 {
-	/*TODO: Popup menu: (FOR SOME REASON IT DOESNT WORK ;;)
-	* - Move Up/Down in hierarchy
-	* - Delete (Same as pressing DELETE)
-	* - Create Empty GameObject child
-	* (If it doesnt work, create menu as "Options" in config -> Lin 203)
-	*/
+	//TODO: Popup menu with Right Click
 
 	if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 	{
@@ -167,19 +151,6 @@ bool PanelHierarchy::RightClickMenu()
 			ImGui::EndMenu();
 		}
 	}
-
-
-
-	//ImGui::OpenPopup("AAAAAAAAAAAA");
-	//ImGui::SameLine();
-	//if (ImGui::BeginPopup("AAAAAAAAAAAA"))
-	//{
-	//	ImGui::Text("This is a sample");
-	//	ImGui::Separator();
-	//	ImGui::Text("This is another sample :)");
-	//	ImGui::EndPopup();
-	//}
-
 
 	return true;
 }

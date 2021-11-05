@@ -46,7 +46,7 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_REPEAT)
 	{
 		float speed = 10.0f * dt;
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_STATE::KEY_REPEAT)
 			speed = 20.0f * dt;
 
 		// OnKeys WASD keys -----------------------------------
@@ -115,6 +115,17 @@ update_status ModuleCamera3D::Update(float dt)
 		
 		newPos = vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z);
 		LookAt(vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z));
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_STATE::KEY_REPEAT)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_STATE::KEY_DOWN)
+		{
+			LOG_CONSOLE("Reset camera position")
+			Position = vec3(0.0f, 0.0f, 5.0f);
+			App->camera->Move(vec3(1, 2, 1));
+			App->camera->LookAt(vec3(0, 0, 0));
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_STATE::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_STATE::KEY_REPEAT)

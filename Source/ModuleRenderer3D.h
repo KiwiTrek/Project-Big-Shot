@@ -23,6 +23,9 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	const char* GetGlewVersion();
+	const char* GetOpenGLVersion();
+
 	void OnResize(int width, int height);
 	bool GetVSync();
 	void SetVSync(bool _vsync);

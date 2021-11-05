@@ -157,7 +157,7 @@ update_status ModuleInput::PreUpdate()
 						std::string fileName = App->importer->GetFileName(tmp.c_str());
 						App->importer->ImportScene(tmp.c_str(), fileName.c_str());
 					}
-					else if(tmp.find(".png") != std::string::npos)
+					else if(tmp.find(".png") != std::string::npos || tmp.find(".dds") != std::string::npos)
 					{
 						if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 						{

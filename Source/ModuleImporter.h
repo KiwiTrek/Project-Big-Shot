@@ -23,6 +23,7 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	void GetAssimpVersion(int& major, int& minor, int& patch);
 	std::string GetFileName(const char* path);
 	void ImportScene(const char* path, const char* rootName);
 	Material* LoadTexture(const char* path);

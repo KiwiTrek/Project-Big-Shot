@@ -37,7 +37,7 @@ update_status PanelInspector::Update()
 	}
 	else
 	{
-		ImGui::Text("Select a game object to see its components.");
+		ImGui::TextWrapped("Select a game object to see its components.");
 	}
 	ImGui::End();
 

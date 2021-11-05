@@ -15,7 +15,7 @@ ModuleScene::~ModuleScene()
 
 bool ModuleScene::Init()
 {
-	LOG_CONSOLE("Loading Intro assets");
+	LOG_CONSOLE("Loading Scene assets");
 	bool ret = true;
 
 	App->camera->Move(vec3(1, 2, 1));
@@ -39,7 +39,7 @@ bool ModuleScene::Start()
 
 bool ModuleScene::CleanUp()
 {
-	LOG("Unloading Intro scene");
+	LOG("Unloading scene");
 
 	root->children.clear();
 	delete root;

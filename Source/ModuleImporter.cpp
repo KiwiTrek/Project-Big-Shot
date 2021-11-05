@@ -10,6 +10,7 @@
 #include "cimport.h"
 #include "scene.h"
 #include "postprocess.h"
+#include "version.h"
 
 ModuleImporter::ModuleImporter(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -33,6 +34,7 @@ bool ModuleImporter::Init()
 	aiAttachLogStream(&stream);
 
 	// DevIL
+	LOG_CONSOLE("Init DevIL");
 	ilInit();
 	iluInit();
 	ilutInit();
@@ -121,11 +123,12 @@ void ModuleImporter::ImportScene(const char* path, const char* rootName)
 		aiNode* rootNode = scene->mRootNode;
 		root = ImportChild(scene, rootNode, nullptr, nullptr, path, rootName);
 		App->gameObjects->AddGameobject(root);
+		LOG_CONSOLE("Successfully loaded scene with path %s", path);
 		aiReleaseImport(scene);
 	}
 	else
 	{
-		if (App->gui != nullptr) App->gui->LogConsole(LOG("Error loading scene with path %s", path));
+		LOG_CONSOLE("Error loading scene with path %s", path);
 	}
 }
 
@@ -222,7 +225,7 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 		}
 
 		m->texCoords = new float[m->vertexNum * 2]();
-		m->colors = new float[m->indexNum * 4]();	//RGBA
+		m->colors = new float[m->indexNum * 4]();
 		m->normals = new float[aiMesh->mNumVertices * 3]();
 
 		int t = 0;
@@ -288,6 +291,13 @@ Transform* ModuleImporter::LoadTransform(aiNode* n)
 	t->UpdateLocalTransform();
 
 	return t;
+}
+
+void ModuleImporter::GetAssimpVersion(int& major, int& minor, int& patch)
+{
+	major = aiGetVersionMajor();
+	minor = aiGetVersionMinor();
+	patch = aiGetVersionRevision();
 }
 
 std::string ModuleImporter::GetFileName(const char* path)

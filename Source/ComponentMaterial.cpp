@@ -50,10 +50,9 @@ void Material::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		ImGui::Checkbox("Enabled", &active);
-
+		ImGui::Checkbox("Enable Material", &active);
 		ImGui::SameLine();
-		if (ImGui::Checkbox("Checkers Image", &checkers))
+		if (ImGui::Checkbox("Checkers", &checkers))
 		{
 			if (!checkers)
 			{
@@ -72,10 +71,7 @@ void Material::DrawInspector()
 			IMGUI_PRINT(IMGUI_YELLOW, "Diffuse Texture:", "%s", name.c_str());
 			IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", path.c_str());
 			IMGUI_PRINT(IMGUI_YELLOW, "Width:", "%d", width); ImGui::SameLine(); IMGUI_PRINT(IMGUI_YELLOW, "Height:", "%d", height);
-			ImGui::Separator();
-
 			ImGui::Text("Image:");
-			ImGui::Spacing();
 			ImGui::Image((ImTextureID)id, ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
 		}
 

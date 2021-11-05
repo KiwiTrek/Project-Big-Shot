@@ -51,7 +51,6 @@ bool ModuleRenderer3D::Init()
 			LOG_CONSOLE("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 		}
 
-
 		//Use Vsync
 		if (vSync && SDL_GL_SetSwapInterval(1) < 0)
 		{
@@ -172,6 +171,16 @@ bool ModuleRenderer3D::CleanUp()
 	SDL_GL_DeleteContext(context);
 
 	return true;
+}
+
+const char* ModuleRenderer3D::GetGlewVersion()
+{
+	return (const char*)glewGetString(GLEW_VERSION);
+}
+
+const char* ModuleRenderer3D::GetOpenGLVersion()
+{
+	return (const char*)glGetString(GL_VERSION);
 }
 
 void ModuleRenderer3D::OnResize(int width, int height)

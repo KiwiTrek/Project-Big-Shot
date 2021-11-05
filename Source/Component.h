@@ -33,11 +33,11 @@ public:
 	virtual void ToggleActive() { active = !active; }
 
 public:
-	ComponentTypes type;
-	GameObject* owner;
+	ComponentTypes type = ComponentTypes::NOT_ASSIGNED;
+	GameObject* owner = nullptr;
 
 protected:
-	bool active;
+	bool active = true;
 };
 
 #endif // !__COMPONENT_H__
