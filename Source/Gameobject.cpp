@@ -202,6 +202,7 @@ void GameObject::UpdateChildrenTransforms()
 void GameObject::AddChild(GameObject* c)
 {
 	children.push_back(c);
+	c->SetParent(this);
 }
 
 int GameObject::GetChildNum()
@@ -227,12 +228,15 @@ void GameObject::SetParent(GameObject* p)
 bool GameObject::RemoveChild(GameObject* gameObject)
 {
 	bool ret = false;
-	for (size_t i = 0; i < children.size(); i++)
+	if (!children.empty())
 	{
-		if (children[i] == gameObject)
+		for (size_t i = 0; i < children.size(); i++)
 		{
-			children.erase(children.begin() + i);
-			ret = true;
+			if (children[i] == gameObject)
+			{
+				children.erase(children.begin() + i);
+				ret = true;
+			}
 		}
 	}
 	return ret;

@@ -50,22 +50,20 @@ update_status ModuleGameObjects::PostUpdate()
 	{
 		Mesh* m = nullptr;
 
-		if ((*item)->children.empty())
-		{
-			std::vector<Component*>::iterator c = (*item)->components.begin();
-			while (c != (*item)->components.end())
-			{
-				if ((*c)->type == ComponentTypes::MESH)
-				{
-					m = (Mesh*)(*c);
-					break;
-				}
-				c++;
-			}
-		}
-		else
+		if (!(*item)->children.empty())
 		{
 			RenderChildren((*item));
+		}
+
+		std::vector<Component*>::iterator c = (*item)->components.begin();
+		while (c != (*item)->components.end())
+		{
+			if ((*c)->type == ComponentTypes::MESH)
+			{
+				m = (Mesh*)(*c);
+				break;
+			}
+			c++;
 		}
 
 		if (m != nullptr && m->IsActive())
@@ -87,21 +85,19 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 	{
 		Mesh* m = nullptr;
 
-		if ((*item)->children.empty())
-		{
-			std::vector<Component*>::iterator c = (*item)->components.begin();
-			while (c != (*item)->components.end())
-			{
-				if ((*c)->type == ComponentTypes::MESH)
-				{
-					m = (Mesh*)(*c);
-				}
-				c++;
-			}
-		}
-		else
+		if (!(*item)->children.empty())
 		{
 			RenderChildren((*item));
+		}
+
+		std::vector<Component*>::iterator c = (*item)->components.begin();
+		while (c != (*item)->components.end())
+		{
+			if ((*c)->type == ComponentTypes::MESH)
+			{
+				m = (Mesh*)(*c);
+			}
+			c++;
 		}
 
 		if (m != nullptr && m->IsActive())

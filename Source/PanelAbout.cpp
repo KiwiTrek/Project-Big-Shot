@@ -36,6 +36,7 @@ update_status PanelAbout::Update()
     if (ImGui::IsItemHovered())
     {
         App->input->isHovering = true;
+        ImGui::SetTooltip("Go to link");
     }
     if (ImGui::IsItemClicked())
     {
