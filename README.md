@@ -94,3 +94,4 @@ Each of the panels has a set of available actions.
  - The hierarchy has more functionalities than those required for the final delivery (moving objects, deleting them and creating empty game objects)
  - The inspector is not only for display purposes. For instance, the transform compononent allows for the translation, rotation and scaling of the object, and the other components have other controls as well.
  - The configuration window has similar functionalities as the ones of the examples shown in class when.
+ - Some of the primitives' textures do not work properly, as their texture coordinates are not properly set. Others just don't have any. The sphere primitive is done in Direct Mode.
