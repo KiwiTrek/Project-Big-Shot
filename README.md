@@ -87,3 +87,10 @@ Each of the panels has a set of available actions.
   - Draw vertex & face normals
 ## About
   - Click on hyperlinks
+# Additional Features & Notes
+## Assignment 0.1
+ - Camera also allows for vertical movement (With Q/E) and resetting by pressing Shift + R.
+ - Most panels have additional information detailing specs of the engine and the hardware.
+ - The hierarchy has more functionalities than those required for the final delivery (moving objects, deleting them and creating empty game objects)
+ - The inspector is not only for display purposes. For instance, the transform compononent allows for the translation, rotation and scaling of the object, and the other components have other controls as well.
+ - The configuration window has similar functionalities as the ones of the examples shown in class when.
