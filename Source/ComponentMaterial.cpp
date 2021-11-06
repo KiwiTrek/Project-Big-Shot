@@ -1,15 +1,13 @@
 #include "RenderGlobals.h"
 #include "Gameobject.h"
-#include "Component.h"
-#include "ComponentMesh.h"
-#include "ComponentMaterial.h"
 
 Material::Material(bool active) : Component(type, active)
 {
 	type = ComponentTypes::MATERIAL;
 
-	name = "defaultTex";
-	path = "Assets/Textures/";
+	name = "Default_texture";
+	path = ASSETS_FOLDER;
+	path.append(TEXTURES_FOLDER);
 	id = -1;
 	textureBuf = -1;
 	format = -1;
@@ -19,7 +17,7 @@ Material::Material(bool active) : Component(type, active)
 	height = -1;
 }
 
-Material::Material(std::string n, std::string p, uint texId, uint texBuf, int f,uint fUnsigned,GLubyte* d,int w, int h, bool active) : Component(type,active)
+Material::Material(std::string n, std::string p, uint texId, uint texBuf, int f, uint fUnsigned, GLubyte* d, int w, int h, bool active) : Component(type, active)
 {
 	type = ComponentTypes::MATERIAL;
 
@@ -54,14 +52,7 @@ void Material::DrawInspector()
 		ImGui::SameLine();
 		if (ImGui::Checkbox("Checkers", &checkers))
 		{
-			if (!checkers)
-			{
-				BindTexture(data);
-			}
-			else
-			{
-				CheckersTexture();
-			}
+			!checkers ? BindTexture(data) : CheckersTexture();
 		}
 
 		ImGui::Separator();
@@ -92,7 +83,6 @@ bool Material::SetTexture(Material* texture)
 		height = texture->height;
 
 		BindTexture(texture->data);
-
 		data = texture->data;
 		return true;
 	}
@@ -105,8 +95,9 @@ bool Material::SetTexture(Material* texture)
 
 void Material::SetDefaultTexture()
 {
-	name = "defaultTex";
-	path = "Assets/Textures/";
+	name = "Default_texture";
+	path = ASSETS_FOLDER;
+	path.append(TEXTURES_FOLDER);
 	format = GL_RGBA;
 	formatUnsigned = GL_RGBA;
 	width = 128;
@@ -116,6 +107,7 @@ void Material::SetDefaultTexture()
 
 void Material::BindTexture(GLubyte* texData)
 {
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 
@@ -155,6 +147,7 @@ GLubyte* Material::CheckersTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerTex);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return (GLubyte*)checkerTex;

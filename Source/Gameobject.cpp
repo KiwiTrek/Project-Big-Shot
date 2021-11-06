@@ -1,4 +1,3 @@
-#include "Globals.h"
 #include "RenderGlobals.h"
 #include "Gameobject.h"
 
@@ -16,7 +15,7 @@ GameObject::~GameObject()
 	std::vector<Component*>::iterator c = components.begin();
 	while (c != components.end())
 	{
-		delete *c;
+		delete* c;
 		++c;
 	}
 	components.clear();
@@ -33,7 +32,15 @@ void GameObject::Update()
 			++c;
 		}
 
-		//children update
+		if (!children.empty())
+		{
+			std::vector<GameObject*>::iterator g = children.begin();
+			while (g != children.end())
+			{
+				(*g)->Update();
+				g++;
+			}
+		}
 	}
 }
 
@@ -42,24 +49,14 @@ Component* GameObject::CreateComponent(ComponentTypes cType, MeshTypes mType, Tr
 	Component* c = nullptr;
 	switch (cType)
 	{
-	case TRANSFORM:
+	case ComponentTypes::TRANSFORM:
 	{
-		if (this->GetTransform() != nullptr)
-		{
-			RemoveComponent(this->GetTransform());
-		}
+		if (this->GetTransform() != nullptr) RemoveComponent(this->GetTransform());
 
-		if (t != nullptr)
-		{
-			c = t;
-		}
-		else
-		{
-			c = new Transform();
-		}
+		t != nullptr ? c = t : c = new Transform();
 		break;
 	}
-	case MESH:
+	case ComponentTypes::MESH:
 	{
 		switch (mType)
 		{
@@ -98,7 +95,7 @@ Component* GameObject::CreateComponent(ComponentTypes cType, MeshTypes mType, Tr
 		}
 		break;
 	}
-	case MATERIAL:
+	case ComponentTypes::MATERIAL:
 	{
 		c = new Material();
 		Material* m = (Material*)c;
@@ -129,7 +126,8 @@ bool GameObject::RemoveComponent(Component* c)
 
 	for (size_t i = 0; i < components.size(); i++)
 	{
-		if (components[i] == c) {
+		if (components[i] == c)
+		{
 			delete components[i];
 			components.erase(components.begin() + i);
 			c = nullptr;
@@ -146,17 +144,11 @@ void GameObject::SetAxis(bool value)
 	std::vector<Component*>::iterator c = components.begin();
 	while (c != components.end())
 	{
-		if ((*c)->type == ComponentTypes::MESH)
-		{
-			m = (Mesh*)(*c);
-		}
+		if ((*c)->type == ComponentTypes::MESH) m = (Mesh*)(*c);
 		++c;
 	}
 
-	if (m != nullptr)
-	{
-		m->axis = value;
-	}
+	if (m != nullptr) m->axis = value;
 }
 
 void GameObject::CreatePrimitive(MeshTypes type)
@@ -178,10 +170,7 @@ Transform* GameObject::GetTransform()
 	std::vector<Component*>::iterator c = components.begin();
 	while (c != components.end())
 	{
-		if ((*c)->type == ComponentTypes::TRANSFORM)
-		{
-			t = (Transform*)(*c);
-		}
+		if ((*c)->type == ComponentTypes::TRANSFORM) t = (Transform*)(*c);
 		++c;
 	}
 	return t;
@@ -249,18 +238,13 @@ void GameObject::DeleteChildren(bool isOriginal)
 		children[i]->DeleteChildren(false);
 		children[i] = nullptr;
 	}
-
 	children.clear();
 
-	if (!isOriginal)
-	{
-		this->~GameObject();
-	}
+	if (!isOriginal) this->~GameObject();
 }
 
 bool GameObject::CleanUp()
 {
 	DeleteChildren();
-
 	return true;
 }

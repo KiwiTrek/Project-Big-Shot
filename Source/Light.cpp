@@ -1,4 +1,3 @@
-#include "Globals.h"
 #include "RenderGlobals.h"
 #include "Light.h"
 
@@ -20,22 +19,18 @@ void Light::SetPos(float x, float y, float z)
 
 void Light::Render()
 {
-	if(on)
+	if (on)
 	{
-		float pos[] = {position.x, position.y, position.z, 1.0f};
+		float pos[] = { position.x, position.y, position.z, 1.0f };
 		glLightfv(ref, GL_POSITION, pos);
 	}
 }
 
 void Light::Active(bool active)
 {
-	if(on != active)
+	if (on != active)
 	{
 		on = !on;
-
-		if(on)
-			glEnable(ref);
-		else
-			glDisable(ref);
+		on ? glEnable(ref) : glDisable(ref);
 	}
 }

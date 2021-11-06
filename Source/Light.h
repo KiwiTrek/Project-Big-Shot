@@ -6,6 +6,7 @@
 
 struct Light
 {
+public:
 	Light();
 
 	void Init();
@@ -13,10 +14,10 @@ struct Light
 	void Active(bool active);
 	void Render();
 
+public:
 	Color ambient;
 	Color diffuse;
 	vec3 position;
-
 	int ref;
 	bool on;
 };

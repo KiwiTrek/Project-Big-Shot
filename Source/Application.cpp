@@ -3,27 +3,20 @@
 
 Application::Application(ConsoleBuffer* _buff)
 {
-	buff = _buff;
-	gui = new ModuleGuiManager(this);
 	window = new ModuleWindow(this);
-	input = new ModuleInput(this);
-	scene = new ModuleScene(this);
-	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
+	input = new ModuleInput(this);
 	importer = new ModuleImporter(this);
+	scene = new ModuleScene(this);
 	gameObjects = new ModuleGameObjects(this);
+	gui = new ModuleGuiManager(this);
+	renderer3D = new ModuleRenderer3D(this);
 
-	// The order of calls is very important!
-	// Modules will Init() Start() and Update in this order
-	// They will CleanUp() in reverse order
-
-	// Main Modules
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
 	AddModule(importer);
-	
-	// Scenes
+
 	AddModule(scene);
 	AddModule(gameObjects);
 
@@ -32,17 +25,18 @@ Application::Application(ConsoleBuffer* _buff)
 
 	framesPerSecTime.Stop();
 	frameCounter = 0;
+	buff = _buff;
 }
 
 Application::~Application()
 {
-	std::vector<Module*>::reverse_iterator item = list_modules.rbegin();
-	while(item != list_modules.rend())
+	std::vector<Module*>::reverse_iterator item = listModules.rbegin();
+	while (item != listModules.rend())
 	{
-		delete *item;
+		delete (*item);
 		++item;
 	}
-	list_modules.clear();
+	listModules.clear();
 
 	appName.clear();
 	orgName.clear();
@@ -64,36 +58,31 @@ bool Application::Init()
 {
 	bool ret = true;
 
-	// Call Init() in all modules
-	std::vector<Module*>::iterator item = list_modules.begin();
-
-	while(item != list_modules.end() && ret == true)
+	std::vector<Module*>::iterator item = listModules.begin();
+	while (item != listModules.end() && ret == true)
 	{
 		ret = (*item)->Init();
 		++item;
 	}
 
-	// After all Init calls we call Start() in all modules
 	if (gui != nullptr) gui->LogConsole(LOG("-------------- Application Start --------------"));
-	item = list_modules.begin();
 
-	while(item != list_modules.end() && ret == true)
+	item = listModules.begin();
+	while (item != listModules.end() && ret == true)
 	{
 		ret = (*item)->Start();
 		++item;
 	}
 
 	PERF_START(framesPerSecTime);
-	
 	return ret;
 }
 
-
-// ---------------------------------------------
 void Application::PrepareUpdate()
 {
 	frameCounter++;
-	// Calculate the dt: differential time since last frame
+
+	// Calculate dt
 	dt = frameTime.ReadSec();
 
 	// Start the timer after read because we want to know how much time it took from the last frame to the new one
@@ -101,14 +90,11 @@ void Application::PrepareUpdate()
 	PERF_START(pTimer);
 }
 
-// ---------------------------------------------
 void Application::FinishUpdate()
 {
 	// Framerate calculations------------------------------------------
 	if (framesPerSecTime.Read() >= 1000)
 	{
-		//LOG("%d", frameCounter);
-		//LOG("%d", framesPerSecTime.Read());
 		averageFps = (float)frameCounter / framesPerSecTime.ReadSec();
 		PERF_START(framesPerSecTime);
 		frameCounter = 0;
@@ -122,38 +108,34 @@ void Application::FinishUpdate()
 	{
 		SDL_Delay((uint32)floor((double)(1000.0f / (float)fpsLimit) - lastFrameMsFloat));
 		lastFrameMsFloat = (float)pTimer.ReadMs();
-		//PERF_PEEK(pTimer);
 		PERF_START(pTimer);
 	}
 
 	if (gui->config != nullptr) gui->config->UpdateHistogram();
 }
 
-// Call PreUpdate, Update and PostUpdate on all modules
-update_status Application::Update()
+UpdateStatus Application::Update()
 {
-	update_status ret = update_status::UPDATE_CONTINUE;
+	// Call PreUpdate, Update and PostUpdate on all modules
+	UpdateStatus ret = UpdateStatus::UPDATE_CONTINUE;
 	PrepareUpdate();
-	
-	std::vector<Module*>::iterator item = list_modules.begin();
-	
-	while(item != list_modules.end() && ret == update_status::UPDATE_CONTINUE)
+
+	std::vector<Module*>::iterator item = listModules.begin();
+	while (item != listModules.end() && ret == UpdateStatus::UPDATE_CONTINUE)
 	{
 		ret = (*item)->PreUpdate();
 		++item;
 	}
 
-	item = list_modules.begin();
-
-	while(item != list_modules.end() && ret == update_status::UPDATE_CONTINUE)
+	item = listModules.begin();
+	while (item != listModules.end() && ret == UpdateStatus::UPDATE_CONTINUE)
 	{
 		ret = (*item)->Update(dt);
 		++item;
 	}
 
-	item = list_modules.begin();
-
-	while(item != list_modules.end() && ret == update_status::UPDATE_CONTINUE)
+	item = listModules.begin();
+	while (item != listModules.end() && ret == UpdateStatus::UPDATE_CONTINUE)
 	{
 		ret = (*item)->PostUpdate();
 		++item;
@@ -166,9 +148,8 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-	std::vector<Module*>::reverse_iterator item = list_modules.rbegin();
-
-	while(item != list_modules.rend() && ret == true)
+	std::vector<Module*>::reverse_iterator item = listModules.rbegin();
+	while (item != listModules.rend() && ret == true)
 	{
 		ret = (*item)->CleanUp();
 		++item;
@@ -178,7 +159,7 @@ bool Application::CleanUp()
 
 void Application::AddModule(Module* mod)
 {
-	list_modules.push_back(mod);
+	listModules.push_back(mod);
 }
 
 void Application::RequestBrowser(const char* link)
@@ -194,6 +175,7 @@ void Application::SetAppName(std::string _name)
 		window->SetTitle(_name.c_str());
 	}
 }
+
 std::string Application::GetAppName()
 {
 	return appName;
@@ -201,11 +183,9 @@ std::string Application::GetAppName()
 
 void Application::SetOrgName(std::string _name)
 {
-	if (!_name.empty())
-	{
-		orgName = _name;
-	}
+	if (!_name.empty()) orgName = _name;
 }
+
 std::string Application::GetOrgName()
 {
 	return orgName;
@@ -215,6 +195,7 @@ void Application::SetFpsLimit(int _limit)
 {
 	fpsLimit = _limit;
 }
+
 int Application::GetFpsLimit()
 {
 	return fpsLimit;
@@ -279,74 +260,3 @@ void Application::GetGPU(uint& gpuVendor, uint& gpuDevice, char* gpuBrand, float
 		vramReserved = float(videoMemReserved) / (1024.f * 1024.f);
 	}
 }
-
-//uint Application::GetFramerateLimit() const
-//{
-//	if (capped_ms > 0)
-//		return (uint)((1.0f / (float)capped_ms) * 1000.0f);
-//	else
-//		return 0;
-//}
-//
-//void Application::SetFramerateLimit(uint max_framerate)
-//{
-//	if (max_framerate > 0)
-//		capped_ms = 1000 / max_framerate;
-//	else
-//		capped_ms = 0;
-//}
-//
-//void Application::LoadConfig()
-//{
-//	char* buffer = "/Engine/config.json";
-//
-//	if (buffer != nullptr)
-//	{
-//		ConfigJSON config((const char*)buffer);
-//
-//		if (config.IsValid() == true)
-//		{
-//			LOG("Loading Engine Preferences");
-//
-//			SetAppName(config.GetSection("App").GetString("Name", "Project Big Shot"));
-//			SetOrgName(config.GetSection("App").GetString("Organization", "UPC CITM"));
-//			SetFramerateLimit(config.GetSection("App").GetInt("MaxFramerate", 0));
-//
-//			ConfigJSON section;
-//			std::vector<Module*>::iterator item = list_modules.begin();
-//
-//			while (item != list_modules.end())
-//			{
-//				section = config.GetSection((*item)->GetName());
-//				//if (section.IsValid())
-//				(*item)->Load(&section);
-//			}
-//		}
-//		else
-//			LOG("Cannot load Engine Preferences: Invalid format");
-//
-//		RELEASE_ARRAY(buffer);
-//	}
-//}
-//
-//void Application::SaveConfig() const
-//{
-//	ConfigJSON config;
-//
-//	config.AddSection("App").AddString("Name", appName.c_str());
-//	config.AddSection("App").AddString("Organization", orgName.c_str());
-//	config.AddSection("App").AddInt("MaxFramerate", GetFramerateLimit());
-//
-//	std::vector<Module*>::reverse_iterator item = list_modules.rbegin();
-//
-//	while (item != list_modules.rend())
-//	{
-//		(*item)->Save(&config.AddSection((*item)->GetName()));
-//	}
-//
-//	char* buf;
-//	uint size = config.Save(&buf, "Saved preferences for Project Big Shot");
-//	if (App->fs->Save("/Engine/config.json", buf, size) > 0)
-//		LOG("Saved Engine Preferences");
-//	RELEASE_ARRAY(buf);
-//}

@@ -6,42 +6,50 @@
 class PanelConfig :public Panel
 {
 public:
-    PanelConfig(Application* app, bool start_enabled = false);
-    ~PanelConfig();
+	PanelConfig(Application* app, bool startEnabled = false);
+	~PanelConfig();
 
-    bool Start();
-    update_status Update();
-    bool CleanUp();
-    void UpdateHistogram();
+	bool Start();
+	UpdateStatus Update();
+	bool CleanUp();
+
+	void UpdateHistogram();
 
 public:
-    std::vector<float> fpsHist;
-    std::vector<float> msHist;
+	std::vector<float> fpsHist;
+	std::vector<float> msHist;
 
-    //SDL_Version
-    int sdlMajor, sdlMinor, sdlPatch;
+	//Update input
+	bool update;
 
-    //Assimp Version
-    int assimpMajor, assimpMinor, assimpPatch;
+	//SDL_Version
+	int sdlMajor, sdlMinor, sdlPatch;
 
-    std::string glVersion;
-    std::string imguiVersion;
-    std::string glewVersion;
+	//Assimp Version
+	int assimpMajor, assimpMinor, assimpPatch;
 
-    //CPU
-    int cpuCount;
-    int cpuSize;
+	//GL version
+	std::string glVersion;
 
-    //RAM
-    float ramSize;
+	//ImGui version
+	std::string imguiVersion;
 
-    //Caps
-    bool threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42;
+	//Glew version
+	std::string glewVersion;
 
-    //GPU
-    uint gpuVendorId, gpuDeviceId;
-    char gpuBrand[250];
-    float videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
+	//CPU
+	int cpuCount, cpuSize;
+
+	//RAM
+	float ramSize;
+
+	//Caps
+	bool threeD, altiVec, avx, avx2, mmx, rdtsc, sse, sse2, sse3, sse41, sse42;
+
+	//GPU
+	uint gpuVendorId, gpuDeviceId;
+	char gpuBrand[250];
+	float videoMemBudget, videoMemCurrent, videoMemAvailable, videoMemReserved;
 };
 
 #endif // !__PANEL_CONFIG_H__

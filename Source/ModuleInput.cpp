@@ -1,10 +1,7 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
 
-#define MAX_KEYS 300
-
-ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "input";
 	keyboard = new KEY_STATE[MAX_KEYS];
@@ -12,21 +9,19 @@ ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, sta
 	isHovering = false;
 }
 
-// Destructor
 ModuleInput::~ModuleInput()
 {
 	delete[] keyboard;
 	keyboard = nullptr;
 }
 
-// Called before render is available
 bool ModuleInput::Init()
 {
 	LOG_CONSOLE("Init SDL input event system");
 	bool ret = true;
 	SDL_Init(0);
 
-	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
+	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		LOG_CONSOLE("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
@@ -35,23 +30,21 @@ bool ModuleInput::Init()
 	return ret;
 }
 
-// Called every draw update
-update_status ModuleInput::PreUpdate()
+UpdateStatus ModuleInput::PreUpdate()
 {
 	SDL_PumpEvents();
-
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
-	
-	for(int i = 0; i < MAX_KEYS; ++i)
+
+	for (int i = 0; i < MAX_KEYS; ++i)
 	{
-		if(keys[i] == 1)
+		if (keys[i] == 1)
 		{
 			if (keyboard[i] == KEY_STATE::KEY_IDLE)
 			{
 				LogInput(i, KEY_STATE::KEY_DOWN);
 				keyboard[i] = KEY_STATE::KEY_DOWN;
 			}
-			else if(keyboard[i] != KEY_STATE::KEY_REPEAT)
+			else if (keyboard[i] != KEY_STATE::KEY_REPEAT)
 			{
 				LogInput(i, KEY_STATE::KEY_REPEAT);
 				keyboard[i] = KEY_STATE::KEY_REPEAT;
@@ -71,131 +64,130 @@ update_status ModuleInput::PreUpdate()
 		}
 	}
 
-	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
+	Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
-	mouse_z = 0;
+	mouseX /= SCREEN_SIZE;
+	mouseY /= SCREEN_SIZE;
+	mouseZ = 0;
 
-	for(int i = 0; i < 5; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
-		if(buttons & SDL_BUTTON(i))
+		if (buttons & SDL_BUTTON(i))
 		{
-			if (mouse_buttons[i] == KEY_STATE::KEY_IDLE)
+			if (mouseButtons[i] == KEY_STATE::KEY_IDLE)
 			{
 				LogInput(1000 + i, KEY_STATE::KEY_DOWN);
-				mouse_buttons[i] = KEY_STATE::KEY_DOWN;
+				mouseButtons[i] = KEY_STATE::KEY_DOWN;
 			}
-			else if(mouse_buttons[i] != KEY_STATE::KEY_REPEAT)
+			else if (mouseButtons[i] != KEY_STATE::KEY_REPEAT)
 			{
 				LogInput(1000 + i, KEY_STATE::KEY_REPEAT);
-				mouse_buttons[i] = KEY_STATE::KEY_REPEAT;
+				mouseButtons[i] = KEY_STATE::KEY_REPEAT;
 			}
 		}
 		else
 		{
-			if (mouse_buttons[i] == KEY_STATE::KEY_REPEAT || mouse_buttons[i] == KEY_STATE::KEY_DOWN)
+			if (mouseButtons[i] == KEY_STATE::KEY_REPEAT || mouseButtons[i] == KEY_STATE::KEY_DOWN)
 			{
 				LogInput(1000 + i, KEY_STATE::KEY_UP);
-				mouse_buttons[i] = KEY_STATE::KEY_UP;
+				mouseButtons[i] = KEY_STATE::KEY_UP;
 			}
 			else
 			{
-				mouse_buttons[i] = KEY_STATE::KEY_IDLE;
+				mouseButtons[i] = KEY_STATE::KEY_IDLE;
 			}
 		}
 	}
 
-	mouse_x_motion = mouse_y_motion = 0;
+	mouseMotionX = mouseMotionY = 0;
 
 	bool quit = false;
 	SDL_Event e;
-	while(SDL_PollEvent(&e))
+	while (SDL_PollEvent(&e))
 	{
-		switch(e.type)
+		switch (e.type)
 		{
-			case SDL_MOUSEWHEEL:
+		case SDL_MOUSEWHEEL:
+		{
+			mouseZ = e.wheel.y;
+			break;
+		}
+		case SDL_MOUSEMOTION:
+		{
+			mouseX = e.motion.x / SCREEN_SIZE;
+			mouseY = e.motion.y / SCREEN_SIZE;
+
+			mouseMotionX = e.motion.xrel / SCREEN_SIZE;
+			mouseMotionY = e.motion.yrel / SCREEN_SIZE;
+			break;
+		}
+		case SDL_QUIT:
+		{
+			quit = true;
+			break;
+		}
+		case SDL_WINDOWEVENT:
+		{
+			if (e.window.event == SDL_WINDOWEVENT_RESIZED)
 			{
-				mouse_z = e.wheel.y;
+				App->window->SetWidth(e.window.data1);
+				App->window->SetHeight(e.window.data2);
 			}
 			break;
-
-			case SDL_MOUSEMOTION:
+		}
+		case SDL_DROPFILE:
+		{
+			std::string tmp;
+			tmp.assign(e.drop.file);
+			if (tmp.empty() != true)
 			{
-				mouse_x = e.motion.x / SCREEN_SIZE;
-				mouse_y = e.motion.y / SCREEN_SIZE;
-
-				mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-				mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
-			}
-			break;
-
-			case SDL_QUIT:
-			{
-				quit = true;
-			}
-			break;
-
-			case SDL_WINDOWEVENT:
-			{
-				if (e.window.event == SDL_WINDOWEVENT_RESIZED)
+				if (tmp.find(".fbx") != std::string::npos)
 				{
-					App->window->SetWidth(e.window.data1);
-					App->window->SetHeight(e.window.data2);
+					std::string fileName = App->importer->GetFileName(tmp.c_str());
+					App->importer->ImportScene(tmp.c_str(), fileName.c_str());
 				}
-				break;
-			}
-
-			case SDL_DROPFILE:
-			{
-				std::string tmp;
-				tmp.assign(e.drop.file);
-				if (tmp.empty() != true)
+				else if (tmp.find(".png") != std::string::npos || tmp.find(".dds") != std::string::npos)
 				{
-					if (tmp.find(".fbx") != std::string::npos)
+					if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 					{
-						std::string fileName = App->importer->GetFileName(tmp.c_str());
-						App->importer->ImportScene(tmp.c_str(), fileName.c_str());
-					}
-					else if(tmp.find(".png") != std::string::npos || tmp.find(".dds") != std::string::npos)
-					{
-						if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
+						Material* mat = nullptr;
+						std::vector<Component*>::iterator c = App->gameObjects->selectedGameObject->components.begin();
+						while (c != App->gameObjects->selectedGameObject->components.end())
 						{
-							Material* mat = nullptr;
-							std::vector<Component*>::iterator c = App->gameObjects->selectedGameObject->components.begin();
-							while (c != App->gameObjects->selectedGameObject->components.end())
+							if ((*c)->type == ComponentTypes::MATERIAL)
 							{
-								if ((*c)->type == ComponentTypes::MATERIAL)
-								{
-									mat = (Material*)(*c);
-								}
-								c++;
+								mat = (Material*)(*c);
 							}
+							c++;
+						}
 
-							if (mat != nullptr)
-							{
-								mat->SetTexture(App->importer->LoadTexture(tmp.c_str()));
-							}
+						if (mat != nullptr)
+						{
+							mat->SetTexture(App->importer->LoadTexture(tmp.c_str()));
+						}
+					}
+					else
+					{
+						if (App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
+						{
+							LOG_CONSOLE("Error: Cannot assign material to scene root. Select object containing component Mesh");
 						}
 						else
 						{
-							if (App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
-							{
-								LOG_CONSOLE("Error: Cannot assign material to scene root. Select object containing component Mesh");
-							}
-							else
-							{
-								LOG_CONSOLE("Error: No mesh component detected in selected Game Object. Consider selecting children");
-							}
+							LOG_CONSOLE("Error: No mesh component detected in selected Game Object. Consider selecting children");
 						}
 					}
 				}
-				break;
 			}
+			break;
+		}
 		}
 	}
 
-	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_STATE::KEY_UP) return update_status::UPDATE_STOP;
+	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_STATE::KEY_UP)
+	{
+		return UpdateStatus::UPDATE_STOP;
+	}
 
 	if (isHovering)
 	{
@@ -208,10 +200,9 @@ update_status ModuleInput::PreUpdate()
 		SDL_FreeCursor(SDL_GetCursor());
 	}
 
-	return update_status::UPDATE_CONTINUE;
+	return UpdateStatus::UPDATE_CONTINUE;
 }
 
-// Called before quitting
 bool ModuleInput::CleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
@@ -232,4 +223,40 @@ void ModuleInput::LogInput(int id, KEY_STATE state)
 		tmp = "Mouse: " + std::to_string(id - 1000) + " - " + states[(int)state] + "\n";
 	}
 	App->gui->LogInputText.appendf(tmp.c_str());
+	App->gui->config->update = true;
+}
+
+KEY_STATE ModuleInput::GetKey(int id) const
+{
+	return keyboard[id];
+}
+
+KEY_STATE ModuleInput::GetMouseButton(int id) const
+{
+	return mouseButtons[id];
+}
+
+int ModuleInput::GetMouseX() const
+{
+	return mouseX;
+}
+
+int ModuleInput::GetMouseY() const
+{
+	return mouseY;
+}
+
+int ModuleInput::GetMouseZ() const
+{
+	return mouseZ;
+}
+
+int ModuleInput::GetMouseXMotion() const
+{
+	return mouseMotionX;
+}
+
+int ModuleInput::GetMouseYMotion() const
+{
+	return mouseMotionY;
 }

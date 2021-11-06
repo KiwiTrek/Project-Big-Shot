@@ -8,52 +8,49 @@ class Application;
 
 class Module
 {
-private :
-	bool enabled;
 public:
-	Application* App;
-	std::string name;
-
-	Module(Application* parent, bool start_enabled = true) : App(parent), enabled(start_enabled)
+	Module(Application* parent, bool startEnabled = true) : App(parent), enabled(startEnabled)
 	{}
-
 	virtual ~Module()
 	{}
 
-	virtual bool Init() 
+	virtual bool Init()
 	{
-		return true; 
+		return true;
 	}
-
 	virtual bool Start()
 	{
 		return true;
 	}
-
-	virtual update_status PreUpdate()
+	virtual UpdateStatus PreUpdate()
 	{
-		return update_status::UPDATE_CONTINUE;
+		return UpdateStatus::UPDATE_CONTINUE;
 	}
-
-	virtual update_status Update(float dt)
+	virtual UpdateStatus Update(float dt)
 	{
-		return update_status::UPDATE_CONTINUE;
+		return UpdateStatus::UPDATE_CONTINUE;
 	}
-
-	virtual update_status PostUpdate()
+	virtual UpdateStatus PostUpdate()
 	{
-		return update_status::UPDATE_CONTINUE;
+		return UpdateStatus::UPDATE_CONTINUE;
 	}
-
-	virtual bool CleanUp() 
-	{ 
-		return true; 
+	virtual bool CleanUp()
+	{
+		return true;
 	}
-
 	virtual const char* GetName()
 	{
 		return name.c_str();
 	}
+
+public:
+	Application* App;
+
+protected:
+	std::string name;
+
+private:
+	bool enabled;
 };
 
 #endif // !__MODULE_H__

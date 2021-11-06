@@ -3,11 +3,9 @@
 
 struct Color
 {
-	float r, g, b, a;
-	
+public:
 	Color() : r(0.0f), g(0.0f), b(0.0f), a(1.0f)
 	{}
-
 	Color(float r, float g, float b, float a = 1.0f) : r(r), g(g), b(b), a(a)
 	{}
 
@@ -23,12 +21,15 @@ struct Color
 	{
 		return (float*)this;
 	}
+
+public:
+	float r, g, b, a;
 };
 
-extern Color Red;
-extern Color Green;
-extern Color Blue;
-extern Color Black;
-extern Color White;
+extern Color red;
+extern Color green;
+extern Color blue;
+extern Color black;
+extern Color white;
 
 #endif // !__COLOR_H__

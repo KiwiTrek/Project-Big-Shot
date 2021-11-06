@@ -1,26 +1,22 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
 
-ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleWindow::ModuleWindow(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "window";
 	window = NULL;
-	screen_surface = NULL;
+	screenSurface = NULL;
 }
 
-// Destructor
 ModuleWindow::~ModuleWindow()
-{
-}
+{}
 
-// Called before render is available
 bool ModuleWindow::Init()
 {
-	LOG_CONSOLE("Init SDL window & surface");
 	bool ret = true;
+	LOG_CONSOLE("Init SDL window & surface");
 
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		LOG_CONSOLE("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
@@ -36,29 +32,29 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-		if(fullscreen == true)
+		if (fullscreen == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(resizable == true)
+		if (resizable == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(borderless == true)
+		if (borderless == true)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(fullscreenDesktop == true)
+		if (fullscreenDesktop == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
 		window = SDL_CreateWindow(App->GetAppName().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
-		if(window == NULL)
+		if (window == NULL)
 		{
 			LOG_CONSOLE("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
@@ -66,7 +62,7 @@ bool ModuleWindow::Init()
 		else
 		{
 			//Get window surface
-			screen_surface = SDL_GetWindowSurface(window);
+			screenSurface = SDL_GetWindowSurface(window);
 			SetBrightness(SDL_GetWindowBrightness(window));
 		}
 	}
@@ -74,15 +70,14 @@ bool ModuleWindow::Init()
 	return ret;
 }
 
-// Called before quitting
 bool ModuleWindow::CleanUp()
 {
 	LOG("Destroying SDL window and quitting all SDL systems");
 
-	SDL_FreeSurface(screen_surface);
+	SDL_FreeSurface(screenSurface);
 
 	//Destroy window
-	if(window != NULL)
+	if (window != NULL)
 	{
 		SDL_DestroyWindow(window);
 	}
@@ -115,7 +110,7 @@ int ModuleWindow::GetWidth()
 void ModuleWindow::SetWidth(int w)
 {
 	screenWidth = w;
-	SDL_SetWindowSize(window,screenWidth,screenHeight);
+	SDL_SetWindowSize(window, screenWidth, screenHeight);
 	App->renderer3D->OnResize(screenWidth, screenHeight);
 }
 

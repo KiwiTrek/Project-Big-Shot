@@ -1,8 +1,6 @@
 #ifndef __MODULE_RENDERER_3D_H__
 #define __MODULE_RENDERER_3D_H__
 
-#include "Module.h"
-#include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
 #include "Mesh.h"
@@ -15,12 +13,12 @@ typedef unsigned char GLubyte;
 class ModuleRenderer3D : public Module
 {
 public:
-	ModuleRenderer3D(Application* app, bool start_enabled = true);
+	ModuleRenderer3D(Application* app, bool startEnabled = true);
 	~ModuleRenderer3D();
 
 	bool Init();
-	update_status PreUpdate();
-	update_status PostUpdate();
+	UpdateStatus PreUpdate();
+	UpdateStatus PostUpdate();
 	bool CleanUp();
 
 	const char* GetGlewVersion();
@@ -46,11 +44,10 @@ public:
 	bool IsWireframe();
 
 public:
-
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	mat3x3 NormalMatrix;
-	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+	mat3x3 normalMatrix;
+	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
 
 private:
 	bool axis = false;
@@ -58,7 +55,7 @@ private:
 	bool wireframe = false;
 	bool depthTest = true;
 	bool cullFace = true;
-	bool lighting = true;
+	bool lighting = false;
 	bool colorMaterial = true;
 	bool texture2D = true;
 	bool faceNormals = false;

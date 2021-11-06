@@ -1,10 +1,10 @@
 #include <stdlib.h>
-#include "Application.h"
+#include "ConsoleBuffer.h"
 #include "Globals.h"
-
+#include "Application.h"
 #include "SDL.h"
 
-enum class main_states
+enum class MainStates
 {
 	MAIN_CREATION,
 	MAIN_START,
@@ -13,75 +13,76 @@ enum class main_states
 	MAIN_EXIT
 };
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
-	ConsoleBuffer* consoleBuff = new ConsoleBuffer;
+	ConsoleBuffer* consoleBuff = new ConsoleBuffer();
 	consoleBuff->initBuff = LOG("Starting Engine...");
 
-	int main_return = EXIT_FAILURE;
-	main_states state = main_states::MAIN_CREATION;
+	int mainReturn = EXIT_FAILURE;
+	MainStates state = MainStates::MAIN_CREATION;
 	Application* App = NULL;
 
-	while (state != main_states::MAIN_EXIT)
+	while (state != MainStates::MAIN_EXIT)
 	{
 		switch (state)
 		{
-		case main_states::MAIN_CREATION:
-
+		case MainStates::MAIN_CREATION:
+		{
 			consoleBuff->initBuff2 = LOG("-------------- Application Creation --------------");
 			App = new Application(consoleBuff);
-			state = main_states::MAIN_START;
+			state = MainStates::MAIN_START;
 			break;
-
-		case main_states::MAIN_START:
-
+		}
+		case MainStates::MAIN_START:
+		{
 			LOG_CONSOLE("-------------- Application Init --------------");
 			if (App->Init() == false)
 			{
 				LOG_CONSOLE("Application Init exits with ERROR");
-				state = main_states::MAIN_EXIT;
+				state = MainStates::MAIN_EXIT;
 			}
 			else
 			{
-				state = main_states::MAIN_UPDATE;
+				state = MainStates::MAIN_UPDATE;
 				LOG_CONSOLE("-------------- Application Update --------------");
 			}
-
 			break;
-
-		case main_states::MAIN_UPDATE:
+		}
+		case MainStates::MAIN_UPDATE:
 		{
-			update_status update_return = App->Update();
+			UpdateStatus updateReturn = App->Update();
 
-			if (update_return == update_status::UPDATE_ERROR)
+			if (updateReturn == UpdateStatus::UPDATE_ERROR)
 			{
 				LOG_CONSOLE("Application Update exits with ERROR");
-				state = main_states::MAIN_EXIT;
+				state = MainStates::MAIN_EXIT;
 			}
 
-			if (update_return == update_status::UPDATE_STOP)
-				state = main_states::MAIN_FINISH;
-		}
+			if (updateReturn == UpdateStatus::UPDATE_STOP)
+			{
+				state = MainStates::MAIN_FINISH;
+			}
 			break;
-
-		case main_states::MAIN_FINISH:
-
+		}
+		case MainStates::MAIN_FINISH:
+		{
 			LOG_CONSOLE("-------------- Application CleanUp --------------");
 			if (App->CleanUp() == false)
 			{
 				LOG("Application CleanUp exits with ERROR");
 			}
 			else
-				main_return = EXIT_SUCCESS;
+			{
+				mainReturn = EXIT_SUCCESS;
+			}
 
-			state = main_states::MAIN_EXIT;
-
+			state = MainStates::MAIN_EXIT;
 			break;
-
+		}
 		}
 	}
 
 	delete App;
 	LOG("Exiting Engine...\n");
-	return main_return;
+	return mainReturn;
 }

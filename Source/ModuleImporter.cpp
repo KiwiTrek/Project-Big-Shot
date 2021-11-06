@@ -1,4 +1,3 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleImporter.h"
 #include "ModuleGameObjects.h"
@@ -12,17 +11,14 @@
 #include "postprocess.h"
 #include "version.h"
 
-ModuleImporter::ModuleImporter(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleImporter::ModuleImporter(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "file_system";
 }
 
-// Destructor
 ModuleImporter::~ModuleImporter()
-{
-}
+{}
 
-// Called before render is available
 bool ModuleImporter::Init()
 {
 	LOG_CONSOLE("Init File System");
@@ -33,7 +29,6 @@ bool ModuleImporter::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	// DevIL
 	LOG_CONSOLE("Init DevIL");
 	ilInit();
 	iluInit();
@@ -45,17 +40,16 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-	//ImportScene("Assets/warrior.fbx");
-	ImportScene("Assets/Models/BakerHouse.fbx", "BakerHouse");
+	//ImportScene("Assets/Resources/warrior.fbx");
+	ImportScene("Assets/Resources/Models/Baker_house.fbx", "Baker_house");
 	return true;
 }
 
-// Called before quitting
 bool ModuleImporter::CleanUp()
 {
 	LOG("Destroying File System");
 
-	// detach log stream
+	// Detach log stream
 	aiDetachAllLogStreams();
 
 	return true;
@@ -75,7 +69,9 @@ Material* ModuleImporter::LoadTexture(const char* path)
 	Material* texture = new Material();
 
 	if (id == 0)
+	{
 		LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
+	}
 
 	// TODO:: Change to ilLoadL
 	if (ilLoadImage(path))
@@ -180,10 +176,9 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 
 Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n, const char* path)
 {
-	aiMesh* aiMesh = scene->mMeshes[*n->mMeshes];
-
-	aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
 	aiString texPath;
+	aiMesh* aiMesh = scene->mMeshes[*n->mMeshes];
+	aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
 	aiGetMaterialTexture(material, aiTextureType::aiTextureType_DIFFUSE, aiMesh->mMaterialIndex, &texPath);
 
 	Material* texture = new Material();
@@ -194,6 +189,7 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n, const cha
 		texture = LoadTexture(newPath.c_str());
 		return texture;
 	}
+
 	return nullptr;
 }
 
@@ -204,7 +200,6 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 	m->vertexNum = aiMesh->mNumVertices;
 	m->vertices = new float[m->vertexNum * 3];
 	memcpy(m->vertices, aiMesh->mVertices, sizeof(float) * m->vertexNum * 3);
-
 	LOG_CONSOLE("Loaded new mesh with %d vertices", m->vertexNum);
 
 	if (aiMesh->HasFaces())
@@ -215,8 +210,7 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 		{
 			if (aiMesh->mFaces[j].mNumIndices != 3)
 			{
-				// Quad
-				LOG_CONSOLE("WARNING, geometry face with != 3 indices!");
+				LOG_CONSOLE("ERROR: Geometry face with != 3 indices!");
 			}
 			else
 			{
@@ -228,15 +222,28 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 		m->colors = new float[m->indexNum * 4]();
 		m->normals = new float[aiMesh->mNumVertices * 3]();
 
-		int t = 0;
-
-		for (uint v = 0, n = 0, tx = 0, c = 0; v < aiMesh->mNumVertices; v++, n += 3, c += 4, tx += 2)
+		uint n = 0, tx = 0, c = 0;
+		for (uint v = 0; v < aiMesh->mNumVertices; v++)
 		{
 			if (aiMesh->HasNormals())
 			{
 				m->normals[n] = aiMesh->mNormals[v].x;
 				m->normals[n + 1] = aiMesh->mNormals[v].y;
 				m->normals[n + 2] = aiMesh->mNormals[v].z;
+				n += 3;
+			}
+
+			if (aiMesh->mTextureCoords[0])
+			{
+				m->texCoords[tx] = aiMesh->mTextureCoords[0][v].x;
+				m->texCoords[tx + 1] = aiMesh->mTextureCoords[0][v].y;
+				tx += 2;
+			}
+			else
+			{
+				m->texCoords[tx] = 0.0f;
+				m->texCoords[tx + 1] = 0.0f;
+				tx += 2;
 			}
 
 			if (aiMesh->HasVertexColors(v))
@@ -245,6 +252,7 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 				m->colors[c + 1] = aiMesh->mColors[v]->g;
 				m->colors[c + 2] = aiMesh->mColors[v]->b;
 				m->colors[c + 3] = aiMesh->mColors[v]->a;
+				c += 4;
 			}
 			else
 			{
@@ -252,24 +260,11 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 				m->colors[c + 1] = 0.0f;
 				m->colors[c + 2] = 0.0f;
 				m->colors[c + 3] = 0.0f;
+				c += 4;
 			}
-
-			if (aiMesh->mTextureCoords[0])
-			{
-				m->texCoords[tx] = aiMesh->mTextureCoords[0][v].x;
-				m->texCoords[tx + 1] = aiMesh->mTextureCoords[0][v].y;
-			}
-			else
-			{
-				m->texCoords[tx] = 0.0f;
-				m->texCoords[tx + 1] = 0.0f;
-			}
-			t = tx;
 		}
-
 		return m;
 	}
-
 	return nullptr;
 }
 
@@ -279,7 +274,6 @@ Transform* ModuleImporter::LoadTransform(aiNode* n)
 	aiQuaternion r;
 
 	n->mTransformation.Decompose(s, r, p);
-
 	float3 pos(p.x, p.y, p.z);
 	float3 scale(s.x, s.y, s.z);
 	Quat rot(r.x, r.y, r.z, r.w);
@@ -318,15 +312,18 @@ void ModuleImporter::SplitPath(const char* fullPath, std::string* path, std::str
 		if (path != nullptr)
 		{
 			if (pos_separator < full.length())
+			{
 				*path = full.substr(0, pos_separator + 1).c_str();
+			}
 			else
+			{
 				path->clear();
+			}
 		}
 
-		if (fileName != nullptr)
+		if (fileName != nullptr && pos_separator < full.length())
 		{
-			if (pos_separator < full.length())
-				*fileName = full.substr(pos_separator + 1, std::string::npos);
+			*fileName = full.substr(pos_separator + 1, std::string::npos);
 		}
 	}
 }

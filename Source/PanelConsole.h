@@ -6,12 +6,13 @@
 class PanelConsole :public Panel
 {
 public:
-    PanelConsole(Application* app, bool start_enabled = true);
-    ~PanelConsole();
+	PanelConsole(Application* app, bool startEnabled = true);
+	~PanelConsole();
 
-    update_status Update();
+	UpdateStatus Update();
 public:
-    bool update;
+	//Update console
+	bool update;
 };
 
 #endif // !__PANEL_CONSOLE_H__

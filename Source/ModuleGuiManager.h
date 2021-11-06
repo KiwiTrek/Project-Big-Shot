@@ -3,8 +3,6 @@
 
 #include "Module.h"
 #include "Panel.h"
-#include "Globals.h"
-#include <vector>
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -21,36 +19,34 @@
 class ModuleGuiManager : public Module
 {
 public:
-	ModuleGuiManager(Application* app, bool start_enabled = true);
+	ModuleGuiManager(Application* app, bool startEnabled = true);
 	~ModuleGuiManager();
 
 	bool Start();
-	update_status PreUpdate();
-	update_status Update(float dt);
-	update_status PostUpdate();
+	UpdateStatus PreUpdate();
+	UpdateStatus Update(float dt);
+	UpdateStatus PostUpdate();
 	bool CleanUp();
 
 	void AddPanel(Panel* panel);
 	void SetupStyle();
-
-	update_status MenuBar();
-
+	UpdateStatus MenuBar();
 	void LogConsole(const char* buff);
 	const char* GetImGuiVersion();
 
 public:
-	std::vector<Panel*> list_panels;
+	bool demo;
+	bool usingKeyboard;
+	ImGuiTextBuffer LogInputText;
+	ImGuiTextBuffer LogConsoleText;
+
+	std::vector<Panel*> listPanels;
 
 	PanelAbout* about;
 	PanelConsole* console;
 	PanelConfig* config;
 	PanelHierarchy* hierarchy;
 	PanelInspector* inspector;
-
-	bool demo;
-	bool usingKeyboard;
-	ImGuiTextBuffer LogInputText;
-	ImGuiTextBuffer LogConsoleText;
 };
 
 #endif // !__MODULE_GUI_MANAGER_H__

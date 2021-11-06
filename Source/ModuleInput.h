@@ -5,6 +5,7 @@
 #include "Globals.h"
 
 #define MAX_MOUSE_BUTTONS 5
+#define MAX_KEYS 300
 
 enum class KEY_STATE
 {
@@ -17,49 +18,20 @@ enum class KEY_STATE
 class ModuleInput : public Module
 {
 public:
-
-	ModuleInput(Application* app, bool start_enabled = true);
+	ModuleInput(Application* app, bool startEnabled = true);
 	~ModuleInput();
 
 	bool Init();
-	update_status PreUpdate();
+	UpdateStatus PreUpdate();
 	bool CleanUp();
 
-	KEY_STATE GetKey(int id) const
-	{
-		return keyboard[id];
-	}
-
-	KEY_STATE GetMouseButton(int id) const
-	{
-		return mouse_buttons[id];
-	}
-
-	int GetMouseX() const
-	{
-		return mouse_x;
-	}
-
-	int GetMouseY() const
-	{
-		return mouse_y;
-	}
-
-	int GetMouseZ() const
-	{
-		return mouse_z;
-	}
-
-	int GetMouseXMotion() const
-	{
-		return mouse_x_motion;
-	}
-
-	int GetMouseYMotion() const
-	{
-		return mouse_y_motion;
-	}
-
+	KEY_STATE GetKey(int id) const;
+	KEY_STATE GetMouseButton(int id) const;
+	int GetMouseX() const;
+	int GetMouseY() const;
+	int GetMouseZ() const;
+	int GetMouseXMotion() const;
+	int GetMouseYMotion() const;
 	void LogInput(int id, KEY_STATE state);
 
 public:
@@ -67,13 +39,12 @@ public:
 
 private:
 	KEY_STATE* keyboard;
-	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
-	int mouse_x;
-	int mouse_y;
-	int mouse_z;
-	int mouse_x_motion;
-	int mouse_y_motion;
-	//int mouse_z_motion;
+	KEY_STATE mouseButtons[MAX_MOUSE_BUTTONS];
+	int mouseX;
+	int mouseY;
+	int mouseZ;
+	int mouseMotionX;
+	int mouseMotionY;
 };
 
 #endif // !__MODULE_INPUT_H__

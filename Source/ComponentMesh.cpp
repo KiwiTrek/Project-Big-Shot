@@ -1,12 +1,7 @@
-#include "Globals.h"
 #include "RenderGlobals.h"
 #include "Gameobject.h"
 
-#include "Component.h"
-#include "ComponentMesh.h"
-
-// ------------------------------------------------------------
-Mesh::Mesh(bool active) : Component(type,active), color(White), wire(false), axis(false), mType(MeshTypes::NONE), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
+Mesh::Mesh(bool active) : Component(type, active), color(white), wire(false), axis(false), mType(MeshTypes::NONE), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
 normalsBuf(-1), texCoords(nullptr), normals(nullptr), colors(nullptr), drawFaceNormals(false), drawVertexNormals(false)
 {
 	type = ComponentTypes::MESH;
@@ -36,13 +31,11 @@ Mesh::~Mesh()
 	texCoords = nullptr;
 }
 
-// ------------------------------------------------------------
 MeshTypes Mesh::GetType() const
 {
 	return mType;
 }
 
-// ------------------------------------------------------------
 void Mesh::GenerateBuffers()
 {
 	Material* mat = nullptr;
@@ -80,7 +73,6 @@ void Mesh::GenerateBuffers()
 	}
 }
 
-// ------------------------------------------------------------
 void Mesh::DrawInspector()
 {
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
@@ -98,7 +90,6 @@ void Mesh::DrawInspector()
 	}
 }
 
-// ------------------------------------------------------------
 void Mesh::Render() const
 {
 	Material* mat = nullptr;
@@ -174,19 +165,12 @@ void Mesh::Render() const
 
 	glColor3f(color.r, color.g, color.b);
 
-	if (wire)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	wire ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if (mType == MeshTypes::Primitive_Sphere)
-	{
-		InnerRender();
-	}
-	else
-	{
+	(mType == MeshTypes::Primitive_Sphere) ?
+		InnerRender() :
 		glDrawElements(GL_TRIANGLES, indexNum, GL_UNSIGNED_INT, NULL);
-	}
+
 
 	if (drawFaceNormals) DrawFaceNormals();
 	if (drawVertexNormals) DrawVertexNormals();
@@ -203,52 +187,41 @@ void Mesh::Render() const
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-// ------------------------------------------------------------
 void Mesh::InnerRender() const
 {
 	glPointSize(5.0f);
 
 	glBegin(GL_POINTS);
-
 	glVertex3f(0.0f, 0.0f, 0.0f);
-
 	glEnd();
 
 	glPointSize(1.0f);
 }
 
-// ------------------------------------------------------------
 void Mesh::DrawVertexNormals() const
 {
-	if (normalsBuf == -1 || normals == nullptr)
-		return;
+	if (normalsBuf == -1 || normals == nullptr) return;
 
-	float normal_lenght = 0.5f;
+	float normalLenght = 0.5f;
 
-	//vertices normals
 	glBegin(GL_LINES);
 	for (size_t i = 0, c = 0; i < vertexNum * 3; i += 3, c += 4)
 	{
 		glColor4f(1.f, 0.0f, 0.0f, 1.f);
-		//glColor4f(colors[c], colors[c + 1], colors[c + 2], colors[c + 3]);
 		glVertex3f(vertices[i], vertices[i + 1], vertices[i + 2]);
-
-		glVertex3f(vertices[i] + (normals[i] * normal_lenght),
-			vertices[i + 1] + (normals[i + 1] * normal_lenght),
-			vertices[i + 2] + (normals[i + 2]) * normal_lenght);
+		glVertex3f(vertices[i] + (normals[i] * normalLenght),
+			vertices[i + 1] + (normals[i + 1] * normalLenght),
+			vertices[i + 2] + (normals[i + 2]) * normalLenght);
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnd();
 }
 
-// ------------------------------------------------------------
 void Mesh::DrawFaceNormals() const
 {
-	if (normalsBuf == -1 || normals == nullptr)
-		return;
+	if (normalsBuf == -1 || normals == nullptr) return;
 
-	//vertices normals
 	glBegin(GL_LINES);
 	for (size_t i = 0; i < vertexNum * 3; i += 3)
 	{
@@ -262,14 +235,12 @@ void Mesh::DrawFaceNormals() const
 		float nz = (normals[i + 2] + normals[i + 5] + normals[i + 8]) / 3;
 
 		glVertex3f(vx, vy, vz);
-
 		glVertex3f(vx + (normals[i] * 0.5f),
 			vy + (normals[i + 1] * 0.5f),
 			vz + (normals[i + 2]) * 0.5f);
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
 	glEnd();
 }
 
@@ -407,7 +378,7 @@ void SphereP::InnerRender() const
 	for (j = 0; j < meshRings; j++)
 	{
 		double latitude1 = (M_PI / meshRings) * j - M_PI / 2;
-		double latitude2 = (M_PI / meshRings) * (j + 1) - M_PI / 2;
+		double latitude2 = (M_PI / meshRings) * ((double)j + 1) - M_PI / 2;
 		double sinLat1 = sin(latitude1);
 		double cosLat1 = cos(latitude1);
 		double sinLat2 = sin(latitude2);
@@ -451,49 +422,43 @@ void CylinderP::CalcGeometry()
 	float currentAngle = 0;
 	float increase = 2 * M_PI / sides;
 
-	//Vertices ------------------------------------------------
-
 	std::vector<float> verticesTMP;
 
-	//Top center
+	// Top center
 	verticesTMP.push_back(0);
 	verticesTMP.push_back(height * 0.5f);
 	verticesTMP.push_back(0);
 
-	//Top face
+	// Top face
 	for (int i = 0; i < sides; i++)
 	{
-		verticesTMP.push_back(radius * cos(currentAngle));//x
-		verticesTMP.push_back(height * 0.5f);		       //y
-		verticesTMP.push_back(radius * sin(currentAngle));//z
+		verticesTMP.push_back(radius * cos(currentAngle));	// Calculates the X value
+		verticesTMP.push_back(height * 0.5f);				// Calculates the Y value
+		verticesTMP.push_back(radius * sin(currentAngle));	// Calculates the Z value
 
-		//anticlockwise
 		currentAngle -= increase;
 	}
 
 	currentAngle = 0;
 
-	//Bottom Center
+	// Bottom Center
 	verticesTMP.push_back(0);
 	verticesTMP.push_back(-height * 0.5f);
 	verticesTMP.push_back(0);
 
-	//Bottom face
+	// Bottom face
 	for (int i = 0; i < sides; i++)
 	{
-		verticesTMP.push_back(radius * cos(currentAngle)); //x
-		verticesTMP.push_back(-height * 0.5f);			    //y
-		verticesTMP.push_back(radius * sin(currentAngle)); //z
+		verticesTMP.push_back(radius * cos(currentAngle));	// Calculates the X value
+		verticesTMP.push_back(-height * 0.5f);				// Calculates the Y value
+		verticesTMP.push_back(radius * sin(currentAngle));	// Calculates the Z value
 
-		//clockwise
 		currentAngle -= increase;
 	}
 
-	// Indices ----------------------------------------------
-
 	std::vector<uint> indicesTMP;
 
-	//Top Face
+	// Top Face
 	for (int i = 1; i < sides; i++)
 	{
 		indicesTMP.push_back(0);
@@ -505,15 +470,15 @@ void CylinderP::CalcGeometry()
 	indicesTMP.push_back(sides);
 	indicesTMP.push_back(1);
 
-	//Sides
+	// Sides
 	for (int i = 1; i < sides; i++)
 	{
-		//Left triangle
+		// Left triangle
 		indicesTMP.push_back(i);
 		indicesTMP.push_back(sides + i + 1);
 		indicesTMP.push_back(sides + i + 2);
 
-		//Right triangle
+		// Right triangle
 		indicesTMP.push_back(i + sides + 2);
 		indicesTMP.push_back(i + 1);
 		indicesTMP.push_back(i);
@@ -527,7 +492,7 @@ void CylinderP::CalcGeometry()
 	indicesTMP.push_back(1);
 	indicesTMP.push_back(sides);
 
-	//Bottom Face
+	// Bottom Face
 	int k = sides + 1;
 	for (int i = 1; i < sides; i++)
 	{
@@ -540,7 +505,7 @@ void CylinderP::CalcGeometry()
 	indicesTMP.push_back(sides + 2);
 	indicesTMP.push_back(2 * sides + 1);
 
-	//TODO: Texcoords
+	// TODO: Texcoords
 
 	vertexNum = verticesTMP.size();
 	vertices = new float[vertexNum]();
@@ -569,10 +534,10 @@ PyramidP::PyramidP(bool active) : Mesh(active)
 
 	vertices = new float[15]
 	{
-		//Top Vertex
+		// Top Vertex
 		0.0f, 0.85f, 0.0f,
 
-		//Bottom 
+		// Bottom 
 		-0.5f ,0.0f, -0.5f,
 		0.5f ,0.0f, -0.5f,
 		0.5f ,0.0f, 0.5f,
@@ -581,12 +546,12 @@ PyramidP::PyramidP(bool active) : Mesh(active)
 
 	indices = new uint[18]
 	{
-		0, 4, 3, // Front
-		0, 3, 2, // Left
-		0, 2, 1, // Right
-		0, 1, 4,  // Back
+		0, 4, 3,			// Front
+		0, 3, 2,			// Left
+		0, 2, 1,			// Right
+		0, 1, 4,			// Back
 
-		1, 3, 4,  1, 2, 3 //Bottom
+		1, 3, 4,  1, 2, 3	// Bottom
 	};
 
 	texCoords = new float[10]
@@ -595,10 +560,10 @@ PyramidP::PyramidP(bool active) : Mesh(active)
 		0.5f, 1.0f,
 
 		//Low vertices
-		0.0f, 0.0f, //Bottom Left
-		1.0f, 0.0f, //Bottom Right
-		0.0f, 0.0f, //Top Right
-		1.0f, 0.0f,
+		0.0f, 0.0f,			// Bottom Left
+		1.0f, 0.0f,			// Bottom Right
+		0.0f, 0.0f,			// Top Right
+		1.0f, 0.0f			// Top Left
 	};
 
 	vertexNum = 5;
@@ -619,18 +584,16 @@ Grid::Grid(float x, float y, float z, float d, bool active) : Mesh(active), norm
 void Grid::Render() const
 {
 	glLineWidth(1.0f);
-
 	glBegin(GL_LINES);
 
 	float d = 200.0f;
 
-	for(float i = -d; i <= d; i += 1.0f)
+	for (float i = -d; i <= d; i += 1.0f)
 	{
 		glVertex3f(i, 0.0f, -d);
 		glVertex3f(i, 0.0f, d);
 		glVertex3f(-d, 0.0f, i);
 		glVertex3f(d, 0.0f, i);
 	}
-
 	glEnd();
 }

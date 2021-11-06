@@ -13,38 +13,42 @@ class ModuleWindow : public Module
 {
 public:
 
-	ModuleWindow(Application* app, bool start_enabled = true);
-
-	// Destructor
+	ModuleWindow(Application* app, bool startEnabled = true);
 	virtual ~ModuleWindow();
 
 	bool Init();
 	bool CleanUp();
 
 	void SetTitle(const char* title);
+	uint GetRefreshRate();
+
 	float GetBrightness();
 	void SetBrightness(float b);
+
 	int GetWidth();
 	void SetWidth(int w);
 	int GetHeight();
 	void SetHeight(int h);
 	void GetMaxWindow(int& w, int& h);
-	uint GetRefreshRate();
+
 	bool IsFullscreen();
 	void SetFullscreen(bool f);
-	bool IsResizable();
-	void SetResizable(bool r);
-	bool IsBorderless();
-	void SetBorderless(bool b);
+
 	bool IsFullscreenDesktop();
 	void SetFullscreenDesktop(bool fd);
+
+	bool IsResizable();
+	void SetResizable(bool r);
+
+	bool IsBorderless();
+	void SetBorderless(bool b);
 
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;
 
 	//The surface contained by the window
-	SDL_Surface* screen_surface;
+	SDL_Surface* screenSurface;
 
 private:
 	int screenWidth = DEFAULT_WIDTH;

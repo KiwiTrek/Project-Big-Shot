@@ -4,15 +4,15 @@
 #include "ConsoleBuffer.h"
 #include "MathGeoLib.h"
 
-#define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__)
+#define LOG(format, ...) Log(__FILE__, __LINE__, format, __VA_ARGS__)
 
-const char* log(const char file[], int line, const char* format, ...);
+const char* Log(const char file[], int line, const char* format, ...);
 
 #define LOG_CONSOLE(format, ...) \
 	{\
 		if (App->gui != nullptr && App->gui->console != nullptr) \
 		{\
-			App->gui->LogConsole(log(__FILE__, __LINE__, format, __VA_ARGS__)); \
+			App->gui->LogConsole(Log(__FILE__, __LINE__, format, __VA_ARGS__)); \
 		}\
 	}
 
@@ -21,23 +21,21 @@ const char* log(const char file[], int line, const char* format, ...);
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
-// Deletes a buffer
 #define RELEASE( x )\
-    {\
-       if( x != nullptr )\
-       {\
-         delete x;\
-	     x = nullptr;\
-       }\
-    }
+	{\
+	   if( x != nullptr )\
+	   {\
+		 delete x;\
+		 x = nullptr;\
+	   }\
+	}
 
-// Deletes an array of buffers
 #define RELEASE_ARRAY( x )\
 	{\
-       if( x != nullptr )\
-       {\
-           delete[] x;\
-	       x = nullptr;\
+	   if( x != nullptr )\
+	   {\
+		   delete[] x;\
+		   x = nullptr;\
 		 }\
 	 }
 
@@ -47,14 +45,14 @@ typedef unsigned __int64 uint64;
 typedef unsigned long long UID;
 typedef unsigned short ushort;
 
-enum class update_status
+enum class UpdateStatus
 {
 	UPDATE_CONTINUE = 1,
 	UPDATE_STOP,
 	UPDATE_ERROR
 };
 
-// ImGui Globals
+// ImGui
 #define IMGUI_BLACK ImVec4(0.0f,0.0f,0.0f,1.f)
 #define IMGUI_LIGHT_GREY ImVec4(0.84f,0.84f,0.84f,1.f)
 #define IMGUI_GREY ImVec4(0.6f,0.6f,0.6f,1.f)
@@ -76,22 +74,22 @@ enum class update_status
 
 
 #define IMGUI_PRINT(color, field, format, ...) \
-    ImGui::Text(field); \
-    ImGui::SameLine(); \
-    ImGui::TextColored(color, format, __VA_ARGS__)
+	ImGui::Text(field); \
+	ImGui::SameLine(); \
+	ImGui::TextColored(color, format, __VA_ARGS__)
 
 #define IMGUI_BULLET(color, field, format, ...) \
-    ImGui::BulletText(field); \
-    ImGui::SameLine(); \
-    ImGui::TextColored(color, format, __VA_ARGS__)
+	ImGui::BulletText(field); \
+	ImGui::SameLine(); \
+	ImGui::TextColored(color, format, __VA_ARGS__)
 
-// Performance macros
+// Timer
 #define PERF_START(timer) timer.Start()
 #define PERF_PEEK(timer) LOG("%s took %f ms", __FUNCTION__, timer.ReadMs())
 
-// Configuration -----------
+// Configuration
 #define SCREEN_SIZE 1
-#define ASSETS_FOLDER "Assets/"
+#define ASSETS_FOLDER "Assets/Resources/"
 #define MODELS_FOLDER "Models/"
 #define TEXTURES_FOLDER "Textures/"
 

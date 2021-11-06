@@ -10,13 +10,8 @@ class Application;
 class Panel
 {
 public:
-	Application* App;
-	std::string name;
-	bool active;
-
-	Panel(Application* parent, bool start_enabled = false) : App(parent), active(start_enabled)
+	Panel(Application* parent, bool startEnabled = false) : App(parent), active(startEnabled)
 	{}
-
 	virtual ~Panel()
 	{}
 
@@ -24,21 +19,23 @@ public:
 	{
 		return true;
 	}
-
-	virtual update_status Update()
+	virtual UpdateStatus Update()
 	{
-		return update_status::UPDATE_CONTINUE;
+		return UpdateStatus::UPDATE_CONTINUE;
 	}
-
 	virtual bool RightClickMenu()
 	{
 		return true;
 	}
-
 	virtual bool CleanUp()
 	{
 		return true;
 	}
+
+public:
+	Application* App;
+	std::string name;
+	bool active;
 };
 
 #endif // !__PANEL_H__

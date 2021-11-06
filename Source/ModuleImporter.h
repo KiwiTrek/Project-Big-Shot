@@ -13,11 +13,8 @@ struct aiNode;
 class ModuleImporter : public Module
 {
 public:
-
-	ModuleImporter(Application* app, bool start_enabled = true);
-
-	// Destructor
-	virtual ~ModuleImporter();
+	ModuleImporter(Application* app, bool startEnabled = true);
+	~ModuleImporter();
 
 	bool Init();
 	bool Start();

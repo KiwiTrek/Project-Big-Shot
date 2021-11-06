@@ -1,24 +1,20 @@
 #include "Globals.h"
 #include "Application.h"
 #include "RenderGlobals.h"
-#include "ModuleRenderer3D.h"
-#include "ModuleGameObjects.h"
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "renderer";
 }
 
-// Destructor
 ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
-// Called before render is available
 bool ModuleRenderer3D::Init()
 {
 	LOG_CONSOLE("Creating 3D Renderer context");
 	bool ret = true;
-	
+
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -28,13 +24,13 @@ bool ModuleRenderer3D::Init()
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
-	if(context == NULL)
+	if (context == NULL)
 	{
 		LOG_CONSOLE("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	
-	if(ret == true)
+
+	if (ret == true)
 	{
 		GLenum err = glewInit();
 
@@ -63,7 +59,7 @@ bool ModuleRenderer3D::Init()
 
 		//Check for error
 		err = glGetError();
-		if(err != GL_NO_ERROR)
+		if (err != GL_NO_ERROR)
 		{
 			LOG_CONSOLE("Error initializing OpenGL! %s\n", gluErrorString(err));
 			ret = false;
@@ -75,42 +71,42 @@ bool ModuleRenderer3D::Init()
 
 		//Check for error
 		err = glGetError();
-		if(err != GL_NO_ERROR)
+		if (err != GL_NO_ERROR)
 		{
 			LOG_CONSOLE("Error initializing OpenGL! %s\n", gluErrorString(err));
 			ret = false;
 		}
-		
+
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glClearDepth(1.0f);
-		
+
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		//Check for error
 		err = glGetError();
-		if(err != GL_NO_ERROR)
+		if (err != GL_NO_ERROR)
 		{
 			LOG_CONSOLE("Error initializing OpenGL! %s\n", gluErrorString(err));
 			ret = false;
 		}
-		
-		GLfloat LightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+
+		GLfloat LightModelAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
-		
+
 		lights[0].ref = GL_LIGHT0;
 		lights[0].ambient.Set(0.25f, 0.25f, 0.25f, 1.0f);
 		lights[0].diffuse.Set(0.75f, 0.75f, 0.75f, 1.0f);
 		lights[0].SetPos(0.0f, 0.0f, 2.5f);
 		lights[0].Init();
-		
-		GLfloat MaterialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+		GLfloat MaterialAmbient[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MaterialAmbient);
 
-		GLfloat MaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat MaterialDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
-		
+
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		lights[0].Active(true);
@@ -125,8 +121,7 @@ bool ModuleRenderer3D::Init()
 	return ret;
 }
 
-// PreUpdate: clear buffer
-update_status ModuleRenderer3D::PreUpdate()
+UpdateStatus ModuleRenderer3D::PreUpdate()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -142,32 +137,30 @@ update_status ModuleRenderer3D::PreUpdate()
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	lights[0].SetPos(App->camera->position.x, App->camera->position.y, App->camera->position.z);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 	{
 		lights[i].Render();
 	}
 
-	return update_status::UPDATE_CONTINUE;
+	return UpdateStatus::UPDATE_CONTINUE;
 }
 
-// PostUpdate present buffer to screen
-update_status ModuleRenderer3D::PostUpdate()
+UpdateStatus ModuleRenderer3D::PostUpdate()
 {
 	SDL_GL_SwapWindow(App->window->window);
-	return update_status::UPDATE_CONTINUE;
+	return UpdateStatus::UPDATE_CONTINUE;
 }
 
-// Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG_CONSOLE("Destroying 3D Renderer");
 
-	NormalMatrix.~mat3x3();
-	ModelMatrix.~mat4x4();
-	ViewMatrix.~mat4x4();
-	ProjectionMatrix.~mat4x4();
+	normalMatrix.~mat3x3();
+	modelMatrix.~mat4x4();
+	viewMatrix.~mat4x4();
+	projectionMatrix.~mat4x4();
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -189,8 +182,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
+	projectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	glLoadMatrixf(&projectionMatrix);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

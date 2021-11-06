@@ -8,10 +8,10 @@ class GameObject;
 class PanelInspector :public Panel
 {
 public:
-    PanelInspector(Application* app, bool start_enabled = true);
-    ~PanelInspector();
+	PanelInspector(Application* app, bool startEnabled = true);
+	~PanelInspector();
 
-    update_status Update();
+	UpdateStatus Update();
 };
 
 #endif // !__PANEL_INSPECTOR_H__

@@ -8,12 +8,12 @@ class GameObject;
 class PanelHierarchy :public Panel
 {
 public:
-    PanelHierarchy(Application* app, bool start_enabled = true);
-    ~PanelHierarchy();
+	PanelHierarchy(Application* app, bool startEnabled = true);
+	~PanelHierarchy();
 
-    update_status Update();
-    void DisplayChild(GameObject* g);
-    bool RightClickMenu();
+	UpdateStatus Update();
+	void DisplayChild(GameObject* g);
+	bool RightClickMenu();
 };
 
 #endif // !__PANEL_HIERARCHY_H__

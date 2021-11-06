@@ -3,25 +3,24 @@
 
 #include "Module.h"
 #include "GameObject.h"
-#include "Globals.h"
 #include <vector>
 
 class ModuleGameObjects : public Module
 {
 public:
-	ModuleGameObjects(Application* app, bool start_enabled = true);
+	ModuleGameObjects(Application* app, bool startEnabled = true);
 	~ModuleGameObjects();
 
 	bool Init();
 	bool Start();
-	update_status PostUpdate();
+	UpdateStatus PostUpdate();
 	bool CleanUp();
 
 	void AddGameobject(GameObject* g);
 	void RemoveGameobject(GameObject* g);
 
 public:
-	std::vector<GameObject*> gameobjectList;
+	std::vector<GameObject*> gameObjectList;
 	GameObject* selectedGameObject = nullptr;
 
 private:

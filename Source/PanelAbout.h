@@ -6,10 +6,10 @@
 class PanelAbout :public Panel
 {
 public:
-    PanelAbout(Application* app, bool start_enabled = false);
-    ~PanelAbout();
+	PanelAbout(Application* app, bool startEnabled = false);
+	~PanelAbout();
 
-    update_status Update();
+	UpdateStatus Update();
 };
 
 #endif // !__PANEL_ABOUT_H__

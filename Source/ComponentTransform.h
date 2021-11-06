@@ -7,11 +7,15 @@ class Transform : public Component
 {
 public:
 	Transform(bool active = true);
-	Transform(float3 p, Quat r, float3 s,bool active = true);
+	Transform(float3 p, Quat r, float3 s, bool active = true);
 	~Transform();
+
 	void DrawInspector();
-	
 	void Reset();
+	void UpdateGlobalTransform();
+	void UpdateGlobalTransform(float4x4 pGlobalTransform);
+	void UpdateLocalTransform();
+
 	void SetPos(float x, float y, float z);
 	void SetPos(float3 p);
 	float3 GetPos();
@@ -23,9 +27,6 @@ public:
 	float3 GetScale();
 	float4x4 GetGlobalTransform();
 	float4x4 GetLocalTransform();
-	void UpdateGlobalTransform();
-	void UpdateGlobalTransform(float4x4 pGlobalTransform);
-	void UpdateLocalTransform();
 
 private:
 	float3 pos;

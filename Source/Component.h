@@ -6,7 +6,7 @@
 
 class GameObject;
 
-enum ComponentTypes
+enum class ComponentTypes
 {
 	NOT_ASSIGNED,
 	TRANSFORM,
@@ -19,7 +19,6 @@ class Component
 public:
 	Component(ComponentTypes type, bool active = true) : type(ComponentTypes::NOT_ASSIGNED), active(active)
 	{}
-
 	virtual ~Component()
 	{}
 

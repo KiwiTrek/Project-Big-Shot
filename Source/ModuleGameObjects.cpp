@@ -1,33 +1,28 @@
 #include "ModuleGameObjects.h"
 #include "Application.h"
-#include "ModuleRenderer3D.h"
-#include "Gameobject.h"
 
-ModuleGameObjects::ModuleGameObjects(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleGameObjects::ModuleGameObjects(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
-    name = "game_objects";
+	name = "game_objects";
 }
 
 ModuleGameObjects::~ModuleGameObjects()
-{
-
-}
+{}
 
 bool ModuleGameObjects::Init()
 {
-    return true;
+	return true;
 }
 
 bool ModuleGameObjects::Start()
 {
-    return true;
+	return true;
 }
 
-update_status ModuleGameObjects::PostUpdate()
+UpdateStatus ModuleGameObjects::PostUpdate()
 {
-
-	std::vector<Component*>::iterator gridComponent = App->scene->grid->components.begin();
 	Mesh* gridMesh = nullptr;
+	std::vector<Component*>::iterator gridComponent = App->scene->grid->components.begin();
 	while (gridComponent != App->scene->grid->components.end())
 	{
 		if ((*gridComponent)->type == ComponentTypes::MESH)
@@ -44,16 +39,12 @@ update_status ModuleGameObjects::PostUpdate()
 		gridMesh->Render();
 	}
 
-	std::vector<GameObject*>::iterator item = gameobjectList.begin();
-
-	while (item != gameobjectList.end())
+	std::vector<GameObject*>::iterator item = gameObjectList.begin();
+	while (item != gameObjectList.end())
 	{
 		Mesh* m = nullptr;
 
-		if (!(*item)->children.empty())
-		{
-			RenderChildren((*item));
-		}
+		if (!(*item)->children.empty()) RenderChildren((*item));
 
 		std::vector<Component*>::iterator c = (*item)->components.begin();
 		while (c != (*item)->components.end())
@@ -72,11 +63,10 @@ update_status ModuleGameObjects::PostUpdate()
 			m->axis = App->renderer3D->IsAxis();
 			m->Render();
 		}
-
 		++item;
 	}
 
-	return update_status::UPDATE_CONTINUE;
+	return UpdateStatus::UPDATE_CONTINUE;
 }
 
 void ModuleGameObjects::RenderChildren(GameObject* parent)
@@ -86,31 +76,22 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 	{
 		Mesh* m = nullptr;
 
-		if (!(*item)->children.empty())
-		{
-			RenderChildren((*item));
-		}
+		if (!(*item)->children.empty()) RenderChildren((*item));
 
 		std::vector<Component*>::iterator c = (*item)->components.begin();
 		while (c != (*item)->components.end())
 		{
-			if ((*c)->type == ComponentTypes::MESH)
-			{
-				m = (Mesh*)(*c);
-			}
+			if ((*c)->type == ComponentTypes::MESH) m = (Mesh*)(*c);
 			c++;
 		}
 
 		if (m != nullptr && m->IsActive())
 		{
-			if (m->GetType() != MeshTypes::Primitive_Grid)
-			{
-				m->axis = App->renderer3D->IsAxis();
-			}
+			if (m->GetType() != MeshTypes::Primitive_Grid) m->axis = App->renderer3D->IsAxis();
+
 			m->wire = App->renderer3D->IsWireframe();
 			m->Render();
 		}
-
 		++item;
 	}
 }
@@ -121,16 +102,16 @@ bool ModuleGameObjects::CleanUp()
 
 	LOG("Deleting Game Objects");
 
-	std::vector<GameObject*>::reverse_iterator g = gameobjectList.rbegin();
-	while (g != gameobjectList.rend())
+	std::vector<GameObject*>::reverse_iterator g = gameObjectList.rbegin();
+	while (g != gameObjectList.rend())
 	{
 		(*g)->CleanUp();
 		delete (*g);
 		g++;
 	}
-	gameobjectList.clear();
+	gameObjectList.clear();
 
-    return true;
+	return true;
 }
 
 void ModuleGameObjects::AddGameobject(GameObject* g)
@@ -138,7 +119,7 @@ void ModuleGameObjects::AddGameobject(GameObject* g)
 	App->scene->GetSceneRoot()->AddChild(g);
 	g->SetParent(App->scene->GetSceneRoot());
 
-	gameobjectList.push_back(g);
+	gameObjectList.push_back(g);
 }
 
 void ModuleGameObjects::RemoveGameobject(GameObject* g)
@@ -152,11 +133,11 @@ void ModuleGameObjects::RemoveGameobject(GameObject* g)
 		g->DeleteChildren();
 	}
 
-	for (size_t i = 0; i < gameobjectList.size(); i++)
+	for (size_t i = 0; i < gameObjectList.size(); i++)
 	{
-		if (gameobjectList[i] == g)
+		if (gameObjectList[i] == g)
 		{
-			gameobjectList.erase(gameobjectList.begin() + i);
+			gameObjectList.erase(gameObjectList.begin() + i);
 		}
 	}
 
