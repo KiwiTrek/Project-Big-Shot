@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleGuiManager.h"
 
 ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -105,6 +106,7 @@ UpdateStatus ModuleInput::PreUpdate()
 	SDL_Event e;
 	while (SDL_PollEvent(&e))
 	{
+		App->gui->GetInput(&e);
 		switch (e.type)
 		{
 		case SDL_MOUSEWHEEL:

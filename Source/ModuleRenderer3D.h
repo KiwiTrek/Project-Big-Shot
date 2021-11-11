@@ -50,14 +50,15 @@ public:
 	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
 
 private:
-	bool axis = false;
-	bool vSync = false;
-	bool wireframe = false;
 	bool depthTest = true;
 	bool cullFace = true;
 	bool lighting = false;
 	bool colorMaterial = true;
 	bool texture2D = true;
+	bool vSync = false;
+
+	bool axis = false;
+	bool wireframe = false;
 	bool faceNormals = false;
 	bool vecNormals = false;
 };

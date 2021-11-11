@@ -26,16 +26,14 @@ bool PanelConfig::Start()
 
 UpdateStatus PanelConfig::Update()
 {
+	ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
+
 	ImGui::Begin(name.c_str(), &active);
 
 	if (ImGui::CollapsingHeader("Application"))
 	{
-		//TODO: ImGui::InputText does not work
-		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
-		flags &= ~ImGuiInputTextFlags_ReadOnly;
-
 		std::string appName = App->GetAppName();
-		if (ImGui::InputText("Project Name", &appName, flags)) App->SetAppName(appName);
+		if (ImGui::InputText("Project Name", &appName, flags))	App->SetAppName(appName);
 
 		std::string orgName = App->GetOrgName();
 		if (ImGui::InputText("Organization", &orgName, flags)) App->SetOrgName(orgName);
@@ -60,9 +58,32 @@ UpdateStatus PanelConfig::Update()
 		int h = App->window->GetHeight();
 		int maxW, maxH;
 		App->window->GetMaxWindow(maxW, maxH);
-		if (ImGui::SliderInt("Width", &w, 640, maxW)) App->window->SetWidth(w);
+		if (ImGui::InputInt("Width", &w, 1, 25, flags))
+		{
+			if (w < 320)
+			{
+				w = 320;
+			}
+			else if (w > maxW)
+			{
+				w = maxW;
+			}
 
-		if (ImGui::SliderInt("Height", &h, 480, maxH)) App->window->SetHeight(h);
+			App->window->SetWidth(w);
+		}
+		if (ImGui::InputInt("Height", &h, 1, 25, flags))
+		{
+			if (h < 200)
+			{
+				h = 200;
+			}
+			else if (h > maxH)
+			{
+				h = maxH;
+			}
+
+			App->window->SetHeight(h);
+		}
 
 		ImGui::Text("Refresh rate:");
 		ImGui::SameLine();
@@ -85,7 +106,9 @@ UpdateStatus PanelConfig::Update()
 
 	if (ImGui::CollapsingHeader("Hardware & Software"))
 	{
-		ImGui::TextColored(IMGUI_YELLOW, "Hardware");
+		ImGui::SetWindowFontScale(1.2f);
+		ImGui::TextColored(IMGUI_YELLOW, "Hardware:");
+		ImGui::SetWindowFontScale(1);
 		IMGUI_PRINT(IMGUI_YELLOW, "CPUs:", "%d (%dKb)", cpuCount, cpuSize);
 		IMGUI_PRINT(IMGUI_YELLOW, "RAM:", "%.2fGb", ramSize);
 		ImGui::Spacing();
@@ -101,7 +124,9 @@ UpdateStatus PanelConfig::Update()
 
 		ImGui::Separator();
 
+		ImGui::SetWindowFontScale(1.2f);
 		ImGui::TextColored(IMGUI_YELLOW, "Software (3rd party libraries):");
+		ImGui::SetWindowFontScale(1);
 		IMGUI_BULLET(IMGUI_YELLOW, "SDL", "%d.%d.%d", sdlMajor, sdlMinor, sdlPatch);
 		IMGUI_BULLET(IMGUI_YELLOW, "OpenGL", "%s", glewVersion.c_str());
 		IMGUI_BULLET(IMGUI_YELLOW, "Glew", "%s", glewVersion.c_str());
@@ -199,6 +224,10 @@ bool PanelConfig::CleanUp()
 {
 	fpsHist.clear();
 	msHist.clear();
+
+	glVersion.clear();
+	glewVersion.clear();
+	imguiVersion.clear();
 
 	return true;
 }

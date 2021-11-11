@@ -110,9 +110,11 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		lights[0].Active(true);
-		glEnable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
+
+		glShadeModel(GL_SMOOTH);
 	}
 
 	// Projection matrix for
@@ -124,12 +126,6 @@ bool ModuleRenderer3D::Init()
 UpdateStatus ModuleRenderer3D::PreUpdate()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	depthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
-	cullFace ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
-	lighting ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
-	colorMaterial ? glEnable(GL_COLOR_MATERIAL) : glDisable(GL_COLOR_MATERIAL);
-	texture2D ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
 
 	glLoadIdentity();
 
@@ -217,6 +213,7 @@ bool ModuleRenderer3D::IsWireframe()
 void ModuleRenderer3D::ToggleDepthTest()
 {
 	depthTest = !depthTest;
+	depthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
 
 bool ModuleRenderer3D::IsDepthTest()
@@ -227,6 +224,7 @@ bool ModuleRenderer3D::IsDepthTest()
 void ModuleRenderer3D::ToggleCullFace()
 {
 	cullFace = !cullFace;
+	cullFace ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
 }
 
 bool ModuleRenderer3D::IsCullFace()
@@ -237,16 +235,7 @@ bool ModuleRenderer3D::IsCullFace()
 void ModuleRenderer3D::ToggleLighting()
 {
 	lighting = !lighting;
-}
-
-bool ModuleRenderer3D::IsAxis()
-{
-	return axis;
-}
-
-void ModuleRenderer3D::ToggleAxis()
-{
-	axis = !axis;
+	lighting ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
 }
 
 bool ModuleRenderer3D::IsLighting()
@@ -254,9 +243,20 @@ bool ModuleRenderer3D::IsLighting()
 	return lighting;
 }
 
+void ModuleRenderer3D::ToggleAxis()
+{
+	axis = !axis;
+}
+
+bool ModuleRenderer3D::IsAxis()
+{
+	return axis;
+}
+
 void ModuleRenderer3D::ToggleColorMaterial()
 {
 	colorMaterial = !colorMaterial;
+	colorMaterial ? glEnable(GL_COLOR_MATERIAL) : glDisable(GL_COLOR_MATERIAL);
 }
 
 bool ModuleRenderer3D::IsColorMaterial()
@@ -267,6 +267,7 @@ bool ModuleRenderer3D::IsColorMaterial()
 void ModuleRenderer3D::ToggleTexture2D()
 {
 	texture2D = !texture2D;
+	texture2D ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
 }
 
 bool ModuleRenderer3D::IsTexture2D()

@@ -20,8 +20,8 @@ UpdateStatus PanelInspector::Update()
 	{
 		std::string name = g->name;
 		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
-		flags &= ~ImGuiInputTextFlags_ReadOnly;
-		ImGui::InputText("Name", &name, flags);
+		if (ImGui::InputText("Name", &name, flags)) g->name = name;
+
 		std::vector<Component*>::iterator item = g->components.begin();
 		while (item != g->components.end())
 		{

@@ -33,6 +33,7 @@ public:
 	UpdateStatus MenuBar();
 	void LogConsole(const char* buff);
 	const char* GetImGuiVersion();
+	bool GetInput(SDL_Event* event);
 
 public:
 	bool demo;

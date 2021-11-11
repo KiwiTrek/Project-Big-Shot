@@ -66,6 +66,7 @@ UpdateStatus ModuleGuiManager::PreUpdate()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
+
 	ImGui::NewFrame();
 
 	ImGuiIO& io = ImGui::GetIO();
@@ -293,6 +294,11 @@ const char* ModuleGuiManager::GetImGuiVersion()
 	return IMGUI_VERSION;
 }
 
+bool ModuleGuiManager::GetInput(SDL_Event* event)
+{
+	return ImGui_ImplSDL2_ProcessEvent(event);
+}
+
 void ModuleGuiManager::SetupStyle()
 {
 	ImGuiStyle* style = &ImGui::GetStyle();
@@ -315,7 +321,7 @@ void ModuleGuiManager::SetupStyle()
 	ImVec4* colors = style->Colors;
 	colors[ImGuiCol_Text] = IMGUI_WHITE;
 	colors[ImGuiCol_TextDisabled] = IMGUI_GREY;
-	colors[ImGuiCol_TextSelectedBg] = IMGUI_LIGHT_PINK;
+	colors[ImGuiCol_TextSelectedBg] = ImVec4(1.00f,1.00f,1.00f,0.50f);
 	colors[ImGuiCol_WindowBg] = IMGUI_DARK_PINK;
 	colors[ImGuiCol_ChildBg] = IMGUI_DARK_PINK;
 	colors[ImGuiCol_PopupBg] = IMGUI_DARK_PINK;
