@@ -191,7 +191,7 @@ void GameObject::UpdateChildrenTransforms()
 void GameObject::AddChild(GameObject* c)
 {
 	children.push_back(c);
-	c->SetParent(this);
+	c->parent = this;
 }
 
 int GameObject::GetChildNum()
@@ -202,16 +202,6 @@ int GameObject::GetChildNum()
 GameObject* GameObject::GetChildAt(int index)
 {
 	return children[index];
-}
-
-GameObject* GameObject::GetParent()
-{
-	return parent;
-}
-
-void GameObject::SetParent(GameObject* p)
-{
-	parent = p;
 }
 
 bool GameObject::RemoveChild(GameObject* gameObject)

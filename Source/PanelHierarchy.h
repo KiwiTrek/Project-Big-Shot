@@ -14,6 +14,13 @@ public:
 	UpdateStatus Update();
 	void DisplayChild(GameObject* g);
 	bool RightClickMenu();
+private:
+	void MoveUp();
+	void MoveDown();
+	void Delete();
+
+	bool reparent = false;
+	GameObject* bufferReparent;
 };
 
 #endif // !__PANEL_HIERARCHY_H__

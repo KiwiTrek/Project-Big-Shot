@@ -117,7 +117,7 @@ bool ModuleGameObjects::CleanUp()
 void ModuleGameObjects::AddGameobject(GameObject* g)
 {
 	App->scene->GetSceneRoot()->AddChild(g);
-	g->SetParent(App->scene->GetSceneRoot());
+	g->parent = App->scene->GetSceneRoot();
 
 	gameObjectList.push_back(g);
 }
@@ -128,7 +128,7 @@ void ModuleGameObjects::RemoveGameobject(GameObject* g)
 	{
 		g->DeleteChildren();
 	}
-	else if (g->GetParent()->RemoveChild(g))
+	else if (g->parent->RemoveChild(g))
 	{
 		g->DeleteChildren();
 	}

@@ -209,6 +209,13 @@ UpdateStatus ModuleGuiManager::MenuBar()
 
 		if (ImGui::BeginMenu("Create"))
 		{
+			if (ImGui::MenuItem("Empty"))
+			{
+				GameObject* g = new GameObject("Empty GameObject");
+				App->gameObjects->AddGameobject(g);
+				App->gameObjects->selectedGameObject = g;
+			}
+
 			if (ImGui::BeginMenu("GameObject"))
 			{
 				if (ImGui::MenuItem("Cube"))
@@ -217,6 +224,8 @@ UpdateStatus ModuleGuiManager::MenuBar()
 					c->CreatePrimitive(MeshTypes::Primitive_Cube);
 					c->SetAxis(true);
 					App->gameObjects->AddGameobject(c);
+					App->gameObjects->selectedGameObject = c;
+
 				}
 
 				if (ImGui::MenuItem("Plane"))
@@ -225,6 +234,7 @@ UpdateStatus ModuleGuiManager::MenuBar()
 					pl->CreatePrimitive(MeshTypes::Primitive_Plane);
 					pl->SetAxis(true);
 					App->gameObjects->AddGameobject(pl);
+					App->gameObjects->selectedGameObject = pl;
 				}
 
 				if (ImGui::MenuItem("Sphere"))
@@ -233,6 +243,7 @@ UpdateStatus ModuleGuiManager::MenuBar()
 					s->CreatePrimitive(MeshTypes::Primitive_Sphere);
 					s->SetAxis(true);
 					App->gameObjects->AddGameobject(s);
+					App->gameObjects->selectedGameObject = s;
 				}
 
 				if (ImGui::MenuItem("Cylinder"))
@@ -241,6 +252,7 @@ UpdateStatus ModuleGuiManager::MenuBar()
 					cyl->CreatePrimitive(MeshTypes::Primitive_Cylinder);
 					cyl->SetAxis(true);
 					App->gameObjects->AddGameobject(cyl);
+					App->gameObjects->selectedGameObject = cyl;
 				}
 
 				if (ImGui::MenuItem("Pyramid"))
@@ -249,6 +261,7 @@ UpdateStatus ModuleGuiManager::MenuBar()
 					p->CreatePrimitive(MeshTypes::Primitive_Pyramid);
 					p->SetAxis(true);
 					App->gameObjects->AddGameobject(p);
+					App->gameObjects->selectedGameObject = p;
 				}
 				ImGui::EndMenu();
 			}

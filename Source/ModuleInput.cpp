@@ -143,7 +143,7 @@ UpdateStatus ModuleInput::PreUpdate()
 			tmp.assign(e.drop.file);
 			if (tmp.empty() != true)
 			{
-				if (tmp.find(".fbx") != std::string::npos)
+				if (tmp.find(".fbx") != std::string::npos || tmp.find(".FBX") != std::string::npos)
 				{
 					std::string fileName = App->importer->GetFileName(tmp.c_str());
 					App->importer->ImportScene(tmp.c_str(), fileName.c_str());

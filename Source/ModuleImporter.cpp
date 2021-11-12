@@ -40,8 +40,8 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-	//ImportScene("Assets/Resources/warrior.fbx");
 	ImportScene("Assets/Resources/Models/Baker_house.fbx", "Baker_house");
+	//ImportScene("Assets/Resources/Models/Street_environment.fbx", "Street_environment");
 	return true;
 }
 
@@ -144,7 +144,7 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 	if (parentGameObject != nullptr)
 	{
 		parentGameObject->AddChild(g);
-		g->SetParent(parentGameObject);
+		g->parent = parentGameObject;
 	}
 
 	Transform* t = (Transform*)g->CreateComponent(ComponentTypes::TRANSFORM, MeshTypes::NONE, LoadTransform(n));

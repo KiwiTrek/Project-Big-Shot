@@ -29,8 +29,6 @@ public:
 	GameObject* GetChildAt(int index);
 	bool RemoveChild(GameObject* gameObject);
 	void DeleteChildren(bool isOriginal = true);
-	GameObject* GetParent();
-	void SetParent(GameObject* p);
 	void UpdateChildrenTransforms();
 
 	void SetAxis(bool value);
