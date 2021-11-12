@@ -6,7 +6,7 @@ Engine created for the "Game Engines" subject in the Bachelor's degree in Video 
 # Team Members:
  - Guillem Álava Burgueño ([@WillyTrek19](https://github.com/WillyTrek19))
  - Sergi Colomer Ferrer ([@Lladruc37](https://github.com/Lladruc37))
- - Arnau Lucena Cobo ([@TitoLuce](https://github.com/TitoLuce)
+ - Arnau Lucena Cobo ([@TitoLuce](https://github.com/TitoLuce))
 
 # Keyboard Controls:
 ### General
