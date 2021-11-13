@@ -11,16 +11,18 @@ class Material : public Component
 {
 public:
 	Material(bool active = true);
-	Material(std::string n, std::string p, uint texId, uint texBuf, int f, uint fUnsigned, GLubyte* data, int w, int h, bool active);
+	Material(std::string n, std::string p, uint texId, uint texBuf, int f, uint fUnsigned, GLubyte* data, int w, int h, bool active = true);
 	~Material();
 
 	bool SetTexture(Material* texture);
+	bool SetTexture(Color c);
 	void DrawInspector();
 
 private:
 	void SetDefaultTexture();
 	void BindTexture(GLubyte* texData);
 	GLubyte* CheckersTexture();
+	GLubyte* ColorTexture(Color c);
 
 public:
 	std::string name;
@@ -36,6 +38,7 @@ public:
 	int height = -1;
 
 	bool checkers = false;
+	bool usingColor = false;
 };
 
 #endif //!__COMPONENT_MATERIAL_H__

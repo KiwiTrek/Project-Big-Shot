@@ -180,11 +180,12 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 
 Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 {
+	aiMaterial* material = nullptr;
 	aiString texPath;
 	aiMesh* aiMesh = scene->mMeshes[*n->mMeshes];
 	if (aiMesh->mMaterialIndex >= 0)
 	{
-		aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
+		material = scene->mMaterials[aiMesh->mMaterialIndex];
 		material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &texPath);
 		/* 0 -> All textures only have 1 diffuse map.
 		* If there are multiple diffuse maps, it'll only render the first one
@@ -203,7 +204,19 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 	else
 	{
 		LOG_CONSOLE("No texture found inside model");
+
+		aiColor4D diffuse;
+		if (material != nullptr && aiReturn::AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
+		{
+			uint id = 0;
+			ilGenImages(1, &id);
+			ilBindImage(id);
+			texture->id = id;
+			texture->SetTexture(Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
+			return texture;
+		}
 	}
+
 
 	return nullptr;
 }
