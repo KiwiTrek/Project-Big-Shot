@@ -40,8 +40,8 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-	ImportScene("Assets/Resources/Models/Baker_house.fbx", "Baker_house");
-	//ImportScene("Assets/Resources/Models/Street_environment.fbx", "Street_environment");
+	//ImportScene("Assets/Resources/Models/Baker_house.fbx", "Baker_house");
+	ImportScene("Assets/Resources/Models/Street_environment.fbx", "Street_environment");
 	return true;
 }
 
@@ -62,6 +62,7 @@ Material* ModuleImporter::LoadTexture(const char* path)
 	ilBindImage(id);
 
 	std::string name = GetFileName(path);
+	std::string newPath = UnifyPath(ASSETS_FOLDER, TEXTURES_FOLDER, name.c_str());
 
 	ilEnable(IL_ORIGIN_SET);
 	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
@@ -74,7 +75,7 @@ Material* ModuleImporter::LoadTexture(const char* path)
 	}
 
 	// TODO:: Change to ilLoadL
-	if (ilLoadImage(path))
+	if (ilLoadImage(newPath.c_str()))
 	{
 		if (ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 		{
@@ -86,7 +87,7 @@ Material* ModuleImporter::LoadTexture(const char* path)
 			}
 			else
 			{
-				LOG_CONSOLE("Texture loaded successfully from: %s", path);
+				LOG_CONSOLE("Texture loaded successfully from: %s", newPath.c_str());
 
 				texture->id = id;
 				texture->name = name;
@@ -94,7 +95,7 @@ Material* ModuleImporter::LoadTexture(const char* path)
 				texture->width = ilGetInteger(IL_IMAGE_WIDTH);
 				texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
 				texture->format = texture->formatUnsigned = ilGetInteger(IL_IMAGE_FORMAT);
-				texture->path = path;
+				texture->path = newPath.c_str();
 			}
 		}
 		else
@@ -117,8 +118,10 @@ void ModuleImporter::ImportScene(const char* path, const char* rootName)
 	{
 		GameObject* root = new GameObject("Empty");
 		aiNode* rootNode = scene->mRootNode;
-		root = ImportChild(scene, rootNode, nullptr, nullptr, path, rootName);
+
+		root = ImportChild(scene, rootNode, nullptr, nullptr, rootName);
 		App->gameObjects->AddGameobject(root);
+
 		LOG_CONSOLE("Successfully loaded scene with path %s", path);
 		aiReleaseImport(scene);
 	}
@@ -128,7 +131,7 @@ void ModuleImporter::ImportScene(const char* path, const char* rootName)
 	}
 }
 
-GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode* parentN, GameObject* parentGameObject, const char* path, const char* rootName)
+GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode* parentN, GameObject* parentGameObject, const char* rootName)
 {
 	GameObject* g = nullptr;
 
@@ -151,35 +154,43 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 	if (t->GetScale().x >= 100.0f)
 	{
 		t->SetScale(1.0f, 1.0f, 1.0f);
-		t->UpdateLocalTransform();
 	}
+	t->UpdateGlobalTransform();
+	if (g->parent != nullptr) g->parent->UpdateChildrenTransforms();
 
 	if (n->mMeshes != nullptr)
 	{
 		g->name = n->mName.C_Str();
 
 		Material* mat = (Material*)g->CreateComponent(ComponentTypes::MATERIAL);
-		mat->SetTexture(LoadTexture(scene, n, path));
+		mat->SetTexture(LoadTexture(scene, n));
 
-		Mesh* mesh = ImportModel(scene, n, path);
+		Mesh* mesh = ImportModel(scene, n);
 		g->CreateComponent(mesh);
 		mesh->GenerateBuffers();
 	}
 
 	for (size_t i = 0; i < n->mNumChildren; i++)
 	{
-		ImportChild(scene, n->mChildren[i], n, g, path);
+		ImportChild(scene, n->mChildren[i], n, g);
 	}
 
 	return g;
 }
 
-Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n, const char* path)
+Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 {
 	aiString texPath;
 	aiMesh* aiMesh = scene->mMeshes[*n->mMeshes];
-	aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
-	aiGetMaterialTexture(material, aiTextureType::aiTextureType_DIFFUSE, aiMesh->mMaterialIndex, &texPath);
+	if (aiMesh->mMaterialIndex >= 0)
+	{
+		aiMaterial* material = scene->mMaterials[aiMesh->mMaterialIndex];
+		material->GetTexture(aiTextureType::aiTextureType_DIFFUSE, 0, &texPath);
+		/* 0 -> All textures only have 1 diffuse map.
+		* If there are multiple diffuse maps, it'll only render the first one
+		* As far as we know, this shouldn't happen.
+		*/
+	}
 
 	Material* texture = new Material();
 
@@ -189,11 +200,15 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n, const cha
 		texture = LoadTexture(newPath.c_str());
 		return texture;
 	}
+	else
+	{
+		LOG_CONSOLE("No texture found inside model");
+	}
 
 	return nullptr;
 }
 
-Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char* path)
+Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 {
 	Mesh* m = new Mesh();
 	aiMesh* aiMesh = scene->mMeshes[*node->mMeshes];
@@ -270,13 +285,29 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node, const char
 
 Transform* ModuleImporter::LoadTransform(aiNode* n)
 {
-	aiVector3D p, s;
-	aiQuaternion r;
+	aiVector3D aiPos, aiScale;
+	aiQuaternion aiRot;
 
-	n->mTransformation.Decompose(s, r, p);
-	float3 pos(p.x, p.y, p.z);
-	float3 scale(s.x, s.y, s.z);
-	Quat rot(r.x, r.y, r.z, r.w);
+	n->mTransformation.Decompose(aiScale, aiRot, aiPos);
+
+	float3 pos(aiPos.x, aiPos.y, aiPos.z);
+	float3 scale(aiScale.x, aiScale.y, aiScale.z);
+	Quat rot(aiRot.x, aiRot.y, aiRot.z, aiRot.w);
+
+	while (strstr(n->mName.C_Str(), "_$AssimpFbx$_") != nullptr && n->mNumChildren == 1)
+	{
+		n = n->mChildren[0];
+
+		n->mTransformation.Decompose(aiScale, aiRot, aiPos);
+
+		float3 dummyPos(aiPos.x, aiPos.y, aiPos.z);
+		float3 dummyScale(aiScale.x, aiScale.y, aiScale.z);
+		Quat dummyRot(aiRot.x, aiRot.y, aiRot.z, aiRot.w);
+
+		pos += dummyPos;
+		rot = rot * dummyRot;
+		scale = { scale.x * aiScale.x, scale.y * aiScale.y, scale.z * aiScale.z };
+	}
 
 	Transform* t = new Transform();
 	t->SetPos(pos);

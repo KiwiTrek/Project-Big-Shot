@@ -47,13 +47,6 @@ void Transform::Reset()
 	eulerRot = float3::zero;
 	scale = float3::one;
 
-	std::vector<GameObject*>::iterator g = owner->children.begin();
-	while (g != owner->children.end())
-	{
-		(*g)->GetTransform()->Reset();
-		g++;
-	}
-
 	UpdateGlobalTransform();
 	owner->UpdateChildrenTransforms();
 }

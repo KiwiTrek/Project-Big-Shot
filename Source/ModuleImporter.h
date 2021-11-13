@@ -24,12 +24,12 @@ public:
 	std::string GetFileName(const char* path);
 	void ImportScene(const char* path, const char* rootName);
 	Material* LoadTexture(const char* path);
-	Material* LoadTexture(const aiScene* scene, aiNode* n, const char* path);
+	Material* LoadTexture(const aiScene* scene, aiNode* n);
 	Transform* LoadTransform(aiNode* n);
 
 private:
-	Mesh* ImportModel(const aiScene* scene, aiNode* node, const char* path);
-	GameObject* ImportChild(const aiScene* scene, aiNode* n, aiNode* parentN, GameObject* parentGameObject, const char* path, const char* rootName = nullptr);
+	Mesh* ImportModel(const aiScene* scene, aiNode* node);
+	GameObject* ImportChild(const aiScene* scene, aiNode* n, aiNode* parentN, GameObject* parentGameObject, const char* rootName = nullptr);
 	void SplitPath(const char* fullPath, std::string* path, std::string* fileName);
 	std::string UnifyPath(const char* path, const char* subDir, const char* name);
 };
