@@ -210,7 +210,6 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 		{
 			uint id = 0;
 			ilGenImages(1, &id);
-			ilBindImage(id);
 			texture->id = id;
 			texture->SetTexture(Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 			return texture;

@@ -21,6 +21,7 @@ public:
 private:
 	void SetDefaultTexture();
 	void BindTexture(GLubyte* texData);
+	void BindTexture(Color c);
 	GLubyte* CheckersTexture();
 	GLubyte* ColorTexture(Color c);
 
@@ -39,6 +40,8 @@ public:
 
 	bool checkers = false;
 	bool usingColor = false;
+
+	Color diffuse;
 };
 
 #endif //!__COMPONENT_MATERIAL_H__

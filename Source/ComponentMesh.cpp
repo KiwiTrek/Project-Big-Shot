@@ -1,7 +1,7 @@
 #include "RenderGlobals.h"
 #include "Gameobject.h"
 
-Mesh::Mesh(bool active) : Component(type, active), color(white), wire(false), axis(false), mType(MeshTypes::NONE), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
+Mesh::Mesh(bool active) : Component(type, active), vertexColor(white), wire(false), axis(false), mType(MeshTypes::NONE), vertexBuf(-1), vertexNum(-1), vertices(nullptr), indexBuf(-1), indexNum(-1), indices(nullptr),
 normalsBuf(-1), texCoords(nullptr), normals(nullptr), colors(nullptr), drawFaceNormals(false), drawVertexNormals(false)
 {
 	type = ComponentTypes::MESH;
@@ -163,7 +163,7 @@ void Mesh::Render() const
 		glLineWidth(1.0f);
 	}
 
-	glColor3f(color.r, color.g, color.b);
+	glColor3f(vertexColor.r, vertexColor.g, vertexColor.b);
 
 	wire ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 

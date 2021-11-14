@@ -34,7 +34,7 @@ public:
 	MeshTypes GetType() const;
 
 public:
-	Color color;
+	Color vertexColor;
 	bool axis, wire, drawVertexNormals, drawFaceNormals;
 
 	uint indexBuf = -1;			// index buffer in VRAM

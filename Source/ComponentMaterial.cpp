@@ -15,6 +15,9 @@ Material::Material(bool active) : Component(type, active)
 	data = nullptr;
 	width = -1;
 	height = -1;
+	checkers = false;
+	usingColor = false;
+	diffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 Material::Material(std::string n, std::string p, uint texId, uint texBuf, int f, uint fUnsigned, GLubyte* d, int w, int h, bool active) : Component(type, active)
@@ -30,6 +33,9 @@ Material::Material(std::string n, std::string p, uint texId, uint texBuf, int f,
 	data = d;
 	width = w;
 	height = h;
+	checkers = false;
+	usingColor = false;
+	diffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 Material::~Material()
@@ -53,7 +59,14 @@ void Material::DrawInspector()
 		if (ImGui::Checkbox("Checkers", &checkers))
 		{
 			LOG("%d", id);
-			!checkers ? BindTexture(data) : CheckersTexture();
+			if (usingColor)
+			{
+				!checkers ? BindTexture(diffuse) : CheckersTexture();
+			}
+			else
+			{
+				!checkers ? BindTexture(data) : CheckersTexture();
+			}
 			LOG("%d", id);
 		}
 
@@ -84,8 +97,14 @@ bool Material::SetTexture(Material* texture)
 		width = texture->width;
 		height = texture->height;
 
+		
 		BindTexture(texture->data);
+		
+
+		usingColor = texture->usingColor;
+		diffuse = texture->diffuse;
 		data = texture->data;
+
 		return true;
 	}
 	else
@@ -104,7 +123,9 @@ bool Material::SetTexture(Color c)
 	formatUnsigned = GL_RGBA;
 	width = 128;
 	height = 128;
-	data = ColorTexture(c);
+	usingColor = true;
+	diffuse = c;
+	data = ColorTexture(diffuse);
 	return true;
 }
 
@@ -162,7 +183,7 @@ GLubyte* Material::CheckersTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, formatUnsigned, GL_UNSIGNED_BYTE, checkerTex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerTex);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -198,4 +219,36 @@ GLubyte* Material::ColorTexture(Color c)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return (GLubyte*)colorTex;
+}
+
+void Material::BindTexture(Color c)
+{
+	GLubyte colorTex[128][128][4];
+
+	for (int i = 0; i < 128; ++i)
+	{
+		for (int j = 0; j < 128; ++j)
+		{
+			colorTex[i][j][0] = (GLubyte)(c.r * 255);
+			colorTex[i][j][1] = (GLubyte)(c.g * 255);
+			colorTex[i][j][2] = (GLubyte)(c.b * 255);
+			colorTex[i][j][3] = (GLubyte)(c.a * 255);
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	if (id == -1)
+	{
+		glGenTextures(1, &id);
+	}
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, formatUnsigned, GL_UNSIGNED_BYTE, colorTex);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
