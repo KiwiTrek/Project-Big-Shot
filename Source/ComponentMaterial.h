@@ -20,10 +20,10 @@ public:
 
 private:
 	void SetDefaultTexture();
-	void BindTexture(GLubyte* texData);
-	void BindTexture(Color c);
-	GLubyte* CheckersTexture();
-	GLubyte* ColorTexture(Color c);
+	GLubyte* BindTexture(GLubyte* texData = nullptr);
+	//void BindTexture(Color c);
+	//GLubyte* CheckersTexture();
+	//GLubyte* ColorTexture(Color c);
 
 public:
 	std::string name;

@@ -203,16 +203,27 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 	}
 	else
 	{
-		LOG_CONSOLE("No texture found inside model");
+		LOG_CONSOLE("No texture found inside model, looking for a Color...");
 
 		aiColor4D diffuse;
 		if (material != nullptr && aiReturn::AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
 		{
 			uint id = 0;
 			ilGenImages(1, &id);
+			ilBindImage(id);
 			texture->id = id;
-			texture->SetTexture(Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
+			texture->usingColor = true;
+			texture->diffuse = Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+			//----------
+			//uint id = 0;
+			//ilGenImages(1, &id);
+			//texture->id = id;
+			//texture->SetTexture(Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 			return texture;
+		}
+		else
+		{
+			LOG_CONSOLE("No Color found!");
 		}
 	}
 
