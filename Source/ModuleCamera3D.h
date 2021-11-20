@@ -22,6 +22,10 @@ public:
 private:
 	void CalculateViewMatrix();
 
+	void OnSave(JSONWriter& writer) const;
+
+	void OnLoad(const JSONReader& reader);
+
 public:
 	vec3 x, y, z, position, reference;
 	float currentDist;

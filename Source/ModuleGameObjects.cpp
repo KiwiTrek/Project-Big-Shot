@@ -1,6 +1,10 @@
 #include "ModuleGameObjects.h"
 #include "Application.h"
 
+#include "ModuleScene.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleScene.h"
+
 ModuleGameObjects::ModuleGameObjects(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "game_objects";

@@ -4,14 +4,17 @@
 #include "Timer.h"
 #include "PerfTimer.h"
 #include "Module.h"
-#include "ModuleWindow.h"
-#include "ModuleInput.h"
-#include "ModuleScene.h"
-#include "ModuleRenderer3D.h"
-#include "ModuleCamera3D.h"
 #include "ModuleGuiManager.h"
-#include "ModuleImporter.h"
-#include "ModuleGameObjects.h"
+
+class ModuleWindow;
+class ModuleInput;
+class ModuleScene;
+class ModuleRenderer3D;
+class ModuleViewportFrameBuffer;
+class ModuleCamera3D;
+class ModuleFileSystem;
+class ModuleImporter;
+class ModuleGameObjects;
 
 class Application
 {
@@ -23,14 +26,13 @@ public:
 	UpdateStatus Update();
 	bool CleanUp();
 
-	// TODO: Load/Save config
-	//void LoadConfig();
-	//void SaveConfig() const;
-
 	void SetAppName(std::string _name);
 	std::string GetAppName();
 	void SetOrgName(std::string _name);
 	std::string GetOrgName();
+
+	void LoadEngineConfig();
+	void SaveEngineConfig();
 
 	void SetFpsLimit(int _limit);
 	int GetFpsLimit();
@@ -51,14 +53,16 @@ private:
 	void FinishUpdate();
 
 public:
-	ModuleWindow* window;
-	ModuleInput* input;
-	ModuleScene* scene;
-	ModuleRenderer3D* renderer3D;
-	ModuleCamera3D* camera;
-	ModuleGuiManager* gui;
-	ModuleImporter* importer;
-	ModuleGameObjects* gameObjects;
+	ModuleWindow* window = nullptr;
+	ModuleInput* input = nullptr;
+	ModuleScene* scene = nullptr;
+	ModuleViewportFrameBuffer* viewportBuffer = nullptr;
+	ModuleRenderer3D* renderer3D = nullptr;
+	ModuleCamera3D* camera = nullptr;
+	ModuleFileSystem* fileSystem = nullptr;
+	ModuleGuiManager* gui = nullptr;
+	ModuleImporter* importer = nullptr;
+	ModuleGameObjects* gameObjects = nullptr;
 
 	ConsoleBuffer* buff;
 

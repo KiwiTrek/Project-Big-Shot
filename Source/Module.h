@@ -4,6 +4,15 @@
 #include "Globals.h"
 #include <string>
 
+//JSON
+#include "prettywriter.h"
+#include "document.h"
+
+class Application;
+
+typedef rapidjson::PrettyWriter<rapidjson::StringBuffer> JSONWriter;
+typedef rapidjson::Value JSONReader;
+
 class Application;
 
 class Module
@@ -13,6 +22,15 @@ public:
 	{}
 	virtual ~Module()
 	{}
+
+	virtual void OnLoad(const JSONReader& reader)
+	{
+	}
+
+	virtual void OnSave(JSONWriter& writer) const
+	{
+
+	}
 
 	virtual bool Init()
 	{

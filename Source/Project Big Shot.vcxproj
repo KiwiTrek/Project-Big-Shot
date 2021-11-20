@@ -49,14 +49,14 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\rapidjson\include;$(ProjectDir)External\PhysFS\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86;$(ProjectDir)External\imgui\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;glfw3.lib;physfs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86;$(ProjectDir)External\imgui\lib;$(ProjectDir)External\PhysFS\libx86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,7 +69,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\rapidjson\include;$(ProjectDir)External\PhysFS\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -77,8 +77,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86;$(ProjectDir)External\imgui\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;zlibstatic.lib;DevIL.lib;ILU.lib;ILUT.lib;glfw3.lib;physfs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)External\SDL\libx86;$(ProjectDir)External\Glew\libx86;$(ProjectDir)External\Assimp\libx86;$(ProjectDir)External\DevIL\libx86;$(ProjectDir)External\imgui\lib;$(ProjectDir)External\PhysFS\libx86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -219,10 +219,47 @@
     <ClInclude Include="External\MathGeoLib\include\Math\TransformOps.h" />
     <ClInclude Include="External\MathGeoLib\include\Math\vec2d.h" />
     <ClInclude Include="External\MathGeoLib\include\Time\Clock.h" />
+    <ClInclude Include="External\PhysFS\include\physfs.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\allocators.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\document.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\encodedstream.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\encodings.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\error\en.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\error\error.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\filereadstream.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\filewritestream.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\fwd.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\biginteger.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\diyfp.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\dtoa.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\ieee754.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\itoa.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\meta.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\pow10.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\regex.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\stack.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\strfunc.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\strtod.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\internal\swap.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\istreamwrapper.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\memorybuffer.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\memorystream.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\msinttypes\inttypes.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\msinttypes\stdint.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\ostreamwrapper.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\pointer.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\prettywriter.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\rapidjson.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\reader.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\schema.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\stream.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\stringbuffer.h" />
+    <ClInclude Include="External\rapidjson-1.1.0\include\writer.h" />
     <ClInclude Include="Gameobject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleGameObjects.h" />
     <ClInclude Include="ModuleImporter.h" />
     <ClInclude Include="ModuleGuiManager.h" />
@@ -232,6 +269,7 @@
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleScene.h" />
+    <ClInclude Include="ModuleViewportFrameBuffer.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelAbout.h" />
@@ -239,6 +277,7 @@
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
+    <ClInclude Include="PanelSceneView.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="RenderGlobals.h" />
@@ -307,18 +346,21 @@
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
+    <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleGameObjects.cpp" />
     <ClCompile Include="ModuleImporter.cpp" />
     <ClCompile Include="ModuleGuiManager.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
+    <ClCompile Include="ModuleViewportFrameBuffer.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfig.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
+    <ClCompile Include="PanelSceneView.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="Timer.cpp" />

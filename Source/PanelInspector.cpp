@@ -1,7 +1,7 @@
 #include "PanelInspector.h"
+#include "ModuleGuiManager.h"
 
 #include "Application.h"
-#include "ModuleGuiManager.h"
 #include "ModuleGameObjects.h"
 
 PanelInspector::PanelInspector(Application* app, bool startEnabled) : Panel(app, startEnabled)

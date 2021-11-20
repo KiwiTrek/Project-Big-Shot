@@ -1,22 +1,36 @@
 #include "Application.h"
 #include <shellapi.h>
 
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleScene.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleFileSystem.h"
+#include "ModuleCamera3D.h"
+#include "ModuleViewportFrameBuffer.h"
+#include "ModuleImporter.h"
+#include "ModuleGameObjects.h"
+
 Application::Application(ConsoleBuffer* _buff)
 {
 	window = new ModuleWindow(this);
 	camera = new ModuleCamera3D(this);
 	input = new ModuleInput(this);
 	importer = new ModuleImporter(this);
+	viewportBuffer = new ModuleViewportFrameBuffer(this);
 	scene = new ModuleScene(this);
 	gameObjects = new ModuleGameObjects(this);
 	gui = new ModuleGuiManager(this);
+	fileSystem = new ModuleFileSystem(this);
 	renderer3D = new ModuleRenderer3D(this);
 
+	AddModule(fileSystem);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
 	AddModule(importer);
 
+	//AddModule(viewportBuffer);
 	AddModule(scene);
 	AddModule(gameObjects);
 
@@ -65,6 +79,8 @@ bool Application::Init()
 		++item;
 	}
 
+	LoadEngineConfig();
+
 	if (gui != nullptr) gui->LogConsole(LOG("-------------- Application Start --------------"));
 
 	item = listModules.begin();
@@ -76,6 +92,55 @@ bool Application::Init()
 
 	PERF_START(framesPerSecTime);
 	return ret;
+}
+
+void Application::LoadEngineConfig()
+{
+	char* buffer = nullptr;
+	uint bytesFile = fileSystem->Load("engineConfig.cfg", &buffer);
+
+	if (bytesFile)
+	{
+		rapidjson::Document document;
+		if (document.Parse<rapidjson::kParseStopWhenDoneFlag>(buffer).HasParseError())
+		{
+			if (gui != nullptr) gui->LogConsole(LOG("Error loading engine config"));
+		}
+		else
+		{
+			const rapidjson::Value config = document.GetObjectJSON();
+
+			for (size_t i = 0; i < listModules.size(); i++)
+			{
+				listModules[i]->OnLoad(config);
+			}
+
+			if (gui != nullptr) gui->LogConsole(LOG("Engine config loaded"));
+		}
+	}
+	RELEASE_ARRAY(buffer);
+}
+
+void Application::SaveEngineConfig()
+{
+	rapidjson::StringBuffer sb;
+	JSONWriter writer(sb);
+
+	writer.StartObject();
+	for (size_t i = 0; i < listModules.size(); i++)
+	{
+		listModules[i]->OnSave(writer);
+	}
+	writer.EndObject();
+
+	if (fileSystem->Save("engineConfig.cfg", sb.GetString(), strlen(sb.GetString()), false))
+	{
+		if (gui != nullptr) gui->LogConsole(LOG("Engine configuration saved."));
+	}
+	else
+	{
+		if (gui != nullptr) gui->LogConsole(LOG("Engine configuration not saved."));
+	}
 }
 
 void Application::PrepareUpdate()

@@ -1,6 +1,8 @@
-#include "Application.h"
-#include "ModuleGameObjects.h"
 #include "ModuleScene.h"
+#include "Application.h"
+
+#include "ModuleCamera3D.h"
+#include "ModuleGameObjects.h"
 
 ModuleScene::ModuleScene(Application* app, bool startEnabled) : Module(app, startEnabled)
 {

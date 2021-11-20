@@ -1,8 +1,20 @@
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
+// Warning disabled ---
+#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4530 ) // Warning that exceptions are disabled
+
+#include <windows.h>
+#include <stdio.h>
 #include "ConsoleBuffer.h"
 #include "MathGeoLib.h"
+
+#define LOAD_JSON_BOOL(b) { b = config.HasMember(#b) ? config[#b].GetBool() : b; }
+#define SAVE_JSON_BOOL(b) { writer.String(#b); writer.Bool(b); }
+
+#define LOAD_JSON_FLOAT(b) { b = config.HasMember(#b) ? config[#b].GetFloat() : b; }
+#define SAVE_JSON_FLOAT(b) { writer.String(#b); writer.Double(b); }
 
 #define LOG(format, ...) Log(__FILE__, __LINE__, format, __VA_ARGS__)
 

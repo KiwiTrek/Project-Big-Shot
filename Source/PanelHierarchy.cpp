@@ -1,8 +1,10 @@
 #include "PanelHierarchy.h"
-
 #include "Application.h"
 #include "ModuleGuiManager.h"
+
+#include "ModuleInput.h"
 #include "ModuleGameObjects.h"
+#include "ModuleScene.h"
 
 PanelHierarchy::PanelHierarchy(Application* app, bool startEnabled) : Panel(app, startEnabled)
 {

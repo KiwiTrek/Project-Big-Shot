@@ -1,5 +1,7 @@
-#include "Application.h"
 #include "ModuleWindow.h"
+#include "Application.h"
+
+#include "ModuleRenderer3D.h"
 
 ModuleWindow::ModuleWindow(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -68,6 +70,29 @@ bool ModuleWindow::Init()
 	}
 
 	return ret;
+}
+
+void ModuleWindow::OnLoad(const JSONReader& reader)
+{
+	if (reader.HasMember("window"))
+	{
+		const auto& config = reader["window"];
+		LOAD_JSON_BOOL(fullscreen);
+		LOAD_JSON_BOOL(fullscreenDesktop);
+		LOAD_JSON_BOOL(borderless);
+		LOAD_JSON_BOOL(resizable);
+	}
+}
+
+void ModuleWindow::OnSave(JSONWriter& writer) const
+{
+	writer.String("window");
+	writer.StartObject();
+	SAVE_JSON_BOOL(fullscreen);
+	SAVE_JSON_BOOL(fullscreenDesktop);
+	SAVE_JSON_BOOL(borderless);
+	SAVE_JSON_BOOL(resizable);
+	writer.EndObject();
 }
 
 bool ModuleWindow::CleanUp()

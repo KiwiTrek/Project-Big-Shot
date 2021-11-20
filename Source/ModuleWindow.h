@@ -17,6 +17,8 @@ public:
 	virtual ~ModuleWindow();
 
 	bool Init();
+	void OnLoad(const JSONReader& reader);
+	void OnSave(JSONWriter& writer) const;
 	bool CleanUp();
 
 	void SetTitle(const char* title);

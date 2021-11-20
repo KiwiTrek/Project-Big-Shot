@@ -2,6 +2,10 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 
+#include "ModuleInput.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleGameObjects.h"
+
 ModuleGuiManager::ModuleGuiManager(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "gui";
@@ -14,12 +18,14 @@ ModuleGuiManager::ModuleGuiManager(Application* app, bool startEnabled) : Module
 	config = new PanelConfig(App);
 	hierarchy = new PanelHierarchy(App);
 	inspector = new PanelInspector(App);
+	sceneView = new PanelSceneView(App);
 
 	AddPanel(about);
 	AddPanel(console);
 	AddPanel(config);
 	AddPanel(hierarchy);
 	AddPanel(inspector);
+	//AddPanel(sceneView);
 }
 
 ModuleGuiManager::~ModuleGuiManager()
@@ -150,6 +156,7 @@ bool ModuleGuiManager::CleanUp()
 	config = nullptr;
 	hierarchy = nullptr;
 	inspector = nullptr;
+	sceneView = nullptr;
 	LogInputText.clear();
 	LogConsoleText.clear();
 
@@ -203,6 +210,7 @@ UpdateStatus ModuleGuiManager::MenuBar()
 			ImGui::MenuItem("Configuration", "F1", &config->active);
 			ImGui::MenuItem("Hierarchy", "F2", &hierarchy->active);
 			ImGui::MenuItem("Inspector", "F3", &inspector->active);
+			ImGui::MenuItem("SceneView", nullptr, &sceneView->active);
 			ImGui::MenuItem("Console", "F10", &console->active);
 			ImGui::EndMenu();
 		}

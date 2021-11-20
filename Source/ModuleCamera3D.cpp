@@ -2,6 +2,9 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 
+#include "ModuleInput.h"
+#include "ModuleGameObjects.h"
+
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "camera";
@@ -230,4 +233,30 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	viewMatrix = mat4x4(x.x, y.x, z.x, 0.0f, x.y, y.y, z.y, 0.0f, x.z, y.z, z.z, 0.0f, -dot(x, position), -dot(y, position), -dot(z, position), 1.0f);
 	viewMatrixInverse = inverse(viewMatrix);
+}
+
+void ModuleCamera3D::OnSave(JSONWriter& writer) const
+{
+	//writer.String("camera");
+	//writer.StartObject();
+	//SAVE_JSON_FLOAT(verticalFOV)
+	//SAVE_JSON_FLOAT(nearPlaneDistance)
+	//SAVE_JSON_FLOAT(farPlaneDistance)
+	//SAVE_JSON_FLOAT(cameraSpeed)
+	//SAVE_JSON_FLOAT(cameraSensitivity)
+	//writer.EndObject();
+}
+
+void ModuleCamera3D::OnLoad(const JSONReader& reader)
+{
+	//if (reader.HasMember("camera"))
+	//{
+	//	const auto& config = reader["camera"];
+	//	LOAD_JSON_FLOAT(verticalFOV);
+	//	LOAD_JSON_FLOAT(nearPlaneDistance);
+	//	LOAD_JSON_FLOAT(farPlaneDistance);
+	//	LOAD_JSON_FLOAT(cameraSpeed);
+	//	LOAD_JSON_FLOAT(cameraSensitivity);
+	//}
+	//RecalculateProjection();
 }

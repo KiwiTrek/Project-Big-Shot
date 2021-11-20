@@ -5,16 +5,19 @@
 #include "Panel.h"
 
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_stdlib.h"
 #include "DeviceId.h"
 
+#include "Panel.h"
 #include "PanelAbout.h"
 #include "PanelConsole.h"
 #include "PanelConfig.h"
 #include "PanelHierarchy.h"
 #include "PanelInspector.h"
+#include "PanelSceneView.h"
 
 class ModuleGuiManager : public Module
 {
@@ -48,6 +51,7 @@ public:
 	PanelConfig* config;
 	PanelHierarchy* hierarchy;
 	PanelInspector* inspector;
+	PanelSceneView* sceneView;
 };
 
 #endif // !__MODULE_GUI_MANAGER_H__

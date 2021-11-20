@@ -1,6 +1,7 @@
 #ifndef __MODULE_RENDERER_3D_H__
 #define __MODULE_RENDERER_3D_H__
 
+#include "Module.h"
 #include "glmath.h"
 #include "Light.h"
 #include "Mesh.h"
@@ -9,6 +10,7 @@
 #define MAX_LIGHTS 8
 
 typedef unsigned char GLubyte;
+typedef void* SDL_GLContext;
 
 class ModuleRenderer3D : public Module
 {
@@ -19,6 +21,8 @@ public:
 	bool Init();
 	UpdateStatus PreUpdate();
 	UpdateStatus PostUpdate();
+	void OnLoad(const JSONReader& reader);
+	void OnSave(JSONWriter& writer) const;
 	bool CleanUp();
 
 	const char* GetGlewVersion();

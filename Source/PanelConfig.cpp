@@ -2,6 +2,11 @@
 #include "Application.h"
 #include "ModuleGuiManager.h"
 
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleImporter.h"
+#include "ModuleRenderer3D.h"
+
 PanelConfig::PanelConfig(Application* app, bool startEnabled) : Panel(app, startEnabled), fpsHist(100), msHist(100)
 {
 	name = "Configuration";
@@ -135,6 +140,7 @@ UpdateStatus PanelConfig::Update()
 		IMGUI_BULLET(IMGUI_YELLOW, "MathGeoLib", "1.5");
 		IMGUI_BULLET(IMGUI_YELLOW, "Assimp", "%d.%d.%d", assimpMajor, assimpMinor, assimpPatch);
 		IMGUI_BULLET(IMGUI_YELLOW, "DevIL", "1.8.0");
+		IMGUI_BULLET(IMGUI_YELLOW, "PhysFS", "v3.0.2");
 	}
 
 	if (ImGui::CollapsingHeader("Render"))
@@ -197,24 +203,19 @@ UpdateStatus PanelConfig::Update()
 		ImGui::EndChild();
 	}
 
-	//if (ImGui::BeginMenu("Options"))
-	//{
-	//    //TODO: JSON Parser
-	//    if (ImGui::MenuItem("Set Defaults"))
-	//    {
+	if (ImGui::BeginMenu("Options"))
+	{
+	    if (ImGui::MenuItem("Load"))
+	    {
+			App->LoadEngineConfig();
+	    }
+		if (ImGui::MenuItem("Save"))
+		{
+			App->SaveEngineConfig();
+		}
 
-	//    }
-	//    if (ImGui::MenuItem("Save"))
-	//    {
-
-	//    }
-	//    if (ImGui::MenuItem("Load"))
-	//    {
-
-	//    }
-
-	//    ImGui::EndMenu();
-	//}
+	    ImGui::EndMenu();
+	}
 
 	ImGui::End();
 	return UpdateStatus::UPDATE_CONTINUE;

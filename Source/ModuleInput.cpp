@@ -1,6 +1,11 @@
 #include "Application.h"
 #include "ModuleInput.h"
-#include "ModuleGuiManager.h"
+
+#include "ModuleWindow.h"
+#include "ModuleImporter.h"
+#include "ModuleGameObjects.h"
+#include "ModuleScene.h"
+
 
 ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
 {

@@ -1,6 +1,7 @@
 #include "PanelAbout.h"
 #include "Application.h"
 #include "ModuleGuiManager.h"
+
 #include "ModuleInput.h"
 
 PanelAbout::PanelAbout(Application* app, bool startEnabled) : Panel(app, startEnabled)

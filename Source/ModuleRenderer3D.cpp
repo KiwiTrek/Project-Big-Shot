@@ -1,6 +1,10 @@
-#include "Globals.h"
+#include "ModuleRenderer3D.h"
 #include "Application.h"
+#include "Globals.h"
 #include "RenderGlobals.h"
+
+#include "ModuleWindow.h"
+#include "ModuleCamera3D.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -147,6 +151,33 @@ UpdateStatus ModuleRenderer3D::PostUpdate()
 {
 	SDL_GL_SwapWindow(App->window->window);
 	return UpdateStatus::UPDATE_CONTINUE;
+}
+
+void ModuleRenderer3D::OnLoad(const JSONReader& reader)
+{
+	if (reader.HasMember("render"))
+	{
+		const auto& config = reader["render"];
+		LOAD_JSON_BOOL(depthTest);
+		LOAD_JSON_BOOL(cullFace);
+		LOAD_JSON_BOOL(lighting);
+		LOAD_JSON_BOOL(texture2D);
+		LOAD_JSON_BOOL(wireframe);
+		LOAD_JSON_BOOL(vSync);
+	}
+}
+
+void ModuleRenderer3D::OnSave(JSONWriter& writer) const
+{
+	writer.String("render");
+	writer.StartObject();
+	SAVE_JSON_BOOL(depthTest);
+	SAVE_JSON_BOOL(cullFace);
+	SAVE_JSON_BOOL(lighting);
+	SAVE_JSON_BOOL(texture2D);
+	SAVE_JSON_BOOL(wireframe);
+	SAVE_JSON_BOOL(vSync);
+	writer.EndObject();
 }
 
 bool ModuleRenderer3D::CleanUp()
