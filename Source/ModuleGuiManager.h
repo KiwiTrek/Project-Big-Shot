@@ -19,6 +19,18 @@
 #include "PanelInspector.h"
 #include "PanelSceneView.h"
 
+class Grid
+{
+public:
+	Grid();
+	Grid(float x, float y, float z, float d);
+
+	void Render();
+public:
+	vec3 normal;
+	float constant;
+};
+
 class ModuleGuiManager : public Module
 {
 public:
@@ -52,6 +64,8 @@ public:
 	PanelHierarchy* hierarchy;
 	PanelInspector* inspector;
 	PanelSceneView* sceneView;
+
+	Grid grid;
 };
 
 #endif // !__MODULE_GUI_MANAGER_H__

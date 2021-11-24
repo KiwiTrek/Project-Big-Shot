@@ -684,6 +684,9 @@
     <ClInclude Include="ModuleViewportFrameBuffer.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
+    <ClInclude Include="par_shapes.h">
+      <Filter>Sources\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -922,6 +925,9 @@
     </ClCompile>
     <ClCompile Include="ModuleViewportFrameBuffer.cpp">
       <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="par_shapes.cpp">
+      <Filter>Sources\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

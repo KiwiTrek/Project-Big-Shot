@@ -34,18 +34,18 @@ UpdateStatus PanelHierarchy::Update()
 	DisplayChild(root);
 
 	//TODO: Right Click to hierarchy options
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_DOWN && ImGui::IsAnyItemHovered())
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN && ImGui::IsAnyItemHovered())
 	{
 		ImGui::OpenPopup("Options");
 	}
-	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_STATE::KEY_DOWN && ImGui::IsPopupOpen("Options"))
+	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && ImGui::IsPopupOpen("Options"))
 	{
 		ImGui::CloseCurrentPopup();
 	}
 
 	if (App->gameObjects->selectedGameObject != nullptr && ImGui::IsWindowFocused())
 	{
-		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_STATE::KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KeyState::KEY_DOWN)
 		{
 			App->gameObjects->RemoveGameobject(App->gameObjects->selectedGameObject);
 			App->gameObjects->selectedGameObject = nullptr;
@@ -89,7 +89,7 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 				if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
 				if (ImGui::IsItemHovered())
 				{
-					if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_STATE::KEY_DOWN)
+					if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 					{
 						App->gameObjects->selectedGameObject = g;
 					}
@@ -117,7 +117,7 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 				if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
 				if (ImGui::IsItemHovered())
 				{
-					if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_STATE::KEY_DOWN)
+					if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 					{
 						App->gameObjects->selectedGameObject = g;
 					}
@@ -166,12 +166,13 @@ bool PanelHierarchy::RightClickMenu()
 
 				if (ImGui::BeginMenu("GameObject"))
 				{
+					// TODO: Cube_001, Cube_002...
 					if (ImGui::MenuItem("Cube"))
 					{
 						GameObject* c = new GameObject("Cube");
-						c->CreatePrimitive(MeshTypes::Primitive_Cube);
+						c->CreatePrimitive(Shape::CUBE);
 						c->SetAxis(true);
-						App->gameObjects->selectedGameObject->AddChild(c);
+						App->gameObjects->AddGameobject(c);
 						App->gameObjects->selectedGameObject = c;
 						ImGui::CloseCurrentPopup();
 					}
@@ -179,9 +180,9 @@ bool PanelHierarchy::RightClickMenu()
 					if (ImGui::MenuItem("Plane"))
 					{
 						GameObject* pl = new GameObject("Plane");
-						pl->CreatePrimitive(MeshTypes::Primitive_Plane);
+						pl->CreatePrimitive(Shape::PLANE);
 						pl->SetAxis(true);
-						App->gameObjects->selectedGameObject->AddChild(pl);
+						App->gameObjects->AddGameobject(pl);
 						App->gameObjects->selectedGameObject = pl;
 						ImGui::CloseCurrentPopup();
 					}
@@ -189,9 +190,9 @@ bool PanelHierarchy::RightClickMenu()
 					if (ImGui::MenuItem("Sphere"))
 					{
 						GameObject* s = new GameObject("Sphere");
-						s->CreatePrimitive(MeshTypes::Primitive_Sphere);
+						s->CreatePrimitive(Shape::SPHERE);
 						s->SetAxis(true);
-						App->gameObjects->selectedGameObject->AddChild(s);
+						App->gameObjects->AddGameobject(s);
 						App->gameObjects->selectedGameObject = s;
 						ImGui::CloseCurrentPopup();
 					}
@@ -199,20 +200,30 @@ bool PanelHierarchy::RightClickMenu()
 					if (ImGui::MenuItem("Cylinder"))
 					{
 						GameObject* cyl = new GameObject("Cylinder");
-						cyl->CreatePrimitive(MeshTypes::Primitive_Cylinder);
+						cyl->CreatePrimitive(Shape::CYLINDER);
 						cyl->SetAxis(true);
-						App->gameObjects->selectedGameObject->AddChild(cyl);
+						App->gameObjects->AddGameobject(cyl);
 						App->gameObjects->selectedGameObject = cyl;
 						ImGui::CloseCurrentPopup();
 					}
 
-					if (ImGui::MenuItem("Pyramid"))
+					if (ImGui::MenuItem("Cone"))
 					{
-						GameObject* p = new GameObject("Pyramid");
-						p->CreatePrimitive(MeshTypes::Primitive_Pyramid);
-						p->SetAxis(true);
-						App->gameObjects->selectedGameObject->AddChild(p);
-						App->gameObjects->selectedGameObject = p;
+						GameObject* c = new GameObject("Cone");
+						c->CreatePrimitive(Shape::CONE);
+						c->SetAxis(true);
+						App->gameObjects->AddGameobject(c);
+						App->gameObjects->selectedGameObject = c;
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (ImGui::MenuItem("Torus"))
+					{
+						GameObject* t = new GameObject("Torus");
+						t->CreatePrimitive(Shape::CONE);
+						t->SetAxis(true);
+						App->gameObjects->AddGameobject(t);
+						App->gameObjects->selectedGameObject = t;
 						ImGui::CloseCurrentPopup();
 					}
 					ImGui::EndMenu();

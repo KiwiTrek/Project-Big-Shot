@@ -20,7 +20,7 @@ public:
 	void Update();
 	bool CleanUp();
 
-	Component* CreateComponent(ComponentTypes cType, MeshTypes mType = MeshTypes::NONE, Transform* t = nullptr);
+	Component* CreateComponent(ComponentTypes cType, Shape mType = Shape::NONE, Transform* t = nullptr);
 	void CreateComponent(Component* c);
 	bool RemoveComponent(Component* c);
 
@@ -32,8 +32,20 @@ public:
 	void UpdateChildrenTransforms();
 
 	void SetAxis(bool value);
-	void CreatePrimitive(MeshTypes type);
-	Transform* GetTransform();
+	void CreatePrimitive(Shape type);
+	template<class T> T* GetComponent()
+	{
+		T* component = nullptr;
+		std::vector<Component*>::iterator c = components.begin();
+		while (c != components.end())
+		{
+			component = dynamic_cast<T*>((*c));
+			if (component)
+				break;
+			c++;
+		}
+		return component;
+	}
 
 public:
 	bool active;

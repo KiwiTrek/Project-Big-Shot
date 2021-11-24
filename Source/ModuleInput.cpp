@@ -2,6 +2,7 @@
 #include "ModuleInput.h"
 
 #include "ModuleWindow.h"
+#include "ModuleFileSystem.h"
 #include "ModuleImporter.h"
 #include "ModuleGameObjects.h"
 #include "ModuleScene.h"
@@ -10,8 +11,8 @@
 ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	name = "input";
-	keyboard = new KEY_STATE[MAX_KEYS];
-	memset(keyboard, (int)KEY_STATE::KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
+	keyboard = new KeyState[MAX_KEYS];
+	memset(keyboard, (int)KeyState::KEY_IDLE, sizeof(KeyState) * MAX_KEYS);
 	isHovering = false;
 }
 
@@ -45,27 +46,27 @@ UpdateStatus ModuleInput::PreUpdate()
 	{
 		if (keys[i] == 1)
 		{
-			if (keyboard[i] == KEY_STATE::KEY_IDLE)
+			if (keyboard[i] == KeyState::KEY_IDLE)
 			{
-				LogInput(i, KEY_STATE::KEY_DOWN);
-				keyboard[i] = KEY_STATE::KEY_DOWN;
+				LogInput(i, KeyState::KEY_DOWN);
+				keyboard[i] = KeyState::KEY_DOWN;
 			}
-			else if (keyboard[i] != KEY_STATE::KEY_REPEAT)
+			else if (keyboard[i] != KeyState::KEY_REPEAT)
 			{
-				LogInput(i, KEY_STATE::KEY_REPEAT);
-				keyboard[i] = KEY_STATE::KEY_REPEAT;
+				LogInput(i, KeyState::KEY_REPEAT);
+				keyboard[i] = KeyState::KEY_REPEAT;
 			}
 		}
 		else
 		{
-			if (keyboard[i] == KEY_STATE::KEY_REPEAT || keyboard[i] == KEY_STATE::KEY_DOWN)
+			if (keyboard[i] == KeyState::KEY_REPEAT || keyboard[i] == KeyState::KEY_DOWN)
 			{
-				LogInput(i, KEY_STATE::KEY_UP);
-				keyboard[i] = KEY_STATE::KEY_UP;
+				LogInput(i, KeyState::KEY_UP);
+				keyboard[i] = KeyState::KEY_UP;
 			}
 			else
 			{
-				keyboard[i] = KEY_STATE::KEY_IDLE;
+				keyboard[i] = KeyState::KEY_IDLE;
 			}
 		}
 	}
@@ -80,27 +81,27 @@ UpdateStatus ModuleInput::PreUpdate()
 	{
 		if (buttons & SDL_BUTTON(i))
 		{
-			if (mouseButtons[i] == KEY_STATE::KEY_IDLE)
+			if (mouseButtons[i] == KeyState::KEY_IDLE)
 			{
-				LogInput(1000 + i, KEY_STATE::KEY_DOWN);
-				mouseButtons[i] = KEY_STATE::KEY_DOWN;
+				LogInput(1000 + i, KeyState::KEY_DOWN);
+				mouseButtons[i] = KeyState::KEY_DOWN;
 			}
-			else if (mouseButtons[i] != KEY_STATE::KEY_REPEAT)
+			else if (mouseButtons[i] != KeyState::KEY_REPEAT)
 			{
-				LogInput(1000 + i, KEY_STATE::KEY_REPEAT);
-				mouseButtons[i] = KEY_STATE::KEY_REPEAT;
+				LogInput(1000 + i, KeyState::KEY_REPEAT);
+				mouseButtons[i] = KeyState::KEY_REPEAT;
 			}
 		}
 		else
 		{
-			if (mouseButtons[i] == KEY_STATE::KEY_REPEAT || mouseButtons[i] == KEY_STATE::KEY_DOWN)
+			if (mouseButtons[i] == KeyState::KEY_REPEAT || mouseButtons[i] == KeyState::KEY_DOWN)
 			{
-				LogInput(1000 + i, KEY_STATE::KEY_UP);
-				mouseButtons[i] = KEY_STATE::KEY_UP;
+				LogInput(1000 + i, KeyState::KEY_UP);
+				mouseButtons[i] = KeyState::KEY_UP;
 			}
 			else
 			{
-				mouseButtons[i] = KEY_STATE::KEY_IDLE;
+				mouseButtons[i] = KeyState::KEY_IDLE;
 			}
 		}
 	}
@@ -150,23 +151,23 @@ UpdateStatus ModuleInput::PreUpdate()
 			{
 				if (tmp.find(".fbx") != std::string::npos || tmp.find(".FBX") != std::string::npos)
 				{
-					std::string fileName = App->importer->GetFileName(tmp.c_str());
+					std::string fileName;
+					App->fileSystem->SplitFilePath(tmp.c_str(), nullptr, &fileName);
+					if (tmp.find(".FBX") == std::string::npos)
+					{
+						fileName.append(".fbx");
+					}
+					else
+					{
+						fileName.append(".FBX");
+					}
 					App->importer->ImportScene(tmp.c_str(), fileName.c_str());
 				}
 				else if (tmp.find(".png") != std::string::npos || tmp.find(".dds") != std::string::npos)
 				{
 					if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 					{
-						Material* mat = nullptr;
-						std::vector<Component*>::iterator c = App->gameObjects->selectedGameObject->components.begin();
-						while (c != App->gameObjects->selectedGameObject->components.end())
-						{
-							if ((*c)->type == ComponentTypes::MATERIAL)
-							{
-								mat = (Material*)(*c);
-							}
-							c++;
-						}
+						Material* mat = App->gameObjects->selectedGameObject->GetComponent<Material>();
 
 						if (mat != nullptr)
 						{
@@ -191,7 +192,7 @@ UpdateStatus ModuleInput::PreUpdate()
 		}
 	}
 
-	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_STATE::KEY_UP)
+	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KeyState::KEY_UP)
 	{
 		return UpdateStatus::UPDATE_STOP;
 	}
@@ -217,7 +218,7 @@ bool ModuleInput::CleanUp()
 	return true;
 }
 
-void ModuleInput::LogInput(int id, KEY_STATE state)
+void ModuleInput::LogInput(int id, KeyState state)
 {
 	std::string tmp;
 	static const char* states[] = { "IDLE", "DOWN", "REPEAT", "UP" };
@@ -233,12 +234,12 @@ void ModuleInput::LogInput(int id, KEY_STATE state)
 	App->gui->config->update = true;
 }
 
-KEY_STATE ModuleInput::GetKey(int id) const
+KeyState ModuleInput::GetKey(int id) const
 {
 	return keyboard[id];
 }
 
-KEY_STATE ModuleInput::GetMouseButton(int id) const
+KeyState ModuleInput::GetMouseButton(int id) const
 {
 	return mouseButtons[id];
 }

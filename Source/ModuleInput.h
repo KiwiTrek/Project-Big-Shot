@@ -7,7 +7,7 @@
 #define MAX_MOUSE_BUTTONS 5
 #define MAX_KEYS 300
 
-enum class KEY_STATE
+enum class KeyState
 {
 	KEY_IDLE = 0,
 	KEY_DOWN,
@@ -25,21 +25,21 @@ public:
 	UpdateStatus PreUpdate();
 	bool CleanUp();
 
-	KEY_STATE GetKey(int id) const;
-	KEY_STATE GetMouseButton(int id) const;
+	KeyState GetKey(int id) const;
+	KeyState GetMouseButton(int id) const;
 	int GetMouseX() const;
 	int GetMouseY() const;
 	int GetMouseZ() const;
 	int GetMouseXMotion() const;
 	int GetMouseYMotion() const;
-	void LogInput(int id, KEY_STATE state);
+	void LogInput(int id, KeyState state);
 
 public:
 	bool isHovering;
 
 private:
-	KEY_STATE* keyboard;
-	KEY_STATE mouseButtons[MAX_MOUSE_BUTTONS];
+	KeyState* keyboard;
+	KeyState mouseButtons[MAX_MOUSE_BUTTONS];
 	int mouseX;
 	int mouseY;
 	int mouseZ;

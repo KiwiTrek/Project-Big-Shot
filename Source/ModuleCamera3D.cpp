@@ -42,23 +42,23 @@ bool ModuleCamera3D::CleanUp()
 UpdateStatus ModuleCamera3D::Update(float dt)
 {
 	vec3 newPos(0, 0, 0);
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_STATE::KEY_REPEAT)
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_REPEAT)
 	{
 		float speed = 10.0f * dt;
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_STATE::KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KeyState::KEY_REPEAT)
 		{
 			speed = 20.0f * dt;
 		}
 
 		// WASD keys -----------------------------------
-		if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_STATE::KEY_REPEAT) newPos.y += speed;
-		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_STATE::KEY_REPEAT) newPos.y -= speed;
+		if (App->input->GetKey(SDL_SCANCODE_Q) == KeyState::KEY_REPEAT) newPos.y += speed;
+		if (App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_REPEAT) newPos.y -= speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_STATE::KEY_REPEAT) newPos -= z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_STATE::KEY_REPEAT) newPos += z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KeyState::KEY_REPEAT) newPos -= z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KeyState::KEY_REPEAT) newPos += z * speed;
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_STATE::KEY_REPEAT) newPos -= x * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_STATE::KEY_REPEAT) newPos += x * speed;
+		if (App->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_REPEAT) newPos -= x * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_REPEAT) newPos += x * speed;
 
 		// Mouse motion ----------------
 		int dx = -App->input->GetMouseXMotion();
@@ -109,16 +109,16 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 		}
 	}
 
-	if (App->gameObjects->selectedGameObject != nullptr && App->input->GetKey(SDL_SCANCODE_F) == KEY_STATE::KEY_DOWN)
+	if (App->gameObjects->selectedGameObject != nullptr && App->input->GetKey(SDL_SCANCODE_F) == KeyState::KEY_DOWN)
 	{
-		Transform* t = App->gameObjects->selectedGameObject->GetTransform();
+		Transform* t = App->gameObjects->selectedGameObject->GetComponent<Transform>();
 		newPos = vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z);
 		LookAt(vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z));
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_STATE::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_STATE::KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KeyState::KEY_REPEAT)
 	{
-		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_STATE::KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_R) == KeyState::KEY_DOWN)
 		{
 			LOG_CONSOLE("Reset camera position")
 				position = vec3(0.0f, 0.0f, 5.0f);
@@ -129,9 +129,9 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 
 	if (App->gameObjects->selectedGameObject != nullptr)
 	{
-		if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_STATE::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_STATE::KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_LALT) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KeyState::KEY_REPEAT)
 		{
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_STATE::KEY_REPEAT)
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
 			{
 				// Mouse motion ----------------
 				int dx = -App->input->GetMouseXMotion();
@@ -166,7 +166,7 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 				position = reference + z * length(position);
 				currentDist = length(position);
 
-				float3 focusedPos = App->gameObjects->selectedGameObject->GetTransform()->GetPos();
+				float3 focusedPos = App->gameObjects->selectedGameObject->GetComponent<Transform>()->GetPos();
 				LookAt(vec3(focusedPos.x, focusedPos.y, focusedPos.z));
 			}
 		}

@@ -44,55 +44,21 @@ void GameObject::Update()
 	}
 }
 
-Component* GameObject::CreateComponent(ComponentTypes cType, MeshTypes mType, Transform* t)
+Component* GameObject::CreateComponent(ComponentTypes cType, Shape mType, Transform* t)
 {
 	Component* c = nullptr;
 	switch (cType)
 	{
 	case ComponentTypes::TRANSFORM:
 	{
-		if (this->GetTransform() != nullptr) RemoveComponent(this->GetTransform());
+		if (this->GetComponent<Transform>() != nullptr) RemoveComponent(this->GetComponent<Transform>());
 
 		t != nullptr ? c = t : c = new Transform();
 		break;
 	}
 	case ComponentTypes::MESH:
 	{
-		switch (mType)
-		{
-		case MeshTypes::Primitive_Grid:
-		{
-			c = new Grid();
-			break;
-		}
-		case MeshTypes::Primitive_Plane:
-		{
-			c = new PlaneP();
-			break;
-		}
-		case MeshTypes::Primitive_Cube:
-		{
-			c = new CubeP();
-			break;
-		}
-		case MeshTypes::Primitive_Sphere:
-		{
-			c = new SphereP();
-			break;
-		}
-		case MeshTypes::Primitive_Cylinder:
-		{
-			c = new CylinderP();
-			break;
-		}
-		case MeshTypes::Primitive_Pyramid:
-		{
-			c = new PyramidP();
-			break;
-		}
-		default:
-			break;
-		}
+		c = new Mesh(mType);
 		break;
 	}
 	case ComponentTypes::MATERIAL:
@@ -140,50 +106,27 @@ bool GameObject::RemoveComponent(Component* c)
 
 void GameObject::SetAxis(bool value)
 {
-	Mesh* m = nullptr;
-	std::vector<Component*>::iterator c = components.begin();
-	while (c != components.end())
-	{
-		if ((*c)->type == ComponentTypes::MESH) m = (Mesh*)(*c);
-		++c;
-	}
-
+	Mesh* m = GetComponent<Mesh>();
 	if (m != nullptr) m->axis = value;
 }
 
-void GameObject::CreatePrimitive(MeshTypes type)
+void GameObject::CreatePrimitive(Shape type)
 {
-	if (type != MeshTypes::Primitive_Sphere && type != MeshTypes::Primitive_Grid)
-	{
-		CreateComponent(ComponentTypes::MATERIAL);
-	}
+	Material* mat = (Material*)CreateComponent(ComponentTypes::MATERIAL);
+	mat->checkers = true;
+	mat->SetTexture(nullptr);
 	Mesh* m = (Mesh*)CreateComponent(ComponentTypes::MESH, type);
-	if (type != MeshTypes::Primitive_Sphere && type != MeshTypes::Primitive_Grid)
-	{
-		m->GenerateBuffers();
-	}
-}
-
-Transform* GameObject::GetTransform()
-{
-	Transform* t = nullptr;
-	std::vector<Component*>::iterator c = components.begin();
-	while (c != components.end())
-	{
-		if ((*c)->type == ComponentTypes::TRANSFORM) t = (Transform*)(*c);
-		++c;
-	}
-	return t;
+	m->GenerateBuffers();
 }
 
 void GameObject::UpdateChildrenTransforms()
 {
-	Transform* t = GetTransform();
+	Transform* t = GetComponent<Transform>();
 	t->UpdateGlobalTransform();
 
 	for (size_t i = 0; i < children.size(); i++)
 	{
-		children[i]->GetTransform()->UpdateGlobalTransform(t->GetGlobalTransform());
+		children[i]->GetComponent<Transform>()->UpdateGlobalTransform(t->GetGlobalTransform());
 		children[i]->UpdateChildrenTransforms();
 	}
 }

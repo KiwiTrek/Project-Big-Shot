@@ -126,8 +126,14 @@ unsigned ModuleFileSystem::Size(const std::string& path) const
 
 void ModuleFileSystem::CreateLibraryDirectories()
 {
-	CreateDir("Assets/Models/");
-	CreateDir("Assets/Textures/");
+	std::string path = ASSETS_FOLDER;
+	path.append(MODELS_FOLDER);
+	CreateDir(path.c_str());
+
+	path.clear();
+	path = ASSETS_FOLDER;
+	path.append(TEXTURES_FOLDER);
+	CreateDir(path.c_str());
 }
 
 // Add a new zip file or folder

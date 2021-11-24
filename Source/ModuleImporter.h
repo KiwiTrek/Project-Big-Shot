@@ -21,7 +21,6 @@ public:
 	bool CleanUp();
 
 	void GetAssimpVersion(int& major, int& minor, int& patch);
-	std::string GetFileName(const char* path);
 	void ImportScene(const char* path, const char* rootName);
 	Material* LoadTexture(const char* path);
 	Material* LoadTexture(const aiScene* scene, aiNode* n);
@@ -30,8 +29,6 @@ public:
 private:
 	Mesh* ImportModel(const aiScene* scene, aiNode* node);
 	GameObject* ImportChild(const aiScene* scene, aiNode* n, aiNode* parentN, GameObject* parentGameObject, const char* rootName = nullptr);
-	void SplitPath(const char* fullPath, std::string* path, std::string* fileName);
-	std::string UnifyPath(const char* path, const char* subDir, const char* name);
 };
 
 #endif // !__MODULE_FILE_SYSTEM_H__

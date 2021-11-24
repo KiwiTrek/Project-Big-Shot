@@ -1,4 +1,5 @@
 #include "ModuleGuiManager.h"
+#include "RenderGlobals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
 
@@ -119,6 +120,7 @@ UpdateStatus ModuleGuiManager::Update(float dt)
 	}
 
 	if (demo) ImGui::ShowDemoWindow();
+	grid.Render();
 
 	return status;
 }
@@ -174,22 +176,22 @@ void ModuleGuiManager::AddPanel(Panel* panel)
 
 UpdateStatus ModuleGuiManager::MenuBar()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_STATE::KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
 	{
 		config->active = !config->active;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_STATE::KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KeyState::KEY_DOWN)
 	{
 		hierarchy->active = !hierarchy->active;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_STATE::KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KeyState::KEY_DOWN)
 	{
 		inspector->active = !inspector->active;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_STATE::KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KeyState::KEY_DOWN)
 	{
 		console->active = !console->active;
 	}
@@ -226,20 +228,20 @@ UpdateStatus ModuleGuiManager::MenuBar()
 
 			if (ImGui::BeginMenu("GameObject"))
 			{
+				// TODO: Cube_001, Cube_002...
 				if (ImGui::MenuItem("Cube"))
 				{
 					GameObject* c = new GameObject("Cube");
-					c->CreatePrimitive(MeshTypes::Primitive_Cube);
+					c->CreatePrimitive(Shape::CUBE);
 					c->SetAxis(true);
 					App->gameObjects->AddGameobject(c);
 					App->gameObjects->selectedGameObject = c;
-
 				}
 
 				if (ImGui::MenuItem("Plane"))
 				{
 					GameObject* pl = new GameObject("Plane");
-					pl->CreatePrimitive(MeshTypes::Primitive_Plane);
+					pl->CreatePrimitive(Shape::PLANE);
 					pl->SetAxis(true);
 					App->gameObjects->AddGameobject(pl);
 					App->gameObjects->selectedGameObject = pl;
@@ -248,7 +250,7 @@ UpdateStatus ModuleGuiManager::MenuBar()
 				if (ImGui::MenuItem("Sphere"))
 				{
 					GameObject* s = new GameObject("Sphere");
-					s->CreatePrimitive(MeshTypes::Primitive_Sphere);
+					s->CreatePrimitive(Shape::SPHERE);
 					s->SetAxis(true);
 					App->gameObjects->AddGameobject(s);
 					App->gameObjects->selectedGameObject = s;
@@ -257,19 +259,28 @@ UpdateStatus ModuleGuiManager::MenuBar()
 				if (ImGui::MenuItem("Cylinder"))
 				{
 					GameObject* cyl = new GameObject("Cylinder");
-					cyl->CreatePrimitive(MeshTypes::Primitive_Cylinder);
+					cyl->CreatePrimitive(Shape::CYLINDER);
 					cyl->SetAxis(true);
 					App->gameObjects->AddGameobject(cyl);
 					App->gameObjects->selectedGameObject = cyl;
 				}
 
-				if (ImGui::MenuItem("Pyramid"))
+				if (ImGui::MenuItem("Cone"))
 				{
-					GameObject* p = new GameObject("Pyramid");
-					p->CreatePrimitive(MeshTypes::Primitive_Pyramid);
-					p->SetAxis(true);
-					App->gameObjects->AddGameobject(p);
-					App->gameObjects->selectedGameObject = p;
+					GameObject* c = new GameObject("Cone");
+					c->CreatePrimitive(Shape::CONE);
+					c->SetAxis(true);
+					App->gameObjects->AddGameobject(c);
+					App->gameObjects->selectedGameObject = c;
+				}
+
+				if (ImGui::MenuItem("Torus"))
+				{
+					GameObject* t = new GameObject("Torus");
+					t->CreatePrimitive(Shape::TORUS);
+					t->SetAxis(true);
+					App->gameObjects->AddGameobject(t);
+					App->gameObjects->selectedGameObject = t;
 				}
 				ImGui::EndMenu();
 			}
@@ -395,4 +406,27 @@ void ModuleGuiManager::SetupStyle()
 	colors[ImGuiCol_NavWindowingHighlight] = IMGUI_GREY;
 	colors[ImGuiCol_NavWindowingDimBg] = IMGUI_LIGHT_GREY;
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
+}
+
+Grid::Grid() : normal(0, 1, 0), constant(1)
+{}
+
+Grid::Grid(float x, float y, float z, float d) : normal(x, y, z), constant(d)
+{}
+
+void Grid::Render()
+{
+	glLineWidth(1.0f);
+	glBegin(GL_LINES);
+
+	float d = 200.0f;
+
+	for (float i = -d; i <= d; i += 1.0f)
+	{
+		glVertex3f(i, 0.0f, -d);
+		glVertex3f(i, 0.0f, d);
+		glVertex3f(-d, 0.0f, i);
+		glVertex3f(d, 0.0f, i);
+	}
+	glEnd();
 }

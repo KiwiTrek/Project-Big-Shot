@@ -4,18 +4,19 @@
 #include "glmath.h"
 #include "Color.h"
 #include <vector>
+#include "par_shapes.h"
 
 class GameObject;
 
-enum class MeshTypes
+enum class Shape
 {
 	NONE,
-	Primitive_Grid,
-	Primitive_Plane,
-	Primitive_Cube,
-	Primitive_Sphere,
-	Primitive_Cylinder,
-	Primitive_Pyramid,
+	CUBE,
+	SPHERE,
+	CYLINDER,
+	TORUS,
+	PLANE,
+	CONE
 };
 
 class Mesh : public Component
@@ -23,7 +24,9 @@ class Mesh : public Component
 public:
 
 	Mesh(bool active = true);
+	Mesh(Shape shape, bool active = true);
 	virtual ~Mesh();
+	void CopyParMesh(par_shapes_mesh* parMesh);
 
 	virtual void Render() const;
 	virtual void InnerRender() const;
@@ -31,93 +34,31 @@ public:
 	void DrawVertexNormals() const;
 	void DrawFaceNormals() const;
 	void GenerateBuffers();
-	MeshTypes GetType() const;
+	Shape GetType() const;
 
 public:
 	Color vertexColor;
 	bool axis, wire, drawVertexNormals, drawFaceNormals;
 
-	uint indexBuf = -1;			// index buffer in VRAM
-	int indexNum = -1;
-	uint* indices = nullptr;
+	uint vertexBuf = 0, indexBuf = 0, textureBuf = 0, normalsBuf = 0;
+	std::string texturePath;
 
-	uint vertexBuf = -1;		// vertex buffer in VRAM
-	int vertexNum = -1;			// = normalsNum
-	float* vertices = nullptr;
+	uint vertexNum = 0;
+	std::vector<float3> vertices;
 
-	uint normalsBuf = -1;		// normals buffer in VRAM
-	float* normals = nullptr;
+	uint normalNum = 0;
+	std::vector<float3> normals;
+	std::vector<float3> faceNormals;
+	std::vector<float3> faceCenters;
 
-	float* texCoords = nullptr;	// = UVs
+	std::vector<float2> texCoords;
+
+	uint indexNum = 0;
+	std::vector<uint> indices;
+
 	float* colors = nullptr;
 
 protected:
-	MeshTypes mType;
+	Shape mType;
 };
-
-// ============================================
-class CubeP : public Mesh
-{
-public:
-	CubeP(bool active = true);
-};
-
-// ============================================
-class PlaneP : public Mesh
-{
-public:
-	PlaneP(bool active = true);
-};
-
-// ============================================
-class SphereP : public Mesh
-{
-public:
-	SphereP(bool active = true);
-	SphereP(float _radius, uint _meshRings, uint _quads, bool active = true);
-
-	void InnerRender() const;
-
-public:
-	float radius;
-	uint meshRings;
-	uint quads;
-};
-
-// ============================================
-class CylinderP : public Mesh
-{
-public:
-	CylinderP(bool active = true);
-	CylinderP(float _radius, float _height, uint _sides, bool active = true);
-
-	void CalcGeometry();
-
-public:
-	float radius;
-	float height;
-	uint sides;
-};
-
-// ============================================
-class PyramidP : public Mesh
-{
-public:
-	PyramidP(bool active = true);
-};
-
-// ============================================
-class Grid : public Mesh
-{
-public:
-	Grid(bool active = true);
-	Grid(float x, float y, float z, float d, bool active = true);
-
-	void Render() const;
-
-public:
-	vec3 normal;
-	float constant;
-};
-
 #endif // !__MESH_H__

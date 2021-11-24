@@ -25,42 +25,12 @@ bool ModuleGameObjects::Start()
 
 UpdateStatus ModuleGameObjects::PostUpdate()
 {
-	Mesh* gridMesh = nullptr;
-	std::vector<Component*>::iterator gridComponent = App->scene->grid->components.begin();
-	while (gridComponent != App->scene->grid->components.end())
-	{
-		if ((*gridComponent)->type == ComponentTypes::MESH)
-		{
-			gridMesh = (Mesh*)(*gridComponent);
-			break;
-		}
-		gridComponent++;
-	}
-
-	if (gridMesh != nullptr && gridMesh->IsActive())
-	{
-		gridMesh->wire = App->renderer3D->IsWireframe();
-		gridMesh->Render();
-	}
-
 	std::vector<GameObject*>::iterator item = gameObjectList.begin();
 	while (item != gameObjectList.end())
 	{
-		Mesh* m = nullptr;
-
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
-		std::vector<Component*>::iterator c = (*item)->components.begin();
-		while (c != (*item)->components.end())
-		{
-			if ((*c)->type == ComponentTypes::MESH)
-			{
-				m = (Mesh*)(*c);
-				break;
-			}
-			c++;
-		}
-
+		Mesh* m = (*item)->GetComponent<Mesh>();
 		if (m != nullptr && m->IsActive())
 		{
 			m->wire = App->renderer3D->IsWireframe();
@@ -78,22 +48,13 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 	std::vector<GameObject*>::iterator item = parent->children.begin();
 	while (item != parent->children.end())
 	{
-		Mesh* m = nullptr;
-
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
-		std::vector<Component*>::iterator c = (*item)->components.begin();
-		while (c != (*item)->components.end())
-		{
-			if ((*c)->type == ComponentTypes::MESH) m = (Mesh*)(*c);
-			c++;
-		}
-
+		Mesh* m = (*item)->GetComponent<Mesh>();
 		if (m != nullptr && m->IsActive())
 		{
-			if (m->GetType() != MeshTypes::Primitive_Grid) m->axis = App->renderer3D->IsAxis();
-
 			m->wire = App->renderer3D->IsWireframe();
+			m->axis = App->renderer3D->IsAxis();
 			m->Render();
 		}
 		++item;

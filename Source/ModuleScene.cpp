@@ -23,10 +23,6 @@ bool ModuleScene::Init()
 	root = new GameObject("sceneRoot");
 	App->gameObjects->selectedGameObject = root;
 
-	grid = new GameObject("Grid");
-	grid->CreatePrimitive(MeshTypes::Primitive_Grid);
-	grid->SetAxis(true);
-
 	return ret;
 }
 

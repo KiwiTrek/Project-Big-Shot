@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "ModuleFileSystem.h"
 #include "ModuleImporter.h"
 #include "ModuleGameObjects.h"
 
@@ -61,8 +62,9 @@ Material* ModuleImporter::LoadTexture(const char* path)
 	ilGenImages(1, &id);
 	ilBindImage(id);
 
-	std::string name = GetFileName(path);
-	std::string newPath = UnifyPath(ASSETS_FOLDER, TEXTURES_FOLDER, name.c_str());
+	std::string name;
+	App->fileSystem->SplitFilePath(path, nullptr, &name);
+	std::string newPath = App->fileSystem->GetPathRelativeToAssets(path);
 
 	ilEnable(IL_ORIGIN_SET);
 	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
@@ -74,11 +76,30 @@ Material* ModuleImporter::LoadTexture(const char* path)
 		LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
 	}
 
-	// TODO:: Change to ilLoadL
-	if (ilLoadImage(newPath.c_str()))
+	char* data;
+	uint bytes = App->fileSystem->Load(path, &data);
+
+	if (bytes != 0)
 	{
-		if (ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+		if (ilLoadL(IL_TYPE_UNKNOWN, data, bytes))
 		{
+			ILinfo ImageInfo;
+			iluGetImageInfo(&ImageInfo);
+			if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+			{
+				iluFlipImage();
+			}
+
+			int channels = ilGetInteger(IL_IMAGE_CHANNELS);
+			if (channels == 3)
+			{
+				ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			}
+			else if (channels == 4)
+			{
+				ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			}
+
 			ILenum error = ilGetError();
 
 			if (error != IL_NO_ERROR)
@@ -100,12 +121,12 @@ Material* ModuleImporter::LoadTexture(const char* path)
 		}
 		else
 		{
-			LOG_CONSOLE("Error converting texture: %d, %s", ilGetError(), iluErrorString(ilGetError()));
+			LOG_CONSOLE("Error loading the texture from %s: %d, %s", path, ilGetError(), iluErrorString(ilGetError()));
 		}
 	}
 	else
 	{
-		LOG_CONSOLE("Error loading the texture from %s: %d, %s", path, ilGetError(), iluErrorString(ilGetError()));
+		LOG_CONSOLE("Error loading texture from %s: No bytes", path);
 	}
 
 	return texture;
@@ -113,7 +134,24 @@ Material* ModuleImporter::LoadTexture(const char* path)
 
 void ModuleImporter::ImportScene(const char* path, const char* rootName)
 {
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = nullptr;
+
+	char* buffer = nullptr;
+	uint bytesFile = App->fileSystem->Load(path, &buffer);
+
+	if (buffer == nullptr) {
+		std::string normPathShort = ASSETS_FOLDER;
+		normPathShort.append(MODELS_FOLDER);
+		normPathShort += App->fileSystem->SetNormalName(path);
+		bytesFile = App->fileSystem->Load(normPathShort.c_str(), &buffer);
+	}
+	if (buffer != nullptr) {
+		scene = aiImportFileFromMemory(buffer, bytesFile, aiProcessPreset_TargetRealtime_MaxQuality, NULL);
+	}
+	else {
+		scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+	}
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		GameObject* root = new GameObject("Empty");
@@ -150,7 +188,7 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 		g->parent = parentGameObject;
 	}
 
-	Transform* t = (Transform*)g->CreateComponent(ComponentTypes::TRANSFORM, MeshTypes::NONE, LoadTransform(n));
+	Transform* t = (Transform*)g->CreateComponent(ComponentTypes::TRANSFORM, Shape::NONE, LoadTransform(n));
 	if (t->GetScale().x >= 100.0f)
 	{
 		t->SetScale(1.0f, 1.0f, 1.0f);
@@ -197,7 +235,7 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 
 	if (texPath.length != 0)
 	{
-		std::string newPath = UnifyPath(ASSETS_FOLDER, TEXTURES_FOLDER, texPath.data);
+		std::string newPath = App->fileSystem->GetPathRelativeToAssets(texPath.data);
 		texture = LoadTexture(newPath.c_str());
 		return texture;
 	}
@@ -236,14 +274,14 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 	Mesh* m = new Mesh();
 	aiMesh* aiMesh = scene->mMeshes[*node->mMeshes];
 	m->vertexNum = aiMesh->mNumVertices;
-	m->vertices = new float[m->vertexNum * 3];
-	memcpy(m->vertices, aiMesh->mVertices, sizeof(float) * m->vertexNum * 3);
+	m->vertices.resize(aiMesh->mNumVertices);
+	memcpy(&m->vertices[0], aiMesh->mVertices, sizeof(float3) * aiMesh->mNumVertices);
 	LOG_CONSOLE("Loaded new mesh with %d vertices", m->vertexNum);
 
 	if (aiMesh->HasFaces())
 	{
 		m->indexNum = aiMesh->mNumFaces * 3;
-		m->indices = new uint[m->indexNum];
+		m->indices.resize(m->indexNum);
 		for (uint j = 0; j < aiMesh->mNumFaces; j++)
 		{
 			if (aiMesh->mFaces[j].mNumIndices != 3)
@@ -252,38 +290,37 @@ Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 			}
 			else
 			{
-				memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, sizeof(uint) * 3);
+				memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 			}
 		}
 
-		m->texCoords = new float[m->vertexNum * 2]();
-		m->colors = new float[m->indexNum * 4]();
-		m->normals = new float[aiMesh->mNumVertices * 3]();
+		if (aiMesh->HasNormals()) {
 
-		uint n = 0, tx = 0, c = 0;
+			m->normals.resize(aiMesh->mNumVertices);
+			memcpy(&m->normals[0], aiMesh->mNormals, sizeof(float3) * aiMesh->mNumVertices);
+		}
+
+		m->texCoords.resize(aiMesh->mNumVertices);
+		if (aiMesh->HasTextureCoords(0))
+		{
+			for (size_t j = 0; j < aiMesh->mNumVertices; ++j)
+			{
+				memcpy(&m->texCoords[j], &aiMesh->mTextureCoords[0][j], sizeof(float2));
+			}
+		}
+		else
+		{
+			for (size_t j = 0; j < aiMesh->mNumVertices; ++j)
+			{
+				m->texCoords.at(j).x = 0.0f;
+				m->texCoords.at(j).y = 0.0f;
+			}
+		}
+
+		m->colors = new float[m->indexNum * 4]();
+		uint c = 0;
 		for (uint v = 0; v < aiMesh->mNumVertices; v++)
 		{
-			if (aiMesh->HasNormals())
-			{
-				m->normals[n] = aiMesh->mNormals[v].x;
-				m->normals[n + 1] = aiMesh->mNormals[v].y;
-				m->normals[n + 2] = aiMesh->mNormals[v].z;
-				n += 3;
-			}
-
-			if (aiMesh->mTextureCoords[0])
-			{
-				m->texCoords[tx] = aiMesh->mTextureCoords[0][v].x;
-				m->texCoords[tx + 1] = aiMesh->mTextureCoords[0][v].y;
-				tx += 2;
-			}
-			else
-			{
-				m->texCoords[tx] = 0.0f;
-				m->texCoords[tx + 1] = 0.0f;
-				tx += 2;
-			}
-
 			if (aiMesh->HasVertexColors(v))
 			{
 				m->colors[c] = aiMesh->mColors[v]->r;
@@ -346,47 +383,4 @@ void ModuleImporter::GetAssimpVersion(int& major, int& minor, int& patch)
 	major = aiGetVersionMajor();
 	minor = aiGetVersionMinor();
 	patch = aiGetVersionRevision();
-}
-
-std::string ModuleImporter::GetFileName(const char* path)
-{
-	std::string name;
-	SplitPath(path, nullptr, &name);
-	return name;
-}
-
-void ModuleImporter::SplitPath(const char* fullPath, std::string* path, std::string* fileName)
-{
-	if (fullPath != nullptr)
-	{
-		std::string full(fullPath);
-		size_t pos_separator = full.find_last_of("\\/");
-		size_t pos_dot = full.find_last_of(".");
-
-		if (path != nullptr)
-		{
-			if (pos_separator < full.length())
-			{
-				*path = full.substr(0, pos_separator + 1).c_str();
-			}
-			else
-			{
-				path->clear();
-			}
-		}
-
-		if (fileName != nullptr && pos_separator < full.length())
-		{
-			*fileName = full.substr(pos_separator + 1, std::string::npos);
-		}
-	}
-}
-
-std::string ModuleImporter::UnifyPath(const char* path, const char* subDir, const char* name)
-{
-	std::string newPath;
-	newPath.assign(path);
-	newPath.append(subDir);
-	newPath.append(name);
-	return newPath;
 }

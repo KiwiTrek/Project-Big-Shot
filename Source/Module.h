@@ -56,7 +56,7 @@ public:
 	{
 		return true;
 	}
-	virtual const char* GetName()
+	virtual const char* Name()
 	{
 		return name.c_str();
 	}
