@@ -7,7 +7,6 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleFileSystem.h"
 #include "ModuleCamera3D.h"
-#include "ModuleViewportFrameBuffer.h"
 #include "ModuleImporter.h"
 #include "ModuleGameObjects.h"
 
@@ -17,7 +16,6 @@ Application::Application(ConsoleBuffer* _buff)
 	camera = new ModuleCamera3D(this);
 	input = new ModuleInput(this);
 	importer = new ModuleImporter(this);
-	viewportBuffer = new ModuleViewportFrameBuffer(this);
 	scene = new ModuleScene(this);
 	gameObjects = new ModuleGameObjects(this);
 	gui = new ModuleGuiManager(this);
@@ -30,7 +28,6 @@ Application::Application(ConsoleBuffer* _buff)
 	AddModule(input);
 	AddModule(importer);
 
-	//AddModule(viewportBuffer);
 	AddModule(scene);
 	AddModule(gameObjects);
 

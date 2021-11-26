@@ -10,7 +10,6 @@ class ModuleWindow;
 class ModuleInput;
 class ModuleScene;
 class ModuleRenderer3D;
-class ModuleViewportFrameBuffer;
 class ModuleCamera3D;
 class ModuleFileSystem;
 class ModuleImporter;
@@ -56,7 +55,6 @@ public:
 	ModuleWindow* window = nullptr;
 	ModuleInput* input = nullptr;
 	ModuleScene* scene = nullptr;
-	ModuleViewportFrameBuffer* viewportBuffer = nullptr;
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
 	ModuleFileSystem* fileSystem = nullptr;
