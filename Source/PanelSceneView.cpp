@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleGuiManager.h"
 
-#include "ModuleViewportFrameBuffer.h"
 #include "ModuleGameObjects.h"
 #include "ModuleCamera3D.h"
 
@@ -27,7 +26,7 @@ UpdateStatus PanelSceneView::Update()
     }
     lastViewportSize.x = viewportSize.x;
     lastViewportSize.y = viewportSize.y;
-    ImGui::Image((ImTextureID)App->viewportBuffer->texture, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+    //ImGui::Image((ImTextureID)App->viewportBuffer->texture, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
     ImGui::End();
 	return UpdateStatus::UPDATE_CONTINUE;
 }
