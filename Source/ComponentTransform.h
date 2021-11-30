@@ -3,12 +3,12 @@
 
 class GameObject;
 
-class Transform : public Component
+class ComponentTransform : public Component
 {
 public:
-	Transform(bool active = true);
-	Transform(float3 p, Quat r, float3 s, bool active = true);
-	~Transform();
+	ComponentTransform(bool active = true);
+	ComponentTransform(float3 p, Quat r, float3 s, bool active = true);
+	~ComponentTransform();
 
 	void DrawInspector();
 	void Reset();
@@ -27,6 +27,9 @@ public:
 	float3 GetScale();
 	float4x4 GetGlobalTransform();
 	float4x4 GetLocalTransform();
+
+	//void OnLoad(const JSONReader& reader);
+	//void OnSave(JSONWriter& writer) const;
 
 private:
 	float3 pos;

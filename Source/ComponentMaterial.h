@@ -6,42 +6,25 @@
 
 typedef unsigned char GLubyte;
 class GameObject;
+class ResourceMaterial;
 
-class Material : public Component
+class ComponentMaterial : public Component
 {
 public:
-	Material(bool active = true);
-	Material(std::string n, std::string p, uint texId, uint texBuf, int f, uint fUnsigned, GLubyte* data, int w, int h, bool active = true);
-	~Material();
+	ComponentMaterial(bool active = true);
+	~ComponentMaterial();
 
-	bool SetTexture(Material* texture);
-	bool SetTexture(Color c);
 	void DrawInspector();
+	void BindTexture(bool usingCheckers);
 
-private:
-	void SetDefaultTexture();
-	GLubyte* BindTexture(GLubyte* texData = nullptr);
-	//void BindTexture(Color c);
-	//GLubyte* CheckersTexture();
-	//GLubyte* ColorTexture(Color c);
+	//void OnLoad(const JSONReader& reader);
+	//void OnSave(JSONWriter& writer) const;
 
 public:
-	std::string name;
-	std::string path;
+	bool usingCheckers = false;
+	uint checkersId = -1;
 
-	uint id = -1;
-	uint textureBuf = -1;
-
-	int format = -1;
-	uint formatUnsigned = -1;
-	GLubyte* data = nullptr;
-	int width = -1;
-	int height = -1;
-
-	bool checkers = false;
-	bool usingColor = false;
-
-	Color diffuse;
+	ResourceMaterial* material;
 };
 
 #endif //!__COMPONENT_MATERIAL_H__

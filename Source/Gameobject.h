@@ -20,7 +20,7 @@ public:
 	void Update();
 	bool CleanUp();
 
-	Component* CreateComponent(ComponentTypes cType, Shape mType = Shape::NONE, Transform* t = nullptr);
+	Component* CreateComponent(ComponentTypes cType, ComponentTransform* t = nullptr);
 	void CreateComponent(Component* c);
 	bool RemoveComponent(Component* c);
 
@@ -32,7 +32,10 @@ public:
 	void UpdateChildrenTransforms();
 
 	void SetAxis(bool value);
-	void CreatePrimitive(Shape type);
+
+	void OnLoad(const JSONReader& reader);
+	void OnSave(JSONWriter& writer) const;
+
 	template<class T> T* GetComponent()
 	{
 		T* component = nullptr;
@@ -50,6 +53,7 @@ public:
 public:
 	bool active;
 	std::string name;
+	uint uid;
 	std::vector<Component*> components;
 	std::vector<GameObject*> children;
 	GameObject* parent;

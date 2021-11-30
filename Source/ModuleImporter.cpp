@@ -2,6 +2,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleImporter.h"
 #include "ModuleGameObjects.h"
+#include "ModuleResources.h"
 
 #include "il.h"
 #include "ilu.h"
@@ -56,80 +57,92 @@ bool ModuleImporter::CleanUp()
 	return true;
 }
 
-Material* ModuleImporter::LoadTexture(const char* path)
+ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 {
-	uint id = 0;
-	ilGenImages(1, &id);
-	ilBindImage(id);
-
 	std::string name;
 	App->fileSystem->SplitFilePath(path, nullptr, &name);
 	std::string newPath = App->fileSystem->GetPathRelativeToAssets(path);
 
-	ilEnable(IL_ORIGIN_SET);
-	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-
-	Material* texture = new Material();
-
-	if (id == 0)
+	UID uid = App->resources->Exists(Resource::Type::MATERIAL, newPath.c_str());
+	if (uid == -1)
 	{
-		LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
-	}
+		uint id = 0;
+		ilGenImages(1, &id);
+		ilBindImage(id);
 
-	char* data;
-	uint bytes = App->fileSystem->Load(path, &data);
+		ilEnable(IL_ORIGIN_SET);
+		ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 
-	if (bytes != 0)
-	{
-		if (ilLoadL(IL_TYPE_UNKNOWN, data, bytes))
+		ResourceMaterial* texture = (ResourceMaterial*)App->resources->CreateNewResource(Resource::Type::MATERIAL, Shape::NONE, newPath.c_str());
+
+		if (id == 0)
 		{
-			ILinfo ImageInfo;
-			iluGetImageInfo(&ImageInfo);
-			if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
-			{
-				iluFlipImage();
-			}
+			LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
+		}
 
-			int channels = ilGetInteger(IL_IMAGE_CHANNELS);
-			if (channels == 3)
-			{
-				ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-			}
-			else if (channels == 4)
-			{
-				ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-			}
+		char* data;
+		uint bytes = App->fileSystem->Load(path, &data);
 
-			ILenum error = ilGetError();
-
-			if (error != IL_NO_ERROR)
+		if (bytes != 0)
+		{
+			if (ilLoadL(IL_TYPE_UNKNOWN, data, bytes))
 			{
-				LOG_CONSOLE("Texture error: %d, %s", error, iluErrorString(error));
+				ILinfo ImageInfo;
+				iluGetImageInfo(&ImageInfo);
+				if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+				{
+					iluFlipImage();
+				}
+
+				int channels = ilGetInteger(IL_IMAGE_CHANNELS);
+				if (channels == 3)
+				{
+					ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+				}
+				else if (channels == 4)
+				{
+					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+				}
+
+				ILenum error = ilGetError();
+
+				if (error != IL_NO_ERROR)
+				{
+					LOG_CONSOLE("Material error: %d, %s", error, iluErrorString(error));
+				}
+				else
+				{
+					LOG_CONSOLE("Material loaded successfully from: %s", newPath.c_str());
+
+					texture->texId = id;
+					texture->name = name;
+					texture->data = ilGetData();
+					texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+					texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+					texture->format = texture->formatUnsigned = ilGetInteger(IL_IMAGE_FORMAT);
+					texture->path = newPath.c_str();
+				}
 			}
 			else
 			{
-				LOG_CONSOLE("Texture loaded successfully from: %s", newPath.c_str());
-
-				texture->id = id;
-				texture->name = name;
-				texture->data = ilGetData();
-				texture->width = ilGetInteger(IL_IMAGE_WIDTH);
-				texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
-				texture->format = texture->formatUnsigned = ilGetInteger(IL_IMAGE_FORMAT);
-				texture->path = newPath.c_str();
+				LOG_CONSOLE("Error loading the material from %s: %d, %s", path, ilGetError(), iluErrorString(ilGetError()));
 			}
 		}
 		else
 		{
-			LOG_CONSOLE("Error loading the texture from %s: %d, %s", path, ilGetError(), iluErrorString(ilGetError()));
+			LOG_CONSOLE("Error loading material from %s: No bytes", path);
 		}
+		return texture;
 	}
 	else
 	{
-		LOG_CONSOLE("Error loading texture from %s: No bytes", path);
+		ResourceMaterial* rm = (ResourceMaterial*)App->resources->RequestResource(uid);
+		rm->referenceCount++;
+		LOG_CONSOLE("Material already exists with uid : %d, pulling from resources.", (int)uid);
+		return rm;
 	}
 
-	return texture;
+	return nullptr;
 }
 
 void ModuleImporter::ImportScene(const char* path, const char* rootName)
@@ -188,7 +201,7 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 		g->parent = parentGameObject;
 	}
 
-	Transform* t = (Transform*)g->CreateComponent(ComponentTypes::TRANSFORM, Shape::NONE, LoadTransform(n));
+	ComponentTransform* t = (ComponentTransform*)g->CreateComponent(ComponentTypes::TRANSFORM, LoadTransform(n));
 	if (t->GetScale().x >= 100.0f)
 	{
 		t->SetScale(1.0f, 1.0f, 1.0f);
@@ -200,12 +213,14 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 	{
 		g->name = n->mName.C_Str();
 
-		Material* mat = (Material*)g->CreateComponent(ComponentTypes::MATERIAL);
-		mat->SetTexture(LoadTexture(scene, n));
+		ComponentMaterial* mat = (ComponentMaterial*)g->CreateComponent(ComponentTypes::MATERIAL);
+		mat->material = LoadTexture(scene, n);
+		mat->BindTexture(mat->usingCheckers);
 
-		Mesh* mesh = ImportModel(scene, n);
-		g->CreateComponent(mesh);
-		mesh->GenerateBuffers();
+		ComponentMesh* mesh = (ComponentMesh*)g->CreateComponent(ComponentTypes::MESH);
+		ResourceMesh* rMesh = ImportModel(scene, n);
+		rMesh->GenerateBuffers();
+		mesh->mesh = rMesh;
 	}
 
 	for (size_t i = 0; i < n->mNumChildren; i++)
@@ -216,7 +231,7 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 	return g;
 }
 
-Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
+ResourceMaterial* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 {
 	aiMaterial* material = nullptr;
 	aiString texPath;
@@ -231,7 +246,7 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 		*/
 	}
 
-	Material* texture = new Material();
+	ResourceMaterial* texture = nullptr;
 
 	if (texPath.length != 0)
 	{
@@ -246,12 +261,24 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 		aiColor4D diffuse;
 		if (material != nullptr && aiReturn::AI_SUCCESS == aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &diffuse))
 		{
-			uint id = 0;
-			ilGenImages(1, &id);
-			ilBindImage(id);
-			texture->id = id;
-			texture->usingColor = true;
-			texture->diffuse = Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+			Color diff = Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+			UID uid = App->resources->Exists(Resource::Type::MATERIAL, nullptr, false, diff);
+			if (uid == -1)
+			{
+				texture = (ResourceMaterial*)App->resources->CreateNewResource(Resource::Type::MATERIAL,Shape::NONE, nullptr, true, diff);
+				uint id = 0;
+				ilGenImages(1, &id);
+				ilBindImage(id);
+				texture->texId = id;
+				LOG_CONSOLE("Material color loaded successfully.");
+			}
+			else
+			{
+				ResourceMaterial* rm = (ResourceMaterial*)App->resources->RequestResource(uid);
+				rm->referenceCount++;
+				LOG_CONSOLE("Material color already exists with uid : %d, pulling from resources.", (int)uid);
+				return rm;
+			}
 			//----------
 			//uint id = 0;
 			//ilGenImages(1, &id);
@@ -269,81 +296,71 @@ Material* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 	return nullptr;
 }
 
-Mesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
+ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 {
-	Mesh* m = new Mesh();
 	aiMesh* aiMesh = scene->mMeshes[*node->mMeshes];
-	m->vertexNum = aiMesh->mNumVertices;
-	m->vertices.resize(aiMesh->mNumVertices);
-	memcpy(&m->vertices[0], aiMesh->mVertices, sizeof(float3) * aiMesh->mNumVertices);
-	LOG_CONSOLE("Loaded new mesh with %d vertices", m->vertexNum);
-
-	if (aiMesh->HasFaces())
+	UID uid = App->resources->Exists(Resource::Type::MESH, *aiMesh);
+	if (uid == -1)
 	{
-		m->indexNum = aiMesh->mNumFaces * 3;
-		m->indices.resize(m->indexNum);
-		for (uint j = 0; j < aiMesh->mNumFaces; j++)
+		ResourceMesh* m = (ResourceMesh*)App->resources->CreateNewResource(Resource::Type::MESH);
+		m->vertexNum = aiMesh->mNumVertices;
+		m->vertices.resize(aiMesh->mNumVertices);
+		memcpy(&m->vertices[0], aiMesh->mVertices, sizeof(float3) * aiMesh->mNumVertices);
+		LOG_CONSOLE("Loaded new mesh with %d vertices", m->vertexNum);
+
+		if (aiMesh->HasFaces())
 		{
-			if (aiMesh->mFaces[j].mNumIndices != 3)
+			m->indexNum = aiMesh->mNumFaces * 3;
+			m->indices.resize(m->indexNum);
+			for (uint j = 0; j < aiMesh->mNumFaces; j++)
 			{
-				LOG_CONSOLE("ERROR: Geometry face with != 3 indices!");
+				if (aiMesh->mFaces[j].mNumIndices != 3)
+				{
+					LOG_CONSOLE("ERROR: Geometry face with != 3 indices!");
+				}
+				else
+				{
+					memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, 3 * sizeof(uint));
+				}
+			}
+
+			if (aiMesh->HasNormals()) {
+
+				m->normals.resize(aiMesh->mNumVertices);
+				memcpy(&m->normals[0], aiMesh->mNormals, sizeof(float3) * aiMesh->mNumVertices);
+			}
+
+			m->texCoords.resize(aiMesh->mNumVertices);
+			if (aiMesh->HasTextureCoords(0))
+			{
+				for (size_t j = 0; j < aiMesh->mNumVertices; ++j)
+				{
+					memcpy(&m->texCoords[j], &aiMesh->mTextureCoords[0][j], sizeof(float2));
+				}
 			}
 			else
 			{
-				memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, 3 * sizeof(uint));
+				for (size_t j = 0; j < aiMesh->mNumVertices; ++j)
+				{
+					m->texCoords.at(j).x = 0.0f;
+					m->texCoords.at(j).y = 0.0f;
+				}
 			}
+			LOG_CONSOLE("Mesh copied successfully.");
+			return m;
 		}
-
-		if (aiMesh->HasNormals()) {
-
-			m->normals.resize(aiMesh->mNumVertices);
-			memcpy(&m->normals[0], aiMesh->mNormals, sizeof(float3) * aiMesh->mNumVertices);
-		}
-
-		m->texCoords.resize(aiMesh->mNumVertices);
-		if (aiMesh->HasTextureCoords(0))
-		{
-			for (size_t j = 0; j < aiMesh->mNumVertices; ++j)
-			{
-				memcpy(&m->texCoords[j], &aiMesh->mTextureCoords[0][j], sizeof(float2));
-			}
-		}
-		else
-		{
-			for (size_t j = 0; j < aiMesh->mNumVertices; ++j)
-			{
-				m->texCoords.at(j).x = 0.0f;
-				m->texCoords.at(j).y = 0.0f;
-			}
-		}
-
-		m->colors = new float[m->indexNum * 4]();
-		uint c = 0;
-		for (uint v = 0; v < aiMesh->mNumVertices; v++)
-		{
-			if (aiMesh->HasVertexColors(v))
-			{
-				m->colors[c] = aiMesh->mColors[v]->r;
-				m->colors[c + 1] = aiMesh->mColors[v]->g;
-				m->colors[c + 2] = aiMesh->mColors[v]->b;
-				m->colors[c + 3] = aiMesh->mColors[v]->a;
-				c += 4;
-			}
-			else
-			{
-				m->colors[c] = 0.0f;
-				m->colors[c + 1] = 0.0f;
-				m->colors[c + 2] = 0.0f;
-				m->colors[c + 3] = 0.0f;
-				c += 4;
-			}
-		}
-		return m;
+	}
+	else
+	{
+		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(uid);
+		rm->referenceCount++;
+		LOG_CONSOLE("Mesh already exists, pulling from resources.");
+		return rm;
 	}
 	return nullptr;
 }
 
-Transform* ModuleImporter::LoadTransform(aiNode* n)
+ComponentTransform* ModuleImporter::LoadTransform(aiNode* n)
 {
 	aiVector3D aiPos, aiScale;
 	aiQuaternion aiRot;
@@ -369,7 +386,7 @@ Transform* ModuleImporter::LoadTransform(aiNode* n)
 		scale = { scale.x * aiScale.x, scale.y * aiScale.y, scale.z * aiScale.z };
 	}
 
-	Transform* t = new Transform();
+	ComponentTransform* t = new ComponentTransform();
 	t->SetPos(pos);
 	t->SetRot(rot);
 	t->SetScale(scale);

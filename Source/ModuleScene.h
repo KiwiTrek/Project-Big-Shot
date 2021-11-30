@@ -22,6 +22,8 @@ public:
 
 	GameObject* GetSceneRoot() { return root; }
 	bool CleanUp();
+	void Load(std::string scene);
+	void Save(std::string scene);
 
 public:
 	GameObject* grid;

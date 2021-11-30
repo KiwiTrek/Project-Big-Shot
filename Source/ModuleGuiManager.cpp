@@ -2,6 +2,7 @@
 #include "RenderGlobals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleResources.h"
 
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
@@ -228,60 +229,12 @@ UpdateStatus ModuleGuiManager::MenuBar()
 
 			if (ImGui::BeginMenu("GameObject"))
 			{
-				// TODO: Cube_001, Cube_002...
-				if (ImGui::MenuItem("Cube"))
-				{
-					GameObject* c = new GameObject("Cube");
-					c->CreatePrimitive(Shape::CUBE);
-					c->SetAxis(true);
-					App->gameObjects->AddGameobject(c);
-					App->gameObjects->selectedGameObject = c;
-				}
-
-				if (ImGui::MenuItem("Plane"))
-				{
-					GameObject* pl = new GameObject("Plane");
-					pl->CreatePrimitive(Shape::PLANE);
-					pl->SetAxis(true);
-					App->gameObjects->AddGameobject(pl);
-					App->gameObjects->selectedGameObject = pl;
-				}
-
-				if (ImGui::MenuItem("Sphere"))
-				{
-					GameObject* s = new GameObject("Sphere");
-					s->CreatePrimitive(Shape::SPHERE);
-					s->SetAxis(true);
-					App->gameObjects->AddGameobject(s);
-					App->gameObjects->selectedGameObject = s;
-				}
-
-				if (ImGui::MenuItem("Cylinder"))
-				{
-					GameObject* cyl = new GameObject("Cylinder");
-					cyl->CreatePrimitive(Shape::CYLINDER);
-					cyl->SetAxis(true);
-					App->gameObjects->AddGameobject(cyl);
-					App->gameObjects->selectedGameObject = cyl;
-				}
-
-				if (ImGui::MenuItem("Cone"))
-				{
-					GameObject* c = new GameObject("Cone");
-					c->CreatePrimitive(Shape::CONE);
-					c->SetAxis(true);
-					App->gameObjects->AddGameobject(c);
-					App->gameObjects->selectedGameObject = c;
-				}
-
-				if (ImGui::MenuItem("Torus"))
-				{
-					GameObject* t = new GameObject("Torus");
-					t->CreatePrimitive(Shape::TORUS);
-					t->SetAxis(true);
-					App->gameObjects->AddGameobject(t);
-					App->gameObjects->selectedGameObject = t;
-				}
+				if (ImGui::MenuItem("Cube")) CreateShape(Shape::CUBE);
+				if (ImGui::MenuItem("Sphere")) CreateShape(Shape::SPHERE);
+				if (ImGui::MenuItem("Cylinder")) CreateShape(Shape::CYLINDER);
+				if (ImGui::MenuItem("Torus")) CreateShape(Shape::TORUS);
+				if (ImGui::MenuItem("Plane")) CreateShape(Shape::PLANE);
+				if (ImGui::MenuItem("Cone")) CreateShape(Shape::CONE);
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();
@@ -313,6 +266,46 @@ UpdateStatus ModuleGuiManager::MenuBar()
 
 	ImGui::EndMainMenuBar();
 	return UpdateStatus::UPDATE_CONTINUE;
+}
+
+void ModuleGuiManager::CreateShape(Shape shape)
+{
+	std::string name;
+	ResourceMesh* rMesh = (ResourceMesh*)App->resources->GetShape(shape);
+	switch (shape)
+	{
+	case Shape::CUBE:
+		name = "Cube_";
+		break;
+	case Shape::SPHERE:
+		name = "Sphere_";
+		break;
+	case Shape::CYLINDER:
+		name = "Cylinder_";
+		break;
+	case Shape::TORUS:
+		name = "Torus_";
+		break;
+	case Shape::PLANE:
+		name = "Plane_";
+		break;
+	case Shape::CONE:
+		name = "Cone_";
+		break;
+	}
+	name += (int)rMesh->referenceCount;
+	GameObject* c = new GameObject(name);
+	ComponentMaterial* mat = (ComponentMaterial*)c->CreateComponent(ComponentTypes::MATERIAL);
+	mat->usingCheckers = true;
+	mat->BindTexture(mat->usingCheckers);
+
+	ComponentMesh* m = (ComponentMesh*)c->CreateComponent(ComponentTypes::MESH);
+	m->mesh = rMesh;
+	rMesh->GenerateBuffers();
+
+	c->SetAxis(true);
+	App->gameObjects->AddGameobject(c);
+	App->gameObjects->selectedGameObject = c;
 }
 
 void ModuleGuiManager::LogConsole(const char* buff)

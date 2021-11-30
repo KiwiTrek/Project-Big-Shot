@@ -111,7 +111,7 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 
 	if (App->gameObjects->selectedGameObject != nullptr && App->input->GetKey(SDL_SCANCODE_F) == KeyState::KEY_DOWN)
 	{
-		Transform* t = App->gameObjects->selectedGameObject->GetComponent<Transform>();
+		ComponentTransform* t = App->gameObjects->selectedGameObject->GetComponent<ComponentTransform>();
 		newPos = vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z);
 		LookAt(vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z));
 	}
@@ -166,7 +166,7 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 				position = reference + z * length(position);
 				currentDist = length(position);
 
-				float3 focusedPos = App->gameObjects->selectedGameObject->GetComponent<Transform>()->GetPos();
+				float3 focusedPos = App->gameObjects->selectedGameObject->GetComponent<ComponentTransform>()->GetPos();
 				LookAt(vec3(focusedPos.x, focusedPos.y, focusedPos.z));
 			}
 		}

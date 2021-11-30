@@ -1,9 +1,19 @@
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
+
+
 // Warning disabled ---
-#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4005 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4006 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4009 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4099 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4018 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4305 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4244 ) // Warning that exceptions are disabled
 #pragma warning( disable : 4530 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4996 ) // Warning that exceptions are disabled
 
 #include <windows.h>
 #include <stdio.h>
@@ -51,10 +61,10 @@ const char* Log(const char file[], int line, const char* format, ...);
 		 }\
 	 }
 
+typedef unsigned int UID;
 typedef unsigned int uint;
 typedef unsigned __int32 uint32;
 typedef unsigned __int64 uint64;
-typedef unsigned long long UID;
 typedef unsigned short ushort;
 
 enum class UpdateStatus

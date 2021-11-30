@@ -166,64 +166,39 @@ bool PanelHierarchy::RightClickMenu()
 
 				if (ImGui::BeginMenu("GameObject"))
 				{
-					// TODO: Cube_001, Cube_002...
 					if (ImGui::MenuItem("Cube"))
 					{
-						GameObject* c = new GameObject("Cube");
-						c->CreatePrimitive(Shape::CUBE);
-						c->SetAxis(true);
-						App->gameObjects->AddGameobject(c);
-						App->gameObjects->selectedGameObject = c;
-						ImGui::CloseCurrentPopup();
-					}
-
-					if (ImGui::MenuItem("Plane"))
-					{
-						GameObject* pl = new GameObject("Plane");
-						pl->CreatePrimitive(Shape::PLANE);
-						pl->SetAxis(true);
-						App->gameObjects->AddGameobject(pl);
-						App->gameObjects->selectedGameObject = pl;
+						App->gui->CreateShape(Shape::CUBE);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Sphere"))
 					{
-						GameObject* s = new GameObject("Sphere");
-						s->CreatePrimitive(Shape::SPHERE);
-						s->SetAxis(true);
-						App->gameObjects->AddGameobject(s);
-						App->gameObjects->selectedGameObject = s;
+						App->gui->CreateShape(Shape::SPHERE);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Cylinder"))
 					{
-						GameObject* cyl = new GameObject("Cylinder");
-						cyl->CreatePrimitive(Shape::CYLINDER);
-						cyl->SetAxis(true);
-						App->gameObjects->AddGameobject(cyl);
-						App->gameObjects->selectedGameObject = cyl;
-						ImGui::CloseCurrentPopup();
-					}
-
-					if (ImGui::MenuItem("Cone"))
-					{
-						GameObject* c = new GameObject("Cone");
-						c->CreatePrimitive(Shape::CONE);
-						c->SetAxis(true);
-						App->gameObjects->AddGameobject(c);
-						App->gameObjects->selectedGameObject = c;
+						App->gui->CreateShape(Shape::CYLINDER);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Torus"))
 					{
-						GameObject* t = new GameObject("Torus");
-						t->CreatePrimitive(Shape::CONE);
-						t->SetAxis(true);
-						App->gameObjects->AddGameobject(t);
-						App->gameObjects->selectedGameObject = t;
+						App->gui->CreateShape(Shape::TORUS);
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (ImGui::MenuItem("Plane"))
+					{
+						App->gui->CreateShape(Shape::PLANE);
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (ImGui::MenuItem("Cone"))
+					{
+						App->gui->CreateShape(Shape::CONE);
 						ImGui::CloseCurrentPopup();
 					}
 					ImGui::EndMenu();

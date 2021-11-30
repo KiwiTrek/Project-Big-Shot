@@ -76,6 +76,9 @@
     <Filter Include="Sources\Tools\rapidjson\msinttypes">
       <UniqueIdentifier>{688cbd24-15bb-485d-b08f-ec7816472019}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GameObjects\Resources">
+      <UniqueIdentifier>{3e3a4bf3-0a0f-4011-9e8d-96ae3d835174}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -684,6 +687,18 @@
     <ClInclude Include="par_shapes.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleResources.h">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Sources\GameObjects\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMaterial.h">
+      <Filter>Sources\GameObjects\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Sources\GameObjects\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -922,6 +937,15 @@
     </ClCompile>
     <ClCompile Include="par_shapes.cpp">
       <Filter>Sources\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleResources.cpp">
+      <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMaterial.cpp">
+      <Filter>Sources\GameObjects\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMesh.cpp">
+      <Filter>Sources\GameObjects\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

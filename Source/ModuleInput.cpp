@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleFileSystem.h"
 #include "ModuleImporter.h"
+#include "ModuleResources.h"
 #include "ModuleGameObjects.h"
 #include "ModuleScene.h"
 
@@ -147,6 +148,7 @@ UpdateStatus ModuleInput::PreUpdate()
 		{
 			std::string tmp;
 			tmp.assign(e.drop.file);
+			//App->fileSystem->Save(tmp.c_str(), e.drop.file, sizeof(e.drop.file));
 			if (tmp.empty() != true)
 			{
 				if (tmp.find(".fbx") != std::string::npos || tmp.find(".FBX") != std::string::npos)
@@ -165,26 +167,60 @@ UpdateStatus ModuleInput::PreUpdate()
 				}
 				else if (tmp.find(".png") != std::string::npos || tmp.find(".dds") != std::string::npos)
 				{
-					if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
+					std::string fileName;
+					App->fileSystem->SplitFilePath(tmp.c_str(), nullptr, &fileName);
+					std::string pathName = fileName;
+					if (tmp.find(".png") != std::string::npos)
 					{
-						Material* mat = App->gameObjects->selectedGameObject->GetComponent<Material>();
+						pathName.append(".png");
+					}
+					else if (tmp.find(".dds") != std::string::npos)
+					{
+						pathName.append(".dds");
+					}
 
-						if (mat != nullptr)
+					if (App->fileSystem->Exists(pathName))
+					{
+						UID uid = -1;
+						uid = App->resources->Exists(Resource::Type::MATERIAL, fileName.c_str());
+						if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 						{
-							mat->SetTexture(App->importer->LoadTexture(tmp.c_str()));
+							ComponentMaterial* mat = App->gameObjects->selectedGameObject->GetComponent<ComponentMaterial>();
+
+							if (mat != nullptr)
+							{
+								if (uid == -1)
+								{
+									mat->material = App->importer->LoadTexture(pathName.c_str());
+									mat->material->name = fileName;
+									mat->BindTexture(mat->usingCheckers);
+								}
+								else
+								{
+									mat->material = (ResourceMaterial*)App->resources->RequestResource(uid);
+								}
+							}
+						}
+						else
+						{
+							if (App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
+							{
+								LOG_CONSOLE("Error: Cannot assign material to scene root. Select object containing component Mesh");
+							}
+							else
+							{
+								LOG_CONSOLE("Error: No mesh component detected in selected Game Object. Consider selecting children");
+							}
 						}
 					}
 					else
 					{
-						if (App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
-						{
-							LOG_CONSOLE("Error: Cannot assign material to scene root. Select object containing component Mesh");
-						}
-						else
-						{
-							LOG_CONSOLE("Error: No mesh component detected in selected Game Object. Consider selecting children");
-						}
+						LOG_CONSOLE("Error: Cannot assign material from outside Assets folder. Put it inside Assets/Resources/Materials");
 					}
+				}
+				else
+				{
+					LOG_CONSOLE("File format selected not supported.");
 				}
 			}
 			break;

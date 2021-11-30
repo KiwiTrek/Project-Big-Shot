@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Panel.h"
+#include "ResourceMesh.h"
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -43,6 +44,7 @@ public:
 	UpdateStatus PostUpdate();
 	bool CleanUp();
 
+	void CreateShape(Shape shape);
 	void AddPanel(Panel* panel);
 	void SetupStyle();
 	UpdateStatus MenuBar();

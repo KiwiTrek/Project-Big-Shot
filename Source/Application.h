@@ -14,6 +14,7 @@ class ModuleCamera3D;
 class ModuleFileSystem;
 class ModuleImporter;
 class ModuleGameObjects;
+class ModuleResources;
 
 class Application
 {
@@ -61,6 +62,7 @@ public:
 	ModuleGuiManager* gui = nullptr;
 	ModuleImporter* importer = nullptr;
 	ModuleGameObjects* gameObjects = nullptr;
+	ModuleResources* resources = nullptr;
 
 	ConsoleBuffer* buff;
 

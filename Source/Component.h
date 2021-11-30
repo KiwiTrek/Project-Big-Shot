@@ -4,6 +4,13 @@
 #include "Globals.h"
 #include "imgui.h"
 
+//JSON
+#include "prettywriter.h"
+#include "document.h"
+
+typedef rapidjson::PrettyWriter<rapidjson::StringBuffer> JSONWriter;
+typedef rapidjson::Value JSONReader;
+
 class GameObject;
 
 enum class ComponentTypes
@@ -30,6 +37,8 @@ public:
 
 	virtual bool IsActive() { return active; }
 	virtual void ToggleActive() { active = !active; }
+	//virtual void OnLoad(const JSONReader& reader);
+	//virtual void OnSave(JSONWriter& writer) const;
 
 public:
 	ComponentTypes type = ComponentTypes::NOT_ASSIGNED;

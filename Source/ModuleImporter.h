@@ -4,11 +4,14 @@
 #include "Module.h"
 #include "SDL.h"
 #include "Gameobject.h"
+#include "ResourceMaterial.h"
+#include "ResourceMesh.h"
 
 class Application;
 struct aiMesh;
 struct aiScene;
 struct aiNode;
+class ResourceMaterial;
 
 class ModuleImporter : public Module
 {
@@ -22,12 +25,12 @@ public:
 
 	void GetAssimpVersion(int& major, int& minor, int& patch);
 	void ImportScene(const char* path, const char* rootName);
-	Material* LoadTexture(const char* path);
-	Material* LoadTexture(const aiScene* scene, aiNode* n);
-	Transform* LoadTransform(aiNode* n);
+	ResourceMaterial* LoadTexture(const aiScene* scene, aiNode* n);
+	ResourceMaterial* LoadTexture(const char* path);
+	ComponentTransform* LoadTransform(aiNode* n);
 
 private:
-	Mesh* ImportModel(const aiScene* scene, aiNode* node);
+	ResourceMesh* ImportModel(const aiScene* scene, aiNode* node);
 	GameObject* ImportChild(const aiScene* scene, aiNode* n, aiNode* parentN, GameObject* parentGameObject, const char* rootName = nullptr);
 };
 

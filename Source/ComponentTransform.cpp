@@ -1,6 +1,6 @@
 #include "Gameobject.h"
 
-Transform::Transform(bool active) : Component(type, active)
+ComponentTransform::ComponentTransform(bool active) : Component(type, active)
 {
 	type = ComponentTypes::TRANSFORM;
 
@@ -14,7 +14,7 @@ Transform::Transform(bool active) : Component(type, active)
 	gParentTransform = float4x4::identity;
 }
 
-Transform::Transform(float3 p, Quat r, float3 s, bool active) : Component(type, active)
+ComponentTransform::ComponentTransform(float3 p, Quat r, float3 s, bool active) : Component(type, active)
 {
 	type = ComponentTypes::TRANSFORM;
 
@@ -28,7 +28,7 @@ Transform::Transform(float3 p, Quat r, float3 s, bool active) : Component(type, 
 	gParentTransform = float4x4::identity;
 }
 
-Transform::~Transform()
+ComponentTransform::~ComponentTransform()
 {
 	pos.zero;
 	rot.identity;
@@ -40,7 +40,7 @@ Transform::~Transform()
 	gParentTransform.zero;
 }
 
-void Transform::Reset()
+void ComponentTransform::Reset()
 {
 	pos = float3::zero;
 	rot = Quat::identity;
@@ -51,26 +51,26 @@ void Transform::Reset()
 	owner->UpdateChildrenTransforms();
 }
 
-void Transform::UpdateGlobalTransform()
+void ComponentTransform::UpdateGlobalTransform()
 {
 	UpdateLocalTransform();
 	gTransform = gParentTransform * lTransform;
 }
 
-void Transform::UpdateGlobalTransform(float4x4 pGlobalTransform)
+void ComponentTransform::UpdateGlobalTransform(float4x4 pGlobalTransform)
 {
 	UpdateLocalTransform();
 	gParentTransform = pGlobalTransform;
 	gTransform = gParentTransform * lTransform;
 }
 
-void Transform::UpdateLocalTransform()
+void ComponentTransform::UpdateLocalTransform()
 {
 	lTransform = float4x4::FromTRS(pos, rot, scale);
 	eulerRot = rot.ToEulerXYZ() * RADTODEG;
 }
 
-void Transform::DrawInspector()
+void ComponentTransform::DrawInspector()
 {
 	if (owner->parent != nullptr && ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -112,57 +112,67 @@ void Transform::DrawInspector()
 	}
 }
 
-float4x4 Transform::GetGlobalTransform()
+float4x4 ComponentTransform::GetGlobalTransform()
 {
 	return gTransform;
 }
 
-float4x4 Transform::GetLocalTransform()
+float4x4 ComponentTransform::GetLocalTransform()
 {
 	return lTransform;
 }
 
-void Transform::SetPos(float x, float y, float z)
+void ComponentTransform::SetPos(float x, float y, float z)
 {
 	pos.Set(x, y, z);
 }
 
-void Transform::SetPos(float3 p)
+void ComponentTransform::SetPos(float3 p)
 {
 	pos = p;
 }
 
-float3 Transform::GetPos()
+float3 ComponentTransform::GetPos()
 {
 	return pos;
 }
 
-void Transform::SetRot(float x, float y, float z)
+void ComponentTransform::SetRot(float x, float y, float z)
 {
 	rot = Quat::FromEulerXYZ(x * DEGTORAD, y * DEGTORAD, z * DEGTORAD);
 }
 
-void Transform::SetRot(Quat q)
+void ComponentTransform::SetRot(Quat q)
 {
 	rot = q;
 }
 
-Quat Transform::GetRot()
+Quat ComponentTransform::GetRot()
 {
 	return rot;
 }
 
-void Transform::SetScale(float x, float y, float z)
+void ComponentTransform::SetScale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
 }
 
-void Transform::SetScale(float3 s)
+void ComponentTransform::SetScale(float3 s)
 {
 	scale = s;
 }
 
-float3 Transform::GetScale()
+float3 ComponentTransform::GetScale()
 {
 	return scale;
 }
+
+//void ComponentTransform::OnLoad(const JSONReader& reader)
+//{
+//
+//}
+//
+//void ComponentTransform::OnSave(JSONWriter& writer) const
+//{
+//
+//}

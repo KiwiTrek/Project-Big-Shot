@@ -22,6 +22,11 @@ public:
 		return (float*)this;
 	}
 
+	bool operator == (const Color& c)
+	{
+		return (this->r == c.r && this->g == c.g && this->b == c.b && this->a == c.a);
+	}
+
 public:
 	float r, g, b, a;
 };

@@ -30,10 +30,10 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 	{
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
-		Mesh* m = (*item)->GetComponent<Mesh>();
+		ComponentMesh* m = (*item)->GetComponent<ComponentMesh>();
 		if (m != nullptr && m->IsActive())
 		{
-			m->wire = App->renderer3D->IsWireframe();
+			m->wireOverride = App->renderer3D->IsWireframe();
 			m->axis = App->renderer3D->IsAxis();
 			m->Render();
 		}
@@ -50,10 +50,10 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 	{
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
-		Mesh* m = (*item)->GetComponent<Mesh>();
+		ComponentMesh* m = (*item)->GetComponent<ComponentMesh>();
 		if (m != nullptr && m->IsActive())
 		{
-			m->wire = App->renderer3D->IsWireframe();
+			m->wireOverride = App->renderer3D->IsWireframe();
 			m->axis = App->renderer3D->IsAxis();
 			m->Render();
 		}

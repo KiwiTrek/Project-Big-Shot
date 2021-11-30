@@ -9,6 +9,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleImporter.h"
 #include "ModuleGameObjects.h"
+#include "ModuleResources.h"
 
 Application::Application(ConsoleBuffer* _buff)
 {
@@ -21,8 +22,10 @@ Application::Application(ConsoleBuffer* _buff)
 	gui = new ModuleGuiManager(this);
 	fileSystem = new ModuleFileSystem(this);
 	renderer3D = new ModuleRenderer3D(this);
+	resources = new ModuleResources(this);
 
 	AddModule(fileSystem);
+	AddModule(resources);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
