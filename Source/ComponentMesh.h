@@ -5,6 +5,7 @@
 #include "Color.h"
 #include <vector>
 #include "par_shapes.h"
+#include "MathGeoLib.h"
 
 class GameObject;
 class ResourceMesh;
@@ -24,13 +25,16 @@ public:
 	void DrawVertexNormals() const;
 	void DrawFaceNormals() const;
 	Shape GetType() const;
+	void CreateBBox();
+	void DrawBBox() const;
 
 	//void OnLoad(const JSONReader& reader);
 	//void OnSave(JSONWriter& writer) const;
 
 public:
 	Color vertexColor;
-	bool axis, wire, wireOverride, drawVertexNormals, drawFaceNormals;
+	bool axis, wire, wireOverride, drawVertexNormals, drawFaceNormals, drawBBox;
+	AABB bbox;
 
 	ResourceMesh* mesh;
 };

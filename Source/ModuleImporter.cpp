@@ -221,6 +221,7 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 		ResourceMesh* rMesh = ImportModel(scene, n);
 		rMesh->GenerateBuffers();
 		mesh->mesh = rMesh;
+		if (mesh->mesh != nullptr)mesh->CreateBBox();
 	}
 
 	for (size_t i = 0; i < n->mNumChildren; i++)

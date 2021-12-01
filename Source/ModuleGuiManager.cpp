@@ -237,6 +237,16 @@ UpdateStatus ModuleGuiManager::MenuBar()
 				if (ImGui::MenuItem("Cone")) CreateShape(Shape::CONE);
 				ImGui::EndMenu();
 			}
+
+			if (ImGui::MenuItem("Camera"))
+			{
+				GameObject* c = new GameObject("Camera");
+				c->CreateComponent(ComponentTypes::CAMERA);
+
+				App->gameObjects->AddGameobject(c);
+				App->gameObjects->selectedGameObject = c;
+			}
+
 			ImGui::EndMenu();
 		}
 
@@ -302,6 +312,7 @@ void ModuleGuiManager::CreateShape(Shape shape)
 	ComponentMesh* m = (ComponentMesh*)c->CreateComponent(ComponentTypes::MESH);
 	m->mesh = rMesh;
 	rMesh->GenerateBuffers();
+	if (m->mesh != nullptr)m->CreateBBox();
 
 	c->SetAxis(true);
 	App->gameObjects->AddGameobject(c);

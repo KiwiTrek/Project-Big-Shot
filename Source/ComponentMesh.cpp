@@ -3,7 +3,7 @@
 #include "ResourceMaterial.h"
 #include "Gameobject.h"
 
-ComponentMesh::ComponentMesh(bool active) : Component(type, active), vertexColor(white), wire(false), axis(false), drawFaceNormals(false), drawVertexNormals(false)
+ComponentMesh::ComponentMesh(bool active) : Component(type, active), vertexColor(white), wire(false), axis(false), drawFaceNormals(false), drawVertexNormals(false), drawBBox(false)
 {
 	type = ComponentTypes::MESH;
 }
@@ -118,6 +118,8 @@ void ComponentMesh::Render() const
 	if (drawFaceNormals) DrawFaceNormals();
 	if (drawVertexNormals) DrawVertexNormals();
 
+	if (drawBBox) DrawBBox();
+
 	glPopMatrix();
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -185,6 +187,75 @@ void ComponentMesh::DrawFaceNormals() const
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnd();
+}
+
+void ComponentMesh::CreateBBox()
+{
+	bbox.SetNegativeInfinity();
+
+	float3* vertices = new float3[mesh->vertexNum];
+
+	for (size_t i = 0; i < mesh->vertexNum; i++)
+	{
+		vertices[i].x = mesh->vertices[i].x;
+		vertices[i].y = mesh->vertices[i].y;
+		vertices[i].z = mesh->vertices[i].z;
+	}
+
+	bbox.Enclose(vertices, mesh->vertexNum);
+
+	delete[] vertices;
+}
+
+void ComponentMesh::DrawBBox() const
+{
+	float3 cornerPoints[8];
+	bbox.GetCornerPoints(cornerPoints);
+
+	glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+	glLineWidth(3.5f);
+	glBegin(GL_LINES);
+
+	glVertex3f(cornerPoints[0].x, cornerPoints[0].y, cornerPoints[0].z);
+	glVertex3f(cornerPoints[1].x, cornerPoints[1].y, cornerPoints[1].z);
+
+	glVertex3f(cornerPoints[0].x, cornerPoints[0].y, cornerPoints[0].z);
+	glVertex3f(cornerPoints[2].x, cornerPoints[2].y, cornerPoints[2].z);
+
+	glVertex3f(cornerPoints[2].x, cornerPoints[2].y, cornerPoints[2].z);
+	glVertex3f(cornerPoints[3].x, cornerPoints[3].y, cornerPoints[3].z);
+
+	glVertex3f(cornerPoints[1].x, cornerPoints[1].y, cornerPoints[1].z);
+	glVertex3f(cornerPoints[3].x, cornerPoints[3].y, cornerPoints[3].z);
+
+	glVertex3f(cornerPoints[0].x, cornerPoints[0].y, cornerPoints[0].z);
+	glVertex3f(cornerPoints[4].x, cornerPoints[4].y, cornerPoints[4].z);
+
+	glVertex3f(cornerPoints[5].x, cornerPoints[5].y, cornerPoints[5].z);
+	glVertex3f(cornerPoints[4].x, cornerPoints[4].y, cornerPoints[4].z);
+
+	glVertex3f(cornerPoints[5].x, cornerPoints[5].y, cornerPoints[5].z);
+	glVertex3f(cornerPoints[1].x, cornerPoints[1].y, cornerPoints[1].z);
+
+	glVertex3f(cornerPoints[5].x, cornerPoints[5].y, cornerPoints[5].z);
+	glVertex3f(cornerPoints[7].x, cornerPoints[7].y, cornerPoints[7].z);
+
+	glVertex3f(cornerPoints[7].x, cornerPoints[7].y, cornerPoints[7].z);
+	glVertex3f(cornerPoints[6].x, cornerPoints[6].y, cornerPoints[6].z);
+
+	glVertex3f(cornerPoints[6].x, cornerPoints[6].y, cornerPoints[6].z);
+	glVertex3f(cornerPoints[2].x, cornerPoints[2].y, cornerPoints[2].z);
+
+	glVertex3f(cornerPoints[6].x, cornerPoints[6].y, cornerPoints[6].z);
+	glVertex3f(cornerPoints[4].x, cornerPoints[4].y, cornerPoints[4].z);
+
+	glVertex3f(cornerPoints[7].x, cornerPoints[7].y, cornerPoints[7].z);
+	glVertex3f(cornerPoints[3].x, cornerPoints[3].y, cornerPoints[3].z);
+
+	glEnd();
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glLineWidth(1.0f);
 }
 
 //void ComponentMesh::OnLoad(const JSONReader& reader)

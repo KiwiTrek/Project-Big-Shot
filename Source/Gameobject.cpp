@@ -69,6 +69,11 @@ Component* GameObject::CreateComponent(ComponentTypes cType, ComponentTransform*
 		c = new ComponentMaterial();
 		break;
 	}
+	case ComponentTypes::CAMERA:
+	{
+		c = new ComponentCamera();
+		break;
+	}
 	default:
 		break;
 	}

@@ -13,7 +13,11 @@ public:
 
 	bool Init();
 	bool Start();
+
+	UpdateStatus Update(float dt);
+	UpdateStatus UpdateChildren(GameObject* parent);
 	UpdateStatus PostUpdate();
+
 	bool CleanUp();
 
 	void AddGameobject(GameObject* g);

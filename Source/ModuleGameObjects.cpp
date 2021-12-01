@@ -23,6 +23,44 @@ bool ModuleGameObjects::Start()
 	return true;
 }
 
+UpdateStatus ModuleGameObjects::Update(float dt)
+{
+	UpdateStatus ret = UpdateStatus::UPDATE_CONTINUE;
+
+	std::vector<GameObject*>::iterator item = gameObjectList.begin();
+	while (item != gameObjectList.end())
+	{
+		if (!(*item)->children.empty()) ret = UpdateChildren((*item));
+		std::vector<Component*>::iterator c = (*item)->components.begin();
+		while (c != (*item)->components.end())
+		{
+			(*c)->Update();
+			c++;
+		}
+		item++;
+	}
+	return ret;
+}
+
+UpdateStatus ModuleGameObjects::UpdateChildren(GameObject* parent)
+{
+	UpdateStatus ret = UpdateStatus::UPDATE_CONTINUE;
+
+	std::vector<GameObject*>::iterator item = parent->children.begin();
+	while (item != parent->children.end())
+	{
+		if (!(*item)->children.empty()) ret = UpdateChildren((*item));
+		std::vector<Component*>::iterator c = (*item)->components.begin();
+		while (c != (*item)->components.end())
+		{
+			(*c)->Update();
+			c++;
+		}
+		item++;
+	}
+	return ret;
+}
+
 UpdateStatus ModuleGameObjects::PostUpdate()
 {
 	std::vector<GameObject*>::iterator item = gameObjectList.begin();
@@ -33,6 +71,7 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 		ComponentMesh* m = (*item)->GetComponent<ComponentMesh>();
 		if (m != nullptr && m->IsActive())
 		{
+			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
 			m->wireOverride = App->renderer3D->IsWireframe();
 			m->axis = App->renderer3D->IsAxis();
 			m->Render();
@@ -53,6 +92,7 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 		ComponentMesh* m = (*item)->GetComponent<ComponentMesh>();
 		if (m != nullptr && m->IsActive())
 		{
+			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
 			m->wireOverride = App->renderer3D->IsWireframe();
 			m->axis = App->renderer3D->IsAxis();
 			m->Render();
