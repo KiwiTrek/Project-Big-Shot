@@ -15,12 +15,14 @@ public:
 
 	void Update() override;
 	//void DrawInspector() override;
-	void DrawFrustrum();
+	void DrawFrustum();
+
+	bool ContainsBBox(const AABB& refBox) const;
 
 public:
-	Frustum frustrum;
-	float horizontalFOV = 90.0f;
-	float aspectRatio = 16 / 9;
+	Frustum frustum;
+	float horizontalFOV = 60.0f;
+	float aspectRatio = 1.777f;
 };
 
 #endif //!__COMPONENT_CAMERA_H__

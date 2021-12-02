@@ -35,6 +35,8 @@ public:
 	Color vertexColor;
 	bool axis, wire, wireOverride, drawVertexNormals, drawFaceNormals, drawBBox;
 	AABB bbox;
+	OBB obb;
+	bool render = true;
 
 	ResourceMesh* mesh;
 };

@@ -113,11 +113,12 @@ void ComponentMesh::Render() const
 
 	wire || wireOverride ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glDrawElements(GL_TRIANGLES, mesh->indexNum, GL_UNSIGNED_INT, NULL);
+	if (render) glDrawElements(GL_TRIANGLES, mesh->indexNum, GL_UNSIGNED_INT, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	if (drawFaceNormals) DrawFaceNormals();
 	if (drawVertexNormals) DrawVertexNormals();
-
 	if (drawBBox) DrawBBox();
 
 	glPopMatrix();
@@ -126,7 +127,7 @@ void ComponentMesh::Render() const
 	glBindBuffer(GL_NORMAL_ARRAY, 0);
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -203,6 +204,11 @@ void ComponentMesh::CreateBBox()
 	}
 
 	bbox.Enclose(vertices, mesh->vertexNum);
+	obb = bbox;
+	obb.Transform(owner->GetComponent<ComponentTransform>()->GetGlobalTransform());
+
+	bbox.SetNegativeInfinity();
+	bbox.Enclose(obb);
 
 	delete[] vertices;
 }

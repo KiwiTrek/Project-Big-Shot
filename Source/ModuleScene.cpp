@@ -24,6 +24,12 @@ bool ModuleScene::Init()
 	root = new GameObject("sceneRoot");
 	App->gameObjects->selectedGameObject = root;
 
+	//Create main camera
+	App->gameObjects->mainCamera = new GameObject("Camera");
+	App->gameObjects->mainCamera->CreateComponent(ComponentTypes::CAMERA);
+
+	App->gameObjects->AddGameobject(App->gameObjects->mainCamera);
+
 	return ret;
 }
 

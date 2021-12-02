@@ -74,6 +74,10 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
 			m->wireOverride = App->renderer3D->IsWireframe();
 			m->axis = App->renderer3D->IsAxis();
+			if (mainCamera != nullptr)
+			{
+				mainCamera->GetComponent<ComponentCamera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+			}
 			m->Render();
 		}
 		++item;
@@ -95,6 +99,10 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
 			m->wireOverride = App->renderer3D->IsWireframe();
 			m->axis = App->renderer3D->IsAxis();
+			if (mainCamera != nullptr)
+			{
+				mainCamera->GetComponent<ComponentCamera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+			}
 			m->Render();
 		}
 		++item;

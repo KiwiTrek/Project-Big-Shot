@@ -4,30 +4,30 @@
 ComponentCamera::ComponentCamera(bool active) : Component(type, active) {
 	type = ComponentTypes::CAMERA;
 
-	frustrum.SetPos(float3(0.0f, 0.0f, -5.0f));
-	frustrum.SetUp(float3(0.0f, 1.0f, 0.0f));
-	frustrum.SetFront(float3(0.0f, 0.0f, 1.0f));
+	frustum.SetPos(float3(0.0f, 0.0f, -5.0f));
+	frustum.SetUp(float3(0.0f, 1.0f, 0.0f));
+	frustum.SetFront(float3(0.0f, 0.0f, 1.0f));
 
 	//This function calculates the verticalFOV using the given horizontal FOV and aspect ratio. Also sets type to PerspectiveFrustum.
-	frustrum.SetHorizontalFovAndAspectRatio(horizontalFOV * DEGTORAD, aspectRatio);
+	frustum.SetHorizontalFovAndAspectRatio(horizontalFOV * DEGTORAD, aspectRatio);
 
-	frustrum.SetViewPlaneDistances(0.3f, 1000.0f);
+	frustum.SetViewPlaneDistances(5.0f, 100.0f);
 }
 
 ComponentCamera::~ComponentCamera() {}
 
 void ComponentCamera::Update() {
-	frustrum.SetPos(owner->GetComponent<ComponentTransform>()->GetPos());
-	frustrum.SetUp(owner->GetComponent<ComponentTransform>()->GetGlobalTransform().WorldY());
-	frustrum.SetFront(owner->GetComponent<ComponentTransform>()->GetGlobalTransform().WorldZ());
+	frustum.SetPos(owner->GetComponent<ComponentTransform>()->GetPos());
+	frustum.SetUp(owner->GetComponent<ComponentTransform>()->GetGlobalTransform().WorldY());
+	frustum.SetFront(owner->GetComponent<ComponentTransform>()->GetGlobalTransform().WorldZ());
 
-	DrawFrustrum();
+	DrawFrustum();
 }
 
-void ComponentCamera::DrawFrustrum()
+void ComponentCamera::DrawFrustum()
 {
 	float3 cornerPoints[8];
-	frustrum.GetCornerPoints(cornerPoints);
+	frustum.GetCornerPoints(cornerPoints);
 
 	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
 	glLineWidth(3.5f);
@@ -73,6 +73,39 @@ void ComponentCamera::DrawFrustrum()
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glLineWidth(1.0f);
+}
+
+// tests if a BBox is within the frustum
+bool ComponentCamera::ContainsBBox(const AABB& refBox) const
+{
+	float3 vCorner[8];
+	int totalIn = 0;
+
+	//Get BBox
+	refBox.GetCornerPoints(vCorner);
+
+	// test all 8 corners against the 6 sides
+	// if all points are behind 1 specific plane, we are out
+	// if we are in with all points, then we are fully in
+	for (int p = 0; p < 6; ++p) {
+		int cornersOutside = 8;
+		int iPtIn = 1;
+
+		for (int i = 0; i < 8; ++i) {
+			// test this point against the planes
+			if (frustum.GetPlane(p).IsOnPositiveSide(vCorner[i]))
+			{
+				iPtIn = 0;
+				--cornersOutside;
+			}
+		}
+		// were all the points outside of plane p?
+		if (cornersOutside == 0) return false;
+		totalIn += iPtIn;
+	}
+	if (totalIn == 6) return true;
+	
+	return true;
 }
 
 //void ComponentCamera::DrawInspector()

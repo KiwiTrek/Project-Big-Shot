@@ -26,6 +26,7 @@ public:
 public:
 	std::vector<GameObject*> gameObjectList;
 	GameObject* selectedGameObject = nullptr;
+	GameObject* mainCamera = nullptr;
 
 private:
 	void RenderChildren(GameObject* parent);
