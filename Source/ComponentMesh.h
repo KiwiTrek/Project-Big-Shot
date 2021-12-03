@@ -20,7 +20,6 @@ public:
 	virtual ~ComponentMesh();
 
 	virtual void Render() const;
-	virtual void InnerRender() const;
 	void DrawInspector();
 	void DrawVertexNormals() const;
 	void DrawFaceNormals() const;

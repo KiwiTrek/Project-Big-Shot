@@ -120,7 +120,6 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 					texture->width = ilGetInteger(IL_IMAGE_WIDTH);
 					texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
 					texture->format = texture->formatUnsigned = ilGetInteger(IL_IMAGE_FORMAT);
-					texture->path = newPath.c_str();
 				}
 			}
 			else
@@ -152,16 +151,20 @@ void ModuleImporter::ImportScene(const char* path, const char* rootName)
 	char* buffer = nullptr;
 	uint bytesFile = App->fileSystem->Load(path, &buffer);
 
-	if (buffer == nullptr) {
+	if (buffer == nullptr)
+	{
 		std::string normPathShort = ASSETS_FOLDER;
 		normPathShort.append(MODELS_FOLDER);
 		normPathShort += App->fileSystem->SetNormalName(path);
 		bytesFile = App->fileSystem->Load(normPathShort.c_str(), &buffer);
 	}
-	if (buffer != nullptr) {
+
+	if (buffer != nullptr)
+	{
 		scene = aiImportFileFromMemory(buffer, bytesFile, aiProcessPreset_TargetRealtime_MaxQuality, NULL);
 	}
-	else {
+	else
+	{
 		scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	}
 

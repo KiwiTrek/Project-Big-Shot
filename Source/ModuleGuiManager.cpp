@@ -15,19 +15,19 @@ ModuleGuiManager::ModuleGuiManager(Application* app, bool startEnabled) : Module
 	//LogConsoleText.appendf(App->buff->initBuff);
 	//LogConsoleText.appendf(App->buff->initBuff2);
 
+	resources = new PanelResources(App);
 	about = new PanelAbout(App);
 	console = new PanelConsole(App);
 	config = new PanelConfig(App);
 	hierarchy = new PanelHierarchy(App);
 	inspector = new PanelInspector(App);
-	sceneView = new PanelSceneView(App);
 
+	AddPanel(resources);
 	AddPanel(about);
 	AddPanel(console);
 	AddPanel(config);
 	AddPanel(hierarchy);
 	AddPanel(inspector);
-	//AddPanel(sceneView);
 }
 
 ModuleGuiManager::~ModuleGuiManager()
@@ -154,12 +154,12 @@ bool ModuleGuiManager::CleanUp()
 	}
 	listPanels.clear();
 
+	resources = nullptr;
 	about = nullptr;
 	console = nullptr;
 	config = nullptr;
 	hierarchy = nullptr;
 	inspector = nullptr;
-	sceneView = nullptr;
 	LogInputText.clear();
 	LogConsoleText.clear();
 
@@ -211,9 +211,9 @@ UpdateStatus ModuleGuiManager::MenuBar()
 		if (ImGui::BeginMenu("View"))
 		{
 			ImGui::MenuItem("Configuration", "F1", &config->active);
-			ImGui::MenuItem("Hierarchy", "F2", &hierarchy->active);
-			ImGui::MenuItem("Inspector", "F3", &inspector->active);
-			ImGui::MenuItem("SceneView", nullptr, &sceneView->active);
+			ImGui::MenuItem("Assets", "F2", &resources->active);
+			ImGui::MenuItem("Hierarchy", "F3", &hierarchy->active);
+			ImGui::MenuItem("Inspector", "F4", &inspector->active);
 			ImGui::MenuItem("Console", "F10", &console->active);
 			ImGui::EndMenu();
 		}
@@ -303,7 +303,7 @@ void ModuleGuiManager::CreateShape(Shape shape)
 		name = "Cone_";
 		break;
 	}
-	name += (int)rMesh->referenceCount;
+	name.append(std::to_string((int)rMesh->referenceCount));
 	GameObject* c = new GameObject(name);
 	ComponentMaterial* mat = (ComponentMaterial*)c->CreateComponent(ComponentTypes::MATERIAL);
 	mat->usingCheckers = true;

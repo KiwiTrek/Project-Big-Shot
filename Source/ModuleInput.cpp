@@ -185,7 +185,7 @@ UpdateStatus ModuleInput::PreUpdate()
 						uid = App->resources->Exists(Resource::Type::MATERIAL, fileName.c_str());
 						if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 						{
-							ComponentMaterial* mat = App->gameObjects->selectedGameObject->GetComponent<ComponentMaterial>();
+							ComponentMaterial* mat = App->gameObjects->selectedGameObject->GetComponent<Material>();
 
 							if (mat != nullptr)
 							{

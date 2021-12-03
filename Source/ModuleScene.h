@@ -25,9 +25,6 @@ public:
 	void Load(std::string scene);
 	void Save(std::string scene);
 
-public:
-	GameObject* grid;
-
 private:
 	GameObject* root;
 };

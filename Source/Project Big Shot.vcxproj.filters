@@ -681,9 +681,6 @@
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
-    <ClInclude Include="PanelSceneView.h">
-      <Filter>Sources\Modules\GUI\Panels</Filter>
-    </ClInclude>
     <ClInclude Include="par_shapes.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
@@ -701,6 +698,9 @@
     </ClInclude>
     <ClInclude Include="ComponentCamera.h">
       <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelResources.h">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -935,9 +935,6 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules\Main</Filter>
     </ClCompile>
-    <ClCompile Include="PanelSceneView.cpp">
-      <Filter>Sources\Modules\GUI\Panels</Filter>
-    </ClCompile>
     <ClCompile Include="par_shapes.cpp">
       <Filter>Sources\Containers</Filter>
     </ClCompile>
@@ -952,6 +949,9 @@
     </ClCompile>
     <ClCompile Include="ComponentCamera.cpp">
       <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelResources.cpp">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

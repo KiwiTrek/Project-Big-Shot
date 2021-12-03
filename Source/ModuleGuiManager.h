@@ -13,12 +13,12 @@
 #include "DeviceId.h"
 
 #include "Panel.h"
+#include "PanelResources.h"
 #include "PanelAbout.h"
 #include "PanelConsole.h"
 #include "PanelConfig.h"
 #include "PanelHierarchy.h"
 #include "PanelInspector.h"
-#include "PanelSceneView.h"
 
 class Grid
 {
@@ -28,7 +28,7 @@ public:
 
 	void Render();
 public:
-	vec3 normal;
+	float3 normal;
 	float constant;
 };
 
@@ -60,12 +60,12 @@ public:
 
 	std::vector<Panel*> listPanels;
 
+	PanelResources* resources;
 	PanelAbout* about;
 	PanelConsole* console;
 	PanelConfig* config;
 	PanelHierarchy* hierarchy;
 	PanelInspector* inspector;
-	PanelSceneView* sceneView;
 
 	Grid grid;
 };

@@ -68,7 +68,7 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 	{
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
-		ComponentMesh* m = (*item)->GetComponent<ComponentMesh>();
+		ComponentMesh* m = (*item)->GetComponent<Mesh>();
 		if (m != nullptr && m->IsActive())
 		{
 			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
@@ -76,7 +76,7 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 			m->axis = App->renderer3D->IsAxis();
 			if (mainCamera != nullptr)
 			{
-				mainCamera->GetComponent<ComponentCamera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+				mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
 			}
 			m->Render();
 		}
@@ -93,7 +93,7 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 	{
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
-		ComponentMesh* m = (*item)->GetComponent<ComponentMesh>();
+		ComponentMesh* m = (*item)->GetComponent<Mesh>();
 		if (m != nullptr && m->IsActive())
 		{
 			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
@@ -101,7 +101,7 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 			m->axis = App->renderer3D->IsAxis();
 			if (mainCamera != nullptr)
 			{
-				mainCamera->GetComponent<ComponentCamera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+				mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
 			}
 			m->Render();
 		}

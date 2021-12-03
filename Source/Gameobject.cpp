@@ -54,7 +54,7 @@ Component* GameObject::CreateComponent(ComponentTypes cType, ComponentTransform*
 	{
 	case ComponentTypes::TRANSFORM:
 	{
-		if (this->GetComponent<ComponentTransform>() != nullptr) RemoveComponent(this->GetComponent<ComponentTransform>());
+		if (this->GetComponent<Transform>() != nullptr) RemoveComponent(this->GetComponent<ComponentTransform>());
 
 		t != nullptr ? c = t : c = new ComponentTransform();
 		break;
@@ -78,11 +78,7 @@ Component* GameObject::CreateComponent(ComponentTypes cType, ComponentTransform*
 		break;
 	}
 
-	if (c != nullptr)
-	{
-		c->owner = this;
-		components.push_back(c);
-	}
+	if (c != nullptr) CreateComponent(c);
 	return c;
 }
 
@@ -112,18 +108,18 @@ bool GameObject::RemoveComponent(Component* c)
 
 void GameObject::SetAxis(bool value)
 {
-	ComponentMesh* m = GetComponent<ComponentMesh>();
+	ComponentMesh* m = GetComponent<Mesh>();
 	if (m != nullptr) m->axis = value;
 }
 
 void GameObject::UpdateChildrenTransforms()
 {
-	ComponentTransform* t = GetComponent<ComponentTransform>();
+	ComponentTransform* t = GetComponent<Transform>();
 	t->UpdateGlobalTransform();
 
 	for (size_t i = 0; i < children.size(); i++)
 	{
-		children[i]->GetComponent<ComponentTransform>()->UpdateGlobalTransform(t->GetGlobalTransform());
+		children[i]->GetComponent<Transform>()->UpdateGlobalTransform(t->GetGlobalTransform());
 		children[i]->UpdateChildrenTransforms();
 	}
 }

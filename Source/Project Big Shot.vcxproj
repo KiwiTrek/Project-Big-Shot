@@ -278,7 +278,7 @@
     <ClInclude Include="PanelConsole.h" />
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
-    <ClInclude Include="PanelSceneView.h" />
+    <ClInclude Include="PanelResources.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="ComponentMesh.h" />
@@ -366,7 +366,7 @@
     <ClCompile Include="PanelConsole.cpp" />
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
-    <ClCompile Include="PanelSceneView.cpp" />
+    <ClCompile Include="PanelResources.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />

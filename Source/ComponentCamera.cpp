@@ -17,9 +17,9 @@ ComponentCamera::ComponentCamera(bool active) : Component(type, active) {
 ComponentCamera::~ComponentCamera() {}
 
 void ComponentCamera::Update() {
-	frustum.SetPos(owner->GetComponent<ComponentTransform>()->GetPos());
-	frustum.SetUp(owner->GetComponent<ComponentTransform>()->GetGlobalTransform().WorldY());
-	frustum.SetFront(owner->GetComponent<ComponentTransform>()->GetGlobalTransform().WorldZ());
+	frustum.SetPos(owner->GetComponent<Transform>()->GetPos());
+	frustum.SetUp(owner->GetComponent<Transform>()->GetGlobalTransform().WorldY());
+	frustum.SetFront(owner->GetComponent<Transform>()->GetGlobalTransform().WorldZ());
 
 	DrawFrustum();
 }

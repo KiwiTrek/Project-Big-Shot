@@ -34,16 +34,16 @@ UpdateStatus PanelHierarchy::Update()
 	DisplayChild(root);
 
 	//TODO: Right Click to hierarchy options
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN && ImGui::IsAnyItemHovered())
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN && ImGui::IsAnyItemHovered() && ImGui::IsWindowHovered())
 	{
-		ImGui::OpenPopup("Options");
+		ImGui::OpenPopup("OptionsHierarchy");
 	}
-	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && ImGui::IsPopupOpen("Options"))
+	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && ImGui::IsPopupOpen("OptionsHierarchy"))
 	{
 		ImGui::CloseCurrentPopup();
 	}
 
-	if (App->gameObjects->selectedGameObject != nullptr && ImGui::IsWindowFocused())
+	if (App->gameObjects->selectedGameObject != nullptr && ImGui::IsWindowFocused() && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 	{
 		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KeyState::KEY_DOWN)
 		{
@@ -133,7 +133,7 @@ bool PanelHierarchy::RightClickMenu()
 	//TODO: Popup menu with Right Click
 	if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot() && !reparent)
 	{
-		if (ImGui::BeginPopupContextItem("Options"))
+		if (ImGui::BeginPopupContextItem("OptionsHierarchy"))
 		{
 			if (ImGui::MenuItem("Move Up"))
 			{

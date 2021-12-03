@@ -19,6 +19,7 @@ public:
 	Resource::Type GetType() const { return type; }
 	UID GetUID() const { return uid; }
 	const char* GetAssetFile() const { return assetsFile.c_str(); }
+	void SetAssetFile(const char* name) { assetsFile = name; }
 	void SetResourceMap(std::map<UID, Resource*>* map) { resources = map; }
 	std::map<UID, Resource*>* GetResourceMap() { return resources; }
 

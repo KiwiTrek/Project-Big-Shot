@@ -11,6 +11,10 @@
 #include <vector>
 
 class Component;
+typedef ComponentMaterial Material;
+typedef ComponentMesh Mesh;
+typedef ComponentTransform Transform;
+typedef ComponentCamera Camera;
 
 class GameObject
 {

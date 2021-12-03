@@ -2,6 +2,7 @@
 #define __MODULE_RESOURCES_H__
 
 #include "Module.h"
+#include "PanelResources.h"
 #include "Resource.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
@@ -9,6 +10,7 @@
 #include <map>
 
 class Application;
+class GameObject;
 class aiMesh;
 
 class ModuleResources : public Module
@@ -33,8 +35,13 @@ public:
 	void ReleaseResource(UID uid);
 
 private:
+	void ReleaseResourceReferences(Resource::Type type, UID uid, GameObject* parent = nullptr);
+
+private:
 	std::map<UID, Resource*> resources;
 	std::map<Shape, Resource*> shapes;
+
+	friend class PanelResources;
 };
 
 #endif // !__MODULE_RESOURCES_H__

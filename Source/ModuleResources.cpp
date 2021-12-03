@@ -2,6 +2,7 @@
 #include "MathGeoLib.h"
 #include "RenderGlobals.h"
 #include "ModuleFileSystem.h"
+#include "ModuleGameObjects.h"
 #include "ModuleImporter.h"
 #include "ModuleResources.h"
 
@@ -99,6 +100,8 @@ const Resource* ModuleResources::RequestResource(UID uid) const
 
 Resource* ModuleResources::GetShape(Shape shape)
 {
+	Resource* r = shapes.at(shape);
+	r->referenceCount++;
 	return shapes.at(shape);
 }
 
@@ -111,7 +114,50 @@ Resource* ModuleResources::RequestResource(UID uid)
 
 void ModuleResources::ReleaseResource(UID uid)
 {
-	resources.erase(uid);
+	Resource* r = resources.at(uid);
+	r->referenceCount--;
+	ReleaseResourceReferences(r->GetType(), uid);
+	resources.erase(resources.find(uid));
+	if (r != nullptr) delete r;
+	r = nullptr;
+}
+
+void ModuleResources::ReleaseResourceReferences(Resource::Type type, UID uid, GameObject* parent)
+{
+	std::vector<GameObject*>::iterator it;
+	parent != nullptr ? it = parent->children.begin() : it = App->gameObjects->gameObjectList.begin();
+
+	std::vector<GameObject*>::iterator ed;
+	parent != nullptr ? ed = parent->children.end() : ed = App->gameObjects->gameObjectList.end();
+
+	while (it != ed)
+	{
+		if (!(*it)->children.empty()) ReleaseResourceReferences(type, uid, (*it));
+
+		switch (type)
+		{
+		case Resource::Type::MATERIAL:
+		{
+			ComponentMaterial* c = (*it)->GetComponent<Material>();
+			if (c != nullptr && c->material != nullptr)
+			{
+				if (c->material->GetUID() == uid) c->material = nullptr;
+			}
+			break;
+		}
+		case Resource::Type::MESH:
+		{
+			ComponentMesh* c = (*it)->GetComponent<Mesh>();
+			if (c != nullptr && c->mesh != nullptr)
+			{
+				if (c->mesh->GetUID() == uid) c->mesh = nullptr;
+			}
+			break;
+		}
+		}
+
+		++it;
+	}
 }
 
 Resource* ModuleResources::CreateNewResource(Resource::Type type,Shape shape, const char* pathFile, bool color, Color c)
@@ -132,7 +178,11 @@ Resource* ModuleResources::CreateNewResource(Resource::Type type,Shape shape, co
 		else
 		{
 			rm = new ResourceMaterial(uid);
-			rm->path = pathFile;
+			rm->SetAssetFile(pathFile);
+			std::string newPath = ASSETS_FOLDER;
+			newPath.append(TEXTURES_FOLDER);
+			newPath.append(pathFile);
+			rm->path = newPath;
 		}
 
 		if (rm != nullptr)
@@ -140,7 +190,6 @@ Resource* ModuleResources::CreateNewResource(Resource::Type type,Shape shape, co
 			rm->SetResourceMap(&resources);
 			resources[uid] = rm;
 			r = (Resource*)rm;
-			r->referenceCount++;
 		}
 		break;
 	}
@@ -151,10 +200,10 @@ Resource* ModuleResources::CreateNewResource(Resource::Type type,Shape shape, co
 		r = (Resource*)rm;
 		r->SetResourceMap(&resources);
 		resources[uid] = r;
-		r->referenceCount++;
 		break;
 	}
 	}
 
+	if (r != nullptr) r->referenceCount++;
 	return r;
 }

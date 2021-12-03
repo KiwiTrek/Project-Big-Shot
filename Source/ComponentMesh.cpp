@@ -27,9 +27,31 @@ void ComponentMesh::DrawInspector()
 		ImGui::Checkbox("Wireframe", &wire);
 		ImGui::Separator();
 
-		IMGUI_PRINT(IMGUI_YELLOW, "Vertices:", "%d", mesh->vertexNum);
-		IMGUI_PRINT(IMGUI_YELLOW, "Indices:", "%d", mesh->indices);
-		ImGui::Separator();
+		if (mesh != nullptr)
+		{
+			ImGui::Text("UID: "); ImGui::SameLine();
+
+			ImGui::Button(std::to_string(mesh->GetUID()).c_str());
+			/*if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESHES"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(UID));
+					UID payloadN = *(const UID*)payload->Data;
+					mesh.payloadN;
+				}
+				ImGui::EndDragDropTarget();
+			}*/
+
+			IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", mesh->GetAssetFile());
+			IMGUI_PRINT(IMGUI_YELLOW, "Vertices:", "%d", mesh->vertexNum);
+			IMGUI_PRINT(IMGUI_YELLOW, "Indices:", "%d", mesh->indices);
+			ImGui::Separator();
+		}
+		else
+		{
+			IMGUI_PRINT(IMGUI_YELLOW, "UID: ", "- none -");
+		}
 
 		ImGui::Checkbox("Vertex Normals", &drawVertexNormals);
 		ImGui::SameLine();
@@ -39,7 +61,9 @@ void ComponentMesh::DrawInspector()
 
 void ComponentMesh::Render() const
 {
-	ComponentMaterial* mat = owner->GetComponent<ComponentMaterial>();
+	if (mesh == nullptr) return;
+
+	ComponentMaterial* mat = owner->GetComponent<Material>();
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -53,26 +77,10 @@ void ComponentMesh::Render() const
 	glBindBuffer(GL_NORMAL_ARRAY, mesh->normalsBuf);
 	glNormalPointer(GL_FLOAT, 0, NULL);
 
-	if (mat != nullptr && mat->IsActive())
-	{
-		//textures
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->textureBuf);
-		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-		if (mat->usingCheckers)
-		{
-			glBindTexture(GL_TEXTURE_2D, mat->checkersId);
-		}
-		else
-		{
-			if (mat->material != nullptr) glBindTexture(GL_TEXTURE_2D, mat->material->texId);
-			else glBindTexture(GL_TEXTURE_2D, mat->checkersId);
-		}
-	}
-
 	//indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuf);
 
-	float4x4 t = owner->GetComponent<ComponentTransform>()->GetGlobalTransform();
+	float4x4 t = owner->GetComponent<Transform>()->GetGlobalTransform();
 
 	glPushMatrix();
 	glMultMatrixf((float*)&t.Transposed());
@@ -111,6 +119,22 @@ void ComponentMesh::Render() const
 
 	glColor3f(vertexColor.r, vertexColor.g, vertexColor.b);
 
+	if (mat != nullptr && mat->IsActive())
+	{
+		//textures
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->textureBuf);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+		if (mat->usingCheckers)
+		{
+			glBindTexture(GL_TEXTURE_2D, mat->checkersId);
+		}
+		else
+		{
+			if (mat->material != nullptr) glBindTexture(GL_TEXTURE_2D, mat->material->texId);
+			else glBindTexture(GL_TEXTURE_2D, mat->checkersId);
+		}
+	}
+
 	wire || wireOverride ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	if (render) glDrawElements(GL_TRIANGLES, mesh->indexNum, GL_UNSIGNED_INT, NULL);
@@ -128,20 +152,8 @@ void ComponentMesh::Render() const
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
-
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
-void ComponentMesh::InnerRender() const
-{
-	glPointSize(5.0f);
-
-	glBegin(GL_POINTS);
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glEnd();
-
-	glPointSize(1.0f);
 }
 
 void ComponentMesh::DrawVertexNormals() const
@@ -205,7 +217,7 @@ void ComponentMesh::CreateBBox()
 
 	bbox.Enclose(vertices, mesh->vertexNum);
 	obb = bbox;
-	obb.Transform(owner->GetComponent<ComponentTransform>()->GetGlobalTransform());
+	obb.Transform(owner->GetComponent<Transform>()->GetGlobalTransform());
 
 	bbox.SetNegativeInfinity();
 	bbox.Enclose(obb);
