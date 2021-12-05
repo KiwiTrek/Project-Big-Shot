@@ -2,7 +2,6 @@
 #define __MODULE_RENDERER_3D_H__
 
 #include "Module.h"
-#include "glmath.h"
 #include "Light.h"
 #include "Mesh.h"
 #include <vector>
@@ -19,6 +18,7 @@ public:
 	~ModuleRenderer3D();
 
 	bool Init();
+	void GenerateBuffers();
 	UpdateStatus PreUpdate();
 	UpdateStatus PostUpdate();
 	void OnLoad(const JSONReader& reader);
@@ -50,8 +50,6 @@ public:
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	mat3x3 normalMatrix;
-	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
 
 private:
 	bool depthTest = true;

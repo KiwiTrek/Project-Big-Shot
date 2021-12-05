@@ -15,6 +15,7 @@ class ModuleFileSystem;
 class ModuleImporter;
 class ModuleGameObjects;
 class ModuleResources;
+class ModuleViewportBuffer;
 
 class Application
 {
@@ -63,6 +64,7 @@ public:
 	ModuleImporter* importer = nullptr;
 	ModuleGameObjects* gameObjects = nullptr;
 	ModuleResources* resources = nullptr;
+	ModuleViewportBuffer* viewport = nullptr;
 
 	ConsoleBuffer* buff;
 

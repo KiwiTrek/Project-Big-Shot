@@ -21,6 +21,7 @@ ModuleGuiManager::ModuleGuiManager(Application* app, bool startEnabled) : Module
 	config = new PanelConfig(App);
 	hierarchy = new PanelHierarchy(App);
 	inspector = new PanelInspector(App);
+	scene = new PanelScene(App);
 
 	AddPanel(resources);
 	AddPanel(about);
@@ -28,6 +29,7 @@ ModuleGuiManager::ModuleGuiManager(Application* app, bool startEnabled) : Module
 	AddPanel(config);
 	AddPanel(hierarchy);
 	AddPanel(inspector);
+	AddPanel(scene);
 }
 
 ModuleGuiManager::~ModuleGuiManager()
@@ -160,6 +162,7 @@ bool ModuleGuiManager::CleanUp()
 	config = nullptr;
 	hierarchy = nullptr;
 	inspector = nullptr;
+	scene = nullptr;
 	LogInputText.clear();
 	LogConsoleText.clear();
 
@@ -212,8 +215,9 @@ UpdateStatus ModuleGuiManager::MenuBar()
 		{
 			ImGui::MenuItem("Configuration", "F1", &config->active);
 			ImGui::MenuItem("Assets", "F2", &resources->active);
-			ImGui::MenuItem("Hierarchy", "F3", &hierarchy->active);
-			ImGui::MenuItem("Inspector", "F4", &inspector->active);
+			ImGui::MenuItem("Scene", "F3", &scene->active);
+			ImGui::MenuItem("Hierarchy", "F4", &hierarchy->active);
+			ImGui::MenuItem("Inspector", "F5", &inspector->active);
 			ImGui::MenuItem("Console", "F10", &console->active);
 			ImGui::EndMenu();
 		}

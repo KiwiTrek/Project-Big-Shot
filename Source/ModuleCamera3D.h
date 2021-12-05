@@ -2,36 +2,41 @@
 #define __MODULE_CAMERA_3D_H__
 
 #include "Module.h"
-#include "glmath.h"
+#include "Globals.h"
+#include "Math/float3.h"
+#include "Math/float4x4.h"
+#include "Geometry/Frustum.h"
 
 class ModuleCamera3D : public Module
 {
 public:
-	ModuleCamera3D(Application* app, bool startEnabled = true);
+	ModuleCamera3D(Application* app, bool start_enabled = true);
 	~ModuleCamera3D();
 
-	bool Start();
-	UpdateStatus Update(float dt);
-	bool CleanUp();
+	bool Start() override;
+	UpdateStatus Update(float dt)override;
+	bool CleanUp() override;
 
-	void Look(const vec3& position, const vec3& reference, bool rotateAroundReference = false);
-	void LookAt(const vec3& spot);
-	void Move(const vec3& movement);
-	float* GetViewMatrix();
-
-private:
+	void LookAt(const float3& point);
 	void CalculateViewMatrix();
+	void RecalculateProjection();
+	void OnSave(JSONWriter& writer) const override;
+	void OnLoad(const JSONReader& reader) override;
 
-	void OnSave(JSONWriter& writer) const;
-
-	void OnLoad(const JSONReader& reader);
-
-public:
-	vec3 x, y, z, position, reference;
-	float currentDist;
+	float3 right, up, front, position, reference;
+	Frustum cameraFrustum;
+	float4x4 viewMatrix;
+	float aspectRatio = 1.f;
+	float verticalFOV = 60.f;
+	float nearPlaneDistance = 0.1f;
+	float farPlaneDistance = 1500.f;
+	float cameraSensitivity = .2f;
+	float cameraSpeed = 60.f;
+	bool projectionIsDirty = false;
 
 private:
-	mat4x4 viewMatrix, viewMatrixInverse;
+	float lastDeltaX = 0.f, lastDeltaY = 0.f;
+
 };
 
 #endif // !__MODULE_CAMERA_3D_H__

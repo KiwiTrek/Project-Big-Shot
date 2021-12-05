@@ -257,7 +257,6 @@
     <ClInclude Include="External\rapidjson-1.1.0\include\stringbuffer.h" />
     <ClInclude Include="External\rapidjson-1.1.0\include\writer.h" />
     <ClInclude Include="Gameobject.h" />
-    <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="ModuleFileSystem.h" />
@@ -271,6 +270,7 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleResources.h" />
     <ClInclude Include="ModuleScene.h" />
+    <ClInclude Include="ModuleViewportBuffer.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="PanelAbout.h" />
@@ -279,6 +279,7 @@
     <ClInclude Include="PanelHierarchy.h" />
     <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelResources.h" />
+    <ClInclude Include="PanelScene.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="ComponentMesh.h" />
@@ -347,7 +348,6 @@
     <ClCompile Include="External\MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="External\MathGeoLib\include\Time\Clock.cpp" />
     <ClCompile Include="Gameobject.cpp" />
-    <ClCompile Include="glmath.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -360,6 +360,7 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleResources.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
+    <ClCompile Include="ModuleViewportBuffer.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfig.cpp" />
@@ -367,6 +368,7 @@
     <ClCompile Include="PanelHierarchy.cpp" />
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelResources.cpp" />
+    <ClCompile Include="PanelScene.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />

@@ -18,9 +18,6 @@ bool ModuleScene::Init()
 	bool ret = true;
 	LOG_CONSOLE("Loading Scene assets");
 
-	App->camera->Move(vec3(1, 2, 1));
-	App->camera->LookAt(vec3(0, 0, 0));
-
 	root = new GameObject("sceneRoot");
 	App->gameObjects->selectedGameObject = root;
 

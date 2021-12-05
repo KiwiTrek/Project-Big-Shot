@@ -3,6 +3,7 @@
 #include "ModuleGuiManager.h"
 
 #include "ModuleWindow.h"
+#include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleImporter.h"
 #include "ModuleRenderer3D.h"
@@ -107,6 +108,22 @@ UpdateStatus PanelConfig::Update()
 
 		bool borderless = App->window->IsBorderless();
 		if (ImGui::Checkbox("Borderless", &borderless)) App->window->SetBorderless(borderless);
+	}
+
+	if (ImGui::CollapsingHeader("Editor Camera"))
+	{
+		if (ImGui::DragFloat("Vertical fov", &App->camera->verticalFOV, 1.0f, 0.1f))
+		{
+			App->camera->projectionIsDirty = true;
+		}
+		if (ImGui::DragFloat("Near plane distance", &App->camera->nearPlaneDistance))
+		{
+			App->camera->projectionIsDirty = true;
+		}
+		if (ImGui::DragFloat("Far plane distance", &App->camera->farPlaneDistance))
+		{
+			App->camera->projectionIsDirty = true;
+		}
 	}
 
 	if (ImGui::CollapsingHeader("Hardware & Software"))

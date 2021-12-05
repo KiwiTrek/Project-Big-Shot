@@ -1,5 +1,5 @@
-#ifndef __MODULE_SCENE_INTRO_H__
-#define __MODULE_SCENE_INTRO_H__
+#ifndef __MODULE_SCENE_H__
+#define __MODULE_SCENE_H__
 
 #include "Module.h"
 #include "Globals.h"
@@ -29,4 +29,4 @@ private:
 	GameObject* root;
 };
 
-#endif // !__MODULE_SCENE_INTRO_H__
+#endif // !__MODULE_SCENE_H__

@@ -7,6 +7,7 @@
 #include "ModuleResources.h"
 #include "ModuleGameObjects.h"
 #include "ModuleScene.h"
+#include "ModuleRenderer3D.h"
 
 
 ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)

@@ -558,9 +558,6 @@
     <ClInclude Include="Light.h">
       <Filter>Sources\GameObjects\Components</Filter>
     </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleGameObjects.h">
       <Filter>Sources\GameObjects</Filter>
     </ClInclude>
@@ -701,6 +698,12 @@
     </ClInclude>
     <ClInclude Include="PanelResources.h">
       <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelScene.h">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleViewportBuffer.h">
+      <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -920,9 +923,6 @@
     <ClCompile Include="Light.cpp">
       <Filter>Sources\GameObjects\Components</Filter>
     </ClCompile>
-    <ClCompile Include="glmath.cpp">
-      <Filter>Sources\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleGameObjects.cpp">
       <Filter>Sources\GameObjects</Filter>
     </ClCompile>
@@ -952,6 +952,12 @@
     </ClCompile>
     <ClCompile Include="PanelResources.cpp">
       <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelScene.cpp">
+      <Filter>Sources\Modules\GUI\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleViewportBuffer.cpp">
+      <Filter>Sources\Modules\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

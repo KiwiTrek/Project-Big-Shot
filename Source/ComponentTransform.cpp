@@ -125,11 +125,13 @@ float4x4 ComponentTransform::GetLocalTransform()
 void ComponentTransform::SetPos(float x, float y, float z)
 {
 	pos.Set(x, y, z);
+	UpdateLocalTransform();
 }
 
 void ComponentTransform::SetPos(float3 p)
 {
 	pos = p;
+	UpdateLocalTransform();
 }
 
 float3 ComponentTransform::GetPos()
@@ -140,11 +142,13 @@ float3 ComponentTransform::GetPos()
 void ComponentTransform::SetRot(float x, float y, float z)
 {
 	rot = Quat::FromEulerXYZ(x * DEGTORAD, y * DEGTORAD, z * DEGTORAD);
+	UpdateLocalTransform();
 }
 
 void ComponentTransform::SetRot(Quat q)
 {
 	rot = q;
+	UpdateLocalTransform();
 }
 
 Quat ComponentTransform::GetRot()
@@ -155,11 +159,13 @@ Quat ComponentTransform::GetRot()
 void ComponentTransform::SetScale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
+	UpdateLocalTransform();
 }
 
 void ComponentTransform::SetScale(float3 s)
 {
 	scale = s;
+	UpdateLocalTransform();
 }
 
 float3 ComponentTransform::GetScale()

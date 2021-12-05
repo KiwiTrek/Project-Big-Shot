@@ -10,6 +10,7 @@
 #include "ModuleImporter.h"
 #include "ModuleGameObjects.h"
 #include "ModuleResources.h"
+#include "ModuleViewportBuffer.h"
 
 Application::Application(ConsoleBuffer* _buff)
 {
@@ -23,6 +24,7 @@ Application::Application(ConsoleBuffer* _buff)
 	fileSystem = new ModuleFileSystem(this);
 	renderer3D = new ModuleRenderer3D(this);
 	resources = new ModuleResources(this);
+	viewport = new ModuleViewportBuffer(this);
 
 	AddModule(fileSystem);
 	AddModule(resources);
@@ -34,6 +36,7 @@ Application::Application(ConsoleBuffer* _buff)
 	AddModule(scene);
 	AddModule(gameObjects);
 
+	AddModule(viewport);
 	AddModule(gui);
 	AddModule(renderer3D);
 

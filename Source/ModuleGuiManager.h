@@ -19,6 +19,7 @@
 #include "PanelConfig.h"
 #include "PanelHierarchy.h"
 #include "PanelInspector.h"
+#include "PanelScene.h"
 
 class Grid
 {
@@ -66,6 +67,7 @@ public:
 	PanelConfig* config;
 	PanelHierarchy* hierarchy;
 	PanelInspector* inspector;
+	PanelScene* scene;
 
 	Grid grid;
 };

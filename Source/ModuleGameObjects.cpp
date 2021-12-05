@@ -79,6 +79,7 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 				mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
 			}
 			m->Render();
+			if (m->drawBBox) m->DrawBBox();
 		}
 		++item;
 	}
@@ -104,6 +105,7 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 				mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
 			}
 			m->Render();
+			if (m->drawBBox) m->DrawBBox();
 		}
 		++item;
 	}

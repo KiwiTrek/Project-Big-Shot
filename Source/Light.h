@@ -2,7 +2,7 @@
 #define __LIGHT_H__
 
 #include "Color.h"
-#include "glmath.h"
+#include "MathGeoLib.h"
 
 struct Light
 {
@@ -17,7 +17,7 @@ public:
 public:
 	Color ambient;
 	Color diffuse;
-	vec3 position;
+	float3 position;
 	int ref;
 	bool on;
 };

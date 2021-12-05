@@ -4,6 +4,7 @@
 #include "RenderGlobals.h"
 
 #include "ModuleWindow.h"
+#include "ModuleViewportBuffer.h"
 #include "ModuleCamera3D.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
@@ -131,10 +132,12 @@ UpdateStatus ModuleRenderer3D::PreUpdate()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glLoadIdentity();
+	App->camera->CalculateViewMatrix();
 
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(App->camera->cameraFrustum.ProjectionMatrix().Transposed().ptr());
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->viewMatrix.Transposed().ptr());
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->position.x, App->camera->position.y, App->camera->position.z);
@@ -150,6 +153,7 @@ UpdateStatus ModuleRenderer3D::PreUpdate()
 UpdateStatus ModuleRenderer3D::PostUpdate()
 {
 	SDL_GL_SwapWindow(App->window->window);
+
 	return UpdateStatus::UPDATE_CONTINUE;
 }
 
@@ -184,10 +188,6 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG_CONSOLE("Destroying 3D Renderer");
 
-	normalMatrix.~mat3x3();
-	modelMatrix.~mat4x4();
-	viewMatrix.~mat4x4();
-	projectionMatrix.~mat4x4();
 	SDL_GL_DeleteContext(context);
 
 	return true;
@@ -207,13 +207,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	projectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&projectionMatrix);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	App->viewport->OnResize(width, height);
+	App->camera->RecalculateProjection();
 }
 
 bool ModuleRenderer3D::GetVSync()

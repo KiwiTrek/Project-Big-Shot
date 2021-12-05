@@ -59,6 +59,9 @@ void ComponentMesh::DrawInspector()
 	}
 }
 
+void ComponentMesh::Update()
+{}
+
 void ComponentMesh::Render() const
 {
 	if (mesh == nullptr) return;
@@ -143,7 +146,6 @@ void ComponentMesh::Render() const
 
 	if (drawFaceNormals) DrawFaceNormals();
 	if (drawVertexNormals) DrawVertexNormals();
-	if (drawBBox) DrawBBox();
 
 	glPopMatrix();
 
@@ -204,31 +206,36 @@ void ComponentMesh::DrawFaceNormals() const
 
 void ComponentMesh::CreateBBox()
 {
+	drawingBbox.SetNegativeInfinity();
+	drawingBbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
+
 	bbox.SetNegativeInfinity();
+	bbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
 
-	float3* vertices = new float3[mesh->vertexNum];
+	Sphere sphere;	
+	sphere.r = 0.f;
+	sphere.pos = bbox.CenterPoint();
+	sphere.Enclose(bbox);
 
-	for (size_t i = 0; i < mesh->vertexNum; i++)
-	{
-		vertices[i].x = mesh->vertices[i].x;
-		vertices[i].y = mesh->vertices[i].y;
-		vertices[i].z = mesh->vertices[i].z;
-	}
+	radius = sphere.r;
+	centerPoint = sphere.pos;
 
-	bbox.Enclose(vertices, mesh->vertexNum);
 	obb = bbox;
 	obb.Transform(owner->GetComponent<Transform>()->GetGlobalTransform());
 
 	bbox.SetNegativeInfinity();
 	bbox.Enclose(obb);
-
-	delete[] vertices;
 }
 
 void ComponentMesh::DrawBBox() const
 {
+	float4x4 t = owner->GetComponent<Transform>()->GetGlobalTransform();
+
+	glPushMatrix();
+	glMultMatrixf((float*)&t.Transposed());
+
 	float3 cornerPoints[8];
-	bbox.GetCornerPoints(cornerPoints);
+	drawingBbox.GetCornerPoints(cornerPoints);
 
 	glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
 	glLineWidth(3.5f);
@@ -274,6 +281,13 @@ void ComponentMesh::DrawBBox() const
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glLineWidth(1.0f);
+
+	glPopMatrix();
+}
+
+float3 ComponentMesh::GetCenterPointInWorldCoords() const
+{
+	return owner->GetComponent<Transform>()->GetGlobalTransform().TransformPos(centerPoint);
 }
 
 //void ComponentMesh::OnLoad(const JSONReader& reader)

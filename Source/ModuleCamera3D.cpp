@@ -1,262 +1,209 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
-
 #include "ModuleInput.h"
 #include "ModuleGameObjects.h"
+#include "ComponentTransform.h"
+#include "ComponentMesh.h"
+#include "GameObject.h"
 
-ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
+ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	name = "camera";
-	CalculateViewMatrix();
+	right = float3(1.0f, 0.0f, 0.0f);
+	up = float3(0.0f, 1.0f, 0.0f);
+	front = float3(0.0f, 0.0f, 1.0f);
 
-	x = vec3(1.0f, 0.0f, 0.0f);
-	y = vec3(0.0f, 1.0f, 0.0f);
-	z = vec3(0.0f, 0.0f, 1.0f);
-	position = vec3(0.0f, 0.0f, 5.0f);
-	reference = vec3(0.0f, 0.0f, 0.0f);
-	currentDist = 0.0f;
+	position = float3(0.0f, 5.0f, -15.0f);
+	reference = float3(0.0f, 0.0f, 0.0f);
+
+	cameraFrustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
+
+	CalculateViewMatrix();
 }
 
 ModuleCamera3D::~ModuleCamera3D()
 {}
 
+// -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
-	LOG_CONSOLE("Setting up the camera");
+	LOG("Setting up the camera\n");
+
+	LookAt(float3::zero);
+
 	bool ret = true;
 
 	return ret;
 }
 
+// -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
 
-	viewMatrix.~mat4x4();
-	viewMatrixInverse.~mat4x4();
-
 	return true;
 }
 
+// -----------------------------------------------------------------
 UpdateStatus ModuleCamera3D::Update(float dt)
 {
-	vec3 newPos(0, 0, 0);
+	float3 newPos(0, 0, 0);
+	float speed = cameraSpeed * dt;
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT) speed *= 4.f;
+
+	//Focus
+	if (App->input->GetKey(SDL_SCANCODE_F) == KeyState::KEY_DOWN)
+	{
+		if (App->gameObjects->selectedGameObject != nullptr)
+		{
+			if (ComponentMesh* mesh = App->gameObjects->selectedGameObject->GetComponent<Mesh>())
+			{
+				const float3 meshCenter = mesh->GetCenterPointInWorldCoords();
+				LookAt(meshCenter);
+				const float meshRadius = mesh->radius;
+				const float currentDistance = meshCenter.Distance(position);
+				const float desiredDistance = (meshRadius * 2) / atan(cameraFrustum.HorizontalFov());
+				position = position + front * (currentDistance - desiredDistance);
+			}
+			else
+			{
+				LookAt(App->gameObjects->selectedGameObject->GetComponent<Transform>()->GetPos());
+			}
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KeyState::KEY_REPEAT) newPos.y += speed;
+	if (App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_REPEAT) newPos.y -= speed;
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KeyState::KEY_REPEAT) newPos += front * speed;
+	if (App->input->GetKey(SDL_SCANCODE_S) == KeyState::KEY_REPEAT) newPos -= front * speed;
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_REPEAT) newPos += right * speed;
+	if (App->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_REPEAT) newPos -= right * speed;
+
+	if (App->input->GetMouseZ() > 0) newPos += front * speed * 2;
+	if (App->input->GetMouseZ() < 0) newPos -= front * speed * 2;
+
+	// Mouse motion ----------------
+
+	bool hasRotated = false;
+
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_REPEAT)
 	{
-		float speed = 10.0f * dt;
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KeyState::KEY_REPEAT)
-		{
-			speed = 20.0f * dt;
-		}
-
-		// WASD keys -----------------------------------
-		if (App->input->GetKey(SDL_SCANCODE_Q) == KeyState::KEY_REPEAT) newPos.y += speed;
-		if (App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_REPEAT) newPos.y -= speed;
-
-		if (App->input->GetKey(SDL_SCANCODE_W) == KeyState::KEY_REPEAT) newPos -= z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KeyState::KEY_REPEAT) newPos += z * speed;
-
-		if (App->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_REPEAT) newPos -= x * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_REPEAT) newPos += x * speed;
-
-		// Mouse motion ----------------
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
-		float Sensitivity = 0.25f;
-
-		position -= reference;
-
-		if (dx != 0)
+		if (App->input->GetKey(SDL_SCANCODE_LALT) == KeyState::KEY_REPEAT)
 		{
-			float DeltaX = (float)dx * Sensitivity;
-
-			x = rotate(x, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			y = rotate(y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			z = rotate(z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-		}
-
-		if (dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
-
-			y = rotate(y, DeltaY, x);
-			z = rotate(z, DeltaY, x);
-
-			if (y.y < 0.0f)
+			if (App->gameObjects->selectedGameObject != nullptr)
 			{
-				z = vec3(0.0f, z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				y = cross(z, x);
+				const float newDeltaX = (float)dx * cameraSensitivity;
+				const float newDeltaY = (float)dy * cameraSensitivity;
+
+				reference = App->gameObjects->selectedGameObject->GetComponent<Transform>()->GetPos();
+				Quat yRotation(up, dx * dt * cameraSensitivity * 0.7f);
+				Quat xRotation(right, dy * dt * cameraSensitivity * 0.7f);
+
+				float3 distance = position - reference;
+				distance = xRotation.Transform(distance);
+				distance = yRotation.Transform(distance);
+
+				position = distance + reference;
+
+				CalculateViewMatrix();
+				LookAt(reference);
 			}
 		}
-		position = reference + z * length(position);
-		currentDist = length(position);
-	}
-	else
-	{
-		//Zoom with Mouse Scroll
-		float zoomSpeed = 15.0f * dt;
-		if (App->input->GetMouseZ() > 0)
+		else
 		{
-			currentDist -= zoomSpeed;
-			position = reference + z * currentDist;
-		}
-		if (App->input->GetMouseZ() < 0)
-		{
-			currentDist += zoomSpeed;
-			position = reference + z * currentDist;
-		}
-	}
-
-	if (App->gameObjects->selectedGameObject != nullptr && App->input->GetKey(SDL_SCANCODE_F) == KeyState::KEY_DOWN)
-	{
-		ComponentTransform* t = App->gameObjects->selectedGameObject->GetComponent<Transform>();
-		newPos = vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z);
-		LookAt(vec3(t->GetPos().x, t->GetPos().y, t->GetPos().z));
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KeyState::KEY_REPEAT)
-	{
-		if (App->input->GetKey(SDL_SCANCODE_R) == KeyState::KEY_DOWN)
-		{
-			LOG_CONSOLE("Reset camera position")
-				position = vec3(0.0f, 0.0f, 5.0f);
-			App->camera->Move(vec3(1, 2, 1));
-			App->camera->LookAt(vec3(0, 0, 0));
-		}
-	}
-
-	if (App->gameObjects->selectedGameObject != nullptr)
-	{
-		if (App->input->GetKey(SDL_SCANCODE_LALT) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KeyState::KEY_REPEAT)
-		{
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			if (dx != 0)
 			{
-				// Mouse motion ----------------
-				int dx = -App->input->GetMouseXMotion();
-				int dy = -App->input->GetMouseYMotion();
+				const float newDeltaX = (float)dx * cameraSensitivity;
+				float deltaX = newDeltaX + 0.65f * (lastDeltaX - newDeltaX); //lerp for smooth rotation acceleration to avoid jittering
+				lastDeltaX = deltaX;
+				Quat rotateY = Quat::RotateY(up.y >= 0.f ? deltaX * .1f : -deltaX * .1f);
+				up = rotateY * up;
+				front = rotateY * front;
+				CalculateViewMatrix();
+				hasRotated = true;
+			}
 
-				float Sensitivity = 0.25f;
-
-				position -= reference;
-
-				if (dx != 0)
-				{
-					float DeltaX = (float)dx * Sensitivity;
-
-					x = rotate(x, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-					y = rotate(y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-					z = rotate(z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				}
-
-				if (dy != 0)
-				{
-					float DeltaY = (float)dy * Sensitivity;
-
-					y = rotate(y, DeltaY, x);
-					z = rotate(z, DeltaY, x);
-
-					if (y.y < 0.0f)
-					{
-						z = vec3(0.0f, z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-						y = cross(z, x);
-					}
-				}
-				position = reference + z * length(position);
-				currentDist = length(position);
-
-				float3 focusedPos = App->gameObjects->selectedGameObject->GetComponent<Transform>()->GetPos();
-				LookAt(vec3(focusedPos.x, focusedPos.y, focusedPos.z));
+			if (dy != 0)
+			{
+				const float newDeltaY = (float)dy * cameraSensitivity;
+				float deltaY = newDeltaY + 0.65f * (lastDeltaY - newDeltaY); //lerp for smooth rotation acceleration to avoid jittering
+				lastDeltaY = deltaY;
+				Quat rotateX = Quat::RotateAxisAngle(right, -deltaY * .1f);
+				up = rotateX * up;
+				front = rotateX * front;
+				CalculateViewMatrix();
+				hasRotated = true;
 			}
 		}
 	}
 
 	position += newPos;
-	reference += newPos;
 
-	// Recalculate matrix -------------
-	CalculateViewMatrix();
+	!hasRotated ? lastDeltaX = lastDeltaY = 0.f : 0.f;
 
 	return UpdateStatus::UPDATE_CONTINUE;
 }
 
-void ModuleCamera3D::Look(const vec3& position, const vec3& reference, bool rotateAroundReference)
+
+// -----------------------------------------------------------------
+void ModuleCamera3D::LookAt(const float3& point)
 {
-	this->position = position;
-	this->reference = reference;
+	reference = point;
 
-	z = normalize(position - reference);
-	x = normalize(cross(vec3(0.0f, 1.0f, 0.0f), z));
-	y = cross(z, x);
-
-	if (!rotateAroundReference)
-	{
-		this->reference = this->position;
-		this->position += z * 0.05f;
-	}
-
-	currentDist = length(position);
+	front = (reference - position).Normalized();
+	right = float3(0.0f, 1.0f, 0.0f).Cross(front).Normalized();
+	up = front.Cross(right);
 
 	CalculateViewMatrix();
 }
 
-void ModuleCamera3D::LookAt(const vec3& spot)
-{
-	reference = spot;
-
-	z = normalize(position - reference);
-	x = normalize(cross(vec3(0.0f, 1.0f, 0.0f), z));
-	y = cross(z, x);
-
-	currentDist = length(position);
-
-	CalculateViewMatrix();
-}
-
-void ModuleCamera3D::Move(const vec3& movement)
-{
-	position += movement;
-	reference += movement;
-
-	currentDist = length(position);
-
-	CalculateViewMatrix();
-}
-
-float* ModuleCamera3D::GetViewMatrix()
-{
-	return &viewMatrix;
-}
-
+// -----------------------------------------------------------------
 void ModuleCamera3D::CalculateViewMatrix()
 {
-	viewMatrix = mat4x4(x.x, y.x, z.x, 0.0f, x.y, y.y, z.y, 0.0f, x.z, y.z, z.z, 0.0f, -dot(x, position), -dot(y, position), -dot(z, position), 1.0f);
-	viewMatrixInverse = inverse(viewMatrix);
+	if (projectionIsDirty)
+		RecalculateProjection();
+
+	cameraFrustum.SetPos(position);
+	cameraFrustum.SetFront(front.Normalized());
+	cameraFrustum.SetUp(up.Normalized());
+	float3::Orthonormalize((float3)cameraFrustum.Front(), (float3)cameraFrustum.Up());
+	right = up.Cross(front);
+	viewMatrix = cameraFrustum.ViewMatrix();
+}
+
+void ModuleCamera3D::RecalculateProjection()
+{
+	cameraFrustum.SetViewPlaneDistances(nearPlaneDistance, farPlaneDistance);
+	cameraFrustum.SetVerticalFovAndAspectRatio(verticalFOV * DEGTORAD, aspectRatio);
 }
 
 void ModuleCamera3D::OnSave(JSONWriter& writer) const
 {
-	//writer.String("camera");
-	//writer.StartObject();
-	//SAVE_JSON_FLOAT(verticalFOV)
-	//SAVE_JSON_FLOAT(nearPlaneDistance)
-	//SAVE_JSON_FLOAT(farPlaneDistance)
-	//SAVE_JSON_FLOAT(cameraSpeed)
-	//SAVE_JSON_FLOAT(cameraSensitivity)
-	//writer.EndObject();
+	writer.String("camera");
+	writer.StartObject();
+	SAVE_JSON_FLOAT(verticalFOV);
+	SAVE_JSON_FLOAT(nearPlaneDistance);
+	SAVE_JSON_FLOAT(farPlaneDistance);
+	SAVE_JSON_FLOAT(cameraSpeed);
+	SAVE_JSON_FLOAT(cameraSensitivity);
+	writer.EndObject();
 }
 
 void ModuleCamera3D::OnLoad(const JSONReader& reader)
 {
-	//if (reader.HasMember("camera"))
-	//{
-	//	const auto& config = reader["camera"];
-	//	LOAD_JSON_FLOAT(verticalFOV);
-	//	LOAD_JSON_FLOAT(nearPlaneDistance);
-	//	LOAD_JSON_FLOAT(farPlaneDistance);
-	//	LOAD_JSON_FLOAT(cameraSpeed);
-	//	LOAD_JSON_FLOAT(cameraSensitivity);
-	//}
-	//RecalculateProjection();
+	if (reader.HasMember("camera"))
+	{
+		const auto& config = reader["camera"];
+		LOAD_JSON_FLOAT(verticalFOV);
+		LOAD_JSON_FLOAT(nearPlaneDistance);
+		LOAD_JSON_FLOAT(farPlaneDistance);
+		LOAD_JSON_FLOAT(cameraSpeed);
+		LOAD_JSON_FLOAT(cameraSensitivity);
+	}
+	RecalculateProjection();
 }

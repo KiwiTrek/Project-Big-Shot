@@ -1,7 +1,7 @@
 #include "RenderGlobals.h"
 #include "Light.h"
 
-Light::Light() : ref(-1), on(false), position(0.0f, 0.0f, 0.0f)
+Light::Light() : ref(-1), on(false), position(float3(0.0f, 0.0f, 0.0f))
 {}
 
 void Light::Init()
