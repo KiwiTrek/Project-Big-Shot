@@ -1,9 +1,10 @@
 #include "ModuleScene.h"
 #include "Application.h"
 
+#include "ModuleFileSystem.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGameObjects.h"
-#include "ModuleFileSystem.h"
+#include "ModuleRenderer3D.h"
 
 ModuleScene::ModuleScene(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -24,6 +25,7 @@ bool ModuleScene::Init()
 	//Create main camera
 	App->gameObjects->mainCamera = new GameObject("Camera");
 	App->gameObjects->mainCamera->CreateComponent(ComponentTypes::CAMERA);
+	App->gameObjects->mainCamera->GetComponent<Camera>()->culling = true;
 
 	App->gameObjects->AddGameobject(App->gameObjects->mainCamera);
 
@@ -53,6 +55,7 @@ UpdateStatus ModuleScene::Update(float dt)
 
 UpdateStatus ModuleScene::PostUpdate()
 {
+	if (drawMouse) App->renderer3D->DrawRay();
 	return UpdateStatus::UPDATE_CONTINUE;
 }
 

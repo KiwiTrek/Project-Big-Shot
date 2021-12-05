@@ -20,10 +20,14 @@ public:
 	UpdateStatus Update(float dt);
 	UpdateStatus PostUpdate();
 
+	void SetSceneRoot(GameObject* g) { root = g; }
 	GameObject* GetSceneRoot() { return root; }
 	bool CleanUp();
 	void Load(std::string scene);
 	void Save(std::string scene);
+
+public:
+	bool drawMouse = false;
 
 private:
 	GameObject* root;

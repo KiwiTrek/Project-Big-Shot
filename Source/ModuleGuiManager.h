@@ -29,6 +29,7 @@ public:
 
 	void Render();
 public:
+	bool axis;
 	float3 normal;
 	float constant;
 };
@@ -52,6 +53,7 @@ public:
 	void LogConsole(const char* buff);
 	const char* GetImGuiVersion();
 	bool GetInput(SDL_Event* event);
+	bool MouseOnScene();
 
 public:
 	bool demo;
@@ -67,7 +69,11 @@ public:
 	PanelConfig* config;
 	PanelHierarchy* hierarchy;
 	PanelInspector* inspector;
+
 	PanelScene* scene;
+	ImVec2 scenePanelOrigin;
+	ImVec2 mouseScenePosition;
+	ImVec2 viewportSize;
 
 	Grid grid;
 };

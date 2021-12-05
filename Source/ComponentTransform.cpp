@@ -70,7 +70,7 @@ void ComponentTransform::UpdateLocalTransform()
 	eulerRot = rot.ToEulerXYZ() * RADTODEG;
 }
 
-void ComponentTransform::DrawInspector()
+void ComponentTransform::DrawInspector(Application* App)
 {
 	if (owner->parent != nullptr && ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
@@ -90,22 +90,25 @@ void ComponentTransform::DrawInspector()
 			owner->UpdateChildrenTransforms();
 		}
 
-		float scale4f[4] = { scale.x, scale.y, scale.z, 1.0f };
-		if (ImGui::DragFloat3("Scale", scale4f, 0.01f, -10000.0f, 10000.0f))
+		if (owner->GetComponent<Camera>() == nullptr)
 		{
-			SetScale(scale4f[0], scale4f[1], scale4f[2]);
-			UpdateGlobalTransform();
-			owner->UpdateChildrenTransforms();
-		};
+			float scale4f[4] = { scale.x, scale.y, scale.z, 1.0f };
+			if (ImGui::DragFloat3("Scale", scale4f, 0.01f, -10000.0f, 10000.0f))
+			{
+				SetScale(scale4f[0], scale4f[1], scale4f[2]);
+				UpdateGlobalTransform();
+				owner->UpdateChildrenTransforms();
+			}
 
-		float scaleMult = scale.x;
-		if (ImGui::DragFloat("Uni-Scale", &scaleMult, 0.01f, 0.0f, 10.0f))
-		{
-			SetScale(float3(scaleMult, scaleMult, scaleMult));
-			UpdateGlobalTransform();
-			owner->UpdateChildrenTransforms();
+			float scaleMult = scale.x;
+			if (ImGui::DragFloat("Uni-Scale", &scaleMult, 0.01f, 0.0f, 10.0f))
+			{
+				SetScale(float3(scaleMult, scaleMult, scaleMult));
+				UpdateGlobalTransform();
+				owner->UpdateChildrenTransforms();
+			}
+			ImGui::Spacing();
 		}
-		ImGui::Spacing();
 
 		if (ImGui::Button("Reset")) Reset();
 		ImGui::Spacing();
@@ -166,6 +169,17 @@ void ComponentTransform::SetScale(float3 s)
 {
 	scale = s;
 	UpdateLocalTransform();
+}
+
+void ComponentTransform::SetGlobalTransform(float4x4 transform)
+{
+	gTransform = transform;
+	float4x4 inverseParentGlobal = gParentTransform;
+	inverseParentGlobal.Inverse();
+	lTransform = inverseParentGlobal * gTransform;
+
+	UpdateGlobalTransform();
+	owner->UpdateChildrenTransforms();
 }
 
 float3 ComponentTransform::GetScale()

@@ -79,6 +79,9 @@
     <Filter Include="Sources\GameObjects\Resources">
       <UniqueIdentifier>{3e3a4bf3-0a0f-4011-9e8d-96ae3d835174}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Tools\ImGuizmo">
+      <UniqueIdentifier>{7f3e2b6b-25d5-41e6-88b5-f8adfc915bfa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -705,6 +708,21 @@
     <ClInclude Include="ModuleViewportBuffer.h">
       <Filter>Sources\Modules\Main</Filter>
     </ClInclude>
+    <ClInclude Include="External\ImGuizmo\include\ImCurveEdit.h">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="External\ImGuizmo\include\ImGradient.h">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="External\ImGuizmo\include\ImGuizmo.h">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="External\ImGuizmo\include\ImSequencer.h">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="External\ImGuizmo\include\ImZoomSlider.h">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -958,6 +976,18 @@
     </ClCompile>
     <ClCompile Include="ModuleViewportBuffer.cpp">
       <Filter>Sources\Modules\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="External\ImGuizmo\include\ImCurveEdit.cpp">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="External\ImGuizmo\include\ImGradient.cpp">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="External\ImGuizmo\include\ImGuizmo.cpp">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="External\ImGuizmo\include\ImSequencer.cpp">
+      <Filter>Sources\Tools\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

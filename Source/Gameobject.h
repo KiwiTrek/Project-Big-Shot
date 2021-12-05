@@ -36,8 +36,6 @@ public:
 	void DeleteChildren(bool isOriginal = true);
 	void UpdateChildrenTransforms();
 
-	void SetAxis(bool value);
-
 	void OnLoad(const JSONReader& reader);
 	void OnSave(JSONWriter& writer) const;
 

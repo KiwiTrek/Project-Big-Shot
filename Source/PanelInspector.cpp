@@ -25,7 +25,7 @@ UpdateStatus PanelInspector::Update()
 		std::vector<Component*>::iterator item = g->components.begin();
 		while (item != g->components.end())
 		{
-			(*item)->DrawInspector();
+			(*item)->DrawInspector(App);
 			item++;
 		}
 	}

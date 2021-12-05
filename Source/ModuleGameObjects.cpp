@@ -1,6 +1,8 @@
 #include "ModuleGameObjects.h"
 #include "Application.h"
 
+#include "ModuleInput.h"
+#include "ModuleCamera3D.h"
 #include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleScene.h"
@@ -15,12 +17,25 @@ ModuleGameObjects::~ModuleGameObjects()
 
 bool ModuleGameObjects::Init()
 {
+	currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	currentGizmoMode = ImGuizmo::MODE::WORLD;
 	return true;
 }
 
 bool ModuleGameObjects::Start()
 {
 	return true;
+}
+
+UpdateStatus ModuleGameObjects::PreUpdate()
+{
+	if ((App->input->GetKey(SDL_SCANCODE_T) == KeyState::KEY_DOWN)) currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+
+	else if ((App->input->GetKey(SDL_SCANCODE_Y) == KeyState::KEY_DOWN)) currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+
+	else if ((App->input->GetKey(SDL_SCANCODE_U) == KeyState::KEY_DOWN)) currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+
+	return UpdateStatus::UPDATE_CONTINUE;
 }
 
 UpdateStatus ModuleGameObjects::Update(float dt)
@@ -35,10 +50,14 @@ UpdateStatus ModuleGameObjects::Update(float dt)
 		while (c != (*item)->components.end())
 		{
 			(*c)->Update();
+
 			c++;
 		}
 		item++;
 	}
+
+	GuizmoTransformation();
+
 	return ret;
 }
 
@@ -54,6 +73,7 @@ UpdateStatus ModuleGameObjects::UpdateChildren(GameObject* parent)
 		while (c != (*item)->components.end())
 		{
 			(*c)->Update();
+
 			c++;
 		}
 		item++;
@@ -73,18 +93,72 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 		{
 			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
 			m->wireOverride = App->renderer3D->IsWireframe();
-			m->axis = App->renderer3D->IsAxis();
+
 			if (mainCamera != nullptr)
 			{
-				mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+				if (mainCamera->GetComponent<Camera>()->culling == true)
+				{
+					mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+				}
+				else
+				{
+					m->render = true;
+				}
 			}
+			else
+			{
+				m->render = true;
+			}
+
 			m->Render();
 			if (m->drawBBox) m->DrawBBox();
 		}
+
+		ComponentCamera* c = (*item)->GetComponent<Camera>();
+		if (c != nullptr && c->IsActive())
+		{
+			c->Render();
+			if ((*item) == selectedGameObject)
+			{
+				c->drawFrustum = true;
+				c->DrawBBox();
+			}
+			else
+			{
+				c->drawFrustum = false;
+			}
+		}
+
 		++item;
 	}
 
 	return UpdateStatus::UPDATE_CONTINUE;
+}
+
+void ModuleGameObjects::GuizmoTransformation()
+{
+	/*if (selectedGameObject == nullptr)
+		return;
+
+	float4x4 viewMatrix = App->camera->viewMatrix.Transposed();
+	float4x4 projectionMatrix = App->camera->cameraFrustum.ProjectionMatrix().Transposed();
+	float4x4 objectTransform = selectedGameObject->GetComponent<Transform>()->GetGlobalTransform().Transposed();
+
+	ImGuizmo::SetDrawlist();
+	ImGuizmo::SetRect(App->gui->scenePanelOrigin.x, App->gui->scenePanelOrigin.y, App->gui->viewportSize.x, App->gui->viewportSize.y);
+
+	float tempTransform[16];
+	memcpy(tempTransform, objectTransform.ptr(), 16 * sizeof(float));
+
+	ImGuizmo::Manipulate(viewMatrix.ptr(), projectionMatrix.ptr(), currentGizmoOperation, currentGizmoOperation != ImGuizmo::OPERATION::SCALE ? currentGizmoMode : ImGuizmo::MODE::LOCAL, tempTransform);
+
+	if (ImGuizmo::IsUsing())
+	{
+		float4x4 newTransform;
+		newTransform.Set(tempTransform);
+		objectTransform = newTransform.Transposed();
+		selectedGameObject->GetComponent<Transform>()->SetGlobalTransform(objectTransform);
+	}*/
 }
 
 void ModuleGameObjects::RenderChildren(GameObject* parent)
@@ -99,13 +173,30 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 		{
 			(*item) == selectedGameObject ? m->drawBBox = true : m->drawBBox = false;
 			m->wireOverride = App->renderer3D->IsWireframe();
-			m->axis = App->renderer3D->IsAxis();
+
 			if (mainCamera != nullptr)
 			{
-				mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+				if (mainCamera->GetComponent<Camera>()->culling == true)
+				{
+					mainCamera->GetComponent<Camera>()->ContainsBBox(m->bbox) ? m->render = true : m->render = false;
+				}
+				else
+				{
+					m->render = true;
+				}
+			}
+			else
+			{
+				m->render = true;
 			}
 			m->Render();
 			if (m->drawBBox) m->DrawBBox();
+
+			ComponentCamera* c = (*item)->GetComponent<Camera>();
+			if (c != nullptr && c->IsActive())
+			{
+				(*item) == selectedGameObject ? c->drawFrustum = true : c->drawFrustum = false;
+			}
 		}
 		++item;
 	}
@@ -158,4 +249,23 @@ void ModuleGameObjects::RemoveGameobject(GameObject* g)
 
 	delete g;
 	g = nullptr;
+}
+
+std::vector<GameObject*> ModuleGameObjects::GetAllGameObjects()
+{
+	std::vector<GameObject*> gameObjects;
+
+	PreorderGameObjects(App->scene->GetSceneRoot(), gameObjects);
+
+	return gameObjects;
+}
+
+void ModuleGameObjects::PreorderGameObjects(GameObject* gameObject, std::vector<GameObject*>& gameObjects)
+{
+	gameObjects.push_back(gameObject);
+
+	for (size_t i = 0; i < gameObject->children.size(); i++)
+	{
+		PreorderGameObjects(gameObject->GetChildAt(i), gameObjects);
+	}
 }

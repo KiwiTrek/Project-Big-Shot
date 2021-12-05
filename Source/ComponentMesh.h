@@ -20,7 +20,7 @@ public:
 
 	void Update() override;
 	void Render() const;
-	void DrawInspector();
+	void DrawInspector(Application* App);
 	void DrawVertexNormals() const;
 	void DrawFaceNormals() const;
 	Shape GetType() const;
@@ -35,7 +35,7 @@ public:
 
 public:
 	Color vertexColor;
-	bool axis, wire, wireOverride, drawVertexNormals, drawFaceNormals, drawBBox;
+	bool wire, wireOverride, drawVertexNormals, drawFaceNormals, drawBBox;
 
 	AABB bbox;
 	AABB drawingBbox;

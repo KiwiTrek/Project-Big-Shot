@@ -3,6 +3,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleGameObjects.h"
+#include "ModuleRenderer3D.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "GameObject.h"
@@ -32,6 +33,13 @@ bool ModuleCamera3D::Start()
 	LookAt(float3::zero);
 
 	bool ret = true;
+
+	aspectRatio = 1.f;
+	verticalFOV = 60.f;
+	nearPlaneDistance = 0.1f;
+	farPlaneDistance = 500.f;
+	cameraSensitivity = .1f;
+	cameraSpeed = 60.f;
 
 	return ret;
 }
@@ -100,7 +108,6 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 				const float newDeltaX = (float)dx * cameraSensitivity;
 				const float newDeltaY = (float)dy * cameraSensitivity;
 
-				reference = App->gameObjects->selectedGameObject->GetComponent<Transform>()->GetPos();
 				Quat yRotation(up, dx * dt * cameraSensitivity * 0.7f);
 				Quat xRotation(right, dy * dt * cameraSensitivity * 0.7f);
 
@@ -140,6 +147,12 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 				hasRotated = true;
 			}
 		}
+	}
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && !ImGuizmo::IsUsing() && App->gui->MouseOnScene())
+	{
+		GameObject* picked = MousePicking();
+		App->gameObjects->selectedGameObject = picked;
 	}
 
 	position += newPos;
@@ -182,15 +195,122 @@ void ModuleCamera3D::RecalculateProjection()
 	cameraFrustum.SetVerticalFovAndAspectRatio(verticalFOV * DEGTORAD, aspectRatio);
 }
 
+GameObject* ModuleCamera3D::MousePicking()
+{
+	float normalX = App->gui->mouseScenePosition.x / App->gui->viewportSize.x;
+	float normalY = App->gui->mouseScenePosition.y / App->gui->viewportSize.y;
+
+	normalX = (normalX - 0.5f) * 2.0f;
+	normalY = -(normalY - 0.5f) * 2.0f;
+
+	LineSegment newRay = cameraFrustum.UnProjectLineSegment(normalX, normalY);
+
+	App->renderer3D->ray = newRay;
+
+	std::vector<GameObject*> sceneGameObjects = App->gameObjects->GetAllGameObjects();
+	std::map<float, GameObject*> hitGameObjects;
+
+	//Find all hit GameObjects
+	for (size_t i = 0; i < sceneGameObjects.size(); i++)
+	{
+		ComponentMesh* m = sceneGameObjects[i]->GetComponent<Mesh>();
+		if (m != nullptr)
+		{
+			bool hit = newRay.Intersects(m->bbox);
+
+			if (hit)
+			{
+				float dNear;
+				float dFar;
+				hit = newRay.Intersects(m->bbox, dNear, dFar);
+				hitGameObjects[dNear] = sceneGameObjects[i];
+			}
+		}
+		else if (m == nullptr)
+		{
+			ComponentCamera* c = sceneGameObjects[i]->GetComponent<Camera>();
+			if (c != nullptr)
+			{
+				bool hit = newRay.Intersects(c->bbox);
+
+				if (hit)
+				{
+					float dNear;
+					float dFar;
+					hit = newRay.Intersects(c->bbox, dNear, dFar);
+					hitGameObjects[dNear] = sceneGameObjects[i];
+				}
+			}
+		}
+	}
+
+	std::map<float, GameObject*>::iterator it = hitGameObjects.begin();
+	for (it; it != hitGameObjects.end(); it++)
+	{
+		GameObject* gameObject = it->second;
+
+		LineSegment rayLocal = newRay;
+		rayLocal.Transform(gameObject->GetComponent<Transform>()->GetGlobalTransform().Inverted());
+
+		ComponentMesh* cMesh = gameObject->GetComponent<Mesh>();
+
+		if (cMesh != nullptr)
+		{
+			ResourceMesh* rMesh = cMesh->mesh;
+
+			if (rMesh == nullptr)
+				continue;
+
+			for (size_t i = 0; i < rMesh->indexNum; i += 3)
+			{
+				//create every triangle
+				float3 v1;
+				v1.x = rMesh->vertices[rMesh->indices[i]].x;
+				v1.y = rMesh->vertices[rMesh->indices[i]].y;
+				v1.z = rMesh->vertices[rMesh->indices[i]].z;
+
+				float3 v2;
+				v2.x = rMesh->vertices[rMesh->indices[i + 1]].x;
+				v2.y = rMesh->vertices[rMesh->indices[i + 1]].y;
+				v2.z = rMesh->vertices[rMesh->indices[i + 1]].z;
+
+				float3 v3;
+				v3.x = rMesh->vertices[rMesh->indices[i + 2]].x;
+				v3.y = rMesh->vertices[rMesh->indices[i + 2]].y;
+				v3.z = rMesh->vertices[rMesh->indices[i + 2]].z;
+
+				const Triangle triangle(v1, v2, v3);
+
+				float distance;
+				float3 intersectionPoint;
+				if (rayLocal.Intersects(triangle, &distance, &intersectionPoint))
+				{
+					return gameObject;
+				}
+			}
+		}
+		else
+		{
+			ComponentCamera* cam = gameObject->GetComponent<Camera>();
+			if (cam != nullptr)
+			{
+				return gameObject;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 void ModuleCamera3D::OnSave(JSONWriter& writer) const
 {
 	writer.String("camera");
 	writer.StartObject();
+	SAVE_JSON_FLOAT(cameraSpeed);
+	SAVE_JSON_FLOAT(cameraSensitivity);
 	SAVE_JSON_FLOAT(verticalFOV);
 	SAVE_JSON_FLOAT(nearPlaneDistance);
 	SAVE_JSON_FLOAT(farPlaneDistance);
-	SAVE_JSON_FLOAT(cameraSpeed);
-	SAVE_JSON_FLOAT(cameraSensitivity);
 	writer.EndObject();
 }
 
@@ -199,11 +319,11 @@ void ModuleCamera3D::OnLoad(const JSONReader& reader)
 	if (reader.HasMember("camera"))
 	{
 		const auto& config = reader["camera"];
+		LOAD_JSON_FLOAT(cameraSpeed);
+		LOAD_JSON_FLOAT(cameraSensitivity);
 		LOAD_JSON_FLOAT(verticalFOV);
 		LOAD_JSON_FLOAT(nearPlaneDistance);
 		LOAD_JSON_FLOAT(farPlaneDistance);
-		LOAD_JSON_FLOAT(cameraSpeed);
-		LOAD_JSON_FLOAT(cameraSensitivity);
 	}
 	RecalculateProjection();
 }

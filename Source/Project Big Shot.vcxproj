@@ -49,7 +49,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\rapidjson\include;$(ProjectDir)External\PhysFS\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\rapidjson\include;$(ProjectDir)External\PhysFS\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External\ImGuizmo\include;$(ProjectDir)External</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -69,7 +69,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WINDOWS_IGNORE_PACKING_MISMATCH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\rapidjson\include;$(ProjectDir)External\PhysFS\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)External\SDL\include;$(ProjectDir)External\imgui\include;$(ProjectDir)External\Glew\include;$(ProjectDir)External\MathGeoLib\include;$(ProjectDir)External\GPUDetect\include;$(ProjectDir)External\Assimp\include;$(ProjectDir)External\rapidjson\include;$(ProjectDir)External\PhysFS\include;$(ProjectDir)External\DevIL\include;$(ProjectDir)External\ImGuizmo\include;$(ProjectDir)External</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,6 +135,11 @@
     <ClInclude Include="External\Glew\include\glew.h" />
     <ClInclude Include="External\GPUDetect\include\DeviceId.h" />
     <ClInclude Include="External\GPUDetect\include\dxgi1_4.h" />
+    <ClInclude Include="External\ImGuizmo\include\ImCurveEdit.h" />
+    <ClInclude Include="External\ImGuizmo\include\ImGradient.h" />
+    <ClInclude Include="External\ImGuizmo\include\ImGuizmo.h" />
+    <ClInclude Include="External\ImGuizmo\include\ImSequencer.h" />
+    <ClInclude Include="External\ImGuizmo\include\ImZoomSlider.h" />
     <ClInclude Include="External\imgui\include\imconfig.h" />
     <ClInclude Include="External\imgui\include\imgui.h" />
     <ClInclude Include="External\imgui\include\imgui_impl_opengl3.h" />
@@ -297,6 +302,10 @@
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="External\GPUDetect\include\DeviceId.cpp" />
+    <ClCompile Include="External\ImGuizmo\include\ImCurveEdit.cpp" />
+    <ClCompile Include="External\ImGuizmo\include\ImGradient.cpp" />
+    <ClCompile Include="External\ImGuizmo\include\ImGuizmo.cpp" />
+    <ClCompile Include="External\ImGuizmo\include\ImSequencer.cpp" />
     <ClCompile Include="External\imgui\include\imgui.cpp" />
     <ClCompile Include="External\imgui\include\imgui_demo.cpp" />
     <ClCompile Include="External\imgui\include\imgui_draw.cpp" />

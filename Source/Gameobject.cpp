@@ -106,12 +106,6 @@ bool GameObject::RemoveComponent(Component* c)
 	return ret;
 }
 
-void GameObject::SetAxis(bool value)
-{
-	ComponentMesh* m = GetComponent<Mesh>();
-	if (m != nullptr) m->axis = value;
-}
-
 void GameObject::UpdateChildrenTransforms()
 {
 	ComponentTransform* t = GetComponent<Transform>();

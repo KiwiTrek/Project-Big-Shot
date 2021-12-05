@@ -11,6 +11,7 @@
 typedef rapidjson::PrettyWriter<rapidjson::StringBuffer> JSONWriter;
 typedef rapidjson::Value JSONReader;
 
+class Application;
 class GameObject;
 
 enum class ComponentTypes
@@ -33,7 +34,7 @@ public:
 	virtual void Update()
 	{}
 
-	virtual void DrawInspector()
+	virtual void DrawInspector(Application* App)
 	{}
 
 	virtual bool IsActive() { return active; }

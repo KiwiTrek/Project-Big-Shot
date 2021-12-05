@@ -54,7 +54,7 @@ bool ModuleWindow::Init()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(App->GetAppName().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(App->GetAppName().c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 
 		if (window == NULL)
 		{
@@ -125,6 +125,11 @@ float ModuleWindow::GetBrightness()
 void ModuleWindow::SetBrightness(float b)
 {
 	SDL_SetWindowBrightness(window, b);
+}
+
+void ModuleWindow::GetPosition(int& x, int& y)
+{
+	SDL_GetWindowPosition(window, &x, &y);
 }
 
 int ModuleWindow::GetWidth()

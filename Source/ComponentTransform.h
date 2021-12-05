@@ -10,7 +10,7 @@ public:
 	ComponentTransform(float3 p, Quat r, float3 s, bool active = true);
 	~ComponentTransform();
 
-	void DrawInspector();
+	void DrawInspector(Application* App);
 	void Reset();
 	void UpdateGlobalTransform();
 	void UpdateGlobalTransform(float4x4 pGlobalTransform);
@@ -24,6 +24,7 @@ public:
 	Quat GetRot();
 	void SetScale(float x, float y, float z);
 	void SetScale(float3 s);
+	void SetGlobalTransform(float4x4 transform);
 	float3 GetScale();
 	float4x4 GetGlobalTransform();
 	float4x4 GetLocalTransform();

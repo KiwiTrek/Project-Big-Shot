@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleFileSystem.h"
 #include "ModuleImporter.h"
+#include "ModuleScene.h"
 #include "ModuleGameObjects.h"
 #include "ModuleResources.h"
 

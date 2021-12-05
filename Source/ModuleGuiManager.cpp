@@ -123,6 +123,7 @@ UpdateStatus ModuleGuiManager::Update(float dt)
 	}
 
 	if (demo) ImGui::ShowDemoWindow();
+	grid.axis = App->renderer3D->IsAxis();
 	grid.Render();
 
 	return status;
@@ -318,7 +319,6 @@ void ModuleGuiManager::CreateShape(Shape shape)
 	rMesh->GenerateBuffers();
 	if (m->mesh != nullptr)m->CreateBBox();
 
-	c->SetAxis(true);
 	App->gameObjects->AddGameobject(c);
 	App->gameObjects->selectedGameObject = c;
 }
@@ -337,6 +337,12 @@ const char* ModuleGuiManager::GetImGuiVersion()
 bool ModuleGuiManager::GetInput(SDL_Event* event)
 {
 	return ImGui_ImplSDL2_ProcessEvent(event);
+}
+
+bool ModuleGuiManager::MouseOnScene()
+{
+	return mouseScenePosition.x > 0 && mouseScenePosition.x < viewportSize.x
+		&& mouseScenePosition.y > 0 && mouseScenePosition.y < viewportSize.y;
 }
 
 void ModuleGuiManager::SetupStyle()
@@ -416,18 +422,50 @@ void ModuleGuiManager::SetupStyle()
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 }
 
-Grid::Grid() : normal(0, 1, 0), constant(1)
+Grid::Grid() : normal(0, 1, 0), constant(1), axis(false)
 {}
 
-Grid::Grid(float x, float y, float z, float d) : normal(x, y, z), constant(d)
+Grid::Grid(float x, float y, float z, float d) : normal(x, y, z), constant(d), axis(false)
 {}
 
 void Grid::Render()
 {
-	glLineWidth(1.0f);
-	glBegin(GL_LINES);
-
 	float d = 200.0f;
+	
+	if (axis)
+	{
+		// Draw Axis Grid
+		glLineWidth(2.0f);
+
+		glBegin(GL_LINES);
+
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+
+		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(1.0f, 0.1f, 0.0f); glVertex3f(1.1f, -0.1f, 0.0f);
+		glVertex3f(1.1f, 0.1f, 0.0f); glVertex3f(1.0f, -0.1f, 0.0f);
+
+		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(-0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
+		glVertex3f(0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
+		glVertex3f(0.0f, 1.15f, 0.0f); glVertex3f(0.0f, 1.05f, 0.0f);
+
+		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
+		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(-0.05f, 0.1f, 1.05f); glVertex3f(0.05f, 0.1f, 1.05f);
+		glVertex3f(0.05f, 0.1f, 1.05f); glVertex3f(-0.05f, -0.1f, 1.05f);
+		glVertex3f(-0.05f, -0.1f, 1.05f); glVertex3f(0.05f, -0.1f, 1.05f);
+
+		glEnd();
+
+		glLineWidth(1.0f);
+	}
+
+	glBegin(GL_LINES);
+	glLineWidth(1.0f);
 
 	for (float i = -d; i <= d; i += 1.0f)
 	{

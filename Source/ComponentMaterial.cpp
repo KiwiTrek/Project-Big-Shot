@@ -28,7 +28,7 @@ ComponentMaterial::~ComponentMaterial()
 	material = nullptr;
 }
 
-void ComponentMaterial::DrawInspector()
+void ComponentMaterial::DrawInspector(Application* App)
 {
 	if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
 	{

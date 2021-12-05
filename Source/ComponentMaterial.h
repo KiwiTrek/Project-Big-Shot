@@ -14,7 +14,7 @@ public:
 	ComponentMaterial(bool active = true);
 	~ComponentMaterial();
 
-	void DrawInspector();
+	void DrawInspector(Application* App);
 	void BindTexture(bool usingCheckers);
 
 	//void OnLoad(const JSONReader& reader);

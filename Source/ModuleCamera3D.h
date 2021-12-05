@@ -20,6 +20,7 @@ public:
 	void LookAt(const float3& point);
 	void CalculateViewMatrix();
 	void RecalculateProjection();
+	GameObject* MousePicking();
 	void OnSave(JSONWriter& writer) const override;
 	void OnLoad(const JSONReader& reader) override;
 
@@ -29,8 +30,8 @@ public:
 	float aspectRatio = 1.f;
 	float verticalFOV = 60.f;
 	float nearPlaneDistance = 0.1f;
-	float farPlaneDistance = 1500.f;
-	float cameraSensitivity = .2f;
+	float farPlaneDistance = 500.f;
+	float cameraSensitivity = .1f;
 	float cameraSpeed = 60.f;
 	bool projectionIsDirty = false;
 

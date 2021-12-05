@@ -27,6 +27,7 @@ public:
 	float GetBrightness();
 	void SetBrightness(float b);
 
+	void GetPosition(int &x, int &y);
 	int GetWidth();
 	void SetWidth(int w);
 	int GetHeight();

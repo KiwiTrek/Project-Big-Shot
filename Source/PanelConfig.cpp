@@ -6,6 +6,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleImporter.h"
+#include "ModuleScene.h"
 #include "ModuleRenderer3D.h"
 
 PanelConfig::PanelConfig(Application* app, bool startEnabled) : Panel(app, startEnabled), fpsHist(100), msHist(100)
@@ -112,15 +113,25 @@ UpdateStatus PanelConfig::Update()
 
 	if (ImGui::CollapsingHeader("Editor Camera"))
 	{
-		if (ImGui::DragFloat("Vertical fov", &App->camera->verticalFOV, 1.0f, 0.1f))
+		ImGui::SliderFloat("Speed", &App->camera->cameraSpeed, 1.0f, 120.0f);
+		ImGui::SliderFloat("Sensitivity", &App->camera->cameraSensitivity, 0.05f, 0.5f);
+		if (ImGui::SliderFloat("Vertical FOV", &App->camera->verticalFOV, 0.1f, 180.0f))
 		{
 			App->camera->projectionIsDirty = true;
 		}
-		if (ImGui::DragFloat("Near plane distance", &App->camera->nearPlaneDistance))
+		if (ImGui::InputFloat("Near Plane", &App->camera->nearPlaneDistance, 1.0f, 10.0f))
 		{
+			if (App->camera->nearPlaneDistance <= 0.05f)
+			{
+				App->camera->nearPlaneDistance = 0.05f;
+			}
+			else if (App->camera->nearPlaneDistance > 25.0f)
+			{
+				App->camera->nearPlaneDistance = 25.0f;
+			}
 			App->camera->projectionIsDirty = true;
 		}
-		if (ImGui::DragFloat("Far plane distance", &App->camera->farPlaneDistance))
+		if (ImGui::SliderFloat("Far Plane", &App->camera->farPlaneDistance, 5.0f, 500.0f))
 		{
 			App->camera->projectionIsDirty = true;
 		}
@@ -166,31 +177,29 @@ UpdateStatus PanelConfig::Update()
 
 		bool vSync = App->renderer3D->GetVSync();
 		if (ImGui::Checkbox("VSync", &vSync)) App->renderer3D->SetVSync(vSync);
-
 		ImGui::SameLine();
 		bool wireframe = App->renderer3D->IsWireframe();
 		if (ImGui::Checkbox("Wireframe", &wireframe)) App->renderer3D->ToggleWireframe();
 
 		bool depthTest = App->renderer3D->IsDepthTest();
 		if (ImGui::Checkbox("Depth Test", &depthTest)) App->renderer3D->ToggleDepthTest();
-
 		ImGui::SameLine();
 		bool cullFace = App->renderer3D->IsCullFace();
 		if (ImGui::Checkbox("Cull Face", &cullFace)) App->renderer3D->ToggleCullFace();
 
 		bool lighting = App->renderer3D->IsLighting();
 		if (ImGui::Checkbox("Lighting", &lighting)) App->renderer3D->ToggleLighting();
-
 		ImGui::SameLine();
 		bool axis = App->renderer3D->IsAxis();
 		if (ImGui::Checkbox("Show Axis", &axis)) App->renderer3D->ToggleAxis();
 
 		bool colorMaterial = App->renderer3D->IsColorMaterial();
 		if (ImGui::Checkbox("Color Material", &colorMaterial)) App->renderer3D->ToggleColorMaterial();
-
 		ImGui::SameLine();
 		bool texture2D = App->renderer3D->IsTexture2D();
 		if (ImGui::Checkbox("Texture 2D", &texture2D)) App->renderer3D->ToggleTexture2D();
+
+		ImGui::Checkbox("Draw Mouse Raycast", &App->scene->drawMouse);
 	}
 
 	if (ImGui::CollapsingHeader("Input"))
@@ -199,6 +208,7 @@ UpdateStatus PanelConfig::Update()
 		mouseX = App->input->GetMouseX();
 		mouseY = App->input->GetMouseY();
 		IMGUI_PRINT(IMGUI_YELLOW, "Mouse Position: ", "%d,%d", mouseX, mouseY);
+		IMGUI_PRINT(IMGUI_YELLOW, "Mouse Pos. Scene: ", "%d,%d", (int)App->gui->mouseScenePosition.x, (int)App->gui->mouseScenePosition.y);
 		int mousewheel = App->input->GetMouseZ();
 		IMGUI_PRINT(IMGUI_YELLOW, "Mousewheel: ", "%d", mousewheel);
 		int mouseMotionX, mouseMotionY;
