@@ -59,6 +59,7 @@ UpdateStatus PanelConfig::Update()
 	if (ImGui::CollapsingHeader("Window"))
 	{
 		float b = App->window->GetBrightness();
+		ImGui::Text("Ctrl + Click to Input Value");
 		if (ImGui::SliderFloat("Brightness", &b, 0.05f, 1.0f)) App->window->SetBrightness(b);
 
 		int w = App->window->GetWidth();
@@ -113,6 +114,7 @@ UpdateStatus PanelConfig::Update()
 
 	if (ImGui::CollapsingHeader("Editor Camera"))
 	{
+		ImGui::Text("Ctrl + Click to Input Value");
 		ImGui::SliderFloat("Speed", &App->camera->cameraSpeed, 1.0f, 120.0f);
 		ImGui::SliderFloat("Sensitivity", &App->camera->cameraSensitivity, 0.05f, 0.5f);
 		if (ImGui::SliderFloat("Vertical FOV", &App->camera->verticalFOV, 0.1f, 180.0f))
@@ -131,7 +133,7 @@ UpdateStatus PanelConfig::Update()
 			}
 			App->camera->projectionIsDirty = true;
 		}
-		if (ImGui::SliderFloat("Far Plane", &App->camera->farPlaneDistance, 5.0f, 500.0f))
+		if (ImGui::SliderFloat("Far Plane", &App->camera->farPlaneDistance, 5.0f, 1000.0f))
 		{
 			App->camera->projectionIsDirty = true;
 		}

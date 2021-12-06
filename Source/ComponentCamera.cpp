@@ -238,7 +238,7 @@ void ComponentCamera::DrawInspector(Application* App)
 {
 	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		if (ImGui::Button("Set as Main Camera"))
+		if (ImGui::Button("Set as Main Camera", ImVec2(ImGui::CalcItemWidth(), 20)))
 		{
 			App->gameObjects->mainCamera->GetComponent<Camera>()->culling = false;
 			App->gameObjects->mainCamera->GetComponent<Camera>()->mainCamera = false;

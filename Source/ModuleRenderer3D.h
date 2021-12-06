@@ -28,25 +28,25 @@ public:
 
 	const char* GetGlewVersion();
 	const char* GetOpenGLVersion();
+	const char* GetVideoDriver();
 
 	void OnResize(int width, int height);
-	bool GetVSync();
-	void SetVSync(bool _vsync);
-	bool IsDepthTest();
+	bool GetVSync() { return vSync; };
+	void SetVSync(bool _vsync) { vSync = _vsync; };
+	bool IsDepthTest() { return depthTest; };
 	void ToggleDepthTest();
-	bool IsCullFace();
+	bool IsCullFace() { return cullFace; };
 	void ToggleCullFace();
-	bool IsLighting();
+	bool IsLighting() { return lighting; };
 	void ToggleLighting();
-	bool IsAxis();
-	void ToggleAxis();
-	bool IsColorMaterial();
+	bool IsAxis() { return axis; };
+	void ToggleAxis() { axis = !axis; };
+	bool IsColorMaterial() { return colorMaterial; };
 	void ToggleColorMaterial();
-	bool IsTexture2D();
+	bool IsTexture2D() { return texture2D; };
 	void ToggleTexture2D();
-	const char* GetVideoDriver();
-	void ToggleWireframe();
-	bool IsWireframe();
+	bool IsWireframe() { return wireframe; };
+	void ToggleWireframe() { wireframe = !wireframe; };
 
 public:
 	Light lights[MAX_LIGHTS];

@@ -1,7 +1,7 @@
 {
     "Game Objects": [
         {
-            "UID": 1145344806,
+            "UID": 924866479,
             "name": "sceneRoot",
             "active": true,
             "Components": {
@@ -26,15 +26,15 @@
             },
             "Children": [
                 {
-                    "UID": 1151471454,
+                    "UID": 928347529,
                     "name": "Camera",
                     "active": true,
                     "Components": {
                         "Transform": {
                             "pos": [
-                                -1.5,
                                 0.0,
-                                -22.799999237060548
+                                0.0,
+                                0.0
                             ],
                             "rot": [
                                 0.0,
@@ -51,14 +51,14 @@
                         "Camera": {
                             "mainCamera": true,
                             "fixedFOV": 0,
-                            "culling": true,
+                            "culling": false,
                             "horizontalFOV": 60.0,
                             "aspectRatio": 1.7769999504089356
                         }
                     }
                 },
                 {
-                    "UID": 1680689714,
+                    "UID": 1046616928,
                     "name": "Street_environment",
                     "active": true,
                     "Components": {
@@ -70,9 +70,9 @@
                             ],
                             "rot": [
                                 0.0,
-                                0.5112931132316589,
                                 0.0,
-                                0.8594064116477966
+                                0.0,
+                                1.0
                             ],
                             "scale": [
                                 1.0,
@@ -83,7 +83,7 @@
                     },
                     "Children": [
                         {
-                            "UID": 1688139161,
+                            "UID": 1058034772,
                             "name": "Sky001_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -108,7 +108,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 1690993622,
+                                    "UID": 1061446201,
                                     "name": "Sky001_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -133,7 +133,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 1692943010,
+                                            "UID": 1063813315,
                                             "name": "Sky001_$AssimpFbx$_PostRotation",
                                             "active": true,
                                             "Components": {
@@ -158,7 +158,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 1695031640,
+                                                    "UID": 1066528534,
                                                     "name": "Sky001",
                                                     "active": true,
                                                     "Components": {
@@ -189,7 +189,7 @@
                             ]
                         },
                         {
-                            "UID": 1697120270,
+                            "UID": 1069034890,
                             "name": "Dummy001_$AssimpFbx$_PreRotation",
                             "active": true,
                             "Components": {
@@ -214,7 +214,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 1701088667,
+                                    "UID": 1073769118,
                                     "name": "Dummy001",
                                     "active": true,
                                     "Components": {
@@ -239,7 +239,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 1703246918,
+                                            "UID": 1076205853,
                                             "name": "City_building_004",
                                             "active": true,
                                             "Components": {
@@ -262,13 +262,13 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1854672593,
-                                                    "Name": "building03_c.tga",
+                                                    "UID": 22790234,
+                                                    "Name": "building_025_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 1
                                                 },
                                                 "Mesh": {
-                                                    "UID": 714765066,
+                                                    "UID": 207640414,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -280,17 +280,17 @@
                                                     "drawVertexNormals": false,
                                                     "drawFaceNormals": false,
                                                     "centerPoint": [
-                                                        0.7525219917297363,
-                                                        1.028902292251587,
-                                                        1.028902292251587
+                                                        2.076549768447876,
+                                                        1.316973328590393,
+                                                        1.316973328590393
                                                     ],
-                                                    "radius": 11.4467134475708,
-                                                    "render": false
+                                                    "radius": 11.47626781463623,
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 80170460,
+                                            "UID": 1159424765,
                                             "name": "City_building_001",
                                             "active": true,
                                             "Components": {
@@ -313,7 +313,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 95904806,
+                                                    "UID": 1173836312,
                                                     "Name": "Building_V02_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 3
@@ -336,12 +336,12 @@
                                                         1.2924346923828126
                                                     ],
                                                     "radius": 10.908346176147461,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 791718897,
+                                            "UID": 1520013741,
                                             "name": "City_building_007",
                                             "active": true,
                                             "Components": {
@@ -364,7 +364,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 809402631,
+                                                    "UID": 1537627854,
                                                     "Name": "building_016_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 4
@@ -387,12 +387,12 @@
                                                         0.2654346823692322
                                                     ],
                                                     "radius": 11.523335456848145,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1459802013,
+                                            "UID": 4897637,
                                             "name": "City_building_008",
                                             "active": true,
                                             "Components": {
@@ -415,7 +415,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1474700907,
+                                                    "UID": 22790234,
                                                     "Name": "building_025_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 5
@@ -438,19 +438,19 @@
                                                         0.7095800042152405
                                                     ],
                                                     "radius": 5.891286373138428,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 2068289553,
+                                            "UID": 657246407,
                                             "name": "Line002",
                                             "active": true,
                                             "Components": {
                                                 "Transform": {
                                                     "pos": [
-                                                        37.540000915527347,
-                                                        15.753999710083008,
+                                                        -2.1597719192504885,
+                                                        1.8538382053375245,
                                                         0.0
                                                     ],
                                                     "rot": [
@@ -466,7 +466,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 2115283728,
+                                                    "UID": 708348221,
                                                     "Color": true,
                                                     "Diffuse": [
                                                         0.2705882489681244,
@@ -500,7 +500,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 143732348,
+                                            "UID": 899666729,
                                             "name": "Plane001",
                                             "active": true,
                                             "Components": {
@@ -523,7 +523,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 181327688,
+                                                    "UID": 947148251,
                                                     "Color": true,
                                                     "Diffuse": [
                                                         0.30980393290519717,
@@ -557,7 +557,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 253385423,
+                                            "UID": 1020111059,
                                             "name": "City_building_010",
                                             "active": true,
                                             "Components": {
@@ -580,7 +580,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 265917203,
+                                                    "UID": 1034244122,
                                                     "Name": "building 01_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 8
@@ -608,7 +608,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 84367452,
+                                            "UID": 659356854,
                                             "name": "City_building_011",
                                             "active": true,
                                             "Components": {
@@ -631,7 +631,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 809402631,
+                                                    "UID": 1537627854,
                                                     "Name": "building_016_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 9
@@ -654,12 +654,12 @@
                                                         0.2654346823692322
                                                     ],
                                                     "radius": 11.523335456848145,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 243103332,
+                                            "UID": 805491333,
                                             "name": "City_building_013",
                                             "active": true,
                                             "Components": {
@@ -682,7 +682,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 261274413,
+                                                    "UID": 823035825,
                                                     "Name": "building 06_ c .tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 10
@@ -705,12 +705,12 @@
                                                         1.5026438236236573
                                                     ],
                                                     "radius": 9.827154159545899,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1935496319,
+                                            "UID": 85214284,
                                             "name": "City_building_014",
                                             "active": true,
                                             "Components": {
@@ -733,7 +733,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1854672593,
+                                                    "UID": 1226447971,
                                                     "Name": "building03_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 11
@@ -756,12 +756,12 @@
                                                         5.831689834594727
                                                     ],
                                                     "radius": 14.990031242370606,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 757206613,
+                                            "UID": 685277683,
                                             "name": "City_building_016",
                                             "active": true,
                                             "Components": {
@@ -784,7 +784,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 265917203,
+                                                    "UID": 1034244122,
                                                     "Name": "building 01_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 12
@@ -812,7 +812,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 1123761178,
+                                            "UID": 1069933708,
                                             "name": "City_building_017",
                                             "active": true,
                                             "Components": {
@@ -835,7 +835,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 265917203,
+                                                    "UID": 1034244122,
                                                     "Name": "building 01_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 13
@@ -858,12 +858,12 @@
                                                         3.3138985633850099
                                                     ],
                                                     "radius": 6.19549560546875,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1489201807,
+                                            "UID": 1391304244,
                                             "name": "City_building_022",
                                             "active": true,
                                             "Components": {
@@ -886,7 +886,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1507929856,
+                                                    "UID": 1406412001,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 14
@@ -914,7 +914,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 1719251408,
+                                            "UID": 1895590964,
                                             "name": "City_building_023",
                                             "active": true,
                                             "Components": {
@@ -937,7 +937,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 809402631,
+                                                    "UID": 1537627854,
                                                     "Name": "building_016_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 15
@@ -960,12 +960,12 @@
                                                         0.2654346823692322
                                                     ],
                                                     "radius": 11.523335456848145,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1868240348,
+                                            "UID": 2045902703,
                                             "name": "City_building_024",
                                             "active": true,
                                             "Components": {
@@ -988,7 +988,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1474700907,
+                                                    "UID": 22790234,
                                                     "Name": "building_025_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 16
@@ -1011,12 +1011,12 @@
                                                         0.7095800042152405
                                                     ],
                                                     "radius": 5.891286373138428,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1997735408,
+                                            "UID": 9812656,
                                             "name": "City_building_026",
                                             "active": true,
                                             "Components": {
@@ -1039,7 +1039,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1507929856,
+                                                    "UID": 1406412001,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 17
@@ -1062,12 +1062,12 @@
                                                         2.1251771450042726
                                                     ],
                                                     "radius": 15.746590614318848,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 380485297,
+                                            "UID": 467988457,
                                             "name": "City_building_028",
                                             "active": true,
                                             "Components": {
@@ -1090,7 +1090,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 406453930,
+                                                    "UID": 496950793,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 18
@@ -1118,7 +1118,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 997140311,
+                                            "UID": 1024003580,
                                             "name": "Object010",
                                             "active": true,
                                             "Components": {
@@ -1141,7 +1141,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1203427334,
+                                                    "UID": 1258556729,
                                                     "Color": true,
                                                     "Diffuse": [
                                                         0.5882353186607361,
@@ -1175,7 +1175,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 1320460235,
+                                            "UID": 1379349164,
                                             "name": "City_building_030",
                                             "active": true,
                                             "Components": {
@@ -1198,7 +1198,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 406453930,
+                                                    "UID": 496950793,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 20
@@ -1226,7 +1226,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 1773762566,
+                                            "UID": 1899557276,
                                             "name": "City_building_031",
                                             "active": true,
                                             "Components": {
@@ -1249,7 +1249,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 406453930,
+                                                    "UID": 496950793,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 21
@@ -1277,7 +1277,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 144328780,
+                                            "UID": 247496665,
                                             "name": "City_building_032",
                                             "active": true,
                                             "Components": {
@@ -1300,7 +1300,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1854672593,
+                                                    "UID": 1226447971,
                                                     "Name": "building03_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 22
@@ -1323,12 +1323,12 @@
                                                         1.028902292251587
                                                     ],
                                                     "radius": 11.4467134475708,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 714942496,
+                                            "UID": 808224199,
                                             "name": "City_building_033",
                                             "active": true,
                                             "Components": {
@@ -1351,7 +1351,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 261274413,
+                                                    "UID": 823035825,
                                                     "Name": "building 06_ c .tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 23
@@ -1374,12 +1374,12 @@
                                                         2.095907688140869
                                                     ],
                                                     "radius": 13.345780372619629,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1576223887,
+                                            "UID": 1500953149,
                                             "name": "City_building_034",
                                             "active": true,
                                             "Components": {
@@ -1396,13 +1396,13 @@
                                                         0.7071067094802856
                                                     ],
                                                     "scale": [
-                                                        2.0199999809265138,
-                                                        2.0199999809265138,
-                                                        2.0199999809265138
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1507929856,
+                                                    "UID": 1406412001,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 24
@@ -1430,7 +1430,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 2132426056,
+                                            "UID": 2099902612,
                                             "name": "City_building_035",
                                             "active": true,
                                             "Components": {
@@ -1453,7 +1453,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 406453930,
+                                                    "UID": 496950793,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 25
@@ -1481,7 +1481,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 262451715,
+                                            "UID": 262441278,
                                             "name": "City_building_036",
                                             "active": true,
                                             "Components": {
@@ -1504,7 +1504,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 261274413,
+                                                    "UID": 823035825,
                                                     "Name": "building 06_ c .tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 26
@@ -1527,12 +1527,12 @@
                                                         1.5026438236236573
                                                     ],
                                                     "radius": 9.827154159545899,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1081890885,
+                                            "UID": 1227109854,
                                             "name": "City_building_037",
                                             "active": true,
                                             "Components": {
@@ -1555,7 +1555,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1507929856,
+                                                    "UID": 1406412001,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 27
@@ -1583,7 +1583,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 1530458988,
+                                            "UID": 1761590271,
                                             "name": "City_building_038",
                                             "active": true,
                                             "Components": {
@@ -1606,7 +1606,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 1507929856,
+                                                    "UID": 1406412001,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 28
@@ -1629,12 +1629,12 @@
                                                         5.028719425201416
                                                     ],
                                                     "radius": 14.785143852233887,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1834981242,
+                                            "UID": 25984460,
                                             "name": "City_building_039",
                                             "active": true,
                                             "Components": {
@@ -1657,7 +1657,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 406453930,
+                                                    "UID": 496950793,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 29
@@ -1680,12 +1680,12 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 2113047516,
+                                            "UID": 337259951,
                                             "name": "City_building_040",
                                             "active": true,
                                             "Components": {
@@ -1708,7 +1708,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 406453930,
+                                                    "UID": 496950793,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 30
@@ -1736,7 +1736,7 @@
                                             }
                                         },
                                         {
-                                            "UID": 618121502,
+                                            "UID": 1024767326,
                                             "name": "City_building_041",
                                             "active": true,
                                             "Components": {
@@ -1759,7 +1759,7 @@
                                                     ]
                                                 },
                                                 "Material": {
-                                                    "UID": 95904806,
+                                                    "UID": 1173836312,
                                                     "Name": "Building_V02_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 31
@@ -1782,7 +1782,7 @@
                                                         1.2924346923828126
                                                     ],
                                                     "radius": 10.908346176147461,
-                                                    "render": false
+                                                    "render": true
                                                 }
                                             }
                                         }
@@ -1791,7 +1791,7 @@
                             ]
                         },
                         {
-                            "UID": 853510103,
+                            "UID": 1250617850,
                             "name": "Camera001_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -1816,7 +1816,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 873560951,
+                                    "UID": 1270668698,
                                     "name": "Camera001_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -1841,7 +1841,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 875928065,
+                                            "UID": 1272896570,
                                             "name": "Camera001_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -1866,7 +1866,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 878295179,
+                                                    "UID": 1275472547,
                                                     "name": "Camera001",
                                                     "active": true,
                                                     "Components": {
@@ -1897,7 +1897,7 @@
                             ]
                         },
                         {
-                            "UID": 880801535,
+                            "UID": 1278187766,
                             "name": "Camera001.Target_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -1922,7 +1922,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 901618214,
+                                    "UID": 1298447477,
                                     "name": "Camera001.Target_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -1947,7 +1947,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 903915707,
+                                            "UID": 1300814591,
                                             "name": "Camera001.Target_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -1972,7 +1972,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 906213200,
+                                                    "UID": 1302972842,
                                                     "name": "Camera001.Target",
                                                     "active": true,
                                                     "Components": {
@@ -2003,7 +2003,7 @@
                             ]
                         },
                         {
-                            "UID": 908510693,
+                            "UID": 1305061472,
                             "name": "Spot001_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -2028,7 +2028,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 930859034,
+                                    "UID": 1327340192,
                                     "name": "Spot001_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -2053,7 +2053,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 933226148,
+                                            "UID": 1329846548,
                                             "name": "Spot001_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -2078,7 +2078,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 935593262,
+                                                    "UID": 1332144041,
                                                     "name": "Spot001_$AssimpFbx$_PostRotation",
                                                     "active": true,
                                                     "Components": {
@@ -2103,7 +2103,7 @@
                                                     },
                                                     "Children": [
                                                         {
-                                                            "UID": 937681892,
+                                                            "UID": 1334302292,
                                                             "name": "Spot001",
                                                             "active": true,
                                                             "Components": {
@@ -2136,7 +2136,7 @@
                             ]
                         },
                         {
-                            "UID": 939631280,
+                            "UID": 1336251680,
                             "name": "Spot001.Target_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -2161,7 +2161,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 963929009,
+                                    "UID": 1360410167,
                                     "name": "Spot001.Target_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -2186,7 +2186,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 965948018,
+                                            "UID": 1362498797,
                                             "name": "Spot001.Target_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -2211,7 +2211,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 968036648,
+                                                    "UID": 1364517806,
                                                     "name": "Spot001.Target",
                                                     "active": true,
                                                     "Components": {

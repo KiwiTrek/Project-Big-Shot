@@ -24,6 +24,8 @@ public:
 
 	bool CleanUp();
 
+	ImGuizmo::OPERATION GetGizmoOperation() { return currentGizmoOperation; }
+	void SetGizmoOperation(ImGuizmo::OPERATION operation) { currentGizmoOperation = operation; }
 	void AddGameobject(GameObject* g);
 	void RemoveGameobject(GameObject* g);
 

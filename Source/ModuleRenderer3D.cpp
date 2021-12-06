@@ -217,6 +217,11 @@ const char* ModuleRenderer3D::GetOpenGLVersion()
 	return (const char*)glGetString(GL_VERSION);
 }
 
+const char* ModuleRenderer3D::GetVideoDriver()
+{
+	return SDL_GetCurrentVideoDriver();
+}
+
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -225,40 +230,10 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	App->camera->RecalculateProjection();
 }
 
-bool ModuleRenderer3D::GetVSync()
-{
-	return vSync;
-}
-
-void ModuleRenderer3D::SetVSync(bool _vsync)
-{
-	vSync = _vsync;
-}
-
-const char* ModuleRenderer3D::GetVideoDriver()
-{
-	return SDL_GetCurrentVideoDriver();
-}
-
-void ModuleRenderer3D::ToggleWireframe()
-{
-	wireframe = !wireframe;
-}
-
-bool ModuleRenderer3D::IsWireframe()
-{
-	return wireframe;
-}
-
 void ModuleRenderer3D::ToggleDepthTest()
 {
 	depthTest = !depthTest;
 	depthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
-}
-
-bool ModuleRenderer3D::IsDepthTest()
-{
-	return depthTest;
 }
 
 void ModuleRenderer3D::ToggleCullFace()
@@ -267,30 +242,10 @@ void ModuleRenderer3D::ToggleCullFace()
 	cullFace ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
 }
 
-bool ModuleRenderer3D::IsCullFace()
-{
-	return cullFace;
-}
-
 void ModuleRenderer3D::ToggleLighting()
 {
 	lighting = !lighting;
 	lighting ? glEnable(GL_LIGHTING) : glDisable(GL_LIGHTING);
-}
-
-bool ModuleRenderer3D::IsLighting()
-{
-	return lighting;
-}
-
-void ModuleRenderer3D::ToggleAxis()
-{
-	axis = !axis;
-}
-
-bool ModuleRenderer3D::IsAxis()
-{
-	return axis;
 }
 
 void ModuleRenderer3D::ToggleColorMaterial()
@@ -299,18 +254,8 @@ void ModuleRenderer3D::ToggleColorMaterial()
 	colorMaterial ? glEnable(GL_COLOR_MATERIAL) : glDisable(GL_COLOR_MATERIAL);
 }
 
-bool ModuleRenderer3D::IsColorMaterial()
-{
-	return colorMaterial;
-}
-
 void ModuleRenderer3D::ToggleTexture2D()
 {
 	texture2D = !texture2D;
 	texture2D ? glEnable(GL_TEXTURE_2D) : glDisable(GL_TEXTURE_2D);
-}
-
-bool ModuleRenderer3D::IsTexture2D()
-{
-	return texture2D;
 }

@@ -54,41 +54,6 @@ UpdateStatus PanelResources::Update()
 
 		ImGuiTreeNodeFlags flagsLeaf = flags;
 		flagsLeaf |= ImGuiTreeNodeFlags_Leaf;
-		if (ImGui::TreeNodeEx("Meshes", flags))
-		{
-			for (std::map<UID, Resource*>::iterator it = App->resources->resources.begin(); it != App->resources->resources.end(); ++it)
-			{
-				Resource* r = (*it).second;
-				if (r->GetType() == Resource::Type::MESH)
-				{
-					//ResourceMesh* rm = (ResourceMesh*)r;
-					if (r == selected) flagsLeaf |= ImGuiTreeNodeFlags_Selected;
-					else flagsLeaf &= ~(ImGuiTreeNodeFlags_Selected);
-
-					if (ImGui::TreeNodeEx(std::to_string(r->GetUID()).c_str(), flagsLeaf))
-					{
-						if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) selected = r;
-						if (ImGui::IsItemHovered())
-						{
-							if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
-							{
-								selected = r;
-							}
-						}
-
-						/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-						{
-							UID selectedUID = selected->GetUID();
-							ImGui::SetDragDropPayload("MESHES", &selectedUID, sizeof(UID));
-							ImGui::EndDragDropSource();
-						}*/
-
-						ImGui::TreePop();
-					}
-				}
-			}
-			ImGui::TreePop();
-		}
 
 		if (ImGui::TreeNodeEx("Materials", flags))
 		{
@@ -114,7 +79,44 @@ UpdateStatus PanelResources::Update()
 
 						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 						{
-							ImGui::SetDragDropPayload("MATERIALS", &selected, sizeof(selected));
+							int selectedUID = (int)selected->GetUID();
+							ImGui::SetDragDropPayload("MATERIALS", &selectedUID, sizeof(int));
+							ImGui::EndDragDropSource();
+						}
+
+						ImGui::TreePop();
+					}
+				}
+			}
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNodeEx("Meshes", flags))
+		{
+			for (std::map<UID, Resource*>::iterator it = App->resources->resources.begin(); it != App->resources->resources.end(); ++it)
+			{
+				Resource* r = (*it).second;
+				if (r->GetType() == Resource::Type::MESH)
+				{
+					//ResourceMesh* rm = (ResourceMesh*)r;
+					if (r == selected) flagsLeaf |= ImGuiTreeNodeFlags_Selected;
+					else flagsLeaf &= ~(ImGuiTreeNodeFlags_Selected);
+
+					if (ImGui::TreeNodeEx(std::to_string(r->GetUID()).c_str(), flagsLeaf))
+					{
+						if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) selected = r;
+						if (ImGui::IsItemHovered())
+						{
+							if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+							{
+								selected = r;
+							}
+						}
+
+						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+						{
+							int selectedUID = (int)selected->GetUID();
+							ImGui::SetDragDropPayload("MESHES", &selectedUID, sizeof(int));
 							ImGui::EndDragDropSource();
 						}
 

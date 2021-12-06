@@ -42,7 +42,21 @@ void ComponentMaterial::DrawInspector(Application* App)
 		{
 			if (material->data != nullptr)
 			{
-				IMGUI_PRINT(IMGUI_YELLOW, "UID: ", "%d", material->GetUID());
+				ImGui::Text("UID: "); ImGui::SameLine();
+				ImGui::Button(std::to_string(material->GetUID()).c_str(), ImVec2(ImGui::CalcItemWidth(), 20));
+				if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag material from Resources Panel here to change it.");
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIALS"))
+					{
+						IM_ASSERT(payload->DataSize == sizeof(int));
+						int payloadN = *(const int*)payload->Data;
+						material = (ResourceMaterial*)App->resources->RequestResource((UID)payloadN);
+						BindTexture(usingCheckers);
+					}
+					ImGui::EndDragDropTarget();
+				}
+
 				IMGUI_PRINT(IMGUI_YELLOW, "Diffuse Texture:", "%s", material->name.c_str());
 				IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", material->path.c_str());
 				IMGUI_PRINT(IMGUI_YELLOW, "Width:", "%d", material->width); ImGui::SameLine(); IMGUI_PRINT(IMGUI_YELLOW, "Height:", "%d", material->height);

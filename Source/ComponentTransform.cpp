@@ -1,4 +1,6 @@
 #include "Gameobject.h"
+#include "Application.h"
+#include "ModuleGameObjects.h"
 
 ComponentTransform::ComponentTransform(bool active) : Component(type, active)
 {
@@ -74,6 +76,17 @@ void ComponentTransform::DrawInspector(Application* App)
 {
 	if (owner->parent != nullptr && ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		if (ImGui::RadioButton("Translate", App->gameObjects->GetGizmoOperation() == ImGuizmo::TRANSLATE)) App->gameObjects->SetGizmoOperation(ImGuizmo::TRANSLATE);
+		ImGui::SameLine();
+		if (ImGui::RadioButton("Rotate", App->gameObjects->GetGizmoOperation() == ImGuizmo::ROTATE)) App->gameObjects->SetGizmoOperation(ImGuizmo::ROTATE);
+		if (owner->GetComponent<Camera>() == nullptr)
+		{
+			ImGui::SameLine();
+			if (ImGui::RadioButton("Scale", App->gameObjects->GetGizmoOperation() == ImGuizmo::SCALE)) App->gameObjects->SetGizmoOperation(ImGuizmo::SCALE);
+		}
+
+		ImGui::Text("Ctrl + Click to Input Value");
+
 		float position4f[4] = { pos.x, pos.y, pos.z, 1.0f };
 		if (ImGui::DragFloat3("Position", position4f, 0.1f, -10000.0f, 10000.0f))
 		{
@@ -110,7 +123,7 @@ void ComponentTransform::DrawInspector(Application* App)
 			ImGui::Spacing();
 		}
 
-		if (ImGui::Button("Reset")) Reset();
+		if (ImGui::Button("Reset", ImVec2(ImGui::CalcItemWidth(), 20))) Reset();
 		ImGui::Spacing();
 	}
 }

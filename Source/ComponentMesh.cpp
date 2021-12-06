@@ -30,18 +30,19 @@ void ComponentMesh::DrawInspector(Application* App)
 		if (mesh != nullptr)
 		{
 			ImGui::Text("UID: "); ImGui::SameLine();
-
-			ImGui::Button(std::to_string(mesh->GetUID()).c_str());
-			/*if (ImGui::BeginDragDropTarget())
+			ImGui::Button(std::to_string(mesh->GetUID()).c_str(), ImVec2(ImGui::CalcItemWidth(), 20));
+			if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag mesh from Resources Panel here to change it.");
+			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESHES"))
 				{
-					IM_ASSERT(payload->DataSize == sizeof(UID));
-					UID payloadN = *(const UID*)payload->Data;
-					mesh.payloadN;
+					IM_ASSERT(payload->DataSize == sizeof(int));
+					int payloadN = *(const int*)payload->Data;
+					mesh = (ResourceMesh*)App->resources->RequestResource((UID)payloadN);
+					CreateBBox();
 				}
 				ImGui::EndDragDropTarget();
-			}*/
+			}
 
 			IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", mesh->GetAssetFile());
 			IMGUI_PRINT(IMGUI_YELLOW, "Vertices:", "%d", mesh->vertexNum);

@@ -149,7 +149,7 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 		}
 	}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && !ImGuizmo::IsUsing() && App->gui->MouseOnScene())
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && !ImGuizmo::IsOver() && !ImGuizmo::IsUsing() && App->gui->MouseOnScene())
 	{
 		GameObject* picked = MousePicking();
 		App->gameObjects->selectedGameObject = picked;
