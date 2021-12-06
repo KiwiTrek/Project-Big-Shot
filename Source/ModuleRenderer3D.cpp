@@ -195,8 +195,6 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::DrawRay()
 {
-	glBindTexture(GL_TEXTURE_2D, 0);
-
 	glColor3f(0.0f, 1.0f, 1.0f);
 	glLineWidth(3.0f);
 

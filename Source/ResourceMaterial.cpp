@@ -8,6 +8,7 @@ ResourceMaterial::ResourceMaterial(UID uid) : Resource(uid, Resource::Type::MATE
 	format = -1;
 	formatUnsigned = -1;
 	data = nullptr;
+	usingColor = false;
 	width = -1;
 	height = -1;
 	diffuse.Set(1.0f, 1.0f, 1.0f, 1.0f);
@@ -28,6 +29,7 @@ ResourceMaterial::ResourceMaterial(UID uid, Color c) : Resource(uid, Resource::T
 	width = 1;
 	height = 1;
 	diffuse = c;
+	usingColor = true;
 }
 
 ResourceMaterial::~ResourceMaterial()

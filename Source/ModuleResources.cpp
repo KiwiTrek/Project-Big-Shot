@@ -165,6 +165,95 @@ Resource* ModuleResources::RequestResource(UID uid)
 	return r;
 }
 
+Resource* ModuleResources::RequestResource(Shape shape)
+{
+	Resource* r = nullptr;
+	std::map<Shape, Resource*>::iterator it = shapes.begin();
+	while (it != shapes.end())
+	{
+		if ((*it).first == shape)
+		{
+			ResourceMesh* rMesh = (ResourceMesh*)(*it).second;
+			rMesh->mType = shape;
+			rMesh->GenerateBuffers();
+			r = rMesh;
+			r->SetUID((*it).second->GetUID());
+			break;
+		}
+		it++;
+	}
+
+	return r;
+}
+
+Resource* ModuleResources::RequestResource(std::string name)
+{
+	Resource* r = nullptr;
+	std::map<UID, Resource*>::iterator it = loadedResources.begin();
+	while (it != loadedResources.end())
+	{
+		if ((*it).second->GetAssetFile() == name)
+		{
+			r = (*it).second;
+			r->SetUID((*it).first);
+			break;
+		}
+		it++;
+	}
+
+	if (r == nullptr)
+	{
+		std::map<UID, Resource*>::iterator it = resources.begin();
+		while (it != resources.end())
+		{
+			if ((*it).second->GetAssetFile() == name)
+			{
+				r = (*it).second;
+				r->SetUID((*it).first);
+				break;
+			}
+			it++;
+		}
+	}
+
+	return r;
+}
+
+Resource* ModuleResources::RequestResource(Color color)
+{
+	Resource* r = nullptr;
+	std::map<UID, Resource*>::iterator it = loadedResources.begin();
+	while (it != loadedResources.end())
+	{
+		ResourceMaterial* rColor = (ResourceMaterial*)(*it).second;
+		if (rColor->diffuse == color)
+		{
+			r = (*it).second;
+			r->SetUID((*it).first);
+			break;
+		}
+		it++;
+	}
+
+	if (r == nullptr)
+	{
+		std::map<UID, Resource*>::iterator it = resources.begin();
+		while (it != resources.end())
+		{
+			ResourceMaterial* rColor = (ResourceMaterial*)(*it).second;
+			if (rColor->diffuse == color)
+			{
+				r = (*it).second;
+				r->SetUID((*it).first);
+				break;
+			}
+			it++;
+		}
+	}
+
+	return r;
+}
+
 void ModuleResources::ReleaseResource(UID uid)
 {
 	Resource* r = resources.at(uid);

@@ -19,13 +19,14 @@ public:
 	virtual ~ComponentMesh();
 
 	void Update() override;
-	void Render() const;
+	void Render();
 	void DrawInspector(Application* App);
 	void DrawVertexNormals() const;
 	void DrawFaceNormals() const;
 	Shape GetType() const;
 
 	void CreateBBox();
+	void UpdateBBox();
 	void DrawBBox() const;
 
 	float3 GetCenterPointInWorldCoords() const;

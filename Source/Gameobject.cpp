@@ -237,6 +237,7 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 			}
 			child->OnLoad(childOb, App);
 		}
+		GetComponent<Transform>()->Reset();
 	}
 }
 

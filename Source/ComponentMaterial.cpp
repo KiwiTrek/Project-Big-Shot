@@ -88,27 +88,52 @@ void ComponentMaterial::BindTexture(bool checkers)
 
 void ComponentMaterial::OnLoad(const JSONReader& mat, Application* App)
 {
-	if (mat.HasMember("UID"))
+	if (mat.HasMember("checkersId"))
 	{
-		ResourceMaterial* rMat = (ResourceMaterial*)App->resources->RequestResource(mat["UID"].GetInt());
-		if (rMat == nullptr)
-		{
-			LOG("NO FUNCIONA");
-		}
-		else
-		{
-			material = rMat;
-		}
+		checkersId = mat["checkersId"].GetInt();
 	}
 
 	if (mat.HasMember("usingCheckers"))
 	{
 		usingCheckers = mat["usingCheckers"].GetBool();
+		BindTexture(usingCheckers);
 	}
 
-	if (mat.HasMember("checkersId"))
+	material = nullptr;
+	if (!usingCheckers)
 	{
-		checkersId = mat["checkersId"].GetInt();
+		if (mat.HasMember("Name"))
+		{
+			ResourceMaterial* rMat = (ResourceMaterial*)App->resources->RequestResource(mat["Name"].GetString());
+			if (rMat != nullptr)
+			{
+				material = rMat;
+			}
+		}
+		else if (mat.HasMember("Color"))
+		{
+			const rapidjson::Value& jDiffuse = mat["Diffuse"];
+			float c[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+			uint i = 0;
+			for (rapidjson::Value::ConstValueIterator it = jDiffuse.Begin(); it != jDiffuse.End(); ++it, ++i)
+			{
+				c[i] = it->GetDouble();
+			}
+			Color color = Color(c[0], c[1], c[2], c[3]);
+			ResourceMaterial* rMat = (ResourceMaterial*)App->resources->RequestResource(color);
+			if (rMat != nullptr)
+			{
+				material = rMat;
+			}
+		}
+		else if (mat.HasMember("UID"))
+		{
+			ResourceMaterial* rMat = (ResourceMaterial*)App->resources->RequestResource(mat["UID"].GetInt());
+			if (rMat != nullptr)
+			{
+				material = rMat;
+			}
+		}
 	}
 }
 
@@ -120,6 +145,23 @@ void ComponentMaterial::OnSave(JSONWriter& writer) const
 	{
 		writer.String("UID");
 		writer.Int(material->GetUID());
+		if (material->name != "Color_texture")
+		{
+			writer.String("Name");
+			writer.String(material->GetAssetFile());
+		}
+		else
+		{
+			writer.String("Color");
+			writer.Bool(material->usingColor);
+			writer.String("Diffuse");
+			writer.StartArray();
+			writer.Double(material->diffuse.r);
+			writer.Double(material->diffuse.g);
+			writer.Double(material->diffuse.b);
+			writer.Double(material->diffuse.a);
+			writer.EndArray();
+		}
 	}
 	writer.String("usingCheckers");
 	writer.Bool(usingCheckers);

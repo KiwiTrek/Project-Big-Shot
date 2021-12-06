@@ -35,6 +35,7 @@ public:
 	AABB drawingBbox;
 	Frustum frustum;
 	FixedFOV fixedFOV;
+	bool mainCamera;
 	bool drawFrustum, drawBBox;
 	bool culling;
 	float horizontalFOV = 60.0f;

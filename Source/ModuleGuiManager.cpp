@@ -79,6 +79,7 @@ UpdateStatus ModuleGuiManager::PreUpdate()
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 
 	ImGuiIO& io = ImGui::GetIO();
 	usingKeyboard = io.WantCaptureKeyboard;
@@ -208,11 +209,11 @@ UpdateStatus ModuleGuiManager::MenuBar()
 		{
 			if (ImGui::MenuItem("Save", "CTRL + S"))
 			{
-				App->scene->Save("home.bss");
+				App->scene->Save("Assets/Scenes/currentScene.bss");
 			}
 			if (ImGui::MenuItem("Load", "CTRL + L"))
 			{
-				App->scene->Load("home.bss");
+				App->scene->Load("Assets/Scenes/currentScene.bss");
 			}
 			if (ImGui::MenuItem("Quit", "ESC"))
 			{
@@ -317,7 +318,7 @@ void ModuleGuiManager::CreateShape(Shape shape)
 		name = "Cone_";
 		break;
 	}
-	name.append(std::to_string((int)rMesh->referenceCount));
+	name.append(std::to_string((int)(rMesh->referenceCount - 1)));
 	GameObject* c = new GameObject(name);
 	ComponentMaterial* mat = (ComponentMaterial*)c->CreateComponent(ComponentTypes::MATERIAL);
 	mat->usingCheckers = true;
@@ -326,7 +327,7 @@ void ModuleGuiManager::CreateShape(Shape shape)
 	ComponentMesh* m = (ComponentMesh*)c->CreateComponent(ComponentTypes::MESH);
 	m->mesh = rMesh;
 	rMesh->GenerateBuffers();
-	if (m->mesh != nullptr)m->CreateBBox();
+	if (m->mesh != nullptr) m->CreateBBox();
 
 	App->gameObjects->AddGameobject(c);
 	App->gameObjects->selectedGameObject = c;

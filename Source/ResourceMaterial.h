@@ -28,6 +28,7 @@ public:
 	int height = -1;
 
 	Color diffuse;
+	bool usingColor = false;
 };
 
 #endif // !__RESOURCE_MATERIAL_H__

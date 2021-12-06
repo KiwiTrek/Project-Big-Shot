@@ -22,7 +22,6 @@ UpdateStatus PanelInspector::Update()
 		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
 		if (ImGui::InputText("Name", &name, flags)) g->name = name;
 		IMGUI_PRINT(IMGUI_YELLOW, "UID: ", "%d", g->uid);
-		ImGui::Checkbox("active: ",&g->active);
 		std::vector<Component*>::iterator item = g->components.begin();
 		while (item != g->components.end())
 		{

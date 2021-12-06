@@ -26,6 +26,7 @@ bool ModuleScene::Init()
 	App->gameObjects->mainCamera = new GameObject("Camera");
 	App->gameObjects->mainCamera->CreateComponent(ComponentTypes::CAMERA);
 	App->gameObjects->mainCamera->GetComponent<Camera>()->culling = true;
+	App->gameObjects->mainCamera->GetComponent<Camera>()->mainCamera = true;
 
 	App->gameObjects->AddGameobject(App->gameObjects->mainCamera);
 
@@ -71,7 +72,6 @@ void ModuleScene::Load(std::string scene)
 		}
 		else
 		{
-			LOG_CONSOLE("LOAAAAAAAAAAAAAAAAAAAD\n");
 			const rapidjson::Value& scene = document.GetObjectJSON();
 			App->gameObjects->selectedGameObject = nullptr;
 			App->gameObjects->gameObjectList.clear();
@@ -103,7 +103,6 @@ void ModuleScene::Save(std::string scene)
 	root->OnSave(writer);
 	writer.EndArray();
 	writer.EndObject();
-	LOG_CONSOLE("SAVEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
 
 	if (App->fileSystem->Save(scene.c_str(), sb.GetString(), strlen(sb.GetString()), false))
 	{

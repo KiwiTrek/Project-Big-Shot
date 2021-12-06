@@ -4,7 +4,7 @@
 #include "Application.h"
 #include "ModuleGameObjects.h"
 
-ComponentCamera::ComponentCamera(bool active) : Component(type, active), fixedFOV(FixedFOV::HORIZONTAL), drawFrustum(true), drawBBox(false), culling(true)
+ComponentCamera::ComponentCamera(bool active) : Component(type, active), fixedFOV(FixedFOV::HORIZONTAL), drawFrustum(true), drawBBox(false), culling(true), mainCamera(false)
 {
 	type = ComponentTypes::CAMERA;
 
@@ -241,8 +241,10 @@ void ComponentCamera::DrawInspector(Application* App)
 		if (ImGui::Button("Set as Main Camera"))
 		{
 			App->gameObjects->mainCamera->GetComponent<Camera>()->culling = false;
+			App->gameObjects->mainCamera->GetComponent<Camera>()->mainCamera = false;
 			App->gameObjects->mainCamera = owner;
 			culling = false;
+			mainCamera = true;
 		}
 		ImGui::Checkbox("Frustum Culling", &culling);
 
@@ -303,6 +305,15 @@ void ComponentCamera::DrawInspector(Application* App)
 
 void ComponentCamera::OnLoad(const JSONReader& c, Application* App)
 {
+	if (c.HasMember("mainCamera"))
+	{
+		mainCamera = c["mainCamera"].GetBool();
+		if (mainCamera)
+		{
+			App->gameObjects->mainCamera = owner;
+		}
+	}
+
 	if (c.HasMember("fixedFOV"))
 	{
 		int fov = c["fixedFOV"].GetInt();
@@ -313,6 +324,7 @@ void ComponentCamera::OnLoad(const JSONReader& c, Application* App)
 			break;
 		case 1:
 			fixedFOV = FixedFOV::VERTICAL;
+			break;
 		}
 	}
 
@@ -336,6 +348,8 @@ void ComponentCamera::OnSave(JSONWriter& writer) const
 {
 	writer.String("Camera");
 	writer.StartObject();
+	writer.String("mainCamera");
+	writer.Bool(mainCamera);
 	writer.String("fixedFOV");
 	writer.Int((int)fixedFOV);
 	writer.String("culling");

@@ -58,96 +58,6 @@ bool ModuleImporter::CleanUp()
 	return true;
 }
 
-ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
-{
-	std::string name;
-	App->fileSystem->SplitFilePath(path, nullptr, &name);
-	std::string newPath = App->fileSystem->GetPathRelativeToAssets(path);
-
-	UID uid = App->resources->Exists(Resource::Type::MATERIAL, newPath.c_str());
-	if (uid == -1)
-	{
-		uint id = 0;
-		ilGenImages(1, &id);
-		ilBindImage(id);
-
-		ilEnable(IL_ORIGIN_SET);
-		ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-
-		ResourceMaterial* texture = (ResourceMaterial*)App->resources->CreateNewResource(Resource::Type::MATERIAL, Shape::NONE, newPath.c_str());
-
-		if (id == 0)
-		{
-			LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
-		}
-
-		char* data;
-		uint bytes = App->fileSystem->Load(path, &data);
-
-		if (bytes != 0)
-		{
-			if (ilLoadL(IL_TYPE_UNKNOWN, data, bytes))
-			{
-				ILinfo ImageInfo;
-				iluGetImageInfo(&ImageInfo);
-				if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
-				{
-					iluFlipImage();
-				}
-
-				int channels = ilGetInteger(IL_IMAGE_CHANNELS);
-				if (channels == 3)
-				{
-					ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-				}
-				else if (channels == 4)
-				{
-					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-				}
-
-				ILenum error = ilGetError();
-
-				if (error != IL_NO_ERROR)
-				{
-					LOG_CONSOLE("Material error: %d, %s", error, iluErrorString(error));
-				}
-				else
-				{
-					LOG_CONSOLE("Material loaded successfully from: %s", newPath.c_str());
-
-					texture->texId = id;
-					texture->name = name;
-					texture->data = ilGetData();
-					texture->width = ilGetInteger(IL_IMAGE_WIDTH);
-					texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
-					texture->format = texture->formatUnsigned = ilGetInteger(IL_IMAGE_FORMAT);
-					texture->path = newPath.c_str();
-					std::string file = std::to_string(texture->GetUID()) + TEXTURE_FORMAT_FILE;
-					//App->resources->SaveMaterial(texture, file);
-				}
-			}
-			else
-			{
-				LOG_CONSOLE("Error loading the material from %s: %d, %s", path, ilGetError(), iluErrorString(ilGetError()));
-			}
-		}
-		else
-		{
-			LOG_CONSOLE("Error loading material from %s: No bytes", path);
-		}
-		return texture;
-	}
-	else
-	{
-		ResourceMaterial* rm = (ResourceMaterial*)App->resources->RequestResource(uid);
-		rm->referenceCount++;
-		LOG_CONSOLE("Material already exists with uid : %d, pulling from resources.", (int)uid);
-		return rm;
-	}
-
-	return nullptr;
-}
-
 void ModuleImporter::ImportScene(const char* path, const char* rootName)
 {
 	const aiScene* scene = nullptr;
@@ -237,6 +147,96 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 	}
 
 	return g;
+}
+
+ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
+{
+	std::string name;
+	App->fileSystem->SplitFilePath(path, nullptr, &name);
+	std::string newPath = App->fileSystem->GetPathRelativeToAssets(path);
+
+	UID uid = App->resources->Exists(Resource::Type::MATERIAL, newPath.c_str());
+	if (uid == -1)
+	{
+		uint id = 0;
+		ilGenImages(1, &id);
+		ilBindImage(id);
+
+		ilEnable(IL_ORIGIN_SET);
+		ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+
+		ResourceMaterial* texture = (ResourceMaterial*)App->resources->CreateNewResource(Resource::Type::MATERIAL, Shape::NONE, newPath.c_str());
+
+		if (id == 0)
+		{
+			LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
+		}
+
+		char* data;
+		uint bytes = App->fileSystem->Load(path, &data);
+
+		if (bytes != 0)
+		{
+			if (ilLoadL(IL_TYPE_UNKNOWN, data, bytes))
+			{
+				ILinfo ImageInfo;
+				iluGetImageInfo(&ImageInfo);
+				if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+				{
+					iluFlipImage();
+				}
+
+				int channels = ilGetInteger(IL_IMAGE_CHANNELS);
+				if (channels == 3)
+				{
+					ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+				}
+				else if (channels == 4)
+				{
+					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+				}
+
+				ILenum error = ilGetError();
+
+				if (error != IL_NO_ERROR)
+				{
+					LOG_CONSOLE("Material error: %d, %s", error, iluErrorString(error));
+				}
+				else
+				{
+					LOG_CONSOLE("Material loaded successfully from: %s", newPath.c_str());
+
+					texture->texId = id;
+					texture->name = name;
+					texture->data = ilGetData();
+					texture->width = ilGetInteger(IL_IMAGE_WIDTH);
+					texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
+					texture->format = texture->formatUnsigned = ilGetInteger(IL_IMAGE_FORMAT);
+					texture->path = newPath.c_str();
+					std::string file = std::to_string(texture->GetUID()) + TEXTURE_FORMAT_FILE;
+					//App->resources->SaveMaterial(texture, file);
+				}
+			}
+			else
+			{
+				LOG_CONSOLE("Error loading the material from %s: %d, %s", path, ilGetError(), iluErrorString(ilGetError()));
+			}
+		}
+		else
+		{
+			LOG_CONSOLE("Error loading material from %s: No bytes", path);
+		}
+		return texture;
+	}
+	else
+	{
+		ResourceMaterial* rm = (ResourceMaterial*)App->resources->RequestResource(uid);
+		rm->referenceCount++;
+		LOG_CONSOLE("Material already exists with uid : %d, pulling from resources.", (int)uid);
+		return rm;
+	}
+
+	return nullptr;
 }
 
 ResourceMaterial* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)

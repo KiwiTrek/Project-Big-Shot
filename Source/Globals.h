@@ -13,6 +13,7 @@
 #pragma warning( disable : 4244 ) // Warning that exceptions are disabled
 #pragma warning( disable : 4530 ) // Warning that exceptions are disabled
 #pragma warning( disable : 4577 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4838 ) // Warning that exceptions are disabled
 #pragma warning( disable : 4996 ) // Warning that exceptions are disabled
 
 #include <windows.h>
@@ -119,5 +120,6 @@ enum class UpdateStatus
 #define ASSETS_FOLDER "Assets/Resources/"
 #define MODELS_FOLDER "Models/"
 #define TEXTURES_FOLDER "Textures/"
+#define SCENES_FOLDER "Assets/Scenes/"
 
 #endif // !__GLOBALS_H__

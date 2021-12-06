@@ -19,6 +19,8 @@ ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Modul
 
 	AddPath(".");
 	AddPath("./Assets");
+	AddPath("./Assets/Scenes");
+	scenePath = "Assets/Scenes";
 	AddPath("./Assets/Resources");
 	AddPath("./Assets/Resources/Textures");
 	texturePath = "Assets/Resources/Textures";
@@ -138,6 +140,10 @@ void ModuleFileSystem::CreateLibraryDirectories()
 	path.clear();
 	path = ASSETS_FOLDER;
 	path.append(TEXTURES_FOLDER);
+	CreateDir(path.c_str());
+
+	path.clear();
+	path = SCENES_FOLDER;
 	CreateDir(path.c_str());
 }
 

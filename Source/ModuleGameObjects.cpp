@@ -1,6 +1,7 @@
 #include "ModuleGameObjects.h"
 #include "Application.h"
 
+#include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
@@ -17,6 +18,9 @@ ModuleGameObjects::~ModuleGameObjects()
 
 bool ModuleGameObjects::Init()
 {
+	LOG_CONSOLE("Initializing Gizmo Handler & GameObjects");
+	ImGuizmo::Enable(true);
+
 	currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 	currentGizmoMode = ImGuizmo::MODE::WORLD;
 	return true;
@@ -29,11 +33,21 @@ bool ModuleGameObjects::Start()
 
 UpdateStatus ModuleGameObjects::PreUpdate()
 {
-	if ((App->input->GetKey(SDL_SCANCODE_T) == KeyState::KEY_DOWN)) currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-
-	else if ((App->input->GetKey(SDL_SCANCODE_Y) == KeyState::KEY_DOWN)) currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
-
-	else if ((App->input->GetKey(SDL_SCANCODE_U) == KeyState::KEY_DOWN)) currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+	if ((App->input->GetKey(SDL_SCANCODE_T) == KeyState::KEY_DOWN))
+	{
+		currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		LOG_CONSOLE("Set Guizmo to Translate");
+	}
+	else if ((App->input->GetKey(SDL_SCANCODE_Y) == KeyState::KEY_DOWN))
+	{
+		currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+		LOG_CONSOLE("Set Guizmo to Rotate");
+	}
+	else if ((App->input->GetKey(SDL_SCANCODE_U) == KeyState::KEY_DOWN))
+	{
+		currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+		LOG_CONSOLE("Set Guizmo to Scale");
+	}
 
 	return UpdateStatus::UPDATE_CONTINUE;
 }
@@ -50,7 +64,11 @@ UpdateStatus ModuleGameObjects::Update(float dt)
 		while (c != (*item)->components.end())
 		{
 			(*c)->Update();
-
+			if ((*item) == selectedGameObject && (*c)->type == ComponentTypes::MESH)
+			{
+				ComponentMesh* cm = (ComponentMesh*)(*c);
+				cm->UpdateBBox();
+			}
 			c++;
 		}
 		item++;
@@ -73,7 +91,11 @@ UpdateStatus ModuleGameObjects::UpdateChildren(GameObject* parent)
 		while (c != (*item)->components.end())
 		{
 			(*c)->Update();
-
+			if ((*item) == selectedGameObject && (*c)->type == ComponentTypes::MESH)
+			{
+				ComponentMesh* cm = (ComponentMesh*)(*c);
+				if (cm->mesh != nullptr) cm->UpdateBBox();
+			}
 			c++;
 		}
 		item++;
@@ -135,31 +157,6 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 	return UpdateStatus::UPDATE_CONTINUE;
 }
 
-void ModuleGameObjects::GuizmoTransformation()
-{
-	/*if (selectedGameObject == nullptr)
-		return;
-
-	float4x4 viewMatrix = App->camera->viewMatrix.Transposed();
-	float4x4 projectionMatrix = App->camera->cameraFrustum.ProjectionMatrix().Transposed();
-	float4x4 objectTransform = selectedGameObject->GetComponent<Transform>()->GetGlobalTransform().Transposed();
-
-	ImGuizmo::SetDrawlist();
-	ImGuizmo::SetRect(App->gui->scenePanelOrigin.x, App->gui->scenePanelOrigin.y, App->gui->viewportSize.x, App->gui->viewportSize.y);
-
-	float tempTransform[16];
-	memcpy(tempTransform, objectTransform.ptr(), 16 * sizeof(float));
-
-	ImGuizmo::Manipulate(viewMatrix.ptr(), projectionMatrix.ptr(), currentGizmoOperation, currentGizmoOperation != ImGuizmo::OPERATION::SCALE ? currentGizmoMode : ImGuizmo::MODE::LOCAL, tempTransform);
-
-	if (ImGuizmo::IsUsing())
-	{
-		float4x4 newTransform;
-		newTransform.Set(tempTransform);
-		objectTransform = newTransform.Transposed();
-		selectedGameObject->GetComponent<Transform>()->SetGlobalTransform(objectTransform);
-	}*/
-}
 
 void ModuleGameObjects::RenderChildren(GameObject* parent)
 {
@@ -202,11 +199,38 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 	}
 }
 
+void ModuleGameObjects::GuizmoTransformation()
+{
+	if (selectedGameObject == nullptr)
+		return;
+
+	float4x4 viewMatrix = App->camera->viewMatrix.Transposed();
+	float4x4 projectionMatrix = App->camera->cameraFrustum.ProjectionMatrix().Transposed();
+	float4x4 objectTransform = selectedGameObject->GetComponent<Transform>()->GetGlobalTransform().Transposed();
+
+	float tempTransform[16];
+	memcpy(tempTransform, objectTransform.ptr(), 16 * sizeof(float));
+
+	int winX, winY;
+	App->window->GetPosition(winX, winY);
+	ImGuizmo::SetRect(App->gui->scenePanelOrigin.x + winX, App->gui->scenePanelOrigin.y + winY, App->gui->viewportSize.x, App->gui->viewportSize.y);
+	ImGuizmo::Manipulate(viewMatrix.ptr(), projectionMatrix.ptr(), currentGizmoOperation, currentGizmoOperation != ImGuizmo::OPERATION::SCALE ? currentGizmoMode : ImGuizmo::MODE::LOCAL, tempTransform);
+
+	if (ImGuizmo::IsUsing())
+	{
+		float4x4 newTransform;
+		newTransform.Set(tempTransform);
+		objectTransform = newTransform.Transposed();
+		selectedGameObject->GetComponent<Transform>()->SetGlobalTransform(objectTransform);
+	}
+}
+
 bool ModuleGameObjects::CleanUp()
 {
 	selectedGameObject = nullptr;
 
 	LOG("Deleting Game Objects");
+	ImGuizmo::Enable(false);
 
 	std::vector<GameObject*>::reverse_iterator g = gameObjectList.rbegin();
 	while (g != gameObjectList.rend())

@@ -6,6 +6,7 @@
 #include "Resource.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
+#include "Color.h"
 
 #include <map>
 
@@ -25,6 +26,12 @@ public:
 
 	UID GenerateNewUID();
 	Resource* RequestResource(UID uid);
+
+	//For loading purposes
+	Resource* RequestResource(Shape shape);
+	Resource* RequestResource(std::string name);
+	Resource* RequestResource(Color color);
+
 	const Resource* RequestResource(UID uid) const;
 	Resource* GetShape(Shape shape);
 

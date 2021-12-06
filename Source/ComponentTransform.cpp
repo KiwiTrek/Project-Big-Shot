@@ -46,7 +46,7 @@ void ComponentTransform::Reset()
 	rot = Quat::identity;
 	eulerRot = float3::zero;
 	scale = float3::one;
-
+	
 	UpdateGlobalTransform();
 	owner->UpdateChildrenTransforms();
 }
@@ -177,6 +177,8 @@ void ComponentTransform::SetGlobalTransform(float4x4 transform)
 	float4x4 inverseParentGlobal = gParentTransform;
 	inverseParentGlobal.Inverse();
 	lTransform = inverseParentGlobal * gTransform;
+	lTransform.Decompose(pos, rot, scale);
+	eulerRot = rot.ToEulerXYZ() * RADTODEG;
 
 	UpdateGlobalTransform();
 	owner->UpdateChildrenTransforms();
@@ -189,10 +191,12 @@ float3 ComponentTransform::GetScale()
 
 void ComponentTransform::OnLoad(const JSONReader& t, Application* App)
 {
+	Reset();
+
 	if (t.HasMember("pos"))
 	{
 		const rapidjson::Value& jPos = t["pos"];
-		float p[3] = { 0.0f, 0.0f, 0.0f };
+		double p[3] = { 0.0f, 0.0f, 0.0f };
 		uint i = 0;
 		for (rapidjson::Value::ConstValueIterator it = jPos.Begin(); it != jPos.End(); ++it, ++i)
 		{
@@ -204,19 +208,20 @@ void ComponentTransform::OnLoad(const JSONReader& t, Application* App)
 	if (t.HasMember("rot"))
 	{
 		const rapidjson::Value& jRot = t["rot"];
-		float r[4] = { 0.0, 0.0f, 0.0f, 0.0f };
+		double r[4] = { 0.0, 0.0f, 0.0f, 0.0f };
 		uint i = 0;
 		for (rapidjson::Value::ConstValueIterator it = jRot.Begin(); it != jRot.End(); ++it, ++i)
 		{
 			r[i] = it->GetDouble();
 		}
 		rot = Quat(r[0], r[1], r[2], r[3]);
+		eulerRot = rot.ToEulerXYZ() * RADTODEG;
 	}
 
 	if (t.HasMember("scale"))
 	{
 		const rapidjson::Value& jScale = t["scale"];
-		float s[3] = { 1.0f, 1.0f, 1.0f };
+		double s[3] = { 1.0f, 1.0f, 1.0f };
 		uint i = 0;
 		for (rapidjson::Value::ConstValueIterator it = jScale.Begin(); it != jScale.End(); ++it, ++i)
 		{

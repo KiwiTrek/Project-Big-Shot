@@ -112,6 +112,7 @@ public:
 	std::string systemBasePath;
 	std::string texturePath;
 	std::string meshPath;
+	std::string scenePath;
 };
 
 #endif // __MODULE_FILESYSTEM_H__

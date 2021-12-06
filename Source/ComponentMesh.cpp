@@ -62,7 +62,7 @@ void ComponentMesh::DrawInspector(Application* App)
 void ComponentMesh::Update()
 {}
 
-void ComponentMesh::Render() const
+void ComponentMesh::Render()
 {
 	if (mesh == nullptr) return;
 
@@ -83,13 +83,6 @@ void ComponentMesh::Render() const
 	//indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuf);
 
-	float4x4 t = owner->GetComponent<Transform>()->GetGlobalTransform();
-
-	glPushMatrix();
-	glMultMatrixf((float*)&t.Transposed());
-
-	glColor3f(vertexColor.r, vertexColor.g, vertexColor.b);
-
 	if (mat != nullptr && mat->IsActive())
 	{
 		//textures
@@ -105,6 +98,13 @@ void ComponentMesh::Render() const
 			else glBindTexture(GL_TEXTURE_2D, mat->checkersId);
 		}
 	}
+
+	float4x4 t = owner->GetComponent<Transform>()->GetGlobalTransform();
+
+	glPushMatrix();
+	glMultMatrixf((float*)&t.Transposed());
+
+	glColor3f(vertexColor.r, vertexColor.g, vertexColor.b);
 
 	wire || wireOverride ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -188,7 +188,19 @@ void ComponentMesh::CreateBBox()
 	radius = sphere.r;
 	centerPoint = sphere.pos;
 
-	obb = bbox;
+	obb.SetFrom(bbox);
+	obb.Transform(owner->GetComponent<Transform>()->GetGlobalTransform());
+
+	bbox.SetNegativeInfinity();
+	bbox.Enclose(obb);
+}
+
+void ComponentMesh::UpdateBBox()
+{
+	bbox.SetNegativeInfinity();
+	bbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
+
+	obb.SetFrom(bbox);
 	obb.Transform(owner->GetComponent<Transform>()->GetGlobalTransform());
 
 	bbox.SetNegativeInfinity();
@@ -260,16 +272,43 @@ float3 ComponentMesh::GetCenterPointInWorldCoords() const
 
 void ComponentMesh::OnLoad(const JSONReader& m, Application* App)
 {
-	if (m.HasMember("UID"))
+	if (m.HasMember("Shape"))
+	{
+		int s = m["Shape"].GetInt();
+		Shape shape;
+		switch (s)
+		{
+		case 1:
+			shape = Shape::CUBE;
+			break;
+		case 2:
+			shape = Shape::SPHERE;
+			break;
+		case 3:
+			shape = Shape::CYLINDER;
+			break;
+		case 4:
+			shape = Shape::TORUS;
+			break;
+		case 5:
+			shape = Shape::PLANE;
+			break;
+		case 6:
+			shape = Shape::CONE;
+			break;
+		}
+		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(shape);
+		if (rm != nullptr)
+		{
+			mesh = rm;
+		}
+	}
+	else if (m.HasMember("UID"))
 	{
 		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(m["UID"].GetInt());
 		if (rm != nullptr)
 		{
 			mesh = rm;
-		}
-		else
-		{
-			LOG("NO FUNCIONA");
 		}
 	}
 
@@ -328,7 +367,7 @@ void ComponentMesh::OnLoad(const JSONReader& m, Application* App)
 	}
 
 	drawBBox = false;
-	CreateBBox();
+	if (mesh != nullptr) CreateBBox();
 }
 
 void ComponentMesh::OnSave(JSONWriter& writer) const
@@ -337,6 +376,11 @@ void ComponentMesh::OnSave(JSONWriter& writer) const
 	writer.StartObject();
 	writer.String("UID");
 	writer.Int(mesh->GetUID());
+	if (mesh->mType != Shape::NONE)
+	{
+		writer.String("Shape");
+		writer.Int((int)mesh->mType);
+	}
 	writer.String("vertexColor");
 	writer.StartArray();
 	writer.Double(vertexColor.r);
