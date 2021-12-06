@@ -110,6 +110,8 @@ public:
 	std::string SetNormalName(const char* path);
 
 	std::string systemBasePath;
+	std::string texturePath;
+	std::string meshPath;
 };
 
 #endif // __MODULE_FILESYSTEM_H__

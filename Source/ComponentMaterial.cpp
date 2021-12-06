@@ -42,6 +42,7 @@ void ComponentMaterial::DrawInspector(Application* App)
 		{
 			if (material->data != nullptr)
 			{
+				IMGUI_PRINT(IMGUI_YELLOW, "UID: ", "%d", material->GetUID());
 				IMGUI_PRINT(IMGUI_YELLOW, "Diffuse Texture:", "%s", material->name.c_str());
 				IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", material->path.c_str());
 				IMGUI_PRINT(IMGUI_YELLOW, "Width:", "%d", material->width); ImGui::SameLine(); IMGUI_PRINT(IMGUI_YELLOW, "Height:", "%d", material->height);
@@ -85,30 +86,44 @@ void ComponentMaterial::BindTexture(bool checkers)
 	}
 }
 
-//void ComponentMaterial::OnLoad(const JSONReader& reader)
-//{
-//
-//}
-//
-//void ComponentMaterial::OnSave(JSONWriter& writer) const
-//{
-//	//writer.StartObject();
-//	//writer.String(name.c_str());
-//	//writer.String(path.c_str());
-//	//writer.Int(id);
-//	//writer.Int(textureBuf);
-//	//writer.Int(format);
-//	//writer.Int(formatUnsigned);
-//	//data
-//	//writer.Int(width);
-//	//writer.Int(height);
-//	//writer.Bool(checkers);
-//	//writer.Bool(usingColor);
-//	//writer.StartArray();
-//	//writer.Int(diffuse.r);
-//	//writer.Int(diffuse.g);
-//	//writer.Int(diffuse.b);
-//	//writer.Int(diffuse.a);
-//	//writer.EndArray();
-//	//writer.EndObject();
-//}
+void ComponentMaterial::OnLoad(const JSONReader& mat, Application* App)
+{
+	if (mat.HasMember("UID"))
+	{
+		ResourceMaterial* rMat = (ResourceMaterial*)App->resources->RequestResource(mat["UID"].GetInt());
+		if (rMat == nullptr)
+		{
+			LOG("NO FUNCIONA");
+		}
+		else
+		{
+			material = rMat;
+		}
+	}
+
+	if (mat.HasMember("usingCheckers"))
+	{
+		usingCheckers = mat["usingCheckers"].GetBool();
+	}
+
+	if (mat.HasMember("checkersId"))
+	{
+		checkersId = mat["checkersId"].GetInt();
+	}
+}
+
+void ComponentMaterial::OnSave(JSONWriter& writer) const
+{
+	writer.String("Material");
+	writer.StartObject();
+	if (!usingCheckers)
+	{
+		writer.String("UID");
+		writer.Int(material->GetUID());
+	}
+	writer.String("usingCheckers");
+	writer.Bool(usingCheckers);
+	writer.String("checkersId");
+	writer.Int(checkersId);
+	writer.EndObject();
+}

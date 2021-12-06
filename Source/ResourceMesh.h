@@ -28,8 +28,6 @@ private:
 	void CopyParMesh(par_shapes_mesh* parMesh);
 
 public:
-	uint vertexBuf = 0, indexBuf = 0, textureBuf = 0, normalsBuf = 0;
-
 	uint vertexNum = 0;
 	std::vector<float3> vertices;
 
@@ -40,6 +38,11 @@ public:
 
 	uint indexNum = 0;
 	std::vector<uint> indices;
+
+	uint vertexBuf = 0;
+	uint indexBuf = 0;
+	uint textureBuf = 0;
+	uint normalsBuf = 0;
 
 	Shape mType;
 };

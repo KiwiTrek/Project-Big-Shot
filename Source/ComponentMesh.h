@@ -30,8 +30,8 @@ public:
 
 	float3 GetCenterPointInWorldCoords() const;
 
-	//void OnLoad(const JSONReader& reader);
-	//void OnSave(JSONWriter& writer) const;
+	void OnLoad(const JSONReader& m, Application* App);
+	void OnSave(JSONWriter& writer) const;
 
 public:
 	Color vertexColor;
@@ -40,10 +40,10 @@ public:
 	AABB bbox;
 	AABB drawingBbox;
 	OBB obb;
-	float3 centerPoint = float3::zero;
+	float3 centerPoint;
 	float radius;
 
-	bool render = true;
+	bool render;
 
 	ResourceMesh* mesh;
 };

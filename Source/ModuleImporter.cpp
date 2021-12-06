@@ -121,6 +121,9 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 					texture->width = ilGetInteger(IL_IMAGE_WIDTH);
 					texture->height = ilGetInteger(IL_IMAGE_HEIGHT);
 					texture->format = texture->formatUnsigned = ilGetInteger(IL_IMAGE_FORMAT);
+					texture->path = newPath.c_str();
+					std::string file = std::to_string(texture->GetUID()) + TEXTURE_FORMAT_FILE;
+					//App->resources->SaveMaterial(texture, file);
 				}
 			}
 			else
@@ -271,10 +274,9 @@ ResourceMaterial* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 			if (uid == -1)
 			{
 				texture = (ResourceMaterial*)App->resources->CreateNewResource(Resource::Type::MATERIAL,Shape::NONE, nullptr, true, diff);
-				uint id = 0;
-				ilGenImages(1, &id);
-				ilBindImage(id);
-				texture->texId = id;
+				GenerateId(texture);
+				std::string file = std::to_string(texture->GetUID()) + TEXTURE_FORMAT_FILE;
+				//App->resources->SaveMaterial(texture, file);
 				LOG_CONSOLE("Material color loaded successfully.");
 			}
 			else
@@ -310,7 +312,7 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 		ResourceMesh* m = (ResourceMesh*)App->resources->CreateNewResource(Resource::Type::MESH);
 		m->vertexNum = aiMesh->mNumVertices;
 		m->vertices.resize(aiMesh->mNumVertices);
-		memcpy(&m->vertices[0], aiMesh->mVertices, sizeof(float3) * aiMesh->mNumVertices);
+		memcpy(&m->vertices[0], aiMesh->mVertices, sizeof(float3) * m->vertexNum);
 		LOG_CONSOLE("Loaded new mesh with %d vertices", m->vertexNum);
 
 		if (aiMesh->HasFaces())
@@ -330,9 +332,9 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 			}
 
 			if (aiMesh->HasNormals()) {
-
-				m->normals.resize(aiMesh->mNumVertices);
-				memcpy(&m->normals[0], aiMesh->mNormals, sizeof(float3) * aiMesh->mNumVertices);
+				m->normalNum = aiMesh->mNumVertices;
+				m->normals.resize(m->normalNum);
+				memcpy(&m->normals[0], aiMesh->mNormals, sizeof(float3) * m->normalNum);
 			}
 
 			m->texCoords.resize(aiMesh->mNumVertices);
@@ -352,6 +354,8 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 				}
 			}
 			LOG_CONSOLE("Mesh copied successfully.");
+			std::string file = std::to_string(m->GetUID()) + MESH_FORMAT_FILE;
+			App->resources->SaveMesh(m, file);
 			return m;
 		}
 	}
@@ -405,4 +409,12 @@ void ModuleImporter::GetAssimpVersion(int& major, int& minor, int& patch)
 	major = aiGetVersionMajor();
 	minor = aiGetVersionMinor();
 	patch = aiGetVersionRevision();
+}
+
+void ModuleImporter::GenerateId(ResourceMaterial* rm)
+{
+	uint id = 0;
+	ilGenImages(1, &id);
+	ilBindImage(id);
+	rm->texId = id;
 }

@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "RenderGlobals.h"
 #include "MathGeoLib.h"
+#include "ModuleGameObjects.h"
 #include "Gameobject.h"
 
 GameObject::GameObject(std::string n, bool active) : active(active), parent(nullptr)
@@ -169,35 +170,104 @@ bool GameObject::CleanUp()
 	return true;
 }
 
-void GameObject::OnLoad(const JSONReader& reader)
+void GameObject::OnLoad(const jsonObject& reader, Application* App)
 {
-	//if (reader.HasMember("Game Object"))
-	//{
-	//	const auto& go = reader["Game Object"];
+	bool isRoot = false;
+	if (reader.HasMember("UID"))
+	{
+		uid = reader["UID"].GetInt();
+	}
 
-	//}
+	if (reader.HasMember("name"))
+	{
+		name = reader["name"].GetString();
+		if (name == "sceneRoot") isRoot = true;
+	}
+
+	if (reader.HasMember("active"))
+	{
+		active = reader["active"].GetBool();
+	}
+
+	if (reader.HasMember("Components"))
+	{
+		const jsonObject& jComponents = reader["Components"].GetObjectJSON();
+		if (jComponents.HasMember("Transform"))
+		{
+			ComponentTransform* ct = (ComponentTransform*)CreateComponent(ComponentTypes::TRANSFORM);
+			ct->OnLoad(jComponents["Transform"], App);
+		}
+		if (jComponents.HasMember("Mesh"))
+		{
+			ComponentMesh* cm = (ComponentMesh*)CreateComponent(ComponentTypes::MESH);
+			cm->OnLoad(jComponents["Mesh"], App);
+		}
+		if (jComponents.HasMember("Material"))
+		{
+			ComponentMaterial* cmat = (ComponentMaterial*)CreateComponent(ComponentTypes::MATERIAL);
+			cmat->OnLoad(jComponents["Material"], App);
+		}
+		if (jComponents.HasMember("Camera"))
+		{
+			ComponentCamera* cc = (ComponentCamera*)CreateComponent(ComponentTypes::CAMERA);
+			cc->OnLoad(jComponents["Camera"], App);
+		}
+	}
+
+	if (reader.HasMember("Children"))
+	{
+		const rapidjson::Value& jChildren = reader["Children"];
+		for (rapidjson::Value::ConstValueIterator it = jChildren.Begin(); it != jChildren.End(); ++it)
+		{
+			const jsonObject& childOb = it->GetObjectJSON();
+			const char* childName = "Default Game Object";
+			if (childOb.HasMember("name"))
+			{
+				childName = childOb["name"].GetString();
+			}
+			GameObject* child = new GameObject(childName);
+			if (isRoot)
+			{
+				App->gameObjects->AddGameobject(child);
+			}
+			else
+			{
+				this->AddChild(child);
+				child->parent = this;
+			}
+			child->OnLoad(childOb, App);
+		}
+	}
 }
 
 void GameObject::OnSave(JSONWriter& writer) const
 {
-	//writer.StartObject();
-	//writer.Int(uid);
-	//writer.Int(parent->uid);
-	//writer.String(name.c_str());
-	//writer.Bool(active);
-	//writer.String("Components");
-	//writer.StartArray();
-	//for (uint i = 0; i < components.size(); i++)
-	//{
-	//	components[i]->OnSave(writer);
-	//}
-	//writer.EndArray();
-	//writer.String("Children");
-	//writer.StartArray();
-	//for (uint i = 0; i < children.size(); i++)
-	//{
-	//	children[i]->OnSave(writer);
-	//}
-	//writer.EndArray();
-	//writer.EndObject();
+	writer.StartObject();
+	writer.String("UID");
+	writer.Int(uid);
+	writer.String("name");
+	writer.String(name.c_str());
+	writer.String("active");
+	writer.Bool(active);
+	if (components.size() != 0)
+	{
+		writer.String("Components");
+		writer.StartObject();
+		for (uint i = 0; i < components.size(); i++)
+		{
+			components[i]->OnSave(writer);
+		}
+		writer.EndObject();
+	}
+	if (children.size() != 0)
+	{
+		writer.String("Children");
+		writer.StartArray();
+		for (uint i = 0; i < children.size(); i++)
+		{
+			children[i]->OnSave(writer);
+		}
+		writer.EndArray();
+	}
+	writer.EndObject();
 }

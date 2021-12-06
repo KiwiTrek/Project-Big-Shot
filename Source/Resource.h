@@ -18,6 +18,7 @@ public:
 	virtual ~Resource() {}
 	Resource::Type GetType() const { return type; }
 	UID GetUID() const { return uid; }
+	void SetUID(UID newUid) { uid = newUid; }
 	const char* GetAssetFile() const { return assetsFile.c_str(); }
 	void SetAssetFile(const char* name) { assetsFile = name; }
 	void SetResourceMap(std::map<UID, Resource*>* map) { resources = map; }

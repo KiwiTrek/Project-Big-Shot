@@ -1,0 +1,2200 @@
+{
+    "Game Objects": [
+        {
+            "UID": 1023174440,
+            "name": "sceneRoot",
+            "active": true,
+            "Components": {
+                "Transform": {
+                    "pos": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "rot": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                }
+            },
+            "Children": [
+                {
+                    "UID": 1084440920,
+                    "name": "Camera",
+                    "active": true,
+                    "Components": {
+                        "Transform": {
+                            "pos": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "rot": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        "Camera": {
+                            "fixedFOV": 0,
+                            "culling": true,
+                            "horizontalFOV": 60.0,
+                            "aspectRatio": 1.7769999504089356
+                        }
+                    }
+                },
+                {
+                    "UID": 1773132819,
+                    "name": "Street_environment",
+                    "active": true,
+                    "Components": {
+                        "Transform": {
+                            "pos": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ],
+                            "rot": [
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    },
+                    "Children": [
+                        {
+                            "UID": 1837741107,
+                            "name": "Sky001_$AssimpFbx$_Translation",
+                            "active": true,
+                            "Components": {
+                                "Transform": {
+                                    "pos": [
+                                        18.153732299804689,
+                                        0.0,
+                                        58.96091079711914
+                                    ],
+                                    "rot": [
+                                        -0.9999999403953552,
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ]
+                                }
+                            },
+                            "Children": [
+                                {
+                                    "UID": 1893159423,
+                                    "name": "Sky001_$AssimpFbx$_PreRotation",
+                                    "active": true,
+                                    "Components": {
+                                        "Transform": {
+                                            "pos": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rot": [
+                                                -0.9999999403953552,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ]
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "UID": 1946906835,
+                                            "name": "Sky001_$AssimpFbx$_PostRotation",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        -0.7071067690849304,
+                                                        0.0,
+                                                        0.0,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                }
+                                            },
+                                            "Children": [
+                                                {
+                                                    "UID": 1999749174,
+                                                    "name": "Sky001",
+                                                    "active": true,
+                                                    "Components": {
+                                                        "Transform": {
+                                                            "pos": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0
+                                                            ],
+                                                            "rot": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0,
+                                                                1.0
+                                                            ],
+                                                            "scale": [
+                                                                1.0,
+                                                                1.0,
+                                                                1.0
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "UID": 2054053554,
+                            "name": "Dummy001_$AssimpFbx$_PreRotation",
+                            "active": true,
+                            "Components": {
+                                "Transform": {
+                                    "pos": [
+                                        0.0,
+                                        0.0,
+                                        0.0
+                                    ],
+                                    "rot": [
+                                        -0.7071067690849304,
+                                        0.0,
+                                        0.0,
+                                        0.7071067690849304
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ]
+                                }
+                            },
+                            "Children": [
+                                {
+                                    "UID": 5083622,
+                                    "name": "Dummy001",
+                                    "active": true,
+                                    "Components": {
+                                        "Transform": {
+                                            "pos": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rot": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ]
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "UID": 63565262,
+                                            "name": "City_building_004",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -41.47589111328125,
+                                                        21.01409912109375,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1764057659,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        0.7525219917297363,
+                                                        1.028902292251587,
+                                                        1.028902292251587
+                                                    ],
+                                                    "radius": 11.4467134475708,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 234554438,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 1
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1009782188,
+                                            "name": "City_building_001",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        17.707164764404298,
+                                                        20.05327606201172,
+                                                        2.121072952832037e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1640245534,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.2289788722991944,
+                                                        1.2924346923828126,
+                                                        1.2924346923828126
+                                                    ],
+                                                    "radius": 10.908346176147461,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1132454390,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 3
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1043824772,
+                                            "name": "City_building_007",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        16.0104923248291,
+                                                        37.4932861328125,
+                                                        -0.0000015106878663573298
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1569695559,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.519326090812683,
+                                                        0.2654346823692322,
+                                                        0.2654346823692322
+                                                    ],
+                                                    "radius": 11.523335456848145,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1159534874,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 4
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 2131861760,
+                                            "name": "City_building_008",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        40.97999572753906,
+                                                        18.270824432373048,
+                                                        -0.0000020522466002148578
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 678383615,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        0.7457116842269898,
+                                                        0.7095800042152405,
+                                                        0.7095800042152405
+                                                    ],
+                                                    "radius": 5.891286373138428,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 121392241,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 5
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 905046217,
+                                            "name": "Line002",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -2.1597719192504885,
+                                                        1.8538382053375245,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1508614040,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        11.835601806640625,
+                                                        9.05533218383789,
+                                                        9.05533218383789
+                                                    ],
+                                                    "radius": 79.55875396728516,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1069491019,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 6
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1377912049,
+                                            "name": "Plane001",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -0.02860260009765625,
+                                                        0.026032090187072755,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        0.9966350197792053,
+                                                        0.9706159830093384,
+                                                        0.9966350197792053
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 43485814,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        9.918704986572266,
+                                                        7.4923319816589359,
+                                                        7.4923319816589359
+                                                    ],
+                                                    "radius": 80.95011138916016,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1547996152,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 7
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1693991389,
+                                            "name": "City_building_010",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        25.154010772705079,
+                                                        -39.15372085571289,
+                                                        8.553864176974457e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 813491989,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        0.01216893456876278,
+                                                        3.3138985633850099,
+                                                        3.3138985633850099
+                                                    ],
+                                                    "radius": 6.19549560546875,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1889556778,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 8
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1043729164,
+                                            "name": "City_building_011",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        30.134540557861329,
+                                                        37.4932861328125,
+                                                        -0.0000015106878663573298
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1569695559,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.519326090812683,
+                                                        0.2654346823692322,
+                                                        0.2654346823692322
+                                                    ],
+                                                    "radius": 11.523335456848145,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1159534874,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 9
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1506012604,
+                                            "name": "City_building_013",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -42.288055419921878,
+                                                        33.201576232910159,
+                                                        5.014607040720875e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1228291822,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.2443609237670899,
+                                                        1.5026438236236573,
+                                                        1.5026438236236573
+                                                    ],
+                                                    "radius": 9.827154159545899,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1688141140,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 10
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1037321947,
+                                            "name": "City_building_014",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -19.439706802368165,
+                                                        32.061729431152347,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        1.0,
+                                                        -4.371138828673793e-8
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1587024933,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        2.4699180126190187,
+                                                        5.831689834594727,
+                                                        5.831689834594727
+                                                    ],
+                                                    "radius": 14.990031242370606,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 234554438,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 11
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 974848008,
+                                            "name": "City_building_016",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        34.270423889160159,
+                                                        -41.972747802734378,
+                                                        8.553864176974457e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        1.0,
+                                                        -4.371138828673793e-8
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 813491989,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        0.01216893456876278,
+                                                        3.3138985633850099,
+                                                        3.3138985633850099
+                                                    ],
+                                                    "radius": 6.19549560546875,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1889556778,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 12
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1715685069,
+                                            "name": "City_building_017",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        44.26008224487305,
+                                                        -39.15372085571289,
+                                                        8.553864176974457e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 813491989,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        0.01216893456876278,
+                                                        3.3138985633850099,
+                                                        3.3138985633850099
+                                                    ],
+                                                    "radius": 6.19549560546875,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1889556778,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 13
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 295810493,
+                                            "name": "City_building_022",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -20.831323623657228,
+                                                        -27.426488876342775,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        1.0,
+                                                        1.9470718370939722e-7
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 394900380,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        2.6292266845703127,
+                                                        5.797568321228027,
+                                                        5.797568321228027
+                                                    ],
+                                                    "radius": 15.437549591064454,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 526882592,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 14
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1266673253,
+                                            "name": "City_building_023",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        42.13064193725586,
+                                                        37.4932861328125,
+                                                        -0.0000015106878663573298
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1569695559,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.519326090812683,
+                                                        0.2654346823692322,
+                                                        0.2654346823692322
+                                                    ],
+                                                    "radius": 11.523335456848145,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1159534874,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 15
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1910528261,
+                                            "name": "City_building_024",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -20.572771072387697,
+                                                        43.060829162597659,
+                                                        -0.06919445842504502
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        1.0,
+                                                        4.371138828673793e-8
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 678383615,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        0.7457116842269898,
+                                                        0.7095800042152405,
+                                                        0.7095800042152405
+                                                    ],
+                                                    "radius": 5.891286373138428,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 121392241,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 16
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 283391968,
+                                            "name": "City_building_026",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        31.51188850402832,
+                                                        -16.446016311645509,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        1.0,
+                                                        4.371138828673793e-8
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 792806212,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        -3.4150078296661379,
+                                                        2.1251771450042726,
+                                                        2.1251771450042726
+                                                    ],
+                                                    "radius": 15.746590614318848,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 526882592,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 17
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 207341934,
+                                            "name": "City_building_028",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        13.38798999786377,
+                                                        -33.75503921508789,
+                                                        -9.383451811117993e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 686677821,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.5563511848449708,
+                                                        1.1053861379623414,
+                                                        1.1053861379623414
+                                                    ],
+                                                    "radius": 9.045162200927735,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 501978006,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 18
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1487461176,
+                                            "name": "Object010",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -2.5033531188964845,
+                                                        15.800846099853516,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 2105251415,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        4.426137447357178,
+                                                        -11.179842948913575,
+                                                        -11.179842948913575
+                                                    ],
+                                                    "radius": 33.4280891418457,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1860699357,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 19
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 273316655,
+                                            "name": "City_building_030",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -42.8072395324707,
+                                                        -41.83556365966797,
+                                                        -9.383451811117993e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 686677821,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.5563511848449708,
+                                                        1.1053861379623414,
+                                                        1.1053861379623414
+                                                    ],
+                                                    "radius": 9.045162200927735,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 501978006,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 20
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 873982741,
+                                            "name": "City_building_031",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -34.679481506347659,
+                                                        -41.83556365966797,
+                                                        -9.383451811117993e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 686677821,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.5563511848449708,
+                                                        1.1053861379623414,
+                                                        1.1053861379623414
+                                                    ],
+                                                    "radius": 9.045162200927735,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 501978006,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 21
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 955554651,
+                                            "name": "City_building_032",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -29.478403091430665,
+                                                        21.01409912109375,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1764057659,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        0.7525219917297363,
+                                                        1.028902292251587,
+                                                        1.028902292251587
+                                                    ],
+                                                    "radius": 11.4467134475708,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 234554438,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 22
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 886257854,
+                                            "name": "City_building_033",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -32.36149597167969,
+                                                        42.37042236328125,
+                                                        5.014607040720875e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 263726076,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        -3.2867956161499025,
+                                                        2.095907688140869,
+                                                        2.095907688140869
+                                                    ],
+                                                    "radius": 13.345780372619629,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1688141140,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 23
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1099552696,
+                                            "name": "City_building_034",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        16.049516677856447,
+                                                        -16.696884155273439,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071068286895752,
+                                                        0.7071067094802856
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1487708975,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        4.827322959899902,
+                                                        1.947096586227417,
+                                                        1.947096586227417
+                                                    ],
+                                                    "radius": 14.565007209777832,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 526882592,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 24
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 804405375,
+                                            "name": "City_building_035",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        13.38798999786377,
+                                                        -40.80251693725586,
+                                                        -9.383451811117993e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                        1.0
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 686677821,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.5563511848449708,
+                                                        1.1053861379623414,
+                                                        1.1053861379623414
+                                                    ],
+                                                    "radius": 9.045162200927735,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 501978006,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 25
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1103891015,
+                                            "name": "City_building_036",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -31.216331481933595,
+                                                        33.201576232910159,
+                                                        5.014607040720875e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1228291822,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.2443609237670899,
+                                                        1.5026438236236573,
+                                                        1.5026438236236573
+                                                    ],
+                                                    "radius": 9.827154159545899,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1688141140,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 26
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 804009466,
+                                            "name": "City_building_037",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -20.31769371032715,
+                                                        -16.16360855102539,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        1.0,
+                                                        1.9470718370939722e-7
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1870413527,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        2.076549768447876,
+                                                        1.316973328590393,
+                                                        1.316973328590393
+                                                    ],
+                                                    "radius": 11.47626781463623,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 526882592,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 27
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 287536986,
+                                            "name": "City_building_038",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -41.64900207519531,
+                                                        -16.495393753051759,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071068286895752,
+                                                        0.7071067094802856
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 2138778580,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        2.489457130432129,
+                                                        5.028719425201416,
+                                                        5.028719425201416
+                                                    ],
+                                                    "radius": 14.785143852233887,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 526882592,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 28
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 267810341,
+                                            "name": "City_building_039",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -42.8072395324707,
+                                                        -30.643888473510743,
+                                                        -9.383451811117993e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 686677821,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.5563511848449708,
+                                                        1.1053861379623414,
+                                                        1.1053861379623414
+                                                    ],
+                                                    "radius": 9.045162200927735,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 501978006,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 29
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 376047094,
+                                            "name": "City_building_040",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        -34.679481506347659,
+                                                        -30.643888473510743,
+                                                        -9.383451811117993e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        -0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 686677821,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.5563511848449708,
+                                                        1.1053861379623414,
+                                                        1.1053861379623414
+                                                    ],
+                                                    "radius": 9.045162200927735,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 501978006,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 30
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "UID": 1211892918,
+                                            "name": "City_building_041",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        30.69527816772461,
+                                                        21.612646102905275,
+                                                        2.121072952832037e-7
+                                                    ],
+                                                    "rot": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.7071067690849304,
+                                                        0.7071067690849304
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                },
+                                                "Mesh": {
+                                                    "UID": 1640245534,
+                                                    "vertexColor": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ],
+                                                    "wire": false,
+                                                    "wireOverride": false,
+                                                    "drawVertexNormals": false,
+                                                    "drawFaceNormals": false,
+                                                    "centerPoint": [
+                                                        1.2289788722991944,
+                                                        1.2924346923828126,
+                                                        1.2924346923828126
+                                                    ],
+                                                    "radius": 10.908346176147461,
+                                                    "render": true
+                                                },
+                                                "Material": {
+                                                    "UID": 1132454390,
+                                                    "usingCheckers": false,
+                                                    "checkersId": 31
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "UID": 340562201,
+                            "name": "Camera001_$AssimpFbx$_Translation",
+                            "active": true,
+                            "Components": {
+                                "Transform": {
+                                    "pos": [
+                                        -78.31243133544922,
+                                        45.251216888427737,
+                                        -97.03111267089844
+                                    ],
+                                    "rot": [
+                                        0.04933978617191315,
+                                        0.932287335395813,
+                                        0.13933119177818299,
+                                        -0.3301403522491455
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        0.9999999403953552,
+                                        0.9999999403953552
+                                    ]
+                                }
+                            },
+                            "Children": [
+                                {
+                                    "UID": 813219170,
+                                    "name": "Camera001_$AssimpFbx$_PreRotation",
+                                    "active": true,
+                                    "Components": {
+                                        "Transform": {
+                                            "pos": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rot": [
+                                                0.04933978617191315,
+                                                0.932287335395813,
+                                                0.13933119177818299,
+                                                -0.3301403522491455
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                0.9999999403953552,
+                                                0.9999999403953552
+                                            ]
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "UID": 867662792,
+                                            "name": "Camera001_$AssimpFbx$_Rotation",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        -0.19855600595474244,
+                                                        0.5607047080993652,
+                                                        0.7577487230300903,
+                                                        -0.26833298802375796
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        0.9999999403953552,
+                                                        0.9999999403953552
+                                                    ]
+                                                }
+                                            },
+                                            "Children": [
+                                                {
+                                                    "UID": 920365889,
+                                                    "name": "Camera001",
+                                                    "active": true,
+                                                    "Components": {
+                                                        "Transform": {
+                                                            "pos": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0
+                                                            ],
+                                                            "rot": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0,
+                                                                1.0
+                                                            ],
+                                                            "scale": [
+                                                                1.0,
+                                                                1.0,
+                                                                1.0
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "UID": 973695575,
+                            "name": "Camera001.Target_$AssimpFbx$_Translation",
+                            "active": true,
+                            "Components": {
+                                "Transform": {
+                                    "pos": [
+                                        -28.13262176513672,
+                                        20.873329162597658,
+                                        -35.064212799072269
+                                    ],
+                                    "rot": [
+                                        0.04933978617191315,
+                                        0.932287335395813,
+                                        0.13933119177818299,
+                                        -0.33014047145843508
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        0.9999999403953552,
+                                        1.0
+                                    ]
+                                }
+                            },
+                            "Children": [
+                                {
+                                    "UID": 1481580770,
+                                    "name": "Camera001.Target_$AssimpFbx$_PreRotation",
+                                    "active": true,
+                                    "Components": {
+                                        "Transform": {
+                                            "pos": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rot": [
+                                                0.04933978617191315,
+                                                0.932287335395813,
+                                                0.13933119177818299,
+                                                -0.33014047145843508
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                0.9999999403953552,
+                                                1.0
+                                            ]
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "UID": 1535397803,
+                                            "name": "Camera001.Target_$AssimpFbx$_Rotation",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        -0.1985560655593872,
+                                                        0.5607047080993652,
+                                                        0.7577487230300903,
+                                                        -0.2683330476284027
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        0.9999999403953552,
+                                                        1.0
+                                                    ]
+                                                }
+                                            },
+                                            "Children": [
+                                                {
+                                                    "UID": 1589005973,
+                                                    "name": "Camera001.Target",
+                                                    "active": true,
+                                                    "Components": {
+                                                        "Transform": {
+                                                            "pos": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0
+                                                            ],
+                                                            "rot": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0,
+                                                                1.0
+                                                            ],
+                                                            "scale": [
+                                                                1.0,
+                                                                1.0,
+                                                                1.0
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "UID": 1642057175,
+                            "name": "Spot001_$AssimpFbx$_Translation",
+                            "active": true,
+                            "Components": {
+                                "Transform": {
+                                    "pos": [
+                                        -66.72126770019531,
+                                        141.9341278076172,
+                                        0.000006204137662280118
+                                    ],
+                                    "rot": [
+                                        -0.6900351047515869,
+                                        -0.15443938970565797,
+                                        -0.6900351047515869,
+                                        0.15443941950798036
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ]
+                                }
+                            },
+                            "Children": [
+                                {
+                                    "UID": 50706076,
+                                    "name": "Spot001_$AssimpFbx$_PreRotation",
+                                    "active": true,
+                                    "Components": {
+                                        "Transform": {
+                                            "pos": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rot": [
+                                                -0.6900351047515869,
+                                                -0.15443938970565797,
+                                                -0.6900351047515869,
+                                                0.15443941950798036
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ]
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "UID": 105776287,
+                                            "name": "Spot001_$AssimpFbx$_Rotation",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        -0.3787233829498291,
+                                                        0.3787233531475067,
+                                                        -0.5971336364746094,
+                                                        0.5971336960792542
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                }
+                                            },
+                                            "Children": [
+                                                {
+                                                    "UID": 159941425,
+                                                    "name": "Spot001_$AssimpFbx$_PostRotation",
+                                                    "active": true,
+                                                    "Components": {
+                                                        "Transform": {
+                                                            "pos": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0
+                                                            ],
+                                                            "rot": [
+                                                                -0.7071067690849304,
+                                                                0.0,
+                                                                0.0,
+                                                                0.7071067690849304
+                                                            ],
+                                                            "scale": [
+                                                                1.0,
+                                                                1.0,
+                                                                1.0
+                                                            ]
+                                                        }
+                                                    },
+                                                    "Children": [
+                                                        {
+                                                            "UID": 213201490,
+                                                            "name": "Spot001",
+                                                            "active": true,
+                                                            "Components": {
+                                                                "Transform": {
+                                                                    "pos": [
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0
+                                                                    ],
+                                                                    "rot": [
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0,
+                                                                        1.0
+                                                                    ],
+                                                                    "scale": [
+                                                                        1.0,
+                                                                        1.0,
+                                                                        1.0
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "UID": 265974208,
+                            "name": "Spot001.Target_$AssimpFbx$_Translation",
+                            "active": true,
+                            "Components": {
+                                "Transform": {
+                                    "pos": [
+                                        28.890945434570314,
+                                        -60.96388244628906,
+                                        -0.0000026648158382158728
+                                    ],
+                                    "rot": [
+                                        5.960464477539063e-8,
+                                        0.0,
+                                        0.0,
+                                        0.9999999403953552
+                                    ],
+                                    "scale": [
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ]
+                                }
+                            },
+                            "Children": [
+                                {
+                                    "UID": 876271894,
+                                    "name": "Spot001.Target_$AssimpFbx$_PreRotation",
+                                    "active": true,
+                                    "Components": {
+                                        "Transform": {
+                                            "pos": [
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                            ],
+                                            "rot": [
+                                                5.960464477539063e-8,
+                                                0.0,
+                                                0.0,
+                                                0.9999999403953552
+                                            ],
+                                            "scale": [
+                                                1.0,
+                                                1.0,
+                                                1.0
+                                            ]
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "UID": 930158548,
+                                            "name": "Spot001.Target_$AssimpFbx$_Rotation",
+                                            "active": true,
+                                            "Components": {
+                                                "Transform": {
+                                                    "pos": [
+                                                        0.0,
+                                                        0.0,
+                                                        0.0
+                                                    ],
+                                                    "rot": [
+                                                        0.7071068286895752,
+                                                        0.0,
+                                                        0.0,
+                                                        0.7071067094802856
+                                                    ],
+                                                    "scale": [
+                                                        1.0,
+                                                        1.0,
+                                                        1.0
+                                                    ]
+                                                }
+                                            },
+                                            "Children": [
+                                                {
+                                                    "UID": 982583161,
+                                                    "name": "Spot001.Target",
+                                                    "active": true,
+                                                    "Components": {
+                                                        "Transform": {
+                                                            "pos": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0
+                                                            ],
+                                                            "rot": [
+                                                                0.0,
+                                                                0.0,
+                                                                0.0,
+                                                                1.0
+                                                            ],
+                                                            "scale": [
+                                                                1.0,
+                                                                1.0,
+                                                                1.0
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

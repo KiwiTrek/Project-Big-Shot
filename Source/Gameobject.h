@@ -16,6 +16,8 @@ typedef ComponentMesh Mesh;
 typedef ComponentTransform Transform;
 typedef ComponentCamera Camera;
 
+typedef rapidjson::GenericObject<true, rapidjson::Value> jsonObject;
+
 class GameObject
 {
 public:
@@ -36,7 +38,7 @@ public:
 	void DeleteChildren(bool isOriginal = true);
 	void UpdateChildrenTransforms();
 
-	void OnLoad(const JSONReader& reader);
+	void OnLoad(const jsonObject& reader, Application* App);
 	void OnSave(JSONWriter& writer) const;
 
 	template<class T> T* GetComponent()

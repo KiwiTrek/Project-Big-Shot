@@ -8,6 +8,8 @@
 
 #include "scene.h"
 #include "postprocess.h"
+#include <iostream>
+#include <fstream>
 
 ModuleResources::ModuleResources(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -19,6 +21,24 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Init()
 {
+	std::vector<std::string> listNames;
+	App->fileSystem->GetAllFilesWithExtension(App->fileSystem->meshPath.c_str(), MESH_FORMAT, listNames);
+	for (uint i = 0; i < listNames.size(); ++i)
+	{
+		LOG("LOAD MESH!!!!\n");
+		ResourceMesh* rm = LoadMesh(listNames.at(i).c_str());
+		if (rm != nullptr) loadedResources[rm->GetUID()] = rm;
+	}
+
+	listNames.clear();
+	App->fileSystem->GetAllFilesWithExtension(App->fileSystem->texturePath.c_str(), TEXTURE_FORMAT, listNames);
+	for (uint i = 0; i < listNames.size(); ++i)
+	{
+		LOG("LOAD TEX!!!!\n");
+		ResourceMaterial* rm = LoadMaterial(listNames.at(i).c_str());
+		if (rm != nullptr) loadedResources[rm->GetUID()] = rm;
+	}
+
 	shapes[Shape::CUBE] = CreateNewResource(Resource::Type::MESH, Shape::CUBE);
 	shapes[Shape::SPHERE] = CreateNewResource(Resource::Type::MESH, Shape::SPHERE);
 	shapes[Shape::CYLINDER] = CreateNewResource(Resource::Type::MESH, Shape::CYLINDER);
@@ -42,6 +62,18 @@ UID ModuleResources::Exists(Resource::Type type, const aiMesh& aiMesh)
 	if (type == Resource::Type::MESH)
 	{
 		for (std::map<UID, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
+		{
+			ResourceMesh* rm = (ResourceMesh*)(*it).second;
+			if ((*it).second->GetType() == Resource::Type::MESH)
+			{
+				if (rm->vertexNum == aiMesh.mNumVertices
+					&& memcmp(&rm->normals[0], aiMesh.mNormals, sizeof(float3) * aiMesh.mNumVertices) == 0)
+				{
+					return (*it).first;
+				}
+			}
+		}
+		for (std::map<UID, Resource*>::iterator it = loadedResources.begin(); it != loadedResources.end(); ++it)
 		{
 			ResourceMesh* rm = (ResourceMesh*)(*it).second;
 			if ((*it).second->GetType() == Resource::Type::MESH)
@@ -107,8 +139,29 @@ Resource* ModuleResources::GetShape(Shape shape)
 
 Resource* ModuleResources::RequestResource(UID uid)
 {
-	Resource* r = resources.at(uid);
-	r->referenceCount++;
+	Resource* r = nullptr;
+	if (resources.find(uid) == resources.end())
+	{
+		if (loadedResources.find(uid) == loadedResources.end())
+		{
+			LOG("HAHA NO FUNCIONA");
+		}
+		else
+		{
+			r = loadedResources.at(uid);
+			if (r->GetType() == Resource::Type::MATERIAL)
+			{
+				App->importer->GenerateId((ResourceMaterial*)r);
+			}
+			r->SetResourceMap(&resources);
+			resources[uid] = r;
+		}
+	}
+	else
+	{
+		r = resources.at(uid);
+	}
+	if(r != nullptr) r->referenceCount++;
 	return r;
 }
 
@@ -206,4 +259,236 @@ Resource* ModuleResources::CreateNewResource(Resource::Type type,Shape shape, co
 
 	if (r != nullptr) r->referenceCount++;
 	return r;
+}
+
+bool ModuleResources::SaveMesh(const ResourceMesh* rMesh, const std::string fileName)
+{
+	std::ofstream myFile;
+	std::string path = App->fileSystem->meshPath + "/";
+	path.append(fileName);
+	myFile.open(path.c_str(), std::ios::in | std::ios::app | std::ios::binary);
+	if (myFile.is_open())
+	{
+		uint ranges[4] = {rMesh->GetUID(), rMesh->vertexNum, rMesh->normalNum, rMesh->indexNum };
+		uint vertexBytes = sizeof(float) * rMesh->vertexNum * 3;
+		uint normalBytes = sizeof(float) * rMesh->normalNum * 3;
+		uint texCoordsBytes = sizeof(float) * rMesh->vertexNum * 2;
+		uint indexBytes = sizeof(uint) * rMesh->indexNum;
+		uint size = sizeof(ranges) + vertexBytes + normalBytes + texCoordsBytes + indexBytes;
+
+		char* fileBuff = new char[size];
+		char* cursor = fileBuff;
+
+		uint bytes = sizeof(ranges);
+		memcpy(cursor, ranges, bytes);
+		cursor += bytes;
+
+		bytes = vertexBytes;
+		memcpy(cursor, rMesh->vertices.data(), bytes);
+		cursor += bytes;
+
+		bytes = normalBytes;
+		memcpy(cursor, rMesh->normals.data(), bytes);
+		cursor += bytes;
+
+		bytes = texCoordsBytes;
+		memcpy(cursor, rMesh->texCoords.data(), bytes);
+		cursor += bytes;
+
+		bytes = indexBytes;
+		memcpy(cursor, rMesh->indices.data(), bytes);
+		cursor += bytes;
+
+		myFile.write(fileBuff, size);
+
+		myFile.close();
+		return true;
+	}
+	return false;
+}
+
+ResourceMesh* ModuleResources::LoadMesh(std::string fileName)
+{
+	std::ifstream myFile;
+	std::string path = App->fileSystem->meshPath + "/";
+	path.append(fileName);
+	myFile.open(path.c_str(), std::ios::binary);
+	if (myFile.is_open())
+	{
+		UID uid = GenerateNewUID();
+		ResourceMesh* rMesh = new ResourceMesh(uid);
+
+		myFile.seekg(0, myFile.end);
+		int length = myFile.tellg();
+		myFile.seekg(0, myFile.beg);
+
+		char* fileBuff = new char[length];
+		myFile.read(fileBuff, length);
+
+		char* cursor = fileBuff;
+		uint ranges[4];
+
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+
+		rMesh->SetUID(ranges[0]);
+		rMesh->vertexNum = ranges[1];
+		rMesh->normalNum = ranges[2];
+		rMesh->indexNum = ranges[3];
+
+		bytes = sizeof(float) * rMesh->vertexNum * 3;
+		float* v = new float[rMesh->vertexNum*3];
+		memcpy(v, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * rMesh->normalNum*3;
+		float* n = new float[rMesh->normalNum*3];
+		memcpy(n, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * rMesh->vertexNum*2;
+		float* tx = new float[rMesh->vertexNum*2];
+		memcpy(tx, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(uint) * rMesh->indexNum;
+		uint* ind = new uint[rMesh->indexNum];
+		memcpy(ind, cursor, bytes);
+		cursor += bytes;
+	
+		myFile.close();
+
+		rMesh->vertices.resize(rMesh->vertexNum);
+		rMesh->normals.resize(rMesh->normalNum);
+		rMesh->texCoords.resize(rMesh->vertexNum);
+		rMesh->indices.resize(rMesh->indexNum);
+
+		for (uint i = 0; i < rMesh->vertexNum; ++i)
+		{
+			memcpy(&rMesh->vertices[i], &v[i * 3], sizeof(float) * 3);
+			memcpy(&rMesh->texCoords[i], &tx[i * 2], sizeof(float) * 2);
+		}
+		for (uint i = 0; i < rMesh->normalNum; ++i)
+		{
+			memcpy(&rMesh->normals[i], &n[i * 3], sizeof(float) * 3);
+		}
+		for (uint i = 0; i < rMesh->indexNum; ++i)
+		{
+			memcpy(&rMesh->indices[i], &ind[i], sizeof(uint));
+		}
+
+		return rMesh;
+	}
+	return nullptr;
+}
+
+bool ModuleResources::SaveMaterial(const ResourceMaterial* rm, const std::string fileName)
+{
+	std::ofstream myFile;
+	std::string path = App->fileSystem->texturePath + "/";
+	path.append(fileName);
+	myFile.open(path.c_str(), std::ios::in | std::ios::app | std::ios::binary);
+	if (myFile.is_open())
+	{
+		uint ranges[5] = { rm->GetUID(), rm->width, rm->height, rm->format, rm->formatUnsigned };
+		uint nameBytes = sizeof(char) * 128;
+		uint pathBytes = sizeof(char) * 128;
+		uint dataBytes = sizeof(GLubyte) * 960 * 540;
+		uint colorBytes = sizeof(float) * 4;
+		uint size = sizeof(ranges) + nameBytes + pathBytes + dataBytes + colorBytes;
+
+		char* fileBuff = new char[size];
+		char* cursor = fileBuff;
+
+		uint bytes = sizeof(ranges);
+		memcpy(cursor, ranges, bytes);
+		cursor += bytes;
+
+		bytes = nameBytes;
+		memcpy(cursor, rm->name.c_str(), bytes);
+		cursor += bytes;
+
+		bytes = pathBytes;
+		memcpy(cursor, rm->path.c_str(), bytes);
+		cursor += bytes;
+
+		bytes = dataBytes;
+		memcpy(cursor, rm->data, bytes); // peta aqui
+		cursor += bytes;
+
+		bytes = colorBytes;
+		float color[4] = { rm->diffuse.r,rm->diffuse.g,rm->diffuse.b,rm->diffuse.a };
+		memcpy(cursor, color, bytes);
+		cursor += bytes;
+
+		myFile.write(fileBuff, size);
+
+		myFile.close();
+		return true;
+	}
+	return false;
+}
+
+ResourceMaterial* ModuleResources::LoadMaterial(std::string fileName)
+{
+	std::ifstream myFile;
+	std::string path = App->fileSystem->texturePath + "/";
+	path.append(fileName);
+	myFile.open(path.c_str(), std::ios::binary);
+	if (myFile.is_open())
+	{
+		UID uid = GenerateNewUID();
+		ResourceMaterial* rm = new ResourceMaterial(uid);
+
+		myFile.seekg(0, myFile.end);
+		int length = myFile.tellg();
+		myFile.seekg(0, myFile.beg);
+
+		char* fileBuff = new char[length];
+		myFile.read(fileBuff, length);
+
+		char* cursor = fileBuff;
+		uint ranges[5];
+
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+		cursor += bytes;
+
+		rm->SetUID(ranges[0]);
+		rm->width = ranges[1];
+		rm->height = ranges[2];
+		rm->format = ranges[3];
+		rm->formatUnsigned = ranges[4];
+
+		bytes = sizeof(char) * 128;
+		char* name = new char[128];
+		memcpy(name, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(char) * 128;
+		char* path = new char[128];
+		memcpy(path, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(GLubyte) * 960 * 540;
+		GLubyte* data = new GLubyte[960 * 540];
+		memcpy(data, cursor, bytes);
+		cursor += bytes;
+
+		bytes = sizeof(float) * 4;
+		float* color = new float[4];
+		memcpy(color, cursor, bytes);
+		cursor += bytes;
+
+		myFile.close();
+
+		rm->name = name;
+		rm->path = path;
+		rm->data = data;
+		rm->diffuse = Color(color[0], color[1], color[2], color[3]);
+
+		return rm;
+	}
+	return nullptr;
 }

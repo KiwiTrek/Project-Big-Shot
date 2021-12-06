@@ -29,8 +29,8 @@ public:
 	float4x4 GetGlobalTransform();
 	float4x4 GetLocalTransform();
 
-	//void OnLoad(const JSONReader& reader);
-	//void OnSave(JSONWriter& writer) const;
+	void OnLoad(const JSONReader& t, Application* App);
+	void OnSave(JSONWriter& writer) const;
 
 private:
 	float3 pos;

@@ -61,49 +61,56 @@ UpdateStatus ModuleScene::PostUpdate()
 
 void ModuleScene::Load(std::string scene)
 {
-	//char* buffer = nullptr;
-	//uint bytesFile = App->fileSystem->Load(scene.c_str(), &buffer);
-
-	//if (bytesFile)
-	//{
-	//	rapidjson::Document document;
-	//	if (document.Parse<rapidjson::kParseStopWhenDoneFlag>(buffer).HasParseError())
-	//	{
-	//		LOG_CONSOLE("ERROR: scene  not loaded.");
-	//	}
-	//	else
-	//	{
-	//		const rapidjson::Value config = document.GetObjectJSON();
-
-	//		for (size_t i = 0; i < listModules.size(); i++)
-	//		{
-	//			listModules[i]->OnLoad(config);
-	//		}
-
-	//		LOG_CONSOLE("Scene loaded correctly.");
-	//	}
-	//}
-	//RELEASE_ARRAY(buffer);
+	char* buffer = nullptr;
+	if (App->fileSystem->Load(scene.c_str(), &buffer))
+	{
+		rapidjson::Document document;
+		if (document.Parse<rapidjson::kParseStopWhenDoneFlag>(buffer).HasParseError())
+		{
+			LOG_CONSOLE("ERROR: scene  not loaded.");
+		}
+		else
+		{
+			LOG_CONSOLE("LOAAAAAAAAAAAAAAAAAAAD\n");
+			const rapidjson::Value& scene = document.GetObjectJSON();
+			App->gameObjects->selectedGameObject = nullptr;
+			App->gameObjects->gameObjectList.clear();
+			GameObject* newRoot = new GameObject("sceneRoot");
+			root = newRoot;
+			if (scene.HasMember("Game Objects"))
+			{
+				const rapidjson::Value& goArray = scene["Game Objects"];
+				for (rapidjson::Value::ConstValueIterator it = goArray.Begin(); it != goArray.End(); ++it)
+				{
+					const jsonObject& ob = it->GetObjectJSON();
+					root->OnLoad(ob, App);
+				}
+			}
+			LOG_CONSOLE("Scene loaded correctly.");
+		}
+	}
+	RELEASE_ARRAY(buffer);
 }
 
 void ModuleScene::Save(std::string scene)
 {
-	//rapidjson::StringBuffer sb;
-	//JSONWriter writer(sb);
+	rapidjson::StringBuffer sb;
+	JSONWriter writer(sb);
 
-	//writer.StartObject();
-	//writer.String("Game Objects");
-	//writer.StartArray();
-	//root->OnSave(writer);
-	//writer.EndArray();
-	//writer.EndObject();
+	writer.StartObject();
+	writer.String("Game Objects");
+	writer.StartArray();
+	root->OnSave(writer);
+	writer.EndArray();
+	writer.EndObject();
+	LOG_CONSOLE("SAVEEEEEEEEEEEEEEEEEEEEEEEEEEE\n");
 
-	//if (App->fileSystem->Save(scene.c_str(), sb.GetString(), strlen(sb.GetString()), false))
-	//{
-	//	LOG_CONSOLE("Scene saved correctly.");
-	//}
-	//else
-	//{
-	//	LOG_CONSOLE("ERROR: scene not saved.");
-	//}
+	if (App->fileSystem->Save(scene.c_str(), sb.GetString(), strlen(sb.GetString()), false))
+	{
+		LOG_CONSOLE("Scene saved correctly.");
+	}
+	else
+	{
+		LOG_CONSOLE("ERROR: scene not saved.");
+	}
 }

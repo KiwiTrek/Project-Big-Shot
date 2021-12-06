@@ -28,6 +28,7 @@ public:
 	ResourceMaterial* LoadTexture(const aiScene* scene, aiNode* n);
 	ResourceMaterial* LoadTexture(const char* path);
 	ComponentTransform* LoadTransform(aiNode* n);
+	void GenerateId(ResourceMaterial* rm);
 
 private:
 	ResourceMesh* ImportModel(const aiScene* scene, aiNode* node);

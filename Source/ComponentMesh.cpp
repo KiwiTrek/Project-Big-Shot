@@ -3,7 +3,7 @@
 #include "ResourceMaterial.h"
 #include "Gameobject.h"
 
-ComponentMesh::ComponentMesh(bool active) : Component(type, active), vertexColor(white), wire(false), drawFaceNormals(false), drawVertexNormals(false), drawBBox(false)
+ComponentMesh::ComponentMesh(bool active) : Component(type, active), vertexColor(white), wire(false), wireOverride(false), drawFaceNormals(false), drawVertexNormals(false), drawBBox(false), render(true), centerPoint(float3::zero), radius(1.0f), mesh(nullptr)
 {
 	type = ComponentTypes::MESH;
 }
@@ -258,29 +258,109 @@ float3 ComponentMesh::GetCenterPointInWorldCoords() const
 	return owner->GetComponent<Transform>()->GetGlobalTransform().TransformPos(centerPoint);
 }
 
-//void ComponentMesh::OnLoad(const JSONReader& reader)
-//{
-//
-//}
-//
-//void ComponentMesh::OnSave(JSONWriter& writer) const
-//{
-//	//writer.StartObject();
-//	//writer.StartArray();
-//	//writer.Int(vertexColor.r);
-//	//writer.Int(vertexColor.g);
-//	//writer.Int(vertexColor.b);
-//	//writer.Int(vertexColor.a);
-//	//writer.EndArray();
-//	//writer.Bool(axis);
-//	//writer.Bool(wire);
-//	//writer.Bool(drawVertexNormals);
-//	//writer.Bool(drawFaceNormals);
-//	//writer.Int(vertexBuf);
-//	//writer.Int(indexBuf);
-//	//writer.Int(textureBuf);
-//	//writer.Int(normalsBuf);
-//	//writer.Int(vertexNum);
-//	//
-//	//writer.EndObject();
-//}
+void ComponentMesh::OnLoad(const JSONReader& m, Application* App)
+{
+	if (m.HasMember("UID"))
+	{
+		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(m["UID"].GetInt());
+		if (rm != nullptr)
+		{
+			mesh = rm;
+		}
+		else
+		{
+			LOG("NO FUNCIONA");
+		}
+	}
+
+	if (m.HasMember("vertexColor"))
+	{
+		const rapidjson::Value& jVertexColor = m["vertexColor"];
+		float vc[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		uint i = 0;
+		for (rapidjson::Value::ConstValueIterator it = jVertexColor.Begin(); it != jVertexColor.End(); ++it, ++i)
+		{
+			vc[i] = it->GetDouble();
+		}
+		vertexColor = Color(vc[0], vc[1], vc[2], vc[3]);
+	}
+
+	if (m.HasMember("wire"))
+	{
+		wire = m["wire"].GetBool();
+	}
+
+	if (m.HasMember("wireOverride"))
+	{
+		wireOverride = m["wireOverride"].GetBool();
+	}
+
+	if (m.HasMember("drawVertexNormals"))
+	{
+		drawVertexNormals = m["drawVertexNormals"].GetBool();
+	}
+
+	if (m.HasMember("drawFaceNormals"))
+	{
+		drawFaceNormals = m["drawFaceNormals"].GetBool();
+	}
+
+	if (m.HasMember("centerPoint"))
+	{
+		const rapidjson::Value& jCenterPoint = m["centerPoint"];
+		float cp[3] = { 1.0f, 1.0f, 1.0f };
+		uint i = 0;
+		for (rapidjson::Value::ConstValueIterator it = jCenterPoint.Begin(); it != jCenterPoint.End(); ++it, ++i)
+		{
+			cp[i] = it->GetDouble();
+		}
+		centerPoint = float3(cp[0], cp[1], cp[2]);
+	}
+
+	if (m.HasMember("radius"))
+	{
+		radius = m["radius"].GetDouble();
+	}
+
+	if (m.HasMember("render"))
+	{
+		render = m["render"].GetBool();
+	}
+
+	drawBBox = false;
+	CreateBBox();
+}
+
+void ComponentMesh::OnSave(JSONWriter& writer) const
+{
+	writer.String("Mesh");
+	writer.StartObject();
+	writer.String("UID");
+	writer.Int(mesh->GetUID());
+	writer.String("vertexColor");
+	writer.StartArray();
+	writer.Double(vertexColor.r);
+	writer.Double(vertexColor.g);
+	writer.Double(vertexColor.b);
+	writer.Double(vertexColor.a);
+	writer.EndArray();
+	writer.String("wire");
+	writer.Bool(wire);
+	writer.String("wireOverride");
+	writer.Bool(wireOverride);
+	writer.String("drawVertexNormals");
+	writer.Bool(drawVertexNormals);
+	writer.String("drawFaceNormals");
+	writer.Bool(drawFaceNormals);
+	writer.String("centerPoint");
+	writer.StartArray();
+	writer.Double(centerPoint.x);
+	writer.Double(centerPoint.y);
+	writer.Double(centerPoint.y);
+	writer.EndArray();
+	writer.String("radius");
+	writer.Double(radius);
+	writer.String("render");
+	writer.Bool(render);
+	writer.EndObject();
+}

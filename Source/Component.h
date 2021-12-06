@@ -3,7 +3,8 @@
 
 #include "Globals.h"
 #include "imgui.h"
-
+#include "Application.h"
+#include "ModuleResources.h"
 //JSON
 #include "prettywriter.h"
 #include "document.h"
@@ -39,8 +40,8 @@ public:
 
 	virtual bool IsActive() { return active; }
 	virtual void ToggleActive() { active = !active; }
-	//virtual void OnLoad(const JSONReader& reader);
-	//virtual void OnSave(JSONWriter& writer) const;
+	virtual void OnLoad(const JSONReader& reader, Application* App) {}
+	virtual void OnSave(JSONWriter& writer) const {}
 
 public:
 	ComponentTypes type = ComponentTypes::NOT_ASSIGNED;

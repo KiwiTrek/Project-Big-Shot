@@ -21,13 +21,18 @@ ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Modul
 	AddPath("./Assets");
 	AddPath("./Assets/Resources");
 	AddPath("./Assets/Resources/Textures");
+	texturePath = "Assets/Resources/Textures";
 	AddPath("./Assets/Resources/Models");
+	meshPath = "Assets/Resources/Models";
 }
 
 // Destructor
 ModuleFileSystem::~ModuleFileSystem()
 {
 	PHYSFS_deinit();
+	systemBasePath.clear();
+	texturePath.clear();
+	meshPath.clear();
 }
 
 // Called before render is available

@@ -4,7 +4,7 @@
 #include "Application.h"
 #include "ModuleGameObjects.h"
 
-ComponentCamera::ComponentCamera(bool active) : Component(type, active), fixedFOV(FixedFOV::HORIZONTAL), drawFrustum(true), drawBBox(false)
+ComponentCamera::ComponentCamera(bool active) : Component(type, active), fixedFOV(FixedFOV::HORIZONTAL), drawFrustum(true), drawBBox(false), culling(true)
 {
 	type = ComponentTypes::CAMERA;
 
@@ -270,7 +270,7 @@ void ComponentCamera::DrawInspector(Application* App)
 			}
 
 			ImGui::Spacing();
-			ImGui::Text("Horizontal FOV: %.2f", frustum.HorizontalFov() * RADTODEG);
+			ImGui::Text("Horizontal FOV: %.2f", frustum.HorizontalFov() * (double)RADTODEG);
 		}
 		else if (fixedHorizontalFOV)
 		{
@@ -281,7 +281,7 @@ void ComponentCamera::DrawInspector(Application* App)
 				frustum.SetHorizontalFovAndAspectRatio(horizontalFOV * DEGTORAD, aspectRatio);
 			}
 			ImGui::Spacing();
-			ImGui::Text("Vertical FOV: %.2f", frustum.VerticalFov() * RADTODEG);
+			ImGui::Text("Vertical FOV: %.2f", frustum.VerticalFov() * (double)RADTODEG);
 		}
 
 		ImGui::Spacing();
@@ -299,4 +299,50 @@ void ComponentCamera::DrawInspector(Application* App)
 			frustum.SetViewPlaneDistances(frustum.NearPlaneDistance(), farPlane);
 		}
 	}
+}
+
+void ComponentCamera::OnLoad(const JSONReader& c, Application* App)
+{
+	if (c.HasMember("fixedFOV"))
+	{
+		int fov = c["fixedFOV"].GetInt();
+		switch (fov)
+		{
+		case 0:
+			fixedFOV = FixedFOV::HORIZONTAL;
+			break;
+		case 1:
+			fixedFOV = FixedFOV::VERTICAL;
+		}
+	}
+
+	if (c.HasMember("culling"))
+	{
+		culling = c["culling"].GetBool();
+	}
+
+	if (c.HasMember("horizontalFOV"))
+	{
+		horizontalFOV = c["horizontalFOV"].GetDouble();
+	}
+
+	if (c.HasMember("aspectRatio"))
+	{
+		aspectRatio = c["aspectRatio"].GetDouble();
+	}
+}
+
+void ComponentCamera::OnSave(JSONWriter& writer) const
+{
+	writer.String("Camera");
+	writer.StartObject();
+	writer.String("fixedFOV");
+	writer.Int((int)fixedFOV);
+	writer.String("culling");
+	writer.Bool(culling);
+	writer.String("horizontalFOV");
+	writer.Double(horizontalFOV);
+	writer.String("aspectRatio");
+	writer.Double(aspectRatio);
+	writer.EndObject();
 }

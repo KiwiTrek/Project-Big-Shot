@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleResources.h"
+#include "ModuleScene.h"
 
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
@@ -205,6 +206,14 @@ UpdateStatus ModuleGuiManager::MenuBar()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Save", "CTRL + S"))
+			{
+				App->scene->Save("home.bss");
+			}
+			if (ImGui::MenuItem("Load", "CTRL + L"))
+			{
+				App->scene->Load("home.bss");
+			}
 			if (ImGui::MenuItem("Quit", "ESC"))
 			{
 				return UpdateStatus::UPDATE_STOP;

@@ -20,6 +20,11 @@
 #include "ConsoleBuffer.h"
 #include "MathGeoLib.h"
 
+#define MESH_FORMAT "bsm"
+#define MESH_FORMAT_FILE ".bsm"
+#define TEXTURE_FORMAT "bst"
+#define TEXTURE_FORMAT_FILE ".bst"
+
 #define LOAD_JSON_BOOL(b) { b = config.HasMember(#b) ? config[#b].GetBool() : b; }
 #define SAVE_JSON_BOOL(b) { writer.String(#b); writer.Bool(b); }
 

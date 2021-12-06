@@ -13,6 +13,7 @@ class Application;
 class GameObject;
 class aiMesh;
 
+
 class ModuleResources : public Module
 {
 public:
@@ -33,12 +34,17 @@ public:
 
 	Resource* CreateNewResource(Resource::Type type, Shape shape = Shape::NONE, const char* pathFile = nullptr, bool color = false, Color c = Color(1, 1, 1, 1));
 	void ReleaseResource(UID uid);
+	bool SaveMesh(const ResourceMesh* rMesh, const std::string fileName);
+	ResourceMesh* LoadMesh(std::string fileName);
+	bool SaveMaterial(const ResourceMaterial* rMesh, const std::string fileName);
+	ResourceMaterial* LoadMaterial(std::string fileName);
 
 private:
 	void ReleaseResourceReferences(Resource::Type type, UID uid, GameObject* parent = nullptr);
 
 private:
 	std::map<UID, Resource*> resources;
+	std::map<UID, Resource*> loadedResources;
 	std::map<Shape, Resource*> shapes;
 
 	friend class PanelResources;

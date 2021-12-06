@@ -27,6 +27,9 @@ public:
 
 	bool ContainsBBox(const AABB& refBox) const;
 
+	void OnLoad(const JSONReader& mat, Application* App);
+	void OnSave(JSONWriter& writer) const;
+
 public:
 	AABB bbox;
 	AABB drawingBbox;

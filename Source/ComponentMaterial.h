@@ -17,8 +17,8 @@ public:
 	void DrawInspector(Application* App);
 	void BindTexture(bool usingCheckers);
 
-	//void OnLoad(const JSONReader& reader);
-	//void OnSave(JSONWriter& writer) const;
+	void OnLoad(const JSONReader& mat, Application* App);
+	void OnSave(JSONWriter& writer) const;
 
 public:
 	bool usingCheckers = false;

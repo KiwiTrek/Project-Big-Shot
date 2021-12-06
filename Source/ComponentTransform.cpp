@@ -187,12 +187,70 @@ float3 ComponentTransform::GetScale()
 	return scale;
 }
 
-//void ComponentTransform::OnLoad(const JSONReader& reader)
-//{
-//
-//}
-//
-//void ComponentTransform::OnSave(JSONWriter& writer) const
-//{
-//
-//}
+void ComponentTransform::OnLoad(const JSONReader& t, Application* App)
+{
+	if (t.HasMember("pos"))
+	{
+		const rapidjson::Value& jPos = t["pos"];
+		float p[3] = { 0.0f, 0.0f, 0.0f };
+		uint i = 0;
+		for (rapidjson::Value::ConstValueIterator it = jPos.Begin(); it != jPos.End(); ++it, ++i)
+		{
+			p[i] = it->GetDouble();
+		}
+		pos = float3(p[0], p[1], p[2]);
+	}
+
+	if (t.HasMember("rot"))
+	{
+		const rapidjson::Value& jRot = t["rot"];
+		float r[4] = { 0.0, 0.0f, 0.0f, 0.0f };
+		uint i = 0;
+		for (rapidjson::Value::ConstValueIterator it = jRot.Begin(); it != jRot.End(); ++it, ++i)
+		{
+			r[i] = it->GetDouble();
+		}
+		rot = Quat(r[0], r[1], r[2], r[3]);
+	}
+
+	if (t.HasMember("scale"))
+	{
+		const rapidjson::Value& jScale = t["scale"];
+		float s[3] = { 1.0f, 1.0f, 1.0f };
+		uint i = 0;
+		for (rapidjson::Value::ConstValueIterator it = jScale.Begin(); it != jScale.End(); ++it, ++i)
+		{
+			s[i] = it->GetDouble();
+		}
+		scale = float3(s[0], s[1], s[2]);
+	}
+
+	UpdateGlobalTransform();
+	owner->UpdateChildrenTransforms();
+}
+
+void ComponentTransform::OnSave(JSONWriter& writer) const
+{
+	writer.String("Transform");
+	writer.StartObject();
+	writer.String("pos");
+	writer.StartArray();
+	writer.Double(pos.x);
+	writer.Double(pos.y);
+	writer.Double(pos.z);
+	writer.EndArray();
+	writer.String("rot");
+	writer.StartArray();
+	writer.Double(rot.x);
+	writer.Double(rot.y);
+	writer.Double(rot.z);
+	writer.Double(rot.w);
+	writer.EndArray();
+	writer.String("scale");
+	writer.StartArray();
+	writer.Double(scale.x);
+	writer.Double(scale.y);
+	writer.Double(scale.z);
+	writer.EndArray();
+	writer.EndObject();
+}

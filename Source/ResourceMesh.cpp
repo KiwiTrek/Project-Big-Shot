@@ -1,13 +1,21 @@
 #include "RenderGlobals.h"
 #include "ResourceMesh.h"
 
-ResourceMesh::ResourceMesh(UID uid) : Resource(uid,Resource::Type::MESH), mType(Shape::NONE), vertexBuf(-1), vertexNum(-1), indexBuf(-1), indexNum(-1),
-normalsBuf(-1)
-{}
-
-ResourceMesh::ResourceMesh(UID uid, Shape shape) : Resource(uid, Resource::Type::MESH), mType(shape), vertexBuf(-1), vertexNum(-1), indexBuf(-1), indexNum(-1),
+ResourceMesh::ResourceMesh(UID uid) : Resource(uid,Resource::Type::MESH), mType(Shape::NONE), vertexBuf(-1), indexBuf(-1), textureBuf(-1),
 normalsBuf(-1)
 {
+	vertexNum = 0;
+	normalNum = 0;
+	indexNum = 0;
+}
+
+ResourceMesh::ResourceMesh(UID uid, Shape shape) : Resource(uid, Resource::Type::MESH), mType(shape), vertexBuf(-1), indexBuf(-1),
+normalsBuf(-1)
+{
+	vertexNum = 0;
+	normalNum = 0;
+	indexNum = 0;
+
 	switch (shape)
 	{
 	case Shape::CUBE:
