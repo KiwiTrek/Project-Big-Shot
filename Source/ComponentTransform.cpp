@@ -218,17 +218,17 @@ void ComponentTransform::OnLoad(const JSONReader& t, Application* App)
 		pos = float3(p[0], p[1], p[2]);
 	}
 
-	if (t.HasMember("rot"))
+	if (t.HasMember("eulerRot"))
 	{
-		const rapidjson::Value& jRot = t["rot"];
+		const rapidjson::Value& jEulerRot = t["eulerRot"];
 		double r[4] = { 0.0, 0.0f, 0.0f, 0.0f };
 		uint i = 0;
-		for (rapidjson::Value::ConstValueIterator it = jRot.Begin(); it != jRot.End(); ++it, ++i)
+		for (rapidjson::Value::ConstValueIterator it = jEulerRot.Begin(); it != jEulerRot.End(); ++it, ++i)
 		{
 			r[i] = it->GetDouble();
 		}
-		rot = Quat(r[0], r[1], r[2], r[3]);
-		eulerRot = rot.ToEulerXYZ() * RADTODEG;
+		eulerRot = float3(r[0], r[1], r[2]);
+		SetRot(eulerRot.x, eulerRot.y, eulerRot.z);
 	}
 
 	if (t.HasMember("scale"))
@@ -243,8 +243,8 @@ void ComponentTransform::OnLoad(const JSONReader& t, Application* App)
 		scale = float3(s[0], s[1], s[2]);
 	}
 
+	UpdateLocalTransform();
 	UpdateGlobalTransform();
-	owner->UpdateChildrenTransforms();
 }
 
 void ComponentTransform::OnSave(JSONWriter& writer) const
@@ -257,12 +257,11 @@ void ComponentTransform::OnSave(JSONWriter& writer) const
 	writer.Double(pos.y);
 	writer.Double(pos.z);
 	writer.EndArray();
-	writer.String("rot");
+	writer.String("eulerRot");
 	writer.StartArray();
-	writer.Double(rot.x);
-	writer.Double(rot.y);
-	writer.Double(rot.z);
-	writer.Double(rot.w);
+	writer.Double(eulerRot.x);
+	writer.Double(eulerRot.y);
+	writer.Double(eulerRot.z);
 	writer.EndArray();
 	writer.String("scale");
 	writer.StartArray();

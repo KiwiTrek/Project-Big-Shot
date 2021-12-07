@@ -19,7 +19,7 @@ bool ModuleScene::Init()
 	bool ret = true;
 	LOG_CONSOLE("Loading Scene assets");
 
-	root = new GameObject("sceneRoot");
+	root = new GameObject("Main");
 	App->gameObjects->selectedGameObject = root;
 
 	//Create main camera
@@ -75,7 +75,7 @@ void ModuleScene::Load(std::string scene)
 			const rapidjson::Value& scene = document.GetObjectJSON();
 			App->gameObjects->selectedGameObject = nullptr;
 			App->gameObjects->gameObjectList.clear();
-			GameObject* newRoot = new GameObject("sceneRoot");
+			GameObject* newRoot = new GameObject("Main");
 			root = newRoot;
 			if (scene.HasMember("Game Objects"))
 			{

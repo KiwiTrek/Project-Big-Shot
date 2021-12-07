@@ -145,7 +145,15 @@ UpdateStatus PanelResources::Update()
 				ResourceMaterial* material = (ResourceMaterial*)selected;
 				IMGUI_PRINT(IMGUI_YELLOW, "Type: ", "Material");
 				IMGUI_PRINT(IMGUI_YELLOW, "Name:", "%s", material->name.c_str());
-				IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", material->path.c_str());
+				if (material->name == "Color_texture")
+				{
+					ImGui::SameLine();
+					ImGui::Image((ImTextureID)material->texId, ImVec2(15, 15), ImVec2(0, 1), ImVec2(1, 0));
+				}
+				else
+				{
+					IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", material->path.c_str());
+				}
 				IMGUI_PRINT(IMGUI_YELLOW, "Width:", "%d", material->width);
 				IMGUI_PRINT(IMGUI_YELLOW, "Height:", "%d", material->height);
 				break;

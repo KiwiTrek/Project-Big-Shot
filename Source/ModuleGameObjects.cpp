@@ -33,20 +33,23 @@ bool ModuleGameObjects::Start()
 
 UpdateStatus ModuleGameObjects::PreUpdate()
 {
-	if ((App->input->GetKey(SDL_SCANCODE_T) == KeyState::KEY_DOWN))
+	if (App->gui->MouseOnScene() && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KeyState::KEY_REPEAT))
 	{
-		currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-		LOG_CONSOLE("Set Guizmo to Translate");
-	}
-	else if ((App->input->GetKey(SDL_SCANCODE_Y) == KeyState::KEY_DOWN))
-	{
-		currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
-		LOG_CONSOLE("Set Guizmo to Rotate");
-	}
-	else if ((App->input->GetKey(SDL_SCANCODE_U) == KeyState::KEY_DOWN))
-	{
-		currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
-		LOG_CONSOLE("Set Guizmo to Scale");
+		if ((App->input->GetKey(SDL_SCANCODE_W) == KeyState::KEY_DOWN))
+		{
+			currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+			LOG_CONSOLE("Set Guizmo to Translate");
+		}
+		else if ((App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_DOWN))
+		{
+			currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+			LOG_CONSOLE("Set Guizmo to Rotate");
+		}
+		else if ((App->input->GetKey(SDL_SCANCODE_R) == KeyState::KEY_DOWN))
+		{
+			currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+			LOG_CONSOLE("Set Guizmo to Scale");
+		}
 	}
 
 	return UpdateStatus::UPDATE_CONTINUE;

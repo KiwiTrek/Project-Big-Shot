@@ -55,9 +55,10 @@ bool ModuleCamera3D::CleanUp()
 // -----------------------------------------------------------------
 UpdateStatus ModuleCamera3D::Update(float dt)
 {
+	if (!App->gui->MouseOnScene()) return UpdateStatus::UPDATE_CONTINUE;
+
 	float3 newPos(0, 0, 0);
 	float speed = cameraSpeed * dt;
-	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT) speed *= 4.f;
 
 	//Focus
 	if (App->input->GetKey(SDL_SCANCODE_F) == KeyState::KEY_DOWN)
@@ -80,24 +81,25 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_Q) == KeyState::KEY_REPEAT) newPos.y += speed;
-	if (App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_REPEAT) newPos.y -= speed;
-
-	if (App->input->GetKey(SDL_SCANCODE_W) == KeyState::KEY_REPEAT) newPos += front * speed;
-	if (App->input->GetKey(SDL_SCANCODE_S) == KeyState::KEY_REPEAT) newPos -= front * speed;
-
-	if (App->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_REPEAT) newPos += right * speed;
-	if (App->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_REPEAT) newPos -= right * speed;
+	bool hasRotated = false;
 
 	if (App->input->GetMouseZ() > 0) newPos += front * speed * 2;
 	if (App->input->GetMouseZ() < 0) newPos -= front * speed * 2;
 
-	// Mouse motion ----------------
-
-	bool hasRotated = false;
-
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_REPEAT)
 	{
+		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT) speed *= 4.f;
+
+		if (App->input->GetKey(SDL_SCANCODE_Q) == KeyState::KEY_REPEAT) newPos.y += speed;
+		if (App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_REPEAT) newPos.y -= speed;
+
+		if (App->input->GetKey(SDL_SCANCODE_W) == KeyState::KEY_REPEAT) newPos += front * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KeyState::KEY_REPEAT) newPos -= front * speed;
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KeyState::KEY_REPEAT) newPos += right * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KeyState::KEY_REPEAT) newPos -= right * speed;
+
+		// Mouse Motion ---------------------------------------
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
@@ -149,7 +151,7 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 		}
 	}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && !ImGuizmo::IsOver() && !ImGuizmo::IsUsing() && App->gui->MouseOnScene())
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && !ImGuizmo::IsOver() && !ImGuizmo::IsUsing())
 	{
 		GameObject* picked = MousePicking();
 		App->gameObjects->selectedGameObject = picked;

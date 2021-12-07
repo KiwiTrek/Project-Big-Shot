@@ -181,7 +181,7 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 	if (reader.HasMember("name"))
 	{
 		name = reader["name"].GetString();
-		if (name == "sceneRoot") isRoot = true;
+		if (name == "Main") isRoot = true;
 	}
 
 	if (reader.HasMember("active"))
@@ -194,7 +194,7 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 		const jsonObject& jComponents = reader["Components"].GetObjectJSON();
 		if (jComponents.HasMember("Transform"))
 		{
-			ComponentTransform* ct = (ComponentTransform*)CreateComponent(ComponentTypes::TRANSFORM);
+			ComponentTransform* ct = GetComponent<ComponentTransform>();
 			ct->OnLoad(jComponents["Transform"], App);
 		}
 		if (jComponents.HasMember("Mesh"))
@@ -212,6 +212,7 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 			ComponentCamera* cc = (ComponentCamera*)CreateComponent(ComponentTypes::CAMERA);
 			cc->OnLoad(jComponents["Camera"], App);
 		}
+		components.size();
 	}
 
 	if (reader.HasMember("Children"))
@@ -234,10 +235,10 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 			{
 				this->AddChild(child);
 				child->parent = this;
+				child->parent->UpdateChildrenTransforms();
 			}
 			child->OnLoad(childOb, App);
 		}
-		GetComponent<Transform>()->Reset();
 	}
 }
 

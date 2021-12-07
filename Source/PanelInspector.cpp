@@ -3,6 +3,7 @@
 
 #include "Application.h"
 #include "ModuleGameObjects.h"
+#include "ModuleScene.h"
 
 PanelInspector::PanelInspector(Application* app, bool startEnabled) : Panel(app, startEnabled)
 {
@@ -20,6 +21,7 @@ UpdateStatus PanelInspector::Update()
 	{
 		std::string name = g->name;
 		ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll;
+		if (g == App->scene->GetSceneRoot()) flags |= ImGuiInputTextFlags_ReadOnly;
 		if (ImGui::InputText("Name", &name, flags)) g->name = name;
 		IMGUI_PRINT(IMGUI_YELLOW, "UID: ", "%d", g->uid);
 		std::vector<Component*>::iterator item = g->components.begin();
