@@ -12,7 +12,7 @@
 #include "ModuleResources.h"
 #include "ModuleViewportBuffer.h"
 
-Application::Application(ConsoleBuffer* _buff)
+Application::Application(ConsoleBuffer* buff)
 {
 	window = new ModuleWindow(this);
 	camera = new ModuleCamera3D(this);
@@ -42,7 +42,7 @@ Application::Application(ConsoleBuffer* _buff)
 
 	framesPerSecTime.Stop();
 	frameCounter = 0;
-	buff = _buff;
+	this->buff = buff;
 }
 
 Application::~Application()
@@ -249,9 +249,9 @@ std::string Application::GetAppName()
 	return appName;
 }
 
-void Application::SetOrgName(std::string _name)
+void Application::SetOrgName(std::string name)
 {
-	if (!_name.empty()) orgName = _name;
+	if (!name.empty()) orgName = name;
 }
 
 std::string Application::GetOrgName()
@@ -259,9 +259,9 @@ std::string Application::GetOrgName()
 	return orgName;
 }
 
-void Application::SetFpsLimit(int _limit)
+void Application::SetFpsLimit(int limit)
 {
-	fpsLimit = _limit;
+	fpsLimit = limit;
 }
 
 int Application::GetFpsLimit()

@@ -20,7 +20,6 @@ public:
 	std::string path;
 
 	uint texId = -1;
-
 	int format = -1;
 	uint formatUnsigned = -1;
 	GLubyte* data = nullptr;

@@ -183,42 +183,18 @@ void ModuleGuiManager::AddPanel(Panel* panel)
 
 UpdateStatus ModuleGuiManager::MenuBar()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
-	{
-		config->active = !config->active;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KeyState::KEY_DOWN)
-	{
-		hierarchy->active = !hierarchy->active;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KeyState::KEY_DOWN)
-	{
-		inspector->active = !inspector->active;
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F10) == KeyState::KEY_DOWN)
-	{
-		console->active = !console->active;
-	}
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN) config->active = !config->active;
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KeyState::KEY_DOWN) hierarchy->active = !hierarchy->active;
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KeyState::KEY_DOWN) inspector->active = !inspector->active;
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KeyState::KEY_DOWN) console->active = !console->active;
 
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Save", "CTRL + S"))
-			{
-				App->scene->Save("Assets/Scenes/currentScene.bss");
-			}
-			if (ImGui::MenuItem("Load", "CTRL + L"))
-			{
-				App->scene->Load("Assets/Scenes/currentScene.bss");
-			}
-			if (ImGui::MenuItem("Quit", "ESC"))
-			{
-				return UpdateStatus::UPDATE_STOP;
-			}
+			if (ImGui::MenuItem("Save", "CTRL + S")) App->scene->Save("Assets/Scenes/currentScene.bss");
+			if (ImGui::MenuItem("Load", "CTRL + L")) App->scene->Load("Assets/Scenes/currentScene.bss");
+			if (ImGui::MenuItem("Quit", "ESC")) return UpdateStatus::UPDATE_STOP;
 			ImGui::EndMenu();
 		}
 
@@ -269,20 +245,9 @@ UpdateStatus ModuleGuiManager::MenuBar()
 		{
 			ImGui::MenuItem("Gui Demo", nullptr, &demo);
 
-			if (ImGui::MenuItem("Source"))
-			{
-				App->RequestBrowser("https://github.com/WillyTrek19/Project-Big-Shot");
-			}
-
-			if (ImGui::MenuItem("Download Latest Release"))
-			{
-				App->RequestBrowser("https://github.com/WillyTrek19/Project-Big-Shot/releases");
-			}
-
-			if (ImGui::MenuItem("Report a bug"))
-			{
-				App->RequestBrowser("https://github.com/WillyTrek19/Project-Big-Shot/issues");
-			}
+			if (ImGui::MenuItem("Source")) App->RequestBrowser("https://github.com/WillyTrek19/Project-Big-Shot");
+			if (ImGui::MenuItem("Download Latest Release")) App->RequestBrowser("https://github.com/WillyTrek19/Project-Big-Shot/releases");
+			if (ImGui::MenuItem("Report a bug")) App->RequestBrowser("https://github.com/WillyTrek19/Project-Big-Shot/issues");
 
 			ImGui::MenuItem("About", nullptr, &about->active);
 			ImGui::EndMenu();
@@ -484,5 +449,6 @@ void Grid::Render()
 		glVertex3f(-d, 0.0f, i);
 		glVertex3f(d, 0.0f, i);
 	}
+
 	glEnd();
 }

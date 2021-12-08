@@ -50,8 +50,8 @@ void ComponentMaterial::DrawInspector(Application* App)
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIALS"))
 					{
 						IM_ASSERT(payload->DataSize == sizeof(int));
-						int payloadN = *(const int*)payload->Data;
-						material = (ResourceMaterial*)App->resources->RequestResource((UID)payloadN);
+						int payloadUID = *(const int*)payload->Data;
+						material = (ResourceMaterial*)App->resources->RequestResource((UID)payloadUID);
 						usingCheckers = false;
 						BindTexture(usingCheckers);
 					}
@@ -81,8 +81,8 @@ void ComponentMaterial::DrawInspector(Application* App)
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIALS"))
 				{
 					IM_ASSERT(payload->DataSize == sizeof(int));
-					int payloadN = *(const int*)payload->Data;
-					material = (ResourceMaterial*)App->resources->RequestResource((UID)payloadN);
+					int payloadUID = *(const int*)payload->Data;
+					material = (ResourceMaterial*)App->resources->RequestResource((UID)payloadUID);
 					usingCheckers = false;
 					BindTexture(usingCheckers);
 				}
@@ -104,7 +104,7 @@ void ComponentMaterial::BindTexture(bool checkers)
 
 		for (int i = 0; i < checkersHeight; i++) {
 			for (int j = 0; j < checkersWidth; j++) {
-				int c = ((((i & 0x4) == 0) ^ (((j & 0x4)) == 0))) * 255;
+				int c = (((i & 0x4) == 0) ^ ((j & 0x4) == 0)) * 255;
 				checkerImage[i][j][0] = (GLubyte)c;
 				checkerImage[i][j][1] = (GLubyte)c;
 				checkerImage[i][j][2] = (GLubyte)c;
@@ -140,10 +140,7 @@ void ComponentMaterial::OnLoad(const JSONReader& mat, Application* App)
 		if (mat.HasMember("Name"))
 		{
 			ResourceMaterial* rMat = (ResourceMaterial*)App->resources->RequestResource(mat["Name"].GetString());
-			if (rMat != nullptr)
-			{
-				material = rMat;
-			}
+			if (rMat != nullptr) material = rMat;
 		}
 		else if (mat.HasMember("Color"))
 		{
@@ -164,10 +161,7 @@ void ComponentMaterial::OnLoad(const JSONReader& mat, Application* App)
 		else if (mat.HasMember("UID"))
 		{
 			ResourceMaterial* rMat = (ResourceMaterial*)App->resources->RequestResource(mat["UID"].GetInt());
-			if (rMat != nullptr)
-			{
-				material = rMat;
-			}
+			if (rMat != nullptr) material = rMat;
 		}
 	}
 }
@@ -178,17 +172,14 @@ void ComponentMaterial::OnSave(JSONWriter& writer) const
 	writer.StartObject();
 	if (!usingCheckers)
 	{
-		writer.String("UID");
-		writer.Int(material->GetUID());
+		writer.String("UID"); writer.Int(material->GetUID());
 		if (material->name != "Color_texture")
 		{
-			writer.String("Name");
-			writer.String(material->GetAssetFile());
+			writer.String("Name"); writer.String(material->GetAssetFile());
 		}
 		else
 		{
-			writer.String("Color");
-			writer.Bool(material->usingColor);
+			writer.String("Color"); writer.Bool(material->usingColor);
 			writer.String("Diffuse");
 			writer.StartArray();
 			writer.Double(material->diffuse.r);
@@ -198,9 +189,7 @@ void ComponentMaterial::OnSave(JSONWriter& writer) const
 			writer.EndArray();
 		}
 	}
-	writer.String("usingCheckers");
-	writer.Bool(usingCheckers);
-	writer.String("checkersId");
-	writer.Int(checkersId);
+	writer.String("usingCheckers"); writer.Bool(usingCheckers);
+	writer.String("checkersId"); writer.Int(checkersId);
 	writer.EndObject();
 }

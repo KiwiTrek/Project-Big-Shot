@@ -4,10 +4,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include "ConsoleBuffer.h"
-
-#pragma warning(push, 0)
 #include "MathGeoLib.h"
-#pragma warning(pop)
 
 #define MESH_FORMAT "bsm"
 #define MESH_FORMAT_FILE ".bsm"
@@ -34,8 +31,8 @@ const char* Log(const char file[], int line, const char* format, ...);
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
+#define DEG_TO_RAD 0.0174532925199432957f
+#define RAD_TO_DEG 57.295779513082320876f
 
 #define RELEASE( x )\
 	{\

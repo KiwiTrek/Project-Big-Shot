@@ -33,7 +33,8 @@ bool ModuleGameObjects::Start()
 
 UpdateStatus ModuleGameObjects::PreUpdate()
 {
-	if (selectedGameObject != nullptr && selectedGameObject->GetComponent<Camera>() != nullptr && currentGizmoOperation == ImGuizmo::OPERATION::SCALE) currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+	if (selectedGameObject != nullptr && selectedGameObject->GetComponent<Camera>() != nullptr && currentGizmoOperation == ImGuizmo::OPERATION::SCALE)
+		currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 
 	if (App->gui->MouseOnScene() && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KeyState::KEY_REPEAT))
 	{
@@ -273,10 +274,7 @@ void ModuleGameObjects::RemoveGameobject(GameObject* g)
 
 	for (size_t i = 0; i < gameObjectList.size(); i++)
 	{
-		if (gameObjectList[i] == g)
-		{
-			gameObjectList.erase(gameObjectList.begin() + i);
-		}
+		if (gameObjectList[i] == g) gameObjectList.erase(gameObjectList.begin() + i);
 	}
 
 	delete g;

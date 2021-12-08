@@ -28,15 +28,13 @@ struct PathNode
 	bool IsLastFolder() const
 	{
 		for (uint i = 0; i < children.size(); i++)
-			if (children[i].isFile == false)
-				return false;
+		{
+			if (children[i].isFile == false) return false;
+		}
 		return true;
 	}
 
-	bool operator ==(const PathNode node) const
-	{
-		return path == node.path;
-	}
+	bool operator ==(const PathNode node) const { return path == node.path; }
 
 	void RemoveFoldersMetas()
 	{
@@ -48,8 +46,7 @@ struct PathNode
 			{
 				for (uint m = 0; m < children.size(); ++m)
 				{
-					if (children[m].path == children[f].path + ".meta")
-						children.erase(children.begin() + m);
+					if (children[m].path == children[f].path + ".meta") children.erase(children.begin() + m);
 				}
 				children[f].RemoveFoldersMetas();
 			}

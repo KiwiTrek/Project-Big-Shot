@@ -15,8 +15,12 @@ public:
 		NONE
 	};
 
-	Resource(UID uid, Resource::Type type) :uid(uid), type(type), resources(nullptr) {}
-	virtual ~Resource() {}
+	Resource(UID uid, Resource::Type type) :uid(uid), type(type), resources(nullptr)
+	{}
+
+	virtual ~Resource()
+	{}
+
 	Resource::Type GetType() const { return type; }
 	UID GetUID() const { return uid; }
 	void SetUID(UID newUid) { uid = newUid; }

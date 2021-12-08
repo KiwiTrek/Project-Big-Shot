@@ -19,7 +19,6 @@ public:
 	~ComponentCamera();
 
 	void Update() override;
-	//void DrawInspector() override;
 	void Render() const;
 	void DrawFrustum() const;
 	void DrawBBox() const;
@@ -39,7 +38,7 @@ public:
 	bool drawFrustum, drawBBox;
 	bool culling;
 	float horizontalFOV = 60.0f;
-	float aspectRatio = 1.777f;
+	float aspectRatio = 1.777f; //16/9
 };
 
 #endif //!__COMPONENT_CAMERA_H__

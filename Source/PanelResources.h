@@ -22,7 +22,6 @@ public:
 public:
 	ImGuiTreeNodeFlags flags;
 	Resource* selected = nullptr;
-	bool replace = false;
 };
 
 #endif // !__PANEL_RESOURCES_H__

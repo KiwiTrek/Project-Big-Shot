@@ -37,8 +37,8 @@ void ComponentMesh::DrawInspector(Application* App)
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESHES"))
 				{
 					IM_ASSERT(payload->DataSize == sizeof(int));
-					int payloadN = *(const int*)payload->Data;
-					mesh = (ResourceMesh*)App->resources->RequestResource((UID)payloadN);
+					int payloadUID = *(const int*)payload->Data;
+					mesh = (ResourceMesh*)App->resources->RequestResource((UID)payloadUID);
 					CreateBBox();
 				}
 				ImGui::EndDragDropTarget();
@@ -67,8 +67,8 @@ void ComponentMesh::DrawInspector(Application* App)
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESHES"))
 				{
 					IM_ASSERT(payload->DataSize == sizeof(int));
-					int payloadN = *(const int*)payload->Data;
-					mesh = (ResourceMesh*)App->resources->RequestResource((UID)payloadN);
+					int payloadUID = *(const int*)payload->Data;
+					mesh = (ResourceMesh*)App->resources->RequestResource((UID)payloadUID);
 					CreateBBox();
 				}
 				ImGui::EndDragDropTarget();
@@ -116,8 +116,7 @@ void ComponentMesh::Render()
 		}
 		else
 		{
-			if (mat->material != nullptr) glBindTexture(GL_TEXTURE_2D, mat->material->texId);
-			else glBindTexture(GL_TEXTURE_2D, mat->checkersId);
+			mat->material != nullptr ? glBindTexture(GL_TEXTURE_2D, mat->material->texId) : glBindTexture(GL_TEXTURE_2D, mat->checkersId);
 		}
 	}
 
@@ -160,8 +159,8 @@ void ComponentMesh::DrawVertexNormals() const
 		glColor4f(1.f, 0.0f, 0.0f, 1.f);
 		glVertex3f(mesh->vertices.at(i).x, mesh->vertices.at(i).y, mesh->vertices.at(i).z);
 		glVertex3f(mesh->vertices.at(i).x + (mesh->normals.at(i).x * normalLength),
-				mesh->vertices.at(i).y + (mesh->normals.at(i).y * normalLength),
-				mesh->vertices.at(i).z + (mesh->normals.at(i).z * normalLength));
+			mesh->vertices.at(i).y + (mesh->normals.at(i).y * normalLength),
+			mesh->vertices.at(i).z + (mesh->normals.at(i).z * normalLength));
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -217,7 +216,6 @@ void ComponentMesh::CreateBBox()
 	sphere.r = 0.f;
 	sphere.pos = bbox.CenterPoint();
 	sphere.Enclose(bbox);
-
 	radius = sphere.r;
 	centerPoint = sphere.pos;
 
@@ -339,18 +337,12 @@ void ComponentMesh::OnLoad(const JSONReader& m, Application* App)
 			break;
 		}
 		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(shape);
-		if (rm != nullptr)
-		{
-			mesh = rm;
-		}
+		if (rm != nullptr) mesh = rm;
 	}
 	else if (m.HasMember("UID"))
 	{
 		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(m["UID"].GetInt());
-		if (rm != nullptr)
-		{
-			mesh = rm;
-		}
+		if (rm != nullptr) mesh = rm;
 	}
 
 	if (m.HasMember("vertexColor"))
@@ -365,25 +357,10 @@ void ComponentMesh::OnLoad(const JSONReader& m, Application* App)
 		vertexColor = Color(vc[0], vc[1], vc[2], vc[3]);
 	}
 
-	if (m.HasMember("wire"))
-	{
-		wire = m["wire"].GetBool();
-	}
-
-	if (m.HasMember("wireOverride"))
-	{
-		wireOverride = m["wireOverride"].GetBool();
-	}
-
-	if (m.HasMember("drawVertexNormals"))
-	{
-		drawVertexNormals = m["drawVertexNormals"].GetBool();
-	}
-
-	if (m.HasMember("drawFaceNormals"))
-	{
-		drawFaceNormals = m["drawFaceNormals"].GetBool();
-	}
+	if (m.HasMember("wire")) wire = m["wire"].GetBool();
+	if (m.HasMember("wireOverride")) wireOverride = m["wireOverride"].GetBool();
+	if (m.HasMember("drawVertexNormals")) drawVertexNormals = m["drawVertexNormals"].GetBool();
+	if (m.HasMember("drawFaceNormals")) drawFaceNormals = m["drawFaceNormals"].GetBool();
 
 	if (m.HasMember("centerPoint"))
 	{
@@ -397,15 +374,8 @@ void ComponentMesh::OnLoad(const JSONReader& m, Application* App)
 		centerPoint = float3(cp[0], cp[1], cp[2]);
 	}
 
-	if (m.HasMember("radius"))
-	{
-		radius = m["radius"].GetDouble();
-	}
-
-	if (m.HasMember("render"))
-	{
-		render = m["render"].GetBool();
-	}
+	if (m.HasMember("radius")) radius = m["radius"].GetDouble();
+	if (m.HasMember("render")) render = m["render"].GetBool();
 
 	drawBBox = false;
 	if (mesh != nullptr) CreateBBox();
@@ -415,13 +385,8 @@ void ComponentMesh::OnSave(JSONWriter& writer) const
 {
 	writer.String("Mesh");
 	writer.StartObject();
-	writer.String("UID");
-	writer.Int(mesh->GetUID());
-	if (mesh->mType != Shape::NONE)
-	{
-		writer.String("Shape");
-		writer.Int((int)mesh->mType);
-	}
+	writer.String("UID"); writer.Int(mesh->GetUID());
+	if (mesh->mType != Shape::NONE) writer.String("Shape"); writer.Int((int)mesh->mType);
 	writer.String("vertexColor");
 	writer.StartArray();
 	writer.Double(vertexColor.r);
@@ -429,23 +394,17 @@ void ComponentMesh::OnSave(JSONWriter& writer) const
 	writer.Double(vertexColor.b);
 	writer.Double(vertexColor.a);
 	writer.EndArray();
-	writer.String("wire");
-	writer.Bool(wire);
-	writer.String("wireOverride");
-	writer.Bool(wireOverride);
-	writer.String("drawVertexNormals");
-	writer.Bool(drawVertexNormals);
-	writer.String("drawFaceNormals");
-	writer.Bool(drawFaceNormals);
+	writer.String("wire"); writer.Bool(wire);
+	writer.String("wireOverride"); writer.Bool(wireOverride);
+	writer.String("drawVertexNormals"); writer.Bool(drawVertexNormals);
+	writer.String("drawFaceNormals"); writer.Bool(drawFaceNormals);
 	writer.String("centerPoint");
 	writer.StartArray();
 	writer.Double(centerPoint.x);
 	writer.Double(centerPoint.y);
 	writer.Double(centerPoint.y);
 	writer.EndArray();
-	writer.String("radius");
-	writer.Double(radius);
-	writer.String("render");
-	writer.Bool(render);
+	writer.String("radius"); writer.Double(radius);
+	writer.String("render"); writer.Bool(render);
 	writer.EndObject();
 }

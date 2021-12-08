@@ -20,12 +20,12 @@ public:
 	UpdateStatus UpdateChildren(GameObject* parent);
 	UpdateStatus PostUpdate();
 
-	void GuizmoTransformation();
-
 	bool CleanUp();
 
 	ImGuizmo::OPERATION GetGizmoOperation() { return currentGizmoOperation; }
 	void SetGizmoOperation(ImGuizmo::OPERATION operation) { currentGizmoOperation = operation; }
+	void GuizmoTransformation();
+
 	void AddGameobject(GameObject* g);
 	void RemoveGameobject(GameObject* g);
 

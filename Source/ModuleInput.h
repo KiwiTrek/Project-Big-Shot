@@ -25,13 +25,13 @@ public:
 	UpdateStatus PreUpdate();
 	bool CleanUp();
 
-	KeyState GetKey(int id) const;
-	KeyState GetMouseButton(int id) const;
-	int GetMouseX() const;
-	int GetMouseY() const;
-	int GetMouseZ() const;
-	int GetMouseXMotion() const;
-	int GetMouseYMotion() const;
+	KeyState GetKey(int id) const { return keyboard[id]; };
+	KeyState GetMouseButton(int id) const { return mouseButtons[id]; };
+	int GetMouseX() const { return mouseX; }
+	int GetMouseY() const { return mouseY; }
+	int GetMouseZ() const { return mouseZ; }
+	int GetMouseXMotion() const { return mouseMotionX; }
+	int GetMouseYMotion() const { return mouseMotionY; }
 	void LogInput(int id, KeyState state);
 
 public:

@@ -18,16 +18,16 @@ public:
 
 	void SetPos(float x, float y, float z);
 	void SetPos(float3 p);
-	float3 GetPos();
+	float3 GetPos() { return pos; }
 	void SetRot(float x, float y, float z);
 	void SetRot(Quat q);
-	Quat GetRot();
+	Quat GetRot() { return rot; }
 	void SetScale(float x, float y, float z);
 	void SetScale(float3 s);
 	void SetGlobalTransform(float4x4 transform);
-	float3 GetScale();
-	float4x4 GetGlobalTransform();
-	float4x4 GetLocalTransform();
+	float3 GetScale() { return scale; }
+	float4x4 GetGlobalTransform() { return gTransform; }
+	float4x4 GetLocalTransform() { return lTransform; }
 
 	void OnLoad(const JSONReader& t, Application* App);
 	void OnSave(JSONWriter& writer) const;

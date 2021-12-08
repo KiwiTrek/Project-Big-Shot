@@ -156,14 +156,9 @@ UpdateStatus ModuleInput::PreUpdate()
 				{
 					std::string fileName;
 					App->fileSystem->SplitFilePath(tmp.c_str(), nullptr, &fileName);
-					if (tmp.find(".FBX") == std::string::npos)
-					{
-						fileName.append(".fbx");
-					}
-					else
-					{
-						fileName.append(".FBX");
-					}
+					if (tmp.find(".FBX") == std::string::npos) fileName.append(".fbx");
+					else fileName.append(".FBX");
+
 					App->importer->ImportScene(tmp.c_str(), fileName.c_str());
 				}
 				else if (tmp.find(".png") != std::string::npos || tmp.find(".dds") != std::string::npos)
@@ -171,14 +166,8 @@ UpdateStatus ModuleInput::PreUpdate()
 					std::string fileName;
 					App->fileSystem->SplitFilePath(tmp.c_str(), nullptr, &fileName);
 					std::string pathName = fileName;
-					if (tmp.find(".png") != std::string::npos)
-					{
-						pathName.append(".png");
-					}
-					else if (tmp.find(".dds") != std::string::npos)
-					{
-						pathName.append(".dds");
-					}
+					if (tmp.find(".png") != std::string::npos) pathName.append(".png");
+					else if (tmp.find(".dds") != std::string::npos) pathName.append(".dds");
 
 					if (App->fileSystem->Exists(pathName))
 					{
@@ -229,10 +218,7 @@ UpdateStatus ModuleInput::PreUpdate()
 		}
 	}
 
-	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KeyState::KEY_UP)
-	{
-		return UpdateStatus::UPDATE_STOP;
-	}
+	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KeyState::KEY_UP) return UpdateStatus::UPDATE_STOP;
 
 	if (isHovering)
 	{
@@ -269,39 +255,4 @@ void ModuleInput::LogInput(int id, KeyState state)
 	}
 	App->gui->LogInputText.appendf(tmp.c_str());
 	App->gui->config->update = true;
-}
-
-KeyState ModuleInput::GetKey(int id) const
-{
-	return keyboard[id];
-}
-
-KeyState ModuleInput::GetMouseButton(int id) const
-{
-	return mouseButtons[id];
-}
-
-int ModuleInput::GetMouseX() const
-{
-	return mouseX;
-}
-
-int ModuleInput::GetMouseY() const
-{
-	return mouseY;
-}
-
-int ModuleInput::GetMouseZ() const
-{
-	return mouseZ;
-}
-
-int ModuleInput::GetMouseXMotion() const
-{
-	return mouseMotionX;
-}
-
-int ModuleInput::GetMouseYMotion() const
-{
-	return mouseMotionY;
 }

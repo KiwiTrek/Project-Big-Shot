@@ -105,12 +105,6 @@ void ModuleScene::Save(std::string scene)
 	writer.EndArray();
 	writer.EndObject();
 
-	if (App->fileSystem->Save(scene.c_str(), sb.GetString(), strlen(sb.GetString()), false))
-	{
-		LOG_CONSOLE("Scene saved correctly.");
-	}
-	else
-	{
-		LOG_CONSOLE("ERROR: scene not saved.");
-	}
+	if (App->fileSystem->Save(scene.c_str(), sb.GetString(), strlen(sb.GetString()), false)) LOG_CONSOLE("Scene saved correctly.")
+	else LOG_CONSOLE("ERROR: scene not saved.");
 }

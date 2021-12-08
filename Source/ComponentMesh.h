@@ -38,8 +38,7 @@ public:
 	Color vertexColor;
 	bool wire, wireOverride, drawVertexNormals, drawFaceNormals, drawBBox;
 
-	AABB bbox;
-	AABB drawingBbox;
+	AABB bbox, drawingBbox;
 	OBB obb;
 	float3 centerPoint;
 	float radius;

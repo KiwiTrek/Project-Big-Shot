@@ -21,22 +21,22 @@ class ModuleViewportBuffer;
 class Application
 {
 public:
-	Application(ConsoleBuffer* _buff);
+	Application(ConsoleBuffer* buff);
 	~Application();
 
 	bool Init();
 	UpdateStatus Update();
 	bool CleanUp();
 
-	void SetAppName(std::string _name);
+	void SetAppName(std::string name);
 	std::string GetAppName();
-	void SetOrgName(std::string _name);
+	void SetOrgName(std::string name);
 	std::string GetOrgName();
 
 	void LoadEngineConfig();
 	void SaveEngineConfig();
 
-	void SetFpsLimit(int _limit);
+	void SetFpsLimit(int limit);
 	int GetFpsLimit();
 	float GetFps();
 	float GetMs();

@@ -25,13 +25,10 @@ public:
 	{}
 
 	virtual void OnLoad(const JSONReader& reader)
-	{
-	}
+	{}
 
 	virtual void OnSave(JSONWriter& writer) const
-	{
-
-	}
+	{}
 
 	virtual bool Init()
 	{

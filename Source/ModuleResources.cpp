@@ -6,7 +6,6 @@
 #include "ModuleImporter.h"
 #include "ModuleResources.h"
 
-#include "Timer.h"
 #include "scene.h"
 #include "postprocess.h"
 #include <iostream>
@@ -67,8 +66,7 @@ UID ModuleResources::Exists(Resource::Type type, const aiMesh& aiMesh)
 			ResourceMesh* rm = (ResourceMesh*)(*it).second;
 			if ((*it).second->GetType() == Resource::Type::MESH)
 			{
-				if (rm->vertexNum == aiMesh.mNumVertices
-					&& memcmp(&rm->normals[0], aiMesh.mNormals, sizeof(float3) * aiMesh.mNumVertices) == 0)
+				if (rm->vertexNum == aiMesh.mNumVertices && memcmp(&rm->normals[0], aiMesh.mNormals, sizeof(float3) * aiMesh.mNumVertices) == 0)
 				{
 					return (*it).first;
 				}
@@ -79,8 +77,7 @@ UID ModuleResources::Exists(Resource::Type type, const aiMesh& aiMesh)
 			ResourceMesh* rm = (ResourceMesh*)(*it).second;
 			if ((*it).second->GetType() == Resource::Type::MESH)
 			{
-				if (rm->vertexNum == aiMesh.mNumVertices
-					&& memcmp(&rm->normals[0], aiMesh.mNormals, sizeof(float3) * aiMesh.mNumVertices) == 0)
+				if (rm->vertexNum == aiMesh.mNumVertices && memcmp(&rm->normals[0], aiMesh.mNormals, sizeof(float3) * aiMesh.mNumVertices) == 0)
 				{
 					return (*it).first;
 				}
@@ -102,14 +99,8 @@ UID ModuleResources::Exists(Resource::Type type, const char* pathFile, bool colo
 			ResourceMaterial* rm = (ResourceMaterial*)(*it).second;
 			if ((*it).second->GetType() == Resource::Type::MATERIAL)
 			{
-				if (color && rm->diffuse == c)
-				{
-					return (*it).first;
-				}
-				else if (pathFile != nullptr && pathFile == rm->path)
-				{
-					return (*it).first;
-				}
+				if (color && rm->diffuse == c) return (*it).first;
+				else if (pathFile != nullptr && pathFile == rm->path) return (*it).first;
 			}
 		}
 	}
@@ -150,10 +141,7 @@ Resource* ModuleResources::RequestResource(UID uid)
 		else
 		{
 			r = loadedResources.at(uid);
-			if (r->GetType() == Resource::Type::MATERIAL)
-			{
-				App->importer->GenerateId((ResourceMaterial*)r);
-			}
+			if (r->GetType() == Resource::Type::MATERIAL) App->importer->GenerateId((ResourceMaterial*)r);
 			r->SetResourceMap(&resources);
 			resources[uid] = r;
 		}
@@ -399,9 +387,6 @@ bool ModuleResources::SaveMesh(const ResourceMesh* rMesh, const std::string file
 
 ResourceMesh* ModuleResources::LoadMesh(std::string fileName)
 {
-	Timer timer;
-	timer.Start();
-
 	std::ifstream myFile;
 	std::string path = App->fileSystem->meshPath + "/";
 	path.append(fileName);
@@ -471,7 +456,6 @@ ResourceMesh* ModuleResources::LoadMesh(std::string fileName)
 			memcpy(&rMesh->indices[i], &ind[i], sizeof(uint));
 		}
 
-		LOG_CONSOLE("Mesh loaded successfully in %f ms", timer.ReadSec());
 		return rMesh;
 	}
 	return nullptr;
@@ -526,9 +510,6 @@ bool ModuleResources::SaveMaterial(const ResourceMaterial* rm, const std::string
 
 ResourceMaterial* ModuleResources::LoadMaterial(std::string fileName)
 {
-	Timer timer;
-	timer.Start();
-
 	std::ifstream myFile;
 	std::string path = App->fileSystem->texturePath + "/";
 	path.append(fileName);
@@ -585,7 +566,6 @@ ResourceMaterial* ModuleResources::LoadMaterial(std::string fileName)
 		rm->data = data;
 		rm->diffuse = Color(color[0], color[1], color[2], color[3]);
 
-		LOG_CONSOLE("Material loaded successfully in %f ms", timer.ReadSec());
 		return rm;
 	}
 	return nullptr;

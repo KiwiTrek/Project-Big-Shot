@@ -22,7 +22,7 @@ ComponentTransform::ComponentTransform(float3 p, Quat r, float3 s, bool active) 
 
 	pos = p;
 	rot = r;
-	eulerRot = r.ToEulerXYZ() * RADTODEG;
+	eulerRot = r.ToEulerXYZ() * RAD_TO_DEG;
 	scale = s;
 
 	lTransform = float4x4::FromTRS(pos, rot, scale);
@@ -69,7 +69,7 @@ void ComponentTransform::UpdateGlobalTransform(float4x4 pGlobalTransform)
 void ComponentTransform::UpdateLocalTransform()
 {
 	lTransform = float4x4::FromTRS(pos, rot, scale);
-	eulerRot = rot.ToEulerXYZ() * RADTODEG;
+	eulerRot = rot.ToEulerXYZ() * RAD_TO_DEG;
 }
 
 void ComponentTransform::DrawInspector(Application* App)
@@ -128,16 +128,6 @@ void ComponentTransform::DrawInspector(Application* App)
 	}
 }
 
-float4x4 ComponentTransform::GetGlobalTransform()
-{
-	return gTransform;
-}
-
-float4x4 ComponentTransform::GetLocalTransform()
-{
-	return lTransform;
-}
-
 void ComponentTransform::SetPos(float x, float y, float z)
 {
 	pos.Set(x, y, z);
@@ -150,14 +140,9 @@ void ComponentTransform::SetPos(float3 p)
 	UpdateGlobalTransform();
 }
 
-float3 ComponentTransform::GetPos()
-{
-	return pos;
-}
-
 void ComponentTransform::SetRot(float x, float y, float z)
 {
-	rot = Quat::FromEulerXYZ(x * DEGTORAD, y * DEGTORAD, z * DEGTORAD);
+	rot = Quat::FromEulerXYZ(x * DEG_TO_RAD, y * DEG_TO_RAD, z * DEG_TO_RAD);
 	UpdateGlobalTransform();
 }
 
@@ -165,11 +150,6 @@ void ComponentTransform::SetRot(Quat q)
 {
 	rot = q;
 	UpdateGlobalTransform();
-}
-
-Quat ComponentTransform::GetRot()
-{
-	return rot;
 }
 
 void ComponentTransform::SetScale(float x, float y, float z)
@@ -191,15 +171,10 @@ void ComponentTransform::SetGlobalTransform(float4x4 transform)
 	inverseParentGlobal.Inverse();
 	lTransform = inverseParentGlobal * gTransform;
 	lTransform.Decompose(pos, rot, scale);
-	eulerRot = rot.ToEulerXYZ() * RADTODEG;
+	eulerRot = rot.ToEulerXYZ() * RAD_TO_DEG;
 
 	UpdateGlobalTransform();
 	owner->UpdateChildrenTransforms();
-}
-
-float3 ComponentTransform::GetScale()
-{
-	return scale;
 }
 
 void ComponentTransform::OnLoad(const JSONReader& t, Application* App)

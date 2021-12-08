@@ -180,8 +180,7 @@ void ModuleCamera3D::LookAt(const float3& point)
 // -----------------------------------------------------------------
 void ModuleCamera3D::CalculateViewMatrix()
 {
-	if (projectionIsDirty)
-		RecalculateProjection();
+	if (projectionIsDirty) RecalculateProjection();
 
 	cameraFrustum.SetPos(position);
 	cameraFrustum.SetFront(front.Normalized());
@@ -194,7 +193,7 @@ void ModuleCamera3D::CalculateViewMatrix()
 void ModuleCamera3D::RecalculateProjection()
 {
 	cameraFrustum.SetViewPlaneDistances(nearPlaneDistance, farPlaneDistance);
-	cameraFrustum.SetVerticalFovAndAspectRatio(verticalFOV * DEGTORAD, aspectRatio);
+	cameraFrustum.SetVerticalFovAndAspectRatio(verticalFOV * DEG_TO_RAD, aspectRatio);
 }
 
 GameObject* ModuleCamera3D::MousePicking()
@@ -260,8 +259,7 @@ GameObject* ModuleCamera3D::MousePicking()
 		{
 			ResourceMesh* rMesh = cMesh->mesh;
 
-			if (rMesh == nullptr)
-				continue;
+			if (rMesh == nullptr) continue;
 
 			for (size_t i = 0; i < rMesh->indexNum; i += 3)
 			{
@@ -285,19 +283,13 @@ GameObject* ModuleCamera3D::MousePicking()
 
 				float distance;
 				float3 intersectionPoint;
-				if (rayLocal.Intersects(triangle, &distance, &intersectionPoint))
-				{
-					return gameObject;
-				}
+				if (rayLocal.Intersects(triangle, &distance, &intersectionPoint)) return gameObject;
 			}
 		}
 		else
 		{
 			ComponentCamera* cam = gameObject->GetComponent<Camera>();
-			if (cam != nullptr)
-			{
-				return gameObject;
-			}
+			if (cam != nullptr) return gameObject;
 		}
 	}
 

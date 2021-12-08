@@ -100,10 +100,7 @@ void ResourceMesh::CopyParMesh(par_shapes_mesh* parMesh)
 	{
 		memcpy(&vertices[i], &parMesh->points[i * 3], sizeof(float) * 3);
 		memcpy(&normals[i], &parMesh->normals[i * 3], sizeof(float) * 3);
-		if (parMesh->tcoords != nullptr)
-		{
-			memcpy(&texCoords[i], &parMesh->tcoords[i * 2], sizeof(float) * 2);
-		}
+		if (parMesh->tcoords != nullptr) memcpy(&texCoords[i], &parMesh->tcoords[i * 2], sizeof(float) * 2);
 		else if (mType == Shape::CUBE)
 		{
 			switch (i % 4)
@@ -132,10 +129,12 @@ void ResourceMesh::CopyParMesh(par_shapes_mesh* parMesh)
 			texCoords.at(i).y = 0.0f;
 		}
 	}
+
 	for (size_t i = 0; i < indices.size(); ++i)
 	{
 		indices[i] = parMesh->triangles[i];
 	}
+
 	memcpy(&normals[0], parMesh->normals, vertexNum);
 
 	par_shapes_free_mesh(parMesh);

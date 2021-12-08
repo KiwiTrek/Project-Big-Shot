@@ -61,10 +61,7 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 			if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
 			if (ImGui::IsItemHovered())
 			{
-				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
-				{
-					App->gameObjects->selectedGameObject = g;
-				}
+				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN) App->gameObjects->selectedGameObject = g;
 			}
 
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -85,9 +82,7 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 						if (dropped->parent != g)
 						{
 							dropped->parent->RemoveChild(dropped);
-							g == App->scene->GetSceneRoot() ?
-								App->gameObjects->AddGameobject(dropped)
-								: g->AddChild(dropped);
+							g == App->scene->GetSceneRoot() ? App->gameObjects->AddGameobject(dropped) : g->AddChild(dropped);
 							App->gameObjects->selectedGameObject = dropped;
 						}
 					}
@@ -114,10 +109,7 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 			if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
 			if (ImGui::IsItemHovered())
 			{
-				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
-				{
-					App->gameObjects->selectedGameObject = g;
-				}
+				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN) App->gameObjects->selectedGameObject = g;
 			}
 
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
@@ -138,9 +130,7 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 						if (dropped->parent != g)
 						{
 							dropped->parent->RemoveChild(dropped);
-							g == App->scene->GetSceneRoot() ?
-								App->gameObjects->AddGameobject(dropped)
-								: g->AddChild(dropped);
+							g == App->scene->GetSceneRoot() ? App->gameObjects->AddGameobject(dropped) : g->AddChild(dropped);
 							App->gameObjects->selectedGameObject = dropped;
 						}
 					}

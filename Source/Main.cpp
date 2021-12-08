@@ -58,23 +58,16 @@ int main(int argc, char** argv)
 				state = MainStates::MAIN_EXIT;
 			}
 
-			if (updateReturn == UpdateStatus::UPDATE_STOP)
-			{
-				state = MainStates::MAIN_FINISH;
-			}
+			if (updateReturn == UpdateStatus::UPDATE_STOP) state = MainStates::MAIN_FINISH;
+
 			break;
 		}
 		case MainStates::MAIN_FINISH:
 		{
 			LOG_CONSOLE("-------------- Application CleanUp --------------");
-			if (App->CleanUp() == false)
-			{
-				LOG("Application CleanUp exits with ERROR");
-			}
-			else
-			{
-				mainReturn = EXIT_SUCCESS;
-			}
+
+			if (App->CleanUp() == false) LOG("Application CleanUp exits with ERROR");
+			else mainReturn = EXIT_SUCCESS;
 
 			state = MainStates::MAIN_EXIT;
 			break;

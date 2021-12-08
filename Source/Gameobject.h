@@ -50,8 +50,7 @@ public:
 		while (c != components.end())
 		{
 			component = dynamic_cast<T*>((*c));
-			if (component)
-				break;
+			if (component) break;
 			c++;
 		}
 		return component;

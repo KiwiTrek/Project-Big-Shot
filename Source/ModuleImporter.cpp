@@ -9,7 +9,6 @@
 #include "ilu.h"
 #include "ilut.h"
 
-#include "Timer.h"
 #include "cimport.h"
 #include "scene.h"
 #include "postprocess.h"
@@ -44,7 +43,6 @@ bool ModuleImporter::Init()
 
 bool ModuleImporter::Start()
 {
-	//ImportScene("Assets/Resources/Models/Baker_house.fbx", "Baker_house");
 	ImportScene("Assets/Resources/Models/Street_environment.fbx", "Street_environment");
 	return true;
 }
@@ -104,14 +102,8 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 {
 	GameObject* g = nullptr;
 
-	if (rootName != nullptr)
-	{
-		g = new GameObject(rootName);
-	}
-	else
-	{
-		g = new GameObject(n->mName.C_Str());
-	}
+	if (rootName != nullptr) g = new GameObject(rootName);
+	else g = new GameObject(n->mName.C_Str());
 
 	if (parentGameObject != nullptr)
 	{
@@ -120,10 +112,7 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 	}
 
 	ComponentTransform* t = (ComponentTransform*)g->CreateComponent(ComponentTypes::TRANSFORM, LoadTransform(n));
-	if (t->GetScale().x >= 100.0f)
-	{
-		t->SetScale(1.0f, 1.0f, 1.0f);
-	}
+	if (t->GetScale().x >= 100.0f) t->SetScale(1.0f, 1.0f, 1.0f);
 	t->UpdateGlobalTransform();
 	if (g->parent != nullptr) g->parent->UpdateChildrenTransforms();
 
@@ -168,10 +157,7 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 
 		ResourceMaterial* texture = (ResourceMaterial*)App->resources->CreateNewResource(Resource::Type::MATERIAL, Shape::NONE, newPath.c_str());
 
-		if (id == 0)
-		{
-			LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
-		}
+		if (id == 0) LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
 
 		char* data;
 		uint bytes = App->fileSystem->Load(path, &data);
@@ -182,20 +168,11 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 			{
 				ILinfo ImageInfo;
 				iluGetImageInfo(&ImageInfo);
-				if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
-				{
-					iluFlipImage();
-				}
+				if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT) iluFlipImage();
 
 				int channels = ilGetInteger(IL_IMAGE_CHANNELS);
-				if (channels == 3)
-				{
-					ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-				}
-				else if (channels == 4)
-				{
-					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-				}
+				if (channels == 3) ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+				else if (channels == 4) ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 
 				ILenum error = ilGetError();
 
@@ -287,11 +264,6 @@ ResourceMaterial* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 				LOG_CONSOLE("Material color already exists with uid : %d, pulling from resources.", (int)uid);
 				return rm;
 			}
-			//----------
-			//uint id = 0;
-			//ilGenImages(1, &id);
-			//texture->id = id;
-			//texture->SetTexture(Color(diffuse.r, diffuse.g, diffuse.b, diffuse.a));
 			return texture;
 		}
 		else
@@ -306,9 +278,6 @@ ResourceMaterial* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 
 ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 {
-	Timer timer;
-	timer.Start();
-
 	aiMesh* aiMesh = scene->mMeshes[*node->mMeshes];
 	UID uid = App->resources->Exists(Resource::Type::MESH, *aiMesh);
 	if (uid == -1)
@@ -325,17 +294,12 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 			m->indices.resize(m->indexNum);
 			for (uint j = 0; j < aiMesh->mNumFaces; j++)
 			{
-				if (aiMesh->mFaces[j].mNumIndices != 3)
-				{
-					LOG_CONSOLE("ERROR: Geometry face with != 3 indices!");
-				}
-				else
-				{
-					memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, 3 * sizeof(uint));
-				}
+				if (aiMesh->mFaces[j].mNumIndices != 3) LOG_CONSOLE("ERROR: Geometry face with != 3 indices!")
+				else memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 			}
 
-			if (aiMesh->HasNormals()) {
+			if (aiMesh->HasNormals())
+			{
 				m->normalNum = aiMesh->mNumVertices;
 				m->normals.resize(m->normalNum);
 				memcpy(&m->normals[0], aiMesh->mNormals, sizeof(float3) * m->normalNum);
@@ -357,8 +321,6 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 					m->texCoords.at(j).y = 0.0f;
 				}
 			}
-			timer.Stop();
-			LOG_CONSOLE("Mesh succesfully copied in %f ms.", timer.ReadSec());
 			std::string file = std::to_string(m->GetUID()) + MESH_FORMAT_FILE;
 			App->resources->SaveMesh(m, file);
 			return m;
@@ -368,7 +330,6 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 	{
 		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(uid);
 		rm->referenceCount++;
-		LOG_CONSOLE("Mesh already exists, pulled from resources in %f ms.", timer.ReadSec());
 		return rm;
 	}
 	return nullptr;

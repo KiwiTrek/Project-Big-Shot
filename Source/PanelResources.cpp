@@ -22,15 +22,6 @@ UpdateStatus PanelResources::Update()
 {
 	ImGui::Begin(name.c_str(), &active, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-	if (replace)
-	{
-		ImGui::Separator();
-		ImGui::Separator();
-		ImGui::Text("Select an asset to replace...");
-		ImGui::Separator();
-		ImGui::Separator();
-	}
-
 	ImGui::BeginChild("Assets", ImVec2(ImGui::GetWindowContentRegionWidth() * 0.4f, ImGui::GetContentRegionAvail().y), false, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 	{
 		if (ImGui::IsWindowFocused() && selected != nullptr)
@@ -42,14 +33,8 @@ UpdateStatus PanelResources::Update()
 			}
 		}
 
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN && ImGui::IsAnyItemHovered() && ImGui::IsWindowHovered())
-		{
-			ImGui::OpenPopup("OptionsAssets");
-		}
-		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && ImGui::IsPopupOpen("OptionsAssets"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN && ImGui::IsAnyItemHovered() && ImGui::IsWindowHovered()) ImGui::OpenPopup("OptionsAssets");
+		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && ImGui::IsPopupOpen("OptionsAssets"))ImGui::CloseCurrentPopup();
 		RightClickMenu();
 
 		ImGuiTreeNodeFlags flagsLeaf = flags;
@@ -71,10 +56,7 @@ UpdateStatus PanelResources::Update()
 						if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) selected = r;
 						if (ImGui::IsItemHovered())
 						{
-							if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
-							{
-								selected = r;
-							}
+							if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN) selected = r;
 						}
 
 						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
@@ -113,10 +95,7 @@ UpdateStatus PanelResources::Update()
 						if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) selected = r;
 						if (ImGui::IsItemHovered())
 						{
-							if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
-							{
-								selected = r;
-							}
+							if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN) selected = r;
 						}
 
 						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
@@ -189,20 +168,17 @@ UpdateStatus PanelResources::Update()
 
 bool PanelResources::RightClickMenu()
 {
-	if (!replace)
+	if (ImGui::BeginPopupContextItem("OptionsAssets"))
 	{
-		if (ImGui::BeginPopupContextItem("OptionsAssets"))
+		if (ImGui::MenuItem("Delete"))
 		{
-			if (ImGui::MenuItem("Delete"))
+			if (selected != nullptr)
 			{
-				if (selected != nullptr)
-				{
-					App->resources->ReleaseResource(selected->GetUID());
-					selected = nullptr;
-				}
+				App->resources->ReleaseResource(selected->GetUID());
+				selected = nullptr;
 			}
-			ImGui::EndPopup();
 		}
+		ImGui::EndPopup();
 	}
 	return true;
 }

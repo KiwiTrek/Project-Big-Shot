@@ -30,10 +30,7 @@ UpdateStatus PanelAbout::Update()
 		App->input->isHovering = true;
 		ImGui::SetTooltip("Go to link");
 	}
-	if (ImGui::IsItemClicked())
-	{
-		App->RequestBrowser("https://github.com/WillyTrek19");
-	}
+	if (ImGui::IsItemClicked()) App->RequestBrowser("https://github.com/WillyTrek19");
 
 	IMGUI_BULLET(IMGUI_YELLOW, "Sergi Colomer ", "(https://github.com/Lladruc37)");
 	if (ImGui::IsItemHovered())
@@ -41,10 +38,7 @@ UpdateStatus PanelAbout::Update()
 		App->input->isHovering = true;
 		ImGui::SetTooltip("Go to link");
 	}
-	if (ImGui::IsItemClicked())
-	{
-		App->RequestBrowser("https://github.com/Lladruc37");
-	}
+	if (ImGui::IsItemClicked()) App->RequestBrowser("https://github.com/Lladruc37");
 
 	ImGui::Separator();
 	ImGui::TextWrapped("License:");

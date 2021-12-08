@@ -28,22 +28,19 @@ public:
 	void SetBrightness(float b);
 
 	void GetPosition(int &x, int &y);
-	int GetWidth();
+	int GetWidth() { return screenWidth; }
 	void SetWidth(int w);
-	int GetHeight();
+	int GetHeight() { return screenHeight; }
 	void SetHeight(int h);
 	void GetMaxWindow(int& w, int& h);
 
-	bool IsFullscreen();
+	bool IsFullscreen() { return fullscreen; }
 	void SetFullscreen(bool f);
-
-	bool IsFullscreenDesktop();
+	bool IsFullscreenDesktop() { return fullscreenDesktop; }
 	void SetFullscreenDesktop(bool fd);
-
-	bool IsResizable();
-	void SetResizable(bool r);
-
-	bool IsBorderless();
+	bool IsResizable() { return resizable; }
+	void SetResizable(bool r) { resizable = r; }
+	bool IsBorderless() { return borderless; }
 	void SetBorderless(bool b);
 
 public:

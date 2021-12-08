@@ -173,10 +173,7 @@ bool GameObject::CleanUp()
 void GameObject::OnLoad(const jsonObject& reader, Application* App)
 {
 	bool isRoot = false;
-	if (reader.HasMember("UID"))
-	{
-		uid = reader["UID"].GetInt();
-	}
+	if (reader.HasMember("UID")) uid = reader["UID"].GetInt();
 
 	if (reader.HasMember("name"))
 	{
@@ -184,10 +181,7 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 		if (name == "Main") isRoot = true;
 	}
 
-	if (reader.HasMember("active"))
-	{
-		active = reader["active"].GetBool();
-	}
+	if (reader.HasMember("active")) active = reader["active"].GetBool();
 
 	if (reader.HasMember("Components"))
 	{
@@ -222,10 +216,8 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 		{
 			const jsonObject& childOb = it->GetObjectJSON();
 			const char* childName = "Default Game Object";
-			if (childOb.HasMember("name"))
-			{
-				childName = childOb["name"].GetString();
-			}
+			if (childOb.HasMember("name")) childName = childOb["name"].GetString();
+
 			GameObject* child = new GameObject(childName);
 			if (isRoot)
 			{
@@ -245,12 +237,9 @@ void GameObject::OnLoad(const jsonObject& reader, Application* App)
 void GameObject::OnSave(JSONWriter& writer) const
 {
 	writer.StartObject();
-	writer.String("UID");
-	writer.Int(uid);
-	writer.String("name");
-	writer.String(name.c_str());
-	writer.String("active");
-	writer.Bool(active);
+	writer.String("UID"); writer.Int(uid);
+	writer.String("name"); writer.String(name.c_str());
+	writer.String("active"); writer.Bool(active);
 	if (components.size() != 0)
 	{
 		writer.String("Components");

@@ -13,7 +13,7 @@ ComponentCamera::ComponentCamera(bool active) : Component(type, active), fixedFO
 	frustum.SetFront(float3(0.0f, 0.0f, 1.0f));
 
 	//This function calculates the verticalFOV using the given horizontal FOV and aspect ratio. Also sets type to PerspectiveFrustum.
-	frustum.SetHorizontalFovAndAspectRatio(horizontalFOV * DEGTORAD, aspectRatio);
+	frustum.SetHorizontalFovAndAspectRatio(horizontalFOV * DEG_TO_RAD, aspectRatio);
 	frustum.SetViewPlaneDistances(5.0f, 100.0f);
 
 	drawingBbox.SetFromCenterAndSize(vec(0.0f, 0.0f, 0.0f), vec(1.1f, 1.1f, 1.1f));
@@ -204,33 +204,23 @@ void ComponentCamera::DrawBBox() const
 // tests if a BBox is within the frustum
 bool ComponentCamera::ContainsBBox(const AABB& refBox) const
 {
-	float3 vCorner[8];
-	int totalIn = 0;
+	float3 vertexCorner[8];
 
 	//Get BBox
-	refBox.GetCornerPoints(vCorner);
+	refBox.GetCornerPoints(vertexCorner);
 
-	// test all 8 corners against the 6 sides
-	// if all points are behind 1 specific plane, we are out
-	// if we are in with all points, then we are fully in
-	for (int p = 0; p < 6; ++p) {
+	for (int p = 0; p < 6; ++p)
+	{
 		int cornersOutside = 8;
-		int iPtIn = 1;
 
-		for (int i = 0; i < 8; ++i) {
-			// test this point against the planes
-			if (frustum.GetPlane(p).IsOnPositiveSide(vCorner[i]))
-			{
-				iPtIn = 0;
-				--cornersOutside;
-			}
+		for (int i = 0; i < 8; ++i)
+		{
+			if (frustum.GetPlane(p).IsOnPositiveSide(vertexCorner[i])) --cornersOutside;
 		}
-		// were all the points outside of plane p?
+
 		if (cornersOutside == 0) return false;
-		totalIn += iPtIn;
 	}
-	if (totalIn == 6) return true;
-	
+
 	return true;
 }
 
@@ -265,25 +255,25 @@ void ComponentCamera::DrawInspector(Application* App)
 		if (fixedVerticalFOV)
 		{
 			//Fixed Vertical FOV Settings
-			float verticalFOV = frustum.VerticalFov() * RADTODEG;
+			float verticalFOV = frustum.VerticalFov() * RAD_TO_DEG;
 			if (ImGui::SliderFloat("Vertical FOV", &verticalFOV, 20.0f, 60.0f))
 			{
-				frustum.SetVerticalFovAndAspectRatio(verticalFOV * DEGTORAD, aspectRatio);
+				frustum.SetVerticalFovAndAspectRatio(verticalFOV * DEG_TO_RAD, aspectRatio);
 			}
 
 			ImGui::Spacing();
-			ImGui::Text("Horizontal FOV: %.2f", frustum.HorizontalFov() * (double)RADTODEG);
+			ImGui::Text("Horizontal FOV: %.2f", frustum.HorizontalFov() * (double)RAD_TO_DEG);
 		}
 		else if (fixedHorizontalFOV)
 		{
 			//Fixed Horizontal FOV Settings
-			float horizontalFOV = frustum.HorizontalFov() * RADTODEG;
+			float horizontalFOV = frustum.HorizontalFov() * RAD_TO_DEG;
 			if (ImGui::SliderFloat("Horizontal FOV", &horizontalFOV, 55.0f, 110.0f))
 			{
-				frustum.SetHorizontalFovAndAspectRatio(horizontalFOV * DEGTORAD, aspectRatio);
+				frustum.SetHorizontalFovAndAspectRatio(horizontalFOV * DEG_TO_RAD, aspectRatio);
 			}
 			ImGui::Spacing();
-			ImGui::Text("Vertical FOV: %.2f", frustum.VerticalFov() * (double)RADTODEG);
+			ImGui::Text("Vertical FOV: %.2f", frustum.VerticalFov() * (double)RAD_TO_DEG);
 		}
 
 		ImGui::Spacing();
@@ -308,10 +298,7 @@ void ComponentCamera::OnLoad(const JSONReader& c, Application* App)
 	if (c.HasMember("mainCamera"))
 	{
 		mainCamera = c["mainCamera"].GetBool();
-		if (mainCamera)
-		{
-			App->gameObjects->mainCamera = owner;
-		}
+		if (mainCamera) App->gameObjects->mainCamera = owner;
 	}
 
 	if (c.HasMember("fixedFOV"))
@@ -328,35 +315,19 @@ void ComponentCamera::OnLoad(const JSONReader& c, Application* App)
 		}
 	}
 
-	if (c.HasMember("culling"))
-	{
-		culling = c["culling"].GetBool();
-	}
-
-	if (c.HasMember("horizontalFOV"))
-	{
-		horizontalFOV = c["horizontalFOV"].GetDouble();
-	}
-
-	if (c.HasMember("aspectRatio"))
-	{
-		aspectRatio = c["aspectRatio"].GetDouble();
-	}
+	if (c.HasMember("culling")) culling = c["culling"].GetBool();
+	if (c.HasMember("horizontalFOV")) horizontalFOV = c["horizontalFOV"].GetDouble();
+	if (c.HasMember("aspectRatio")) aspectRatio = c["aspectRatio"].GetDouble();
 }
 
 void ComponentCamera::OnSave(JSONWriter& writer) const
 {
 	writer.String("Camera");
 	writer.StartObject();
-	writer.String("mainCamera");
-	writer.Bool(mainCamera);
-	writer.String("fixedFOV");
-	writer.Int((int)fixedFOV);
-	writer.String("culling");
-	writer.Bool(culling);
-	writer.String("horizontalFOV");
-	writer.Double(horizontalFOV);
-	writer.String("aspectRatio");
-	writer.Double(aspectRatio);
+	writer.String("mainCamera"); writer.Bool(mainCamera);
+	writer.String("fixedFOV"); writer.Int((int)fixedFOV);
+	writer.String("culling"); writer.Bool(culling);
+	writer.String("horizontalFOV"); writer.Double(horizontalFOV);
+	writer.String("aspectRatio"); writer.Double(aspectRatio);
 	writer.EndObject();
 }

@@ -68,27 +68,15 @@ UpdateStatus PanelConfig::Update()
 		App->window->GetMaxWindow(maxW, maxH);
 		if (ImGui::InputInt("Width", &w, 1, 25, flags))
 		{
-			if (w < 320)
-			{
-				w = 320;
-			}
-			else if (w > maxW)
-			{
-				w = maxW;
-			}
+			if (w < 320) w = 320;
+			else if (w > maxW) w = maxW;
 
 			App->window->SetWidth(w);
 		}
 		if (ImGui::InputInt("Height", &h, 1, 25, flags))
 		{
-			if (h < 200)
-			{
-				h = 200;
-			}
-			else if (h > maxH)
-			{
-				h = maxH;
-			}
+			if (h < 200) h = 200;
+			else if (h > maxH) h = maxH;
 
 			App->window->SetHeight(h);
 		}
@@ -100,7 +88,7 @@ UpdateStatus PanelConfig::Update()
 		ImGui::Separator();
 
 		bool fullscreen = App->window->IsFullscreen();
-		if (ImGui::Checkbox("Fullscreen", &fullscreen))  App->window->SetFullscreen(fullscreen);
+		if (ImGui::Checkbox("Fullscreen", &fullscreen)) App->window->SetFullscreen(fullscreen);
 
 		bool fullscreenDesktop = App->window->IsFullscreenDesktop();
 		if (ImGui::Checkbox("Fullscreen Desktop", &fullscreenDesktop)) App->window->SetFullscreenDesktop(fullscreenDesktop);
@@ -117,26 +105,15 @@ UpdateStatus PanelConfig::Update()
 		ImGui::Text("Ctrl + Click to Input Value");
 		ImGui::SliderFloat("Speed", &App->camera->cameraSpeed, 1.0f, 120.0f);
 		ImGui::SliderFloat("Sensitivity", &App->camera->cameraSensitivity, 0.05f, 0.5f);
-		if (ImGui::SliderFloat("Vertical FOV", &App->camera->verticalFOV, 0.1f, 180.0f))
-		{
-			App->camera->projectionIsDirty = true;
-		}
+		if (ImGui::SliderFloat("Vertical FOV", &App->camera->verticalFOV, 0.1f, 180.0f)) App->camera->projectionIsDirty = true;
 		if (ImGui::InputFloat("Near Plane", &App->camera->nearPlaneDistance, 1.0f, 10.0f))
 		{
-			if (App->camera->nearPlaneDistance <= 0.05f)
-			{
-				App->camera->nearPlaneDistance = 0.05f;
-			}
-			else if (App->camera->nearPlaneDistance > 25.0f)
-			{
-				App->camera->nearPlaneDistance = 25.0f;
-			}
+			if (App->camera->nearPlaneDistance <= 0.05f) App->camera->nearPlaneDistance = 0.05f;
+			else if (App->camera->nearPlaneDistance > 25.0f) App->camera->nearPlaneDistance = 25.0f;
+
 			App->camera->projectionIsDirty = true;
 		}
-		if (ImGui::SliderFloat("Far Plane", &App->camera->farPlaneDistance, 5.0f, 1000.0f))
-		{
-			App->camera->projectionIsDirty = true;
-		}
+		if (ImGui::SliderFloat("Far Plane", &App->camera->farPlaneDistance, 5.0f, 1000.0f)) App->camera->projectionIsDirty = true;
 	}
 
 	if (ImGui::CollapsingHeader("Hardware & Software"))
@@ -211,8 +188,8 @@ UpdateStatus PanelConfig::Update()
 		mouseY = App->input->GetMouseY();
 		IMGUI_PRINT(IMGUI_YELLOW, "Mouse Position: ", "%d,%d", mouseX, mouseY);
 		IMGUI_PRINT(IMGUI_YELLOW, "Mouse Pos. Scene: ", "%d,%d", (int)App->gui->mouseScenePosition.x, (int)App->gui->mouseScenePosition.y);
-		int mousewheel = App->input->GetMouseZ();
-		IMGUI_PRINT(IMGUI_YELLOW, "Mousewheel: ", "%d", mousewheel);
+		int mouseWheel = App->input->GetMouseZ();
+		IMGUI_PRINT(IMGUI_YELLOW, "Mousewheel: ", "%d", mouseWheel);
 		int mouseMotionX, mouseMotionY;
 		mouseMotionX = App->input->GetMouseXMotion();
 		mouseMotionY = App->input->GetMouseYMotion();
@@ -234,16 +211,10 @@ UpdateStatus PanelConfig::Update()
 
 	if (ImGui::BeginMenu("Options"))
 	{
-	    if (ImGui::MenuItem("Load"))
-	    {
-			App->LoadEngineConfig();
-	    }
-		if (ImGui::MenuItem("Save"))
-		{
-			App->SaveEngineConfig();
-		}
+		if (ImGui::MenuItem("Load")) App->LoadEngineConfig();
+		if (ImGui::MenuItem("Save")) App->SaveEngineConfig();
 
-	    ImGui::EndMenu();
+		ImGui::EndMenu();
 	}
 
 	ImGui::End();
