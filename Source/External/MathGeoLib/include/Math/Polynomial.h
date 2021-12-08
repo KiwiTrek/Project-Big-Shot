@@ -16,6 +16,7 @@
 	@author Jukka Jylänki
 	@brief */
 #pragma once
+#include "../MathWarnings.h"
 
 #include "MathNamespace.h"
 

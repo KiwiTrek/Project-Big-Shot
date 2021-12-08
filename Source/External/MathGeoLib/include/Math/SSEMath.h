@@ -17,6 +17,8 @@
 	@brief SIMD-enabled math helper utilities. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 #include "MathNamespace.h"
 #include "../MathGeoLibFwd.h"

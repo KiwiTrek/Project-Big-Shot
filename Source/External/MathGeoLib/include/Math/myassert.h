@@ -17,6 +17,7 @@
 	@brief Control over assert() macro for MathGeoLib. */
 #include "MathLog.h"
 #include "assume.h"
+#include "../MathWarnings.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <sstream>

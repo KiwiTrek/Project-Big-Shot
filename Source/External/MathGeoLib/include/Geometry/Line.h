@@ -17,6 +17,8 @@
 	@brief Implementation for the Line geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float3.h"
 

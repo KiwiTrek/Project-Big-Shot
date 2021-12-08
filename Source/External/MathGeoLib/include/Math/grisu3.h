@@ -6,6 +6,8 @@
 	http://www.cs.tufts.edu/~nr/cs257/archive/florian-loitsch/printf.pdf */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 
 #include <stdint.h>

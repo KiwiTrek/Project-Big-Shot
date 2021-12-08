@@ -17,6 +17,8 @@
 	@brief Global compilation defines. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <sstream>

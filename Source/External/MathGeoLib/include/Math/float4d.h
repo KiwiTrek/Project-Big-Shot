@@ -17,6 +17,8 @@
 	@brief A double-precision 4-wide vector. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 
 #include "../MathGeoLibFwd.h"

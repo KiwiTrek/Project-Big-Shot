@@ -17,6 +17,8 @@
 	@brief The Oriented Bounding Box (OBB) geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float3.h"
 

@@ -1,6 +1,7 @@
 #ifndef __PERFTIMER_H__
 #define __PERFTIMER_H__
 
+#include "Warnings.h"
 #include "Globals.h"
 
 // Slow timer with microsecond precision

@@ -17,6 +17,8 @@
 	@brief */
 #pragma once
 
+#include "../MathWarnings.h"
+
 static inline int CountTrailingZeroes32(uint32_t x)
 {
 #ifdef _MSC_VER

@@ -17,6 +17,8 @@
 	@brief A 3-by-3 matrix for linear operations in 3D space. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <ostream>
 #include "myassert.h"

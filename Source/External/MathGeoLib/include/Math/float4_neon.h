@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "../MathWarnings.h"
+
 #ifdef MATH_SIMD
 
 #ifdef MATH_NEON

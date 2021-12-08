@@ -1,6 +1,7 @@
 #ifndef __LIGHT_H__
 #define __LIGHT_H__
 
+#include "Warnings.h"
 #include "Color.h"
 #include "MathGeoLib.h"
 

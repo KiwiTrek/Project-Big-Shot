@@ -9,6 +9,7 @@
 #include "ilu.h"
 #include "ilut.h"
 
+#include "Timer.h"
 #include "cimport.h"
 #include "scene.h"
 #include "postprocess.h"
@@ -305,6 +306,9 @@ ResourceMaterial* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 
 ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 {
+	Timer timer;
+	timer.Start();
+
 	aiMesh* aiMesh = scene->mMeshes[*node->mMeshes];
 	UID uid = App->resources->Exists(Resource::Type::MESH, *aiMesh);
 	if (uid == -1)
@@ -353,7 +357,8 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 					m->texCoords.at(j).y = 0.0f;
 				}
 			}
-			LOG_CONSOLE("Mesh copied successfully.");
+			timer.Stop();
+			LOG_CONSOLE("Mesh succesfully copied in %f ms.", timer.ReadSec());
 			std::string file = std::to_string(m->GetUID()) + MESH_FORMAT_FILE;
 			App->resources->SaveMesh(m, file);
 			return m;
@@ -363,7 +368,7 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 	{
 		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(uid);
 		rm->referenceCount++;
-		LOG_CONSOLE("Mesh already exists, pulling from resources.");
+		LOG_CONSOLE("Mesh already exists, pulled from resources in %f ms.", timer.ReadSec());
 		return rm;
 	}
 	return nullptr;

@@ -1,6 +1,7 @@
 #ifndef __COMPONENT_H__
 #define __COMPONENT_H__
 
+#include "Warnings.h"
 #include "Globals.h"
 #include "imgui.h"
 #include "Application.h"

@@ -17,6 +17,8 @@
 	@brief */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "myassert.h"
 #include "../MathGeoLibFwd.h"
 #include "MathTypes.h"

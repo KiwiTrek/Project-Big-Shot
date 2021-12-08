@@ -1,25 +1,13 @@
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
-
-
-// Warning disabled ---
-#pragma warning( disable : 4005 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4006 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4009 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4099 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4018 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4305 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4244 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4530 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4838 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4996 ) // Warning that exceptions are disabled
-
 #include <windows.h>
 #include <stdio.h>
 #include "ConsoleBuffer.h"
+
+#pragma warning(push, 0)
 #include "MathGeoLib.h"
+#pragma warning(pop)
 
 #define MESH_FORMAT "bsm"
 #define MESH_FORMAT_FILE ".bsm"

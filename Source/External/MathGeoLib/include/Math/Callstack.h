@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include <string>
 

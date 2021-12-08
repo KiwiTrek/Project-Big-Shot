@@ -17,6 +17,8 @@
 	@brief */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "MathFunc.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT

@@ -17,6 +17,8 @@
 	@brief 2D Axis-Aligned Bounding Box structure. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include <stdio.h>
 
 #include "../Math/vec2d.h"

@@ -17,6 +17,8 @@
 	@brief The Triangle2D geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/vec2d.h"
 

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../Math/float3.h"
 #include "../Math/assume.h"
 #include "../Math/Swap.h"

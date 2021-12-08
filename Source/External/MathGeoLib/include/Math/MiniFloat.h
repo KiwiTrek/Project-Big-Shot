@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include <stdint.h>
 
 float Float16ToFloat32(uint16_t float16);

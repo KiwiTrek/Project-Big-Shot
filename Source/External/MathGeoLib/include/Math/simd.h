@@ -17,6 +17,8 @@
 	@brief Generic abstraction layer over different SIMD instruction sets. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 #include "MathNamespace.h"
 #include "../MathGeoLibFwd.h"

@@ -52,6 +52,7 @@ void ComponentMaterial::DrawInspector(Application* App)
 						IM_ASSERT(payload->DataSize == sizeof(int));
 						int payloadN = *(const int*)payload->Data;
 						material = (ResourceMaterial*)App->resources->RequestResource((UID)payloadN);
+						usingCheckers = false;
 						BindTexture(usingCheckers);
 					}
 					ImGui::EndDragDropTarget();
@@ -62,11 +63,31 @@ void ComponentMaterial::DrawInspector(Application* App)
 				IMGUI_PRINT(IMGUI_YELLOW, "Width:", "%d", material->width); ImGui::SameLine(); IMGUI_PRINT(IMGUI_YELLOW, "Height:", "%d", material->height);
 				ImGui::Text("Image:");
 				ImGui::Image((ImTextureID)material->texId, ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
+
+				if (ImGui::Button("Remove material", ImVec2(ImGui::CalcItemWidth(), 20)))
+				{
+					material->referenceCount--;
+					material = nullptr;
+				}
 			}
 		}
 		else
 		{
-			IMGUI_PRINT(IMGUI_YELLOW, "Diffuse Texture: ", "- none -");
+			ImGui::Text("UID: "); ImGui::SameLine();
+			ImGui::Button("- None -", ImVec2(ImGui::CalcItemWidth(), 20));
+			if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag material from Resources Panel here to change it.");
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIALS"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(int));
+					int payloadN = *(const int*)payload->Data;
+					material = (ResourceMaterial*)App->resources->RequestResource((UID)payloadN);
+					usingCheckers = false;
+					BindTexture(usingCheckers);
+				}
+				ImGui::EndDragDropTarget();
+			}
 		}
 		ImGui::Spacing();
 	}

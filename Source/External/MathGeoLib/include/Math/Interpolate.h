@@ -17,6 +17,8 @@
 	@brief */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "assume.h"
 #include "MathFunc.h"
 #include "MathConstants.h"

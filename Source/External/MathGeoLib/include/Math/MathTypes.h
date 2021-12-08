@@ -18,6 +18,8 @@
 
 // As a reminder: http://predef.sourceforge.net/prestd.html
 
+#include "../MathWarnings.h"
+
 #include <stdint.h>
 
 typedef unsigned char u8; ///< a single byte: 0-255.

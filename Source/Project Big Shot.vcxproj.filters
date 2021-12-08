@@ -723,6 +723,12 @@
     <ClInclude Include="External\ImGuizmo\include\ImZoomSlider.h">
       <Filter>Sources\Tools\ImGuizmo</Filter>
     </ClInclude>
+    <ClInclude Include="Warnings.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="MathWarnings.h">
+      <Filter>Sources\Tools\MathGeoLib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">

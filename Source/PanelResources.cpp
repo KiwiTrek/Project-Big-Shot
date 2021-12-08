@@ -81,6 +81,12 @@ UpdateStatus PanelResources::Update()
 						{
 							int selectedUID = (int)selected->GetUID();
 							ImGui::SetDragDropPayload("MATERIALS", &selectedUID, sizeof(int));
+							ImGui::Text("%s", rm->name.c_str());
+							if (rm->name == "Color_texture")
+							{
+								ImGui::SameLine();
+								ImGui::Image((ImTextureID)rm->texId, ImVec2(15, 15), ImVec2(0, 1), ImVec2(1, 0));
+							}
 							ImGui::EndDragDropSource();
 						}
 
@@ -117,6 +123,7 @@ UpdateStatus PanelResources::Update()
 						{
 							int selectedUID = (int)selected->GetUID();
 							ImGui::SetDragDropPayload("MESHES", &selectedUID, sizeof(int));
+							ImGui::Text("%d", selectedUID);
 							ImGui::EndDragDropSource();
 						}
 

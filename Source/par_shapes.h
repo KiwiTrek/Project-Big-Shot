@@ -23,6 +23,8 @@
 //
 // Distributed under the MIT License, see bottom of file.
 
+#include "Warnings.h"
+
 #ifndef PAR_SHAPES_H
 #define PAR_SHAPES_H
 

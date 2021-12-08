@@ -16,6 +16,7 @@
 	@author Jukka Jylänki
 	@brief 2D integral axis-aligned rectangle, equivalent to RECT in Windows API. */
 #pragma once
+#include "../MathWarnings.h"
 
 // Define this when building this project to make Rects be transformable to Win32 RECT() structs.
 // #define MATH_WIN32_INTEROP

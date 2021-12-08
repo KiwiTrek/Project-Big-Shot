@@ -17,6 +17,8 @@
 	@brief Implementation of the Separating Axis Theorem -based convex object intersection test. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float2.h"
 #include "../Math/float3.h"

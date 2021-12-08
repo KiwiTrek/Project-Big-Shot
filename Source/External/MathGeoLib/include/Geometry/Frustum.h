@@ -17,6 +17,8 @@
 	@brief The Frustum geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float2.h"
 #include "../Math/float3.h"

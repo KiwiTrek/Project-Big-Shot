@@ -1,6 +1,7 @@
 #ifndef __MODULE_H__
 #define __MODULE_H__
 
+#include "Warnings.h"
 #include "Globals.h"
 #include <string>
 

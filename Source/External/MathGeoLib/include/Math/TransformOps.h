@@ -17,6 +17,8 @@
 	@brief */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "float3.h"
 #include "SSEMath.h"

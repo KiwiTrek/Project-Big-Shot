@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 
 #ifdef MATH_SIMD

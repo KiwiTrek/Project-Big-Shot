@@ -13,6 +13,8 @@
    limitations under the License. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 /** @file Clock.h
 	@brief The Clock class. Supplies timing facilities. */
 

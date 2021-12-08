@@ -17,6 +17,8 @@
 	@brief The Capsule geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "LineSegment.h"
 

@@ -17,6 +17,8 @@
 	@brief The Axis-Aligned Bounding Box (AABB) geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float3.h"
 #include "../Math/SSEMath.h"

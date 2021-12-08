@@ -17,6 +17,8 @@
 	@brief The 2D Oriented Bounding Box (OBB2D) geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float2.h"
 

@@ -9,26 +9,14 @@
 PanelHierarchy::PanelHierarchy(Application* app, bool startEnabled) : Panel(app, startEnabled)
 {
 	name = "Hierarchy";
-	bufferReparent = nullptr;
 }
 
 PanelHierarchy::~PanelHierarchy()
-{
-	bufferReparent = nullptr;
-}
+{}
 
 UpdateStatus PanelHierarchy::Update()
 {
 	ImGui::Begin(name.c_str(), &active, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-
-	if (reparent && bufferReparent != nullptr)
-	{
-		ImGui::Separator();
-		ImGui::Separator();
-		ImGui::Text("Select a game object to set as parent...");
-		ImGui::Separator();
-		ImGui::Separator();
-	}
 
 	GameObject* root = App->scene->GetSceneRoot();
 	DisplayChild(root);
@@ -52,20 +40,6 @@ UpdateStatus PanelHierarchy::Update()
 		}
 	}
 
-	if (reparent && bufferReparent != nullptr)
-	{
-		if (App->gameObjects->selectedGameObject != nullptr)
-		{
-			bufferReparent->parent->RemoveChild(bufferReparent);
-			App->gameObjects->selectedGameObject == App->scene->GetSceneRoot() ?
-				App->gameObjects->AddGameobject(bufferReparent)
-				: App->gameObjects->selectedGameObject->AddChild(bufferReparent);
-			App->gameObjects->selectedGameObject = bufferReparent;
-			bufferReparent = nullptr;
-			reparent = false;
-		}
-	}
-
 	RightClickMenu();
 
 	ImGui::End();
@@ -82,26 +56,51 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 		if (g == App->scene->GetSceneRoot()) flags |= ImGuiTreeNodeFlags_DefaultOpen;
 		if (g == App->gameObjects->selectedGameObject) flags |= ImGuiTreeNodeFlags_Selected;
 
-		if (g != bufferReparent)
+		if (ImGui::TreeNodeEx(g->name.c_str(), flags))
 		{
-			if (ImGui::TreeNodeEx(g->name.c_str(), flags))
+			if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
+			if (ImGui::IsItemHovered())
 			{
-				if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
-				if (ImGui::IsItemHovered())
+				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 				{
-					if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+					App->gameObjects->selectedGameObject = g;
+				}
+			}
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				ImGui::SetDragDropPayload("DragDropHierarchy", &g, sizeof(GameObject*), ImGuiCond_Once);
+				ImGui::Text("%s", g->name.c_str());
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DragDropHierarchy"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(GameObject*));
+					GameObject* dropped = (GameObject*)*(const int*)payload->Data;
+					if (dropped)
 					{
-						App->gameObjects->selectedGameObject = g;
+						if (dropped->parent != g)
+						{
+							dropped->parent->RemoveChild(dropped);
+							g == App->scene->GetSceneRoot() ?
+								App->gameObjects->AddGameobject(dropped)
+								: g->AddChild(dropped);
+							App->gameObjects->selectedGameObject = dropped;
+						}
 					}
 				}
-
-				for (int i = 0; i < g->GetChildNum(); i++)
-				{
-					DisplayChild(g->GetChildAt(i));
-				}
-
-				ImGui::TreePop();
+				ImGui::EndDragDropTarget();
 			}
+
+			for (int i = 0; i < g->GetChildNum(); i++)
+			{
+				DisplayChild(g->GetChildAt(i));
+			}
+
+			ImGui::TreePop();
 		}
 	}
 	else
@@ -110,28 +109,53 @@ void PanelHierarchy::DisplayChild(GameObject* g)
 
 		if (g == App->gameObjects->selectedGameObject) flags |= ImGuiTreeNodeFlags_Selected;
 
-		if (g != bufferReparent)
+		if (ImGui::TreeNodeEx(g->name.c_str(), flags))
 		{
-			if (ImGui::TreeNodeEx(g->name.c_str(), flags))
+			if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
+			if (ImGui::IsItemHovered())
 			{
-				if (ImGui::IsItemClicked() || ImGui::IsItemClicked(1)) App->gameObjects->selectedGameObject = g;
-				if (ImGui::IsItemHovered())
+				if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 				{
-					if (App->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+					App->gameObjects->selectedGameObject = g;
+				}
+			}
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				ImGui::SetDragDropPayload("DragDropHierarchy", &g, sizeof(GameObject*), ImGuiCond_Once);
+				ImGui::Text("%s", g->name.c_str());
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DragDropHierarchy"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(GameObject*));
+					GameObject* dropped = (GameObject*)*(const int*)payload->Data;
+					if (dropped)
 					{
-						App->gameObjects->selectedGameObject = g;
+						if (dropped->parent != g)
+						{
+							dropped->parent->RemoveChild(dropped);
+							g == App->scene->GetSceneRoot() ?
+								App->gameObjects->AddGameobject(dropped)
+								: g->AddChild(dropped);
+							App->gameObjects->selectedGameObject = dropped;
+						}
 					}
 				}
-				ImGui::TreePop();
+				ImGui::EndDragDropTarget();
 			}
+
+			ImGui::TreePop();
 		}
 	}
 }
 
 bool PanelHierarchy::RightClickMenu()
 {
-	//TODO: Popup menu with Right Click
-	if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot() && !reparent)
+	if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 	{
 		if (ImGui::BeginPopupContextItem("OptionsHierarchy"))
 		{
@@ -153,7 +177,6 @@ bool PanelHierarchy::RightClickMenu()
 				ImGui::CloseCurrentPopup();
 			}
 
-			// TODO: if you are adding the empty at the last element of the hierarchy it doesnt open the menu
 			if (ImGui::BeginMenu("Create child"))
 			{
 				if (ImGui::MenuItem("Empty"))
@@ -206,13 +229,6 @@ bool PanelHierarchy::RightClickMenu()
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::MenuItem("Reparent"))
-			{
-				bufferReparent = App->gameObjects->selectedGameObject;
-				App->gameObjects->selectedGameObject = nullptr;
-				reparent = true;
-				ImGui::CloseCurrentPopup();
-			}
 			ImGui::EndPopup();
 		}
 	}

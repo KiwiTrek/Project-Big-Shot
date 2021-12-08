@@ -17,6 +17,8 @@
 	@brief A linear congruential random number generator. */
 #pragma once
 
+#include "../../MathWarnings.h"
+
 #include "../../MathBuildConfig.h"
 #include "../../Math/MathNamespace.h"
 

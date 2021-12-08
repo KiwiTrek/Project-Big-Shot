@@ -33,6 +33,8 @@ bool ModuleGameObjects::Start()
 
 UpdateStatus ModuleGameObjects::PreUpdate()
 {
+	if (selectedGameObject != nullptr && selectedGameObject->GetComponent<Camera>() != nullptr && currentGizmoOperation == ImGuizmo::OPERATION::SCALE) currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+
 	if (App->gui->MouseOnScene() && (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KeyState::KEY_REPEAT))
 	{
 		if ((App->input->GetKey(SDL_SCANCODE_W) == KeyState::KEY_DOWN))
@@ -40,15 +42,18 @@ UpdateStatus ModuleGameObjects::PreUpdate()
 			currentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 			LOG_CONSOLE("Set Guizmo to Translate");
 		}
-		else if ((App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_DOWN))
+		if ((App->input->GetKey(SDL_SCANCODE_E) == KeyState::KEY_DOWN))
 		{
 			currentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
 			LOG_CONSOLE("Set Guizmo to Rotate");
 		}
-		else if ((App->input->GetKey(SDL_SCANCODE_R) == KeyState::KEY_DOWN))
+		if (selectedGameObject != nullptr && selectedGameObject->GetComponent<Camera>() == nullptr)
 		{
-			currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
-			LOG_CONSOLE("Set Guizmo to Scale");
+			if ((App->input->GetKey(SDL_SCANCODE_R) == KeyState::KEY_DOWN))
+			{
+				currentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+				LOG_CONSOLE("Set Guizmo to Scale");
+			}
 		}
 	}
 

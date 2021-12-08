@@ -17,6 +17,8 @@
 	@brief Implementation of the Gilbert-Johnson-Keerthi (GJK) convex polygon intersection test in 2D. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float2.h"
 #include "../Geometry/Polygon2DRef.h"

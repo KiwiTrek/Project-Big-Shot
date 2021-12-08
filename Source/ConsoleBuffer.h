@@ -1,6 +1,8 @@
 #ifndef __CONSOLE_BUFFER_H__
 #define __CONSOLE_BUFFER_H__
 
+#include "Warnings.h"
+
 struct ConsoleBuffer
 {
 public:

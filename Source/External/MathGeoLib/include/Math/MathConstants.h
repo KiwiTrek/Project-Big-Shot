@@ -21,6 +21,8 @@
 */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "MathTypes.h"
 #include "MathNamespace.h"
 

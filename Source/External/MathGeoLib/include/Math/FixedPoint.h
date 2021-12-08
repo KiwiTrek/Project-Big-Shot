@@ -17,6 +17,8 @@
 	@brief FixedPoint is a templatized structure for representing fixed-point decimal numbers. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>
 #endif

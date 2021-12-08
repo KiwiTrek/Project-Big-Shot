@@ -17,6 +17,8 @@
 	@brief A 4-by-4 matrix for affine and perspective projection operations in 3D space. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 #include "SSEMath.h"
 #include "float4.h"

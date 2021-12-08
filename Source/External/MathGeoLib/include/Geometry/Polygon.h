@@ -17,6 +17,8 @@
 	@brief The Polygon geometry object. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathGeoLibFwd.h"
 #include "../Math/float3.h"
 

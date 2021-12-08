@@ -1,6 +1,7 @@
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
+#include "Warnings.h"
 #include "Globals.h"
 #include "SDL.h"
 

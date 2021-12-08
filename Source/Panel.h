@@ -1,6 +1,7 @@
 #ifndef __PANEL_H__
 #define __PANEL_H__
 
+#include "Warnings.h"
 #include "Globals.h"
 #include <string>
 #include <vector>

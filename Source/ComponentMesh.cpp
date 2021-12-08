@@ -31,7 +31,7 @@ void ComponentMesh::DrawInspector(Application* App)
 		{
 			ImGui::Text("UID: "); ImGui::SameLine();
 			ImGui::Button(std::to_string(mesh->GetUID()).c_str(), ImVec2(ImGui::CalcItemWidth(), 20));
-			if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag mesh from Resources Panel here to change it.");
+			if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag mesh from 'Resources Panel' here to change it.");
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESHES"))
@@ -47,11 +47,32 @@ void ComponentMesh::DrawInspector(Application* App)
 			IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", mesh->GetAssetFile());
 			IMGUI_PRINT(IMGUI_YELLOW, "Vertices:", "%d", mesh->vertexNum);
 			IMGUI_PRINT(IMGUI_YELLOW, "Indices:", "%d", mesh->indices);
+
+			if (ImGui::Button("Remove mesh", ImVec2(ImGui::CalcItemWidth(), 20)))
+			{
+				mesh->referenceCount--;
+				mesh = nullptr;
+				CreateBBox();
+			}
+
 			ImGui::Separator();
 		}
 		else
 		{
-			IMGUI_PRINT(IMGUI_YELLOW, "UID: ", "- none -");
+			ImGui::Text("UID: "); ImGui::SameLine();
+			ImGui::Button("- None -", ImVec2(ImGui::CalcItemWidth(), 20));
+			if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag mesh from 'Resources Panel' here to change it.");
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MESHES"))
+				{
+					IM_ASSERT(payload->DataSize == sizeof(int));
+					int payloadN = *(const int*)payload->Data;
+					mesh = (ResourceMesh*)App->resources->RequestResource((UID)payloadN);
+					CreateBBox();
+				}
+				ImGui::EndDragDropTarget();
+			}
 		}
 
 		ImGui::Checkbox("Vertex Normals", &drawVertexNormals);
@@ -175,13 +196,24 @@ void ComponentMesh::DrawFaceNormals() const
 
 void ComponentMesh::CreateBBox()
 {
-	drawingBbox.SetNegativeInfinity();
-	drawingBbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
+	if (mesh != nullptr)
+	{
+		drawingBbox.SetNegativeInfinity();
+		drawingBbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
 
-	bbox.SetNegativeInfinity();
-	bbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
+		bbox.SetNegativeInfinity();
+		bbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
+	}
+	else
+	{
+		drawingBbox.SetNegativeInfinity();
+		drawingBbox.SetFromCenterAndSize(vec(0.0f, 0.0f, 0.0f), vec(1.0f, 1.0f, 1.0f));
 
-	Sphere sphere;	
+		bbox.SetNegativeInfinity();
+		bbox.SetFromCenterAndSize(vec(0.0f, 0.0f, 0.0f), vec(1.0f, 1.0f, 1.0f));
+	}
+
+	Sphere sphere;
 	sphere.r = 0.f;
 	sphere.pos = bbox.CenterPoint();
 	sphere.Enclose(bbox);
@@ -198,8 +230,16 @@ void ComponentMesh::CreateBBox()
 
 void ComponentMesh::UpdateBBox()
 {
-	bbox.SetNegativeInfinity();
-	bbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
+	if (mesh != nullptr)
+	{
+		bbox.SetNegativeInfinity();
+		bbox.Enclose(&mesh->vertices[0], mesh->vertices.size());
+	}
+	else
+	{
+		bbox.SetNegativeInfinity();
+		bbox.SetFromCenterAndSize(owner->GetComponent<Transform>()->GetPos(), vec(1.0f, 1.0f, 1.0f));
+	}
 
 	obb.SetFrom(bbox);
 	obb.Transform(owner->GetComponent<Transform>()->GetGlobalTransform());

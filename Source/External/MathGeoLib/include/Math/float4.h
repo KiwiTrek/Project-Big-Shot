@@ -17,6 +17,8 @@
 	@brief A 4D (x,y,z,w) homogeneous vector. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT

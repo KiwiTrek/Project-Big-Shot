@@ -6,6 +6,7 @@
 #include "ModuleImporter.h"
 #include "ModuleResources.h"
 
+#include "Timer.h"
 #include "scene.h"
 #include "postprocess.h"
 #include <iostream>
@@ -21,20 +22,20 @@ ModuleResources::~ModuleResources()
 
 bool ModuleResources::Init()
 {
+	LOG_CONSOLE("Loading models found in Resources folder");
 	std::vector<std::string> listNames;
 	App->fileSystem->GetAllFilesWithExtension(App->fileSystem->meshPath.c_str(), MESH_FORMAT, listNames);
 	for (uint i = 0; i < listNames.size(); ++i)
 	{
-		LOG("LOAD MESH!!!!\n");
 		ResourceMesh* rm = LoadMesh(listNames.at(i).c_str());
 		if (rm != nullptr) loadedResources[rm->GetUID()] = rm;
 	}
 
+	LOG_CONSOLE("Loading materials found in Resources folder");
 	listNames.clear();
 	App->fileSystem->GetAllFilesWithExtension(App->fileSystem->texturePath.c_str(), TEXTURE_FORMAT, listNames);
 	for (uint i = 0; i < listNames.size(); ++i)
 	{
-		LOG("LOAD TEX!!!!\n");
 		ResourceMaterial* rm = LoadMaterial(listNames.at(i).c_str());
 		if (rm != nullptr) loadedResources[rm->GetUID()] = rm;
 	}
@@ -398,6 +399,9 @@ bool ModuleResources::SaveMesh(const ResourceMesh* rMesh, const std::string file
 
 ResourceMesh* ModuleResources::LoadMesh(std::string fileName)
 {
+	Timer timer;
+	timer.Start();
+
 	std::ifstream myFile;
 	std::string path = App->fileSystem->meshPath + "/";
 	path.append(fileName);
@@ -467,6 +471,7 @@ ResourceMesh* ModuleResources::LoadMesh(std::string fileName)
 			memcpy(&rMesh->indices[i], &ind[i], sizeof(uint));
 		}
 
+		LOG_CONSOLE("Mesh loaded successfully in %f ms", timer.ReadSec());
 		return rMesh;
 	}
 	return nullptr;
@@ -521,6 +526,9 @@ bool ModuleResources::SaveMaterial(const ResourceMaterial* rm, const std::string
 
 ResourceMaterial* ModuleResources::LoadMaterial(std::string fileName)
 {
+	Timer timer;
+	timer.Start();
+
 	std::ifstream myFile;
 	std::string path = App->fileSystem->texturePath + "/";
 	path.append(fileName);
@@ -577,6 +585,7 @@ ResourceMaterial* ModuleResources::LoadMaterial(std::string fileName)
 		rm->data = data;
 		rm->diffuse = Color(color[0], color[1], color[2], color[3]);
 
+		LOG_CONSOLE("Material loaded successfully in %f ms", timer.ReadSec());
 		return rm;
 	}
 	return nullptr;

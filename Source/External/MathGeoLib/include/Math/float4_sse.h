@@ -17,6 +17,8 @@
 	@brief SSE code for float4-related computations. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #include "../MathBuildConfig.h"
 #include "float4.h"
 

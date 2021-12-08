@@ -17,6 +17,8 @@
 	@brief A QuadTree spatial query acceleration structure for dynamic data. */
 #pragma once
 
+#include "../MathWarnings.h"
+
 #ifdef MATH_GRAPHICSENGINE_INTEROP
 #include "Time/Profiler.h"
 #else

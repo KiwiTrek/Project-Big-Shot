@@ -1,6 +1,8 @@
 #ifndef __GAMEOBJECT_H__
 #define __GAMEOBJECT_H__
 
+#include "Warnings.h"
+
 #include "Component.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"

@@ -25,6 +25,7 @@ bool ModuleScene::Init()
 	//Create main camera
 	App->gameObjects->mainCamera = new GameObject("Camera");
 	App->gameObjects->mainCamera->CreateComponent(ComponentTypes::CAMERA);
+	App->gameObjects->mainCamera->GetComponent<Transform>()->SetPos(0.0f, 2.0f, 0.0f);
 	App->gameObjects->mainCamera->GetComponent<Camera>()->culling = true;
 	App->gameObjects->mainCamera->GetComponent<Camera>()->mainCamera = true;
 

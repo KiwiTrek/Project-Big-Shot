@@ -295,6 +295,8 @@
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="ComponentTransform.h" />
+    <ClInclude Include="Warnings.h" />
+    <ClInclude Include="MathWarnings.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
