@@ -184,9 +184,17 @@ void ModuleGuiManager::AddPanel(Panel* panel)
 UpdateStatus ModuleGuiManager::MenuBar()
 {
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN) config->active = !config->active;
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KeyState::KEY_DOWN) hierarchy->active = !hierarchy->active;
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KeyState::KEY_DOWN) inspector->active = !inspector->active;
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KeyState::KEY_DOWN) resources->active = !resources->active;
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KeyState::KEY_DOWN) scene->active = !scene->active;
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KeyState::KEY_DOWN) hierarchy->active = !hierarchy->active;
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN) inspector->active = !inspector->active;
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KeyState::KEY_DOWN) console->active = !console->active;
+
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RCTRL) == KeyState::KEY_REPEAT)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_S) == KeyState::KEY_DOWN) App->scene->Save("Assets/Scenes/currentScene.bss");
+		if (App->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN) App->scene->Load("Assets/Scenes/currentScene.bss");
+	}
 
 	if (ImGui::BeginMainMenuBar())
 	{

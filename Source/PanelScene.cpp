@@ -19,7 +19,7 @@ PanelScene::~PanelScene()
 UpdateStatus PanelScene::Update()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-	if (ImGui::Begin("Scene", &active, ImGuiWindowFlags_NoScrollbar))
+	if (ImGui::Begin("Scene", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove))
 	{
 		App->gui->scenePanelOrigin = ImGui::GetWindowPos();
 		App->gui->scenePanelOrigin.x += ImGui::GetWindowContentRegionMin().x;

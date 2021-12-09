@@ -502,7 +502,7 @@ bool ModuleResources::SaveMaterial(const ResourceMaterial* rm, const std::string
 		cursor += bytes;
 
 		bytes = dataBytes;
-		memcpy(cursor, rm->data, bytes); // peta aqui
+		memcpy(cursor, rm->data, bytes); // Breaks here
 		cursor += bytes;
 
 		bytes = colorBytes;
