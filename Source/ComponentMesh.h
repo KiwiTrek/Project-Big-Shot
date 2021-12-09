@@ -37,6 +37,7 @@ public:
 public:
 	Color vertexColor;
 	bool wire, wireOverride, drawVertexNormals, drawFaceNormals, drawBBox;
+	float normalLength;
 
 	AABB bbox, drawingBbox;
 	OBB obb;

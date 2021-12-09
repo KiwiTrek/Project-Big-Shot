@@ -53,7 +53,7 @@ bool ModuleWindow::Init()
 			screenSurface = SDL_GetWindowSurface(window);
 			SetBrightness(SDL_GetWindowBrightness(window));
 
-			SDL_Surface* icon = SDL_LoadBMP("Assets/EngineConfig/Spamton.bmp");
+			SDL_Surface* icon = SDL_LoadBMP("Assets/EngineConfig/Icon.bmp");
 			SDL_SetWindowIcon(window, icon);
 			SDL_FreeSurface(icon);
 		}
@@ -153,8 +153,14 @@ uint ModuleWindow::GetRefreshRate()
 
 	SDL_DisplayMode dm;
 
-	if (SDL_GetDesktopDisplayMode(0, &dm) != 0) LOG_CONSOLE("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError())
-	else ret = dm.refresh_rate;
+	if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+	{
+		LOG_CONSOLE("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError())
+	}
+	else
+	{
+		ret = dm.refresh_rate;
+	}
 
 	return ret;
 }

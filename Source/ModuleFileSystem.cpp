@@ -9,7 +9,7 @@
 #include "cfileio.h"
 #include "types.h"
 
-ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleFileSystem::ModuleFileSystem(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	// needs to be created before Init so other modules can use it
 	char* basePath = SDL_GetBasePath();
@@ -30,12 +30,7 @@ ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Modul
 
 // Destructor
 ModuleFileSystem::~ModuleFileSystem()
-{
-	PHYSFS_deinit();
-	systemBasePath.clear();
-	texturePath.clear();
-	meshPath.clear();
-}
+{}
 
 // Called before render is available
 bool ModuleFileSystem::Init()
@@ -55,6 +50,14 @@ bool ModuleFileSystem::Init()
 bool ModuleFileSystem::CleanUp()
 {
 	LOG_CONSOLE("Freeing File System subsystem");
+
+	PHYSFS_deinit();
+
+	systemBasePath.clear();
+	texturePath.clear();
+	meshPath.clear();
+	scenePath.clear();
+
 	return true;
 }
 
@@ -141,11 +144,11 @@ void ModuleFileSystem::CreateLibraryDirectories()
 }
 
 // Add a new zip file or folder
-bool ModuleFileSystem::AddPath(const char* path_or_zip)
+bool ModuleFileSystem::AddPath(const char* pathOrZip)
 {
 	bool ret = false;
 
-	if (PHYSFS_mount(path_or_zip, nullptr, 1) == 0) LOG_CONSOLE("File System error while adding a path or zip: %s\n", PHYSFS_getLastError())
+	if (PHYSFS_mount(pathOrZip, nullptr, 1) == 0) LOG_CONSOLE("File System error while adding a path or zip: %s\n", PHYSFS_getLastError())
 	else ret = true;
 
 	return ret;
@@ -176,11 +179,10 @@ bool ModuleFileSystem::IsDirectory(const char* file) const
 
 const char* ModuleFileSystem::GetWriteDir() const
 {
-	//TODO: erase first annoying dot (".")
 	return PHYSFS_getWriteDir();
 }
 
-void ModuleFileSystem::DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const
+void ModuleFileSystem::DiscoverFiles(const char* directory, std::vector<std::string>& fileList, std::vector<std::string>& dirList) const
 {
 	char** rc = PHYSFS_enumerateFiles(directory);
 	char** i;
@@ -188,14 +190,20 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, std::vector<std::str
 	for (i = rc; *i != nullptr; i++)
 	{
 		std::string str = std::string(directory) + std::string("/") + std::string(*i);
-		if (IsDirectory(str.c_str())) dir_list.push_back(*i);
-		else file_list.push_back(*i);
+		if (IsDirectory(str.c_str()))
+		{
+			dirList.push_back(*i);
+		}
+		else
+		{
+			fileList.push_back(*i);
+		}
 	}
 
 	PHYSFS_freeList(rc);
 }
 
-void ModuleFileSystem::GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& file_list) const
+void ModuleFileSystem::GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& fileList) const
 {
 	std::vector<std::string> files;
 	std::vector<std::string> dirs;
@@ -206,7 +214,7 @@ void ModuleFileSystem::GetAllFilesWithExtension(const char* directory, const cha
 		std::string ext;
 		SplitFilePath(files[i].c_str(), nullptr, nullptr, &ext);
 
-		if (ext == extension) file_list.push_back(files[i]);
+		if (ext == extension) fileList.push_back(files[i]);
 	}
 }
 
@@ -255,9 +263,9 @@ bool ModuleFileSystem::HasExtension(const char* path, std::vector<std::string> e
 	return false;
 }
 
-std::string ModuleFileSystem::NormalizePath(const char* full_path) const
+std::string ModuleFileSystem::NormalizePath(const char* fullPath) const
 {
-	std::string newPath(full_path);
+	std::string newPath(fullPath);
 	for (int i = 0; i < newPath.size(); ++i)
 	{
 		if (newPath[i] == '\\') newPath[i] = '/';
@@ -265,39 +273,57 @@ std::string ModuleFileSystem::NormalizePath(const char* full_path) const
 	return newPath;
 }
 
-void ModuleFileSystem::SplitFilePath(const char* full_path, std::string* path, std::string* file, std::string* extension) const
+void ModuleFileSystem::SplitFilePath(const char* fullPath, std::string* path, std::string* file, std::string* extension) const
 {
-	if (full_path != nullptr)
+	if (fullPath != nullptr)
 	{
-		std::string full(full_path);
-		size_t pos_separator = full.find_last_of("\\/");
-		size_t pos_dot = full.find_last_of(".");
+		std::string full(fullPath);
+		size_t posSeparator = full.find_last_of("\\/");
+		size_t posDot = full.find_last_of(".");
 
 		if (path != nullptr)
 		{
-			if (pos_separator < full.length()) *path = full.substr(0, pos_separator + 1);
-			else path->clear();
+			if (posSeparator < full.length())
+			{
+				*path = full.substr(0, posSeparator + 1);
+			}
+			else
+			{
+				path->clear();
+			}
 		}
 
 		if (file != nullptr)
 		{
-			if (pos_separator < full.length()) *file = full.substr(pos_separator + 1, pos_dot - pos_separator - 1);
-			else *file = full.substr(0, pos_dot);
+			if (posSeparator < full.length())
+			{
+				*file = full.substr(posSeparator + 1, posDot - posSeparator - 1);
+			}
+			else
+			{
+				*file = full.substr(0, posDot);
+			}
 		}
 
 		if (extension != nullptr)
 		{
-			if (pos_dot < full.length()) *extension = full.substr(pos_dot + 1);
-			else extension->clear();
+			if (posDot < full.length())
+			{
+				*extension = full.substr(posDot + 1);
+			}
+			else
+			{
+				extension->clear();
+			}
 		}
 	}
 }
 
 unsigned int ModuleFileSystem::Load(const char* path, const char* file, char** buffer) const
 {
-	std::string full_path(path);
-	full_path += file;
-	return Load(full_path.c_str(), buffer);
+	std::string fullPath(path);
+	fullPath += file;
+	return Load(fullPath.c_str(), buffer);
 }
 
 // Read a whole file and put it in a new buffer
@@ -305,16 +331,16 @@ uint ModuleFileSystem::Load(const char* file, char** buffer) const
 {
 	uint ret = 0;
 
-	PHYSFS_file* fs_file = PHYSFS_openRead(file);
+	PHYSFS_file* fsFile = PHYSFS_openRead(file);
 
-	if (fs_file != nullptr)
+	if (fsFile != nullptr)
 	{
-		PHYSFS_sint32 size = (PHYSFS_sint32)PHYSFS_fileLength(fs_file);
+		PHYSFS_sint32 size = (PHYSFS_sint32)PHYSFS_fileLength(fsFile);
 
 		if (size > 0)
 		{
 			*buffer = new char[size + 1];
-			uint read = (uint)PHYSFS_read(fs_file, *buffer, 1, size);
+			uint read = (uint)PHYSFS_read(fsFile, *buffer, 1, size);
 			if (read != size)
 			{
 				LOG_CONSOLE("File System error while reading from file %s: %s\n", file, PHYSFS_getLastError());
@@ -328,7 +354,7 @@ uint ModuleFileSystem::Load(const char* file, char** buffer) const
 			}
 		}
 
-		if (PHYSFS_close(fs_file) == 0) LOG_CONSOLE("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
+		if (PHYSFS_close(fsFile) == 0) LOG_CONSOLE("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
 	}
 	else
 	{
@@ -352,7 +378,6 @@ bool ModuleFileSystem::DuplicateFile(const char* file, const char* dstFolder, st
 
 bool ModuleFileSystem::DuplicateFile(const char* srcFile, const char* dstFile)
 {
-	//TODO: Compare performance to calling Load(srcFile) and then Save(dstFile)
 	std::ifstream src;
 	src.open(srcFile, std::ios::binary);
 	bool srcOpen = src.is_open();
@@ -400,9 +425,18 @@ uint ModuleFileSystem::Save(const char* file, const void* buffer, unsigned int s
 		}
 		else
 		{
-			if (append == true) { LOG("Added %u data to [%s%s]", size, GetWriteDir(), file); }
-			else if (overwrite == true) { LOG("File [%s%s] overwritten with %u bytes", GetWriteDir(), file, size); }
-			else { LOG("New file created [%s%s] of %u bytes", GetWriteDir(), file, size); }
+			if (append == true)
+			{
+				LOG("Added %u data to [%s%s]", size, GetWriteDir(), file);
+			}
+			else if (overwrite == true)
+			{
+				LOG("File [%s%s] overwritten with %u bytes", GetWriteDir(), file, size);
+			}
+			else
+			{
+				LOG("New file created [%s%s] of %u bytes", GetWriteDir(), file, size);
+			}
 
 			ret = written;
 		}
@@ -455,7 +489,7 @@ std::string ModuleFileSystem::GetUniqueName(const char* path, const char* name) 
 std::string ModuleFileSystem::SetNormalName(const char* path) {
 
 	std::string name(path);
-	std::string new_name;
+	std::string newName;
 	bool found = false;
 	for (size_t i = 0; i < name.size(); i++)
 	{
@@ -465,8 +499,14 @@ std::string ModuleFileSystem::SetNormalName(const char* path) {
 		}
 	}
 
-	if (found) new_name = name.substr(name.find_last_of(0x5c) + 1);
-	else new_name = name.substr(name.find_last_of('/') + 1);
+	if (found)
+	{
+		newName = name.substr(name.find_last_of(0x5c) + 1);
+	}
+	else
+	{
+		newName = name.substr(name.find_last_of('/') + 1);
+	}
 
-	return new_name;
+	return newName;
 }

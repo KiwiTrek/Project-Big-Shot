@@ -32,15 +32,13 @@ public:
 
 	void OnResize(int width, int height);
 	bool GetVSync() { return vSync; };
-	void SetVSync(bool _vsync) { vSync = _vsync; };
+	void SetVSync(bool vsync) { vSync = vsync; };
 	bool IsDepthTest() { return depthTest; };
 	void ToggleDepthTest();
 	bool IsCullFace() { return cullFace; };
 	void ToggleCullFace();
 	bool IsLighting() { return lighting; };
 	void ToggleLighting();
-	bool IsAxis() { return axis; };
-	void ToggleAxis() { axis = !axis; };
 	bool IsColorMaterial() { return colorMaterial; };
 	void ToggleColorMaterial();
 	bool IsTexture2D() { return texture2D; };
@@ -61,7 +59,6 @@ private:
 	bool texture2D = true;
 	bool vSync = false;
 
-	bool axis = false;
 	bool wireframe = false;
 	bool faceNormals = false;
 	bool vecNormals = false;

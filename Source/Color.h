@@ -36,6 +36,9 @@ public:
 extern Color red;
 extern Color green;
 extern Color blue;
+extern Color cyan;
+extern Color yellow;
+extern Color magenta;
 extern Color black;
 extern Color white;
 

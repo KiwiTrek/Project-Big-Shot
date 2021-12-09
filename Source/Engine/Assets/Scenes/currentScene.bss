@@ -32,7 +32,7 @@
                         "Transform": {
                             "pos": [
                                 2.9802322387695315e-8,
-                                0.0,
+                                7.9760589599609379,
                                 -25.09381866455078
                             ],
                             "eulerRot": [
@@ -47,9 +47,9 @@
                             ]
                         },
                         "Camera": {
-                            "mainCamera": true,
+                            "mainCamera": false,
                             "fixedFOV": 0,
-                            "culling": true,
+                            "culling": false,
                             "horizontalFOV": 60.0,
                             "aspectRatio": 1.7769999504089356
                         }
@@ -91,8 +91,8 @@
                                         58.96091079711914
                                     ],
                                     "eulerRot": [
-                                        180.0,
-                                        -0.0,
+                                        -180.0,
+                                        0.0,
                                         -0.0
                                     ],
                                     "scale": [
@@ -115,8 +115,8 @@
                                                 0.0
                                             ],
                                             "eulerRot": [
-                                                180.0,
-                                                -0.0,
+                                                -180.0,
+                                                0.0,
                                                 -0.0
                                             ],
                                             "scale": [
@@ -272,7 +272,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 838336472,
+                                                    "UID": 484293890,
                                                     "Name": "building03_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 1
@@ -319,10 +319,10 @@
                                                         1.2924346923828126
                                                     ],
                                                     "radius": 10.908346176147461,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1816857542,
+                                                    "UID": 1046644524,
                                                     "Name": "Building_V02_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 3
@@ -369,10 +369,10 @@
                                                         0.2654346823692322
                                                     ],
                                                     "radius": 11.523335456848145,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1899425963,
+                                                    "UID": 1727002753,
                                                     "Name": "building_016_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 4
@@ -419,10 +419,10 @@
                                                         0.7095800042152405
                                                     ],
                                                     "radius": 5.891286373138428,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 888505141,
+                                                    "UID": 206804316,
                                                     "Name": "building_025_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 5
@@ -472,7 +472,7 @@
                                                     "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 2032656655,
+                                                    "UID": 849127662,
                                                     "Color": true,
                                                     "Diffuse": [
                                                         0.2705882489681244,
@@ -528,7 +528,7 @@
                                                     "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 400020303,
+                                                    "UID": 1068155328,
                                                     "Color": true,
                                                     "Diffuse": [
                                                         0.30980393290519717,
@@ -581,10 +581,10 @@
                                                         3.3138985633850099
                                                     ],
                                                     "radius": 6.19549560546875,
-                                                    "render": true
+                                                    "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 717840168,
+                                                    "UID": 1142997903,
                                                     "Name": "building 01_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 8
@@ -631,10 +631,10 @@
                                                         0.2654346823692322
                                                     ],
                                                     "radius": 11.523335456848145,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1899425963,
+                                                    "UID": 1727002753,
                                                     "Name": "building_016_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 9
@@ -684,7 +684,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 720622923,
+                                                    "UID": 1198089931,
                                                     "Name": "building 06_ c .tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 10
@@ -704,8 +704,8 @@
                                                     ],
                                                     "eulerRot": [
                                                         -0.0,
-                                                        -0.0,
-                                                        180.0
+                                                        0.0,
+                                                        -180.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -731,10 +731,10 @@
                                                         5.831689834594727
                                                     ],
                                                     "radius": 14.990031242370606,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 838336472,
+                                                    "UID": 484293890,
                                                     "Name": "building03_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 11
@@ -754,8 +754,8 @@
                                                     ],
                                                     "eulerRot": [
                                                         -0.0,
-                                                        -0.0,
-                                                        180.0
+                                                        0.0,
+                                                        -180.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -781,10 +781,10 @@
                                                         3.3138985633850099
                                                     ],
                                                     "radius": 6.19549560546875,
-                                                    "render": true
+                                                    "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 717840168,
+                                                    "UID": 1142997903,
                                                     "Name": "building 01_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 12
@@ -834,7 +834,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 717840168,
+                                                    "UID": 1142997903,
                                                     "Name": "building 01_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 13
@@ -884,7 +884,7 @@
                                                     "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1611467252,
+                                                    "UID": 191159323,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 14
@@ -931,10 +931,10 @@
                                                         0.2654346823692322
                                                     ],
                                                     "radius": 11.523335456848145,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1899425963,
+                                                    "UID": 1727002753,
                                                     "Name": "building_016_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 15
@@ -954,8 +954,8 @@
                                                     ],
                                                     "eulerRot": [
                                                         -0.0,
-                                                        0.0,
-                                                        -180.0
+                                                        -0.0,
+                                                        180.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -984,7 +984,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 888505141,
+                                                    "UID": 206804316,
                                                     "Name": "building_025_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 16
@@ -1004,8 +1004,8 @@
                                                     ],
                                                     "eulerRot": [
                                                         -0.0,
-                                                        0.0,
-                                                        -180.0
+                                                        -0.0,
+                                                        180.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -1034,7 +1034,7 @@
                                                     "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1611467252,
+                                                    "UID": 191159323,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 17
@@ -1081,10 +1081,10 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": true
+                                                    "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 1413624102,
+                                                    "UID": 1225609958,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 18
@@ -1134,7 +1134,7 @@
                                                     "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 652431722,
+                                                    "UID": 1964728311,
                                                     "Color": true,
                                                     "Diffuse": [
                                                         0.5882353186607361,
@@ -1187,10 +1187,10 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": true
+                                                    "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 1413624102,
+                                                    "UID": 1225609958,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 20
@@ -1237,10 +1237,10 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": true
+                                                    "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 1413624102,
+                                                    "UID": 1225609958,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 21
@@ -1290,7 +1290,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 838336472,
+                                                    "UID": 484293890,
                                                     "Name": "building03_c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 22
@@ -1340,7 +1340,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 720622923,
+                                                    "UID": 1198089931,
                                                     "Name": "building 06_ c .tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 23
@@ -1390,7 +1390,7 @@
                                                     "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1611467252,
+                                                    "UID": 191159323,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 24
@@ -1437,10 +1437,10 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": true
+                                                    "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 1413624102,
+                                                    "UID": 1225609958,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 25
@@ -1490,7 +1490,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 720622923,
+                                                    "UID": 1198089931,
                                                     "Name": "building 06_ c .tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 26
@@ -1540,7 +1540,7 @@
                                                     "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1611467252,
+                                                    "UID": 191159323,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 27
@@ -1587,10 +1587,10 @@
                                                         5.028719425201416
                                                     ],
                                                     "radius": 14.785143852233887,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1611467252,
+                                                    "UID": 191159323,
                                                     "Name": "building05 _c.tga",
                                                     "usingCheckers": false,
                                                     "checkersId": 28
@@ -1640,7 +1640,7 @@
                                                     "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 1413624102,
+                                                    "UID": 1225609958,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 29
@@ -1687,10 +1687,10 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": true
+                                                    "render": false
                                                 },
                                                 "Material": {
-                                                    "UID": 1413624102,
+                                                    "UID": 1225609958,
                                                     "Name": "Building_V01_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 30
@@ -1737,10 +1737,10 @@
                                                         1.2924346923828126
                                                     ],
                                                     "radius": 10.908346176147461,
-                                                    "render": false
+                                                    "render": true
                                                 },
                                                 "Material": {
-                                                    "UID": 1816857542,
+                                                    "UID": 1046644524,
                                                     "Name": "Building_V02_C.png",
                                                     "usingCheckers": false,
                                                     "checkersId": 31
@@ -1764,7 +1764,7 @@
                                     ],
                                     "eulerRot": [
                                         -158.52523803710938,
-                                        -37.00050735473633,
+                                        -37.000511169433597,
                                         -166.68003845214845
                                     ],
                                     "scale": [
@@ -1788,7 +1788,7 @@
                                             ],
                                             "eulerRot": [
                                                 -158.52523803710938,
-                                                -37.00050735473633,
+                                                -37.000511169433597,
                                                 -166.68003845214845
                                             ],
                                             "scale": [
@@ -1811,7 +1811,7 @@
                                                         0.0
                                                     ],
                                                     "eulerRot": [
-                                                        -68.5252456665039,
+                                                        -68.52525329589844,
                                                         -37.000518798828128,
                                                         -166.68003845214845
                                                     ],
@@ -1866,7 +1866,7 @@
                                     ],
                                     "eulerRot": [
                                         -158.52523803710938,
-                                        -37.00053405761719,
+                                        -37.00054168701172,
                                         -166.68003845214845
                                     ],
                                     "scale": [
@@ -1890,7 +1890,7 @@
                                             ],
                                             "eulerRot": [
                                                 -158.52523803710938,
-                                                -37.00053405761719,
+                                                -37.00054168701172,
                                                 -166.68003845214845
                                             ],
                                             "scale": [
@@ -1913,7 +1913,7 @@
                                                         0.0
                                                     ],
                                                     "eulerRot": [
-                                                        -68.52526092529297,
+                                                        -68.5252685546875,
                                                         -37.00053405761719,
                                                         -166.68003845214845
                                                     ],
@@ -2015,9 +2015,9 @@
                                                         0.0
                                                     ],
                                                     "eulerRot": [
-                                                        -0.000012017241715511773,
-                                                        64.76864624023438,
-                                                        -89.99996948242188
+                                                        -0.0000040057489059108779,
+                                                        64.7686767578125,
+                                                        -90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -2199,9 +2199,9 @@
                                 19.619253158569337
                             ],
                             "eulerRot": [
-                                -1.4617258310317994,
-                                0.3970010280609131,
-                                25.483001708984376
+                                -1.4617259502410889,
+                                0.3970010578632355,
+                                25.483003616333009
                             ],
                             "scale": [
                                 0.9999995827674866,
@@ -2209,12 +2209,8 @@
                                 0.9999980330467224
                             ]
                         },
-                        "Material": {
-                            "usingCheckers": true,
-                            "checkersId": 64
-                        },
                         "Mesh": {
-                            "UID": 1309280172,
+                            "UID": 1798320946,
                             "Shape": 1,
                             "vertexColor": [
                                 1.0,
@@ -2233,6 +2229,10 @@
                             ],
                             "radius": 1.089074730873108,
                             "render": true
+                        },
+                        "Material": {
+                            "usingCheckers": true,
+                            "checkersId": 64
                         }
                     }
                 },
@@ -2249,7 +2249,7 @@
                             ],
                             "eulerRot": [
                                 2.2812182903289797,
-                                0.5336484313011169,
+                                0.5336486101150513,
                                 -29.398479461669923
                             ],
                             "scale": [
@@ -2258,12 +2258,8 @@
                                 0.9999997019767761
                             ]
                         },
-                        "Material": {
-                            "usingCheckers": true,
-                            "checkersId": 65
-                        },
                         "Mesh": {
-                            "UID": 1309280172,
+                            "UID": 1798320946,
                             "Shape": 1,
                             "vertexColor": [
                                 1.0,
@@ -2282,6 +2278,10 @@
                             ],
                             "radius": 1.089074730873108,
                             "render": true
+                        },
+                        "Material": {
+                            "usingCheckers": true,
+                            "checkersId": 65
                         }
                     }
                 },
@@ -2307,12 +2307,8 @@
                                 1.0
                             ]
                         },
-                        "Material": {
-                            "usingCheckers": true,
-                            "checkersId": 66
-                        },
                         "Mesh": {
-                            "UID": 1309280172,
+                            "UID": 1798320946,
                             "Shape": 1,
                             "vertexColor": [
                                 1.0,
@@ -2331,6 +2327,41 @@
                             ],
                             "radius": 1.089074730873108,
                             "render": true
+                        },
+                        "Material": {
+                            "usingCheckers": true,
+                            "checkersId": 66
+                        }
+                    }
+                },
+                {
+                    "UID": 1763209213,
+                    "name": "Camera",
+                    "active": true,
+                    "Components": {
+                        "Transform": {
+                            "pos": [
+                                -33.65801239013672,
+                                5.790231227874756,
+                                29.29656982421875
+                            ],
+                            "eulerRot": [
+                                -180.0,
+                                49.19896697998047,
+                                -180.0
+                            ],
+                            "scale": [
+                                1.0000016689300538,
+                                1.0,
+                                1.0000016689300538
+                            ]
+                        },
+                        "Camera": {
+                            "mainCamera": true,
+                            "fixedFOV": 0,
+                            "culling": true,
+                            "horizontalFOV": 60.0,
+                            "aspectRatio": 1.7769999504089356
                         }
                     }
                 }

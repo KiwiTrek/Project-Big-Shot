@@ -156,8 +156,8 @@ UpdateStatus ModuleInput::PreUpdate()
 				{
 					std::string fileName;
 					App->fileSystem->SplitFilePath(tmp.c_str(), nullptr, &fileName);
-					if (tmp.find(".FBX") == std::string::npos) fileName.append(".fbx");
-					else fileName.append(".FBX");
+
+					tmp.find(".FBX") == std::string::npos ? fileName.append(".fbx") : fileName.append(".FBX");
 
 					App->importer->ImportScene(tmp.c_str(), fileName.c_str());
 				}
@@ -166,8 +166,14 @@ UpdateStatus ModuleInput::PreUpdate()
 					std::string fileName;
 					App->fileSystem->SplitFilePath(tmp.c_str(), nullptr, &fileName);
 					std::string pathName = fileName;
-					if (tmp.find(".png") != std::string::npos) pathName.append(".png");
-					else if (tmp.find(".dds") != std::string::npos) pathName.append(".dds");
+					if (tmp.find(".png") != std::string::npos)
+					{
+						pathName.append(".png");
+					}
+					else if (tmp.find(".dds") != std::string::npos)
+					{
+						pathName.append(".dds");
+					}
 
 					if (App->fileSystem->Exists(pathName))
 					{

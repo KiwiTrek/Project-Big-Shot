@@ -235,12 +235,12 @@ void Application::RequestBrowser(const char* link)
 	ShellExecute(NULL, "open", link, NULL, NULL, SW_SHOWNORMAL);
 }
 
-void Application::SetAppName(std::string _name)
+void Application::SetAppName(std::string name)
 {
-	if (!_name.empty())
+	if (!name.empty())
 	{
-		appName = _name;
-		window->SetTitle(_name.c_str());
+		appName = name;
+		window->SetTitle(name.c_str());
 	}
 }
 

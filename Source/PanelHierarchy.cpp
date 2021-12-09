@@ -31,6 +31,15 @@ UpdateStatus PanelHierarchy::Update()
 		ImGui::CloseCurrentPopup();
 	}
 
+	if (App->gameObjects->selectedGameObject != nullptr && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
+	{
+		if ((App->input->GetKey(SDL_SCANCODE_LSHIFT) == KeyState::KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RSHIFT) == KeyState::KEY_REPEAT) && ImGui::IsWindowHovered())
+		{
+			if (App->input->GetKey(SDL_SCANCODE_UP) == KeyState::KEY_DOWN) MoveUp();
+			else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KeyState::KEY_DOWN) MoveDown();
+		}
+	}
+
 	if (App->gameObjects->selectedGameObject != nullptr && ImGui::IsWindowFocused() && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 	{
 		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KeyState::KEY_DOWN)
@@ -181,37 +190,37 @@ bool PanelHierarchy::RightClickMenu()
 				{
 					if (ImGui::MenuItem("Cube"))
 					{
-						App->gui->CreateShape(Shape::CUBE);
+						App->gui->CreateShape(Shape::CUBE, true);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Sphere"))
 					{
-						App->gui->CreateShape(Shape::SPHERE);
+						App->gui->CreateShape(Shape::SPHERE, true);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Cylinder"))
 					{
-						App->gui->CreateShape(Shape::CYLINDER);
+						App->gui->CreateShape(Shape::CYLINDER, true);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Torus"))
 					{
-						App->gui->CreateShape(Shape::TORUS);
+						App->gui->CreateShape(Shape::TORUS, true);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Plane"))
 					{
-						App->gui->CreateShape(Shape::PLANE);
+						App->gui->CreateShape(Shape::PLANE, true);
 						ImGui::CloseCurrentPopup();
 					}
 
 					if (ImGui::MenuItem("Cone"))
 					{
-						App->gui->CreateShape(Shape::CONE);
+						App->gui->CreateShape(Shape::CONE, true);
 						ImGui::CloseCurrentPopup();
 					}
 					ImGui::EndMenu();

@@ -141,7 +141,7 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 				m->render = true;
 			}
 
-			m->Render();
+			if (m->render) m->Render();
 			if (m->drawBBox) m->DrawBBox();
 		}
 
@@ -195,7 +195,7 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 			{
 				m->render = true;
 			}
-			m->Render();
+			if (m->render) m->Render();
 			if (m->drawBBox) m->DrawBBox();
 
 			ComponentCamera* c = (*item)->GetComponent<Camera>();
@@ -236,8 +236,6 @@ void ModuleGameObjects::GuizmoTransformation()
 
 bool ModuleGameObjects::CleanUp()
 {
-	selectedGameObject = nullptr;
-
 	LOG("Deleting Game Objects");
 	ImGuizmo::Enable(false);
 
@@ -249,6 +247,9 @@ bool ModuleGameObjects::CleanUp()
 		g++;
 	}
 	gameObjectList.clear();
+
+	selectedGameObject = nullptr;
+	mainCamera = nullptr;
 
 	return true;
 }
@@ -285,17 +286,17 @@ std::vector<GameObject*> ModuleGameObjects::GetAllGameObjects()
 {
 	std::vector<GameObject*> gameObjects;
 
-	PreorderGameObjects(App->scene->GetSceneRoot(), gameObjects);
+	OrderGameObjects(App->scene->GetSceneRoot(), gameObjects);
 
 	return gameObjects;
 }
 
-void ModuleGameObjects::PreorderGameObjects(GameObject* gameObject, std::vector<GameObject*>& gameObjects)
+void ModuleGameObjects::OrderGameObjects(GameObject* gameObject, std::vector<GameObject*>& gameObjects)
 {
 	gameObjects.push_back(gameObject);
 
 	for (size_t i = 0; i < gameObject->children.size(); i++)
 	{
-		PreorderGameObjects(gameObject->GetChildAt(i), gameObjects);
+		OrderGameObjects(gameObject->GetChildAt(i), gameObjects);
 	}
 }

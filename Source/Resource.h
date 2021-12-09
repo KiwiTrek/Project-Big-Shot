@@ -19,7 +19,11 @@ public:
 	{}
 
 	virtual ~Resource()
-	{}
+	{
+		referenceCount = 0;
+		assetsFile.clear();
+		resources = nullptr;
+	}
 
 	Resource::Type GetType() const { return type; }
 	UID GetUID() const { return uid; }

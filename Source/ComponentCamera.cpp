@@ -19,7 +19,8 @@ ComponentCamera::ComponentCamera(bool active) : Component(type, active), fixedFO
 	drawingBbox.SetFromCenterAndSize(vec(0.0f, 0.0f, 0.0f), vec(1.1f, 1.1f, 1.1f));
 }
 
-ComponentCamera::~ComponentCamera() {}
+ComponentCamera::~ComponentCamera()
+{}
 
 void ComponentCamera::Update()
 {

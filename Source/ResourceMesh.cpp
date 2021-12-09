@@ -100,7 +100,10 @@ void ResourceMesh::CopyParMesh(par_shapes_mesh* parMesh)
 	{
 		memcpy(&vertices[i], &parMesh->points[i * 3], sizeof(float) * 3);
 		memcpy(&normals[i], &parMesh->normals[i * 3], sizeof(float) * 3);
-		if (parMesh->tcoords != nullptr) memcpy(&texCoords[i], &parMesh->tcoords[i * 2], sizeof(float) * 2);
+		if (parMesh->tcoords != nullptr)
+		{
+			memcpy(&texCoords[i], &parMesh->tcoords[i * 2], sizeof(float) * 2);
+		}
 		else if (mType == Shape::CUBE)
 		{
 			switch (i % 4)

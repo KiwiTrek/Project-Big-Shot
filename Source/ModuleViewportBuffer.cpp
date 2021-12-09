@@ -7,7 +7,7 @@
 #include "ModuleWindow.h"
 #include "ModuleGuiManager.h"
 
-ModuleViewportBuffer::ModuleViewportBuffer(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleViewportBuffer::ModuleViewportBuffer(Application* app, bool startEnabled) : Module(app, startEnabled)
 {}
 
 ModuleViewportBuffer::~ModuleViewportBuffer()

@@ -66,8 +66,14 @@ int main(int argc, char** argv)
 		{
 			LOG_CONSOLE("-------------- Application CleanUp --------------");
 
-			if (App->CleanUp() == false) LOG("Application CleanUp exits with ERROR");
-			else mainReturn = EXIT_SUCCESS;
+			if (App->CleanUp() == false)
+			{
+				LOG("Application CleanUp exits with ERROR");
+			}
+			else
+			{
+				mainReturn = EXIT_SUCCESS;
+			}
 
 			state = MainStates::MAIN_EXIT;
 			break;

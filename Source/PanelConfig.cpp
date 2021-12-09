@@ -68,15 +68,27 @@ UpdateStatus PanelConfig::Update()
 		App->window->GetMaxWindow(maxW, maxH);
 		if (ImGui::InputInt("Width", &w, 1, 25, flags))
 		{
-			if (w < 320) w = 320;
-			else if (w > maxW) w = maxW;
+			if (w < 320)
+			{
+				w = 320;
+			}
+			else if (w > maxW)
+			{
+				w = maxW;
+			}
 
 			App->window->SetWidth(w);
 		}
 		if (ImGui::InputInt("Height", &h, 1, 25, flags))
 		{
-			if (h < 200) h = 200;
-			else if (h > maxH) h = maxH;
+			if (h < 200)
+			{
+				h = 200;
+			}
+			else if (h > maxH)
+			{
+				h = maxH;
+			}
 
 			App->window->SetHeight(h);
 		}
@@ -105,11 +117,17 @@ UpdateStatus PanelConfig::Update()
 		ImGui::Text("Ctrl + Click to Input Value");
 		ImGui::SliderFloat("Speed", &App->camera->cameraSpeed, 1.0f, 120.0f);
 		ImGui::SliderFloat("Sensitivity", &App->camera->cameraSensitivity, 0.05f, 0.5f);
-		if (ImGui::SliderFloat("Vertical FOV", &App->camera->verticalFOV, 0.1f, 180.0f)) App->camera->projectionIsDirty = true;
+		if (ImGui::SliderFloat("Vertical FOV", &App->camera->verticalFOV, 0.1f, 140.0f)) App->camera->projectionIsDirty = true;
 		if (ImGui::InputFloat("Near Plane", &App->camera->nearPlaneDistance, 1.0f, 10.0f))
 		{
-			if (App->camera->nearPlaneDistance <= 0.05f) App->camera->nearPlaneDistance = 0.05f;
-			else if (App->camera->nearPlaneDistance > 25.0f) App->camera->nearPlaneDistance = 25.0f;
+			if (App->camera->nearPlaneDistance <= 0.05f)
+			{
+				App->camera->nearPlaneDistance = 0.05f;
+			}
+			else if (App->camera->nearPlaneDistance > 25.0f)
+			{
+				App->camera->nearPlaneDistance = 25.0f;
+			}
 
 			App->camera->projectionIsDirty = true;
 		}
@@ -143,11 +161,13 @@ UpdateStatus PanelConfig::Update()
 		IMGUI_BULLET(IMGUI_YELLOW, "OpenGL", "%s", glewVersion.c_str());
 		IMGUI_BULLET(IMGUI_YELLOW, "Glew", "%s", glewVersion.c_str());
 		ImGui::BulletText("GPU Detect (2015)");
-		IMGUI_BULLET(IMGUI_YELLOW, "imgui", "%s", imguiVersion.c_str());
+		IMGUI_BULLET(IMGUI_YELLOW, "ImGui", "%s", imguiVersion.c_str());
+		IMGUI_BULLET(IMGUI_YELLOW, "ImGuizmo", "1.83");
 		IMGUI_BULLET(IMGUI_YELLOW, "MathGeoLib", "1.5");
 		IMGUI_BULLET(IMGUI_YELLOW, "Assimp", "%d.%d.%d", assimpMajor, assimpMinor, assimpPatch);
 		IMGUI_BULLET(IMGUI_YELLOW, "DevIL", "1.8.0");
-		IMGUI_BULLET(IMGUI_YELLOW, "PhysFS", "v3.0.2");
+		IMGUI_BULLET(IMGUI_YELLOW, "PhysFS", "3.0.2");
+		IMGUI_BULLET(IMGUI_YELLOW, "rapidjson", "1.1.0");
 	}
 
 	if (ImGui::CollapsingHeader("Render"))
@@ -169,8 +189,9 @@ UpdateStatus PanelConfig::Update()
 		bool lighting = App->renderer3D->IsLighting();
 		if (ImGui::Checkbox("Lighting", &lighting)) App->renderer3D->ToggleLighting();
 		ImGui::SameLine();
-		bool axis = App->renderer3D->IsAxis();
-		if (ImGui::Checkbox("Show Axis", &axis)) App->renderer3D->ToggleAxis();
+		ImGui::Checkbox("Show Grid", &App->gui->grid.drawGrid);
+		if (App->gui->grid.drawGrid) ImGui::SliderFloat("Grid Transparency", &App->gui->grid.alpha, 0.0f, 1.0f);
+
 
 		bool colorMaterial = App->renderer3D->IsColorMaterial();
 		if (ImGui::Checkbox("Color Material", &colorMaterial)) App->renderer3D->ToggleColorMaterial();

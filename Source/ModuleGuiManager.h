@@ -29,9 +29,10 @@ public:
 
 	void Render();
 public:
-	bool axis;
+	bool drawGrid;
 	float3 normal;
 	float constant;
+	float alpha;
 };
 
 class ModuleGuiManager : public Module
@@ -46,7 +47,7 @@ public:
 	UpdateStatus PostUpdate();
 	bool CleanUp();
 
-	void CreateShape(Shape shape);
+	void CreateShape(Shape shape, bool child = false);
 	void AddPanel(Panel* panel);
 	void SetupStyle();
 	UpdateStatus MenuBar();

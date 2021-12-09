@@ -3,7 +3,7 @@
 #include "ResourceMaterial.h"
 #include "Gameobject.h"
 
-ComponentMesh::ComponentMesh(bool active) : Component(type, active), vertexColor(white), wire(false), wireOverride(false), drawFaceNormals(false), drawVertexNormals(false), drawBBox(false), render(true), centerPoint(float3::zero), radius(1.0f), mesh(nullptr)
+ComponentMesh::ComponentMesh(bool active) : Component(type, active), vertexColor(white), wire(false), wireOverride(false), drawFaceNormals(false), drawVertexNormals(false), normalLength(0.5f), drawBBox(false), render(true), centerPoint(float3::zero), radius(1.0f), mesh(nullptr)
 {
 	type = ComponentTypes::MESH;
 }
@@ -78,6 +78,7 @@ void ComponentMesh::DrawInspector(Application* App)
 		ImGui::Checkbox("Vertex Normals", &drawVertexNormals);
 		ImGui::SameLine();
 		ImGui::Checkbox("Face Normals", &drawFaceNormals);
+		if (drawVertexNormals || drawFaceNormals) ImGui::SliderFloat("Length", &normalLength, 0.1f, 1.5f);
 	}
 }
 
@@ -129,7 +130,7 @@ void ComponentMesh::Render()
 
 	wire || wireOverride ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	if (render) glDrawElements(GL_TRIANGLES, mesh->indexNum, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, mesh->indexNum, GL_UNSIGNED_INT, NULL);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -150,8 +151,6 @@ void ComponentMesh::Render()
 void ComponentMesh::DrawVertexNormals() const
 {
 	if (mesh->normalsBuf == -1 || mesh->normals.size() == 0) return;
-
-	float normalLength = 0.5f;
 
 	glBegin(GL_LINES);
 	for (size_t i = 0; i < mesh->vertices.size(); ++i)
@@ -174,7 +173,7 @@ void ComponentMesh::DrawFaceNormals() const
 	glBegin(GL_LINES);
 	for (size_t i = 0; i < mesh->vertices.size() - 3; ++i)
 	{
-		glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
+		glColor4f(1.0f, 0.0f, 1.0f, 1.0f);
 		float vx = (mesh->vertices.at(i).x + mesh->vertices.at(i + 1).x + mesh->vertices.at(i + 2).x) / 3;
 		float vy = (mesh->vertices.at(i).y + mesh->vertices.at(i + 1).y + mesh->vertices.at(i + 2).y) / 3;
 		float vz = (mesh->vertices.at(i).z + mesh->vertices.at(i + 1).z + mesh->vertices.at(i + 2).z) / 3;
@@ -184,9 +183,9 @@ void ComponentMesh::DrawFaceNormals() const
 		float nz = (mesh->normals.at(i).z + mesh->normals.at(i + 1).z + mesh->normals.at(i + 2).z) / 3;
 
 		glVertex3f(vx, vy, vz);
-		glVertex3f(vx + (mesh->normals.at(i).x * 0.5f),
-			vy + (mesh->normals.at(i).y * 0.5f),
-			vz + (mesh->normals.at(i).z) * 0.5f);
+		glVertex3f(vx + (mesh->normals.at(i).x * normalLength),
+			vy + (mesh->normals.at(i).y * normalLength),
+			vz + (mesh->normals.at(i).z) * normalLength);
 	}
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -386,7 +385,10 @@ void ComponentMesh::OnSave(JSONWriter& writer) const
 	writer.String("Mesh");
 	writer.StartObject();
 	writer.String("UID"); writer.Int(mesh->GetUID());
-	if (mesh->mType != Shape::NONE) writer.String("Shape"); writer.Int((int)mesh->mType);
+	if (mesh->mType != Shape::NONE)
+	{
+		writer.String("Shape"); writer.Int((int)mesh->mType);
+	}
 	writer.String("vertexColor");
 	writer.StartArray();
 	writer.Double(vertexColor.r);

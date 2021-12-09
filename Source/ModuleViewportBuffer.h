@@ -9,7 +9,7 @@
 class ModuleViewportBuffer : public Module
 {
 public:
-	ModuleViewportBuffer(Application* app, bool start_enabled = true);
+	ModuleViewportBuffer(Application* app, bool startEnabled = true);
 	~ModuleViewportBuffer();
 
 	bool Init() override;
@@ -24,7 +24,6 @@ public:
 	uint frameBuffer = 0;
 	uint renderBuffer = 0;
 	uint texture = 0;
-	bool show_viewport_window = true;
 
 };
 

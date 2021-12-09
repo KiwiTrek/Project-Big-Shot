@@ -125,8 +125,7 @@ UpdateStatus ModuleGuiManager::Update(float dt)
 	}
 
 	if (demo) ImGui::ShowDemoWindow();
-	grid.axis = App->renderer3D->IsAxis();
-	grid.Render();
+	if (grid.drawGrid) grid.Render();
 
 	return status;
 }
@@ -166,6 +165,7 @@ bool ModuleGuiManager::CleanUp()
 	hierarchy = nullptr;
 	inspector = nullptr;
 	scene = nullptr;
+
 	LogInputText.clear();
 	LogConsoleText.clear();
 
@@ -258,7 +258,7 @@ UpdateStatus ModuleGuiManager::MenuBar()
 	return UpdateStatus::UPDATE_CONTINUE;
 }
 
-void ModuleGuiManager::CreateShape(Shape shape)
+void ModuleGuiManager::CreateShape(Shape shape, bool child)
 {
 	std::string name;
 	ResourceMesh* rMesh = (ResourceMesh*)App->resources->GetShape(shape);
@@ -294,7 +294,7 @@ void ModuleGuiManager::CreateShape(Shape shape)
 	rMesh->GenerateBuffers();
 	if (m->mesh != nullptr) m->CreateBBox();
 
-	App->gameObjects->AddGameobject(c);
+	child ? App->gameObjects->selectedGameObject->AddChild(c) : App->gameObjects->AddGameobject(c);
 	App->gameObjects->selectedGameObject = c;
 }
 
@@ -397,57 +397,24 @@ void ModuleGuiManager::SetupStyle()
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 }
 
-Grid::Grid() : normal(0, 1, 0), constant(1), axis(false)
+Grid::Grid() : normal(0, 1, 0), constant(200.0f), drawGrid(true), alpha(1.0f)
 {}
 
-Grid::Grid(float x, float y, float z, float d) : normal(x, y, z), constant(d), axis(false)
+Grid::Grid(float x, float y, float z, float d) : normal(x, y, z), constant(d), drawGrid(true), alpha(1.0f)
 {}
 
 void Grid::Render()
 {
-	float d = 200.0f;
-	
-	if (axis)
-	{
-		// Draw Axis Grid
-		glLineWidth(2.0f);
-
-		glBegin(GL_LINES);
-
-		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-
-		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
-		glVertex3f(1.0f, 0.1f, 0.0f); glVertex3f(1.1f, -0.1f, 0.0f);
-		glVertex3f(1.1f, 0.1f, 0.0f); glVertex3f(1.0f, -0.1f, 0.0f);
-
-		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-
-		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(-0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
-		glVertex3f(0.05f, 1.25f, 0.0f); glVertex3f(0.0f, 1.15f, 0.0f);
-		glVertex3f(0.0f, 1.15f, 0.0f); glVertex3f(0.0f, 1.05f, 0.0f);
-
-		glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-
-		glVertex3f(0.0f, 0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 1.0f);
-		glVertex3f(-0.05f, 0.1f, 1.05f); glVertex3f(0.05f, 0.1f, 1.05f);
-		glVertex3f(0.05f, 0.1f, 1.05f); glVertex3f(-0.05f, -0.1f, 1.05f);
-		glVertex3f(-0.05f, -0.1f, 1.05f); glVertex3f(0.05f, -0.1f, 1.05f);
-
-		glEnd();
-
-		glLineWidth(1.0f);
-	}
-
 	glBegin(GL_LINES);
 	glLineWidth(1.0f);
 
-	for (float i = -d; i <= d; i += 1.0f)
+	for (float i = -constant; i <= constant; i += 1.0f)
 	{
-		glVertex3f(i, 0.0f, -d);
-		glVertex3f(i, 0.0f, d);
-		glVertex3f(-d, 0.0f, i);
-		glVertex3f(d, 0.0f, i);
+		glColor4f(1.0f, 1.0f, 1.0f, (GLfloat)alpha);
+		glVertex3f(i, 0.0f, -constant);
+		glVertex3f(i, 0.0f, constant);
+		glVertex3f(-constant, 0.0f, i);
+		glVertex3f(constant, 0.0f, i);
 	}
 
 	glEnd();

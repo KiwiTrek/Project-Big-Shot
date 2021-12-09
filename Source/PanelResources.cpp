@@ -33,8 +33,14 @@ UpdateStatus PanelResources::Update()
 			}
 		}
 
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN && ImGui::IsAnyItemHovered() && ImGui::IsWindowHovered()) ImGui::OpenPopup("OptionsAssets");
-		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && ImGui::IsPopupOpen("OptionsAssets"))ImGui::CloseCurrentPopup();
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN && ImGui::IsAnyItemHovered() && ImGui::IsWindowHovered())
+		{
+			ImGui::OpenPopup("OptionsAssets");
+		}
+		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && ImGui::IsPopupOpen("OptionsAssets"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
 		RightClickMenu();
 
 		ImGuiTreeNodeFlags flagsLeaf = flags;
@@ -48,8 +54,14 @@ UpdateStatus PanelResources::Update()
 				if (r->GetType() == Resource::Type::MATERIAL)
 				{
 					ResourceMaterial* rm = (ResourceMaterial*)r;
-					if (r == selected) flagsLeaf |= ImGuiTreeNodeFlags_Selected;
-					else flagsLeaf &= ~(ImGuiTreeNodeFlags_Selected);
+					if (r == selected)
+					{
+						flagsLeaf |= ImGuiTreeNodeFlags_Selected;
+					}
+					else
+					{
+						flagsLeaf &= ~(ImGuiTreeNodeFlags_Selected);
+					}
 
 					if (ImGui::TreeNodeEx(rm->name.c_str(), flagsLeaf))
 					{

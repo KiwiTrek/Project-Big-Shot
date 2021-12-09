@@ -8,7 +8,7 @@
 #include "ComponentMesh.h"
 #include "GameObject.h"
 
-ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	right = float3(1.0f, 0.0f, 0.0f);
 	up = float3(0.0f, 1.0f, 0.0f);
@@ -37,7 +37,7 @@ bool ModuleCamera3D::Start()
 	aspectRatio = 1.f;
 	verticalFOV = 60.f;
 	nearPlaneDistance = 0.1f;
-	farPlaneDistance = 500.f;
+	farPlaneDistance = 1000.f;
 	cameraSensitivity = .1f;
 	cameraSpeed = 60.f;
 
@@ -151,15 +151,16 @@ UpdateStatus ModuleCamera3D::Update(float dt)
 		}
 	}
 
+	position += newPos;
+
+	!hasRotated ? lastDeltaX = lastDeltaY = 0.f : 0.f;
+
+	//Mouse Picking
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN && !ImGuizmo::IsOver() && !ImGuizmo::IsUsing())
 	{
 		GameObject* picked = MousePicking();
 		App->gameObjects->selectedGameObject = picked;
 	}
-
-	position += newPos;
-
-	!hasRotated ? lastDeltaX = lastDeltaY = 0.f : 0.f;
 
 	return UpdateStatus::UPDATE_CONTINUE;
 }
@@ -205,7 +206,6 @@ GameObject* ModuleCamera3D::MousePicking()
 	normalY = -(normalY - 0.5f) * 2.0f;
 
 	LineSegment newRay = cameraFrustum.UnProjectLineSegment(normalX, normalY);
-
 	App->renderer3D->ray = newRay;
 
 	std::vector<GameObject*> sceneGameObjects = App->gameObjects->GetAllGameObjects();

@@ -31,7 +31,7 @@ public:
 
 	std::vector<GameObject*> GetAllGameObjects();
 
-	void PreorderGameObjects(GameObject* gameObject, std::vector<GameObject*>& gameObjects);
+	void OrderGameObjects(GameObject* gameObject, std::vector<GameObject*>& gameObjects);
 
 public:
 	std::vector<GameObject*> gameObjectList;

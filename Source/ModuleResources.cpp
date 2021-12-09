@@ -50,8 +50,17 @@ bool ModuleResources::Init()
 
 bool ModuleResources::CleanUp()
 {
+	std::map<UID, Resource*>::reverse_iterator r = resources.rbegin();
+	while (r != resources.rend())
+	{
+		if ((*r).second != nullptr) delete (*r).second;
+		r++;
+	}
+
 	resources.clear();
+	loadedResources.clear();
 	shapes.clear();
+
 	return true;
 }
 
@@ -99,15 +108,20 @@ UID ModuleResources::Exists(Resource::Type type, const char* pathFile, bool colo
 			ResourceMaterial* rm = (ResourceMaterial*)(*it).second;
 			if ((*it).second->GetType() == Resource::Type::MATERIAL)
 			{
-				if (color && rm->diffuse == c) return (*it).first;
-				else if (pathFile != nullptr && pathFile == rm->path) return (*it).first;
+				if (color && rm->diffuse == c)
+				{
+					return (*it).first;
+				}
+				else if (pathFile != nullptr && pathFile == rm->path)
+				{
+					return (*it).first;
+				}
 			}
 		}
 	}
 
 	return uid;
 }
-
 
 UID ModuleResources::GenerateNewUID()
 {
@@ -134,11 +148,7 @@ Resource* ModuleResources::RequestResource(UID uid)
 	Resource* r = nullptr;
 	if (resources.find(uid) == resources.end())
 	{
-		if (loadedResources.find(uid) == loadedResources.end())
-		{
-			LOG("HAHA NO FUNCIONA");
-		}
-		else
+		if (loadedResources.find(uid) != loadedResources.end())
 		{
 			r = loadedResources.at(uid);
 			if (r->GetType() == Resource::Type::MATERIAL) App->importer->GenerateId((ResourceMaterial*)r);

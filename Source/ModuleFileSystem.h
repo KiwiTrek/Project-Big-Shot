@@ -58,7 +58,7 @@ class ModuleFileSystem : public Module
 {
 public:
 
-	ModuleFileSystem(Application* app, bool start_enabled = true);// const char* game_path = nullptr);
+	ModuleFileSystem(Application* app, bool startEnabled = true);
 
 	// Destructor
 	~ModuleFileSystem();
@@ -72,13 +72,13 @@ public:
 	void CreateLibraryDirectories();
 
 	// Utility functions
-	bool AddPath(const char* path_or_zip);
+	bool AddPath(const char* pathOrZip);
 	bool Exists(const char* file) const;
 	bool CreateDir(const char* dir);
 	bool IsDirectory(const char* file) const;
 	const char* GetWriteDir() const;
-	void DiscoverFiles(const char* directory, std::vector<std::string>& file_list, std::vector<std::string>& dir_list) const;
-	void GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& file_list) const;
+	void DiscoverFiles(const char* directory, std::vector<std::string>& fileList, std::vector<std::string>& dirList) const;
+	void GetAllFilesWithExtension(const char* directory, const char* extension, std::vector<std::string>& fileList) const;
 	void GetRealDir(std::string path, std::string& output) const;
 	std::string GetPathRelativeToAssets(const char* originalPath) const;
 
@@ -91,7 +91,7 @@ public:
 	bool HasExtension(const char* path, std::vector<std::string> extensions) const;
 
 	std::string NormalizePath(const char* path) const;
-	void SplitFilePath(const char* full_path, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
+	void SplitFilePath(const char* fullPath, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
 
 	// Open for Read/Write
 	unsigned int Load(const char* path, const char* file, char** buffer) const;
@@ -103,9 +103,9 @@ public:
 	unsigned int Save(const char* file, const void* buffer, unsigned int size, bool append = false) const;
 
 	std::string GetUniqueName(const char* path, const char* name) const;
-
 	std::string SetNormalName(const char* path);
 
+public:
 	std::string systemBasePath;
 	std::string texturePath;
 	std::string meshPath;

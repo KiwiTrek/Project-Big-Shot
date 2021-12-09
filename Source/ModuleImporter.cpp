@@ -102,8 +102,14 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 {
 	GameObject* g = nullptr;
 
-	if (rootName != nullptr) g = new GameObject(rootName);
-	else g = new GameObject(n->mName.C_Str());
+	if (rootName != nullptr)
+	{
+		g = new GameObject(rootName);
+	}
+	else
+	{
+		g = new GameObject(n->mName.C_Str());
+	}
 
 	if (parentGameObject != nullptr)
 	{
@@ -171,8 +177,14 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 				if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT) iluFlipImage();
 
 				int channels = ilGetInteger(IL_IMAGE_CHANNELS);
-				if (channels == 3) ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-				else if (channels == 4) ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+				if (channels == 3)
+				{
+					ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+				}
+				else if (channels == 4)
+				{
+					ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+				}
 
 				ILenum error = ilGetError();
 
@@ -210,7 +222,7 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 	{
 		ResourceMaterial* rm = (ResourceMaterial*)App->resources->RequestResource(uid);
 		rm->referenceCount++;
-		LOG_CONSOLE("Material already exists with uid : %d, pulling from resources.", (int)uid);
+		LOG_CONSOLE("Material already exists with UID : %d, pulling from resources.", (int)uid);
 		return rm;
 	}
 
@@ -261,7 +273,7 @@ ResourceMaterial* ModuleImporter::LoadTexture(const aiScene* scene, aiNode* n)
 			{
 				ResourceMaterial* rm = (ResourceMaterial*)App->resources->RequestResource(uid);
 				rm->referenceCount++;
-				LOG_CONSOLE("Material color already exists with uid : %d, pulling from resources.", (int)uid);
+				LOG_CONSOLE("Material color already exists with UID : %d, pulling from resources.", (int)uid);
 				return rm;
 			}
 			return texture;
@@ -294,8 +306,14 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 			m->indices.resize(m->indexNum);
 			for (uint j = 0; j < aiMesh->mNumFaces; j++)
 			{
-				if (aiMesh->mFaces[j].mNumIndices != 3) LOG_CONSOLE("ERROR: Geometry face with != 3 indices!")
-				else memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, 3 * sizeof(uint));
+				if (aiMesh->mFaces[j].mNumIndices != 3)
+				{
+					LOG_CONSOLE("ERROR: Geometry face with != 3 indices!")
+				}
+				else
+				{
+					memcpy(&m->indices[j * 3], aiMesh->mFaces[j].mIndices, 3 * sizeof(uint));
+				}
 			}
 
 			if (aiMesh->HasNormals())
@@ -323,11 +341,13 @@ ResourceMesh* ModuleImporter::ImportModel(const aiScene* scene, aiNode* node)
 			}
 			std::string file = std::to_string(m->GetUID()) + MESH_FORMAT_FILE;
 			App->resources->SaveMesh(m, file);
+			LOG_CONSOLE("Mesh succesfully copied and saved");
 			return m;
 		}
 	}
 	else
 	{
+		LOG_CONSOLE("Mesh already exists with UID: %d, pulling from resources", (int)uid);
 		ResourceMesh* rm = (ResourceMesh*)App->resources->RequestResource(uid);
 		rm->referenceCount++;
 		return rm;
