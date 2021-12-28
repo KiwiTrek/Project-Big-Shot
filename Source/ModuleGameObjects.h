@@ -17,7 +17,7 @@ public:
 
 	UpdateStatus PreUpdate();
 	UpdateStatus Update(float dt);
-	UpdateStatus UpdateChildren(GameObject* parent);
+	UpdateStatus UpdateChildren(float dt, GameObject* parent);
 	UpdateStatus PostUpdate();
 
 	bool CleanUp();

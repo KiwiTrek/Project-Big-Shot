@@ -19,13 +19,19 @@ public:
 	void SetPos(float x, float y, float z);
 	void SetPos(float3 p);
 	float3 GetPos() { return pos; }
+	float3 GetGlobalPos();
+
 	void SetRot(float x, float y, float z);
 	void SetRot(Quat q);
 	Quat GetRot() { return rot; }
+	Quat GetGlobalRot();
+
 	void SetScale(float x, float y, float z);
 	void SetScale(float3 s);
-	void SetGlobalTransform(float4x4 transform);
 	float3 GetScale() { return scale; }
+	float3 GetGlobalScale();
+
+	void SetGlobalTransform(float4x4 transform);
 	float4x4 GetGlobalTransform() { return gTransform; }
 	float4x4 GetLocalTransform() { return lTransform; }
 

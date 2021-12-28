@@ -24,6 +24,8 @@ enum class ComponentTypes
 	MESH,
 	MATERIAL,
 	CAMERA,
+	BILLBOARD,
+	EMITTER
 };
 
 class Component
@@ -34,7 +36,7 @@ public:
 	virtual ~Component()
 	{}
 
-	virtual void Update()
+	virtual void Update(float dt, Application* App)
 	{}
 
 	virtual void DrawInspector(Application* App)

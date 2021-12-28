@@ -82,9 +82,6 @@ void ComponentMesh::DrawInspector(Application* App)
 	}
 }
 
-void ComponentMesh::Update()
-{}
-
 void ComponentMesh::Render()
 {
 	if (mesh == nullptr) return;

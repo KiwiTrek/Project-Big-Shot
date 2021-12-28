@@ -57,7 +57,7 @@ UpdateStatus ModuleScene::Update(float dt)
 
 UpdateStatus ModuleScene::PostUpdate()
 {
-	if (drawMouse) App->renderer3D->DrawRay();
+	if (drawMouse) App->renderer3D->DrawRay(ray);
 	return UpdateStatus::UPDATE_CONTINUE;
 }
 

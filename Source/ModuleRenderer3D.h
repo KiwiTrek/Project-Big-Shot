@@ -24,7 +24,7 @@ public:
 	void OnSave(JSONWriter& writer) const;
 	bool CleanUp();
 
-	void DrawRay();
+	void DrawRay(LineSegment ray);
 
 	const char* GetGlewVersion();
 	const char* GetOpenGLVersion();
@@ -49,7 +49,6 @@ public:
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	LineSegment ray;
 
 private:
 	bool depthTest = true;

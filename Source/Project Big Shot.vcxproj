@@ -85,7 +85,9 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentBillboard.h" />
     <ClInclude Include="ComponentCamera.h" />
+    <ClInclude Include="ComponentEmitter.h" />
     <ClInclude Include="ConsoleBuffer.h" />
     <ClInclude Include="External\Assimp\include\ai_assert.h" />
     <ClInclude Include="External\Assimp\include\anim.h" />
@@ -270,6 +272,7 @@
     <ClInclude Include="ModuleGuiManager.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="ModuleCamera3D.h" />
+    <ClInclude Include="ModuleParticles.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
@@ -285,6 +288,7 @@
     <ClInclude Include="PanelInspector.h" />
     <ClInclude Include="PanelResources.h" />
     <ClInclude Include="PanelScene.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="par_shapes.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="ComponentMesh.h" />
@@ -301,7 +305,9 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ComponentBillboard.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
+    <ClCompile Include="ComponentEmitter.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="External\GPUDetect\include\DeviceId.cpp" />
     <ClCompile Include="External\ImGuizmo\include\ImCurveEdit.cpp" />
@@ -368,6 +374,7 @@
     <ClCompile Include="ModuleImporter.cpp" />
     <ClCompile Include="ModuleGuiManager.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
+    <ClCompile Include="ModuleParticles.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleResources.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
@@ -380,6 +387,7 @@
     <ClCompile Include="PanelInspector.cpp" />
     <ClCompile Include="PanelResources.cpp" />
     <ClCompile Include="PanelScene.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="par_shapes.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />

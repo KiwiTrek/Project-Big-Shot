@@ -68,11 +68,11 @@ UpdateStatus ModuleGameObjects::Update(float dt)
 	std::vector<GameObject*>::iterator item = gameObjectList.begin();
 	while (item != gameObjectList.end())
 	{
-		if (!(*item)->children.empty()) ret = UpdateChildren((*item));
+		if (!(*item)->children.empty()) ret = UpdateChildren(dt, (*item));
 		std::vector<Component*>::iterator c = (*item)->components.begin();
 		while (c != (*item)->components.end())
 		{
-			(*c)->Update();
+			(*c)->Update(dt, App);
 			if ((*item) == selectedGameObject && (*c)->type == ComponentTypes::MESH)
 			{
 				ComponentMesh* cm = (ComponentMesh*)(*c);
@@ -88,18 +88,18 @@ UpdateStatus ModuleGameObjects::Update(float dt)
 	return ret;
 }
 
-UpdateStatus ModuleGameObjects::UpdateChildren(GameObject* parent)
+UpdateStatus ModuleGameObjects::UpdateChildren(float dt, GameObject* parent)
 {
 	UpdateStatus ret = UpdateStatus::UPDATE_CONTINUE;
 
 	std::vector<GameObject*>::iterator item = parent->children.begin();
 	while (item != parent->children.end())
 	{
-		if (!(*item)->children.empty()) ret = UpdateChildren((*item));
+		if (!(*item)->children.empty()) ret = UpdateChildren(dt, (*item));
 		std::vector<Component*>::iterator c = (*item)->components.begin();
 		while (c != (*item)->components.end())
 		{
-			(*c)->Update();
+			(*c)->Update(dt, App);
 			if ((*item) == selectedGameObject && (*c)->type == ComponentTypes::MESH)
 			{
 				ComponentMesh* cm = (ComponentMesh*)(*c);

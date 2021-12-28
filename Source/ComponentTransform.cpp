@@ -140,6 +140,14 @@ void ComponentTransform::SetPos(float3 p)
 	UpdateGlobalTransform();
 }
 
+float3 ComponentTransform::GetGlobalPos()
+{
+	float3 pos;
+	gTransform.Decompose(pos, Quat(), float3());
+
+	return pos;
+}
+
 void ComponentTransform::SetRot(float x, float y, float z)
 {
 	rot = Quat::FromEulerXYZ(x * DEG_TO_RAD, y * DEG_TO_RAD, z * DEG_TO_RAD);
@@ -152,6 +160,14 @@ void ComponentTransform::SetRot(Quat q)
 	UpdateGlobalTransform();
 }
 
+Quat ComponentTransform::GetGlobalRot()
+{
+	if (owner->parent != nullptr)
+		return rot.Mul(owner->parent->GetComponent<Transform>()->GetGlobalRot());
+	else
+		return rot;
+}
+
 void ComponentTransform::SetScale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
@@ -162,6 +178,14 @@ void ComponentTransform::SetScale(float3 s)
 {
 	scale = s;
 	UpdateGlobalTransform();
+}
+
+float3 ComponentTransform::GetGlobalScale()
+{
+	if (owner->parent != nullptr)
+		return scale.Mul(owner->parent->GetComponent<Transform>()->GetGlobalScale());
+	else
+		return scale;
 }
 
 void ComponentTransform::SetGlobalTransform(float4x4 transform)

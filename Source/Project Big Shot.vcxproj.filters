@@ -82,6 +82,12 @@
     <Filter Include="Sources\Tools\ImGuizmo">
       <UniqueIdentifier>{7f3e2b6b-25d5-41e6-88b5-f8adfc915bfa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\Particles">
+      <UniqueIdentifier>{a0c1161b-911d-475d-96a3-a11fa52279d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Particles\Components">
+      <UniqueIdentifier>{20048a7a-9759-4ea1-ae65-516bc4c60983}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -729,6 +735,18 @@
     <ClInclude Include="MathWarnings.h">
       <Filter>Sources\Tools\MathGeoLib</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentBillboard.h">
+      <Filter>Sources\Modules\Particles\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Sources\Modules\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleParticles.h">
+      <Filter>Sources\Modules\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentEmitter.h">
+      <Filter>Sources\Modules\Particles\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="log.cpp">
@@ -994,6 +1012,18 @@
     </ClCompile>
     <ClCompile Include="External\ImGuizmo\include\ImSequencer.cpp">
       <Filter>Sources\Tools\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentBillboard.cpp">
+      <Filter>Sources\Modules\Particles\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Sources\Modules\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleParticles.cpp">
+      <Filter>Sources\Modules\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentEmitter.cpp">
+      <Filter>Sources\Modules\Particles\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

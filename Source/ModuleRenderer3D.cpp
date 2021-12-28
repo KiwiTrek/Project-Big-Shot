@@ -190,7 +190,7 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-void ModuleRenderer3D::DrawRay()
+void ModuleRenderer3D::DrawRay(LineSegment ray)
 {
 	glColor3f(0.0f, 1.0f, 1.0f);
 	glLineWidth(3.0f);

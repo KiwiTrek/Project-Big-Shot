@@ -11,6 +11,7 @@
 #include "ModuleGameObjects.h"
 #include "ModuleResources.h"
 #include "ModuleViewportBuffer.h"
+#include "ModuleParticles.h"
 
 Application::Application(ConsoleBuffer* buff)
 {
@@ -25,6 +26,7 @@ Application::Application(ConsoleBuffer* buff)
 	renderer3D = new ModuleRenderer3D(this);
 	resources = new ModuleResources(this);
 	viewport = new ModuleViewportBuffer(this);
+	particles = new ModuleParticles(this);
 
 	AddModule(fileSystem);
 	AddModule(resources);
@@ -35,6 +37,7 @@ Application::Application(ConsoleBuffer* buff)
 
 	AddModule(scene);
 	AddModule(gameObjects);
+	AddModule(particles);
 
 	AddModule(viewport);
 	AddModule(gui);

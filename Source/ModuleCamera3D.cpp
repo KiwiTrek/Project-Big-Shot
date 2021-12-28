@@ -3,7 +3,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleGameObjects.h"
-#include "ModuleRenderer3D.h"
+#include "ModuleScene.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "GameObject.h"
@@ -206,7 +206,7 @@ GameObject* ModuleCamera3D::MousePicking()
 	normalY = -(normalY - 0.5f) * 2.0f;
 
 	LineSegment newRay = cameraFrustum.UnProjectLineSegment(normalX, normalY);
-	App->renderer3D->ray = newRay;
+	App->scene->ray = newRay;
 
 	std::vector<GameObject*> sceneGameObjects = App->gameObjects->GetAllGameObjects();
 	std::map<float, GameObject*> hitGameObjects;

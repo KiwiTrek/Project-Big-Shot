@@ -25,29 +25,6 @@ GameObject::~GameObject()
 	components.clear();
 }
 
-void GameObject::Update()
-{
-	if (!active)
-	{
-		std::vector<Component*>::iterator c = components.begin();
-		while (c != components.end())
-		{
-			(*c)->Update();
-			++c;
-		}
-
-		if (!children.empty())
-		{
-			std::vector<GameObject*>::iterator g = children.begin();
-			while (g != children.end())
-			{
-				(*g)->Update();
-				g++;
-			}
-		}
-	}
-}
-
 Component* GameObject::CreateComponent(ComponentTypes cType, ComponentTransform* t)
 {
 	Component* c = nullptr;

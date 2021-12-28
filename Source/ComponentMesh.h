@@ -18,7 +18,6 @@ public:
 	ComponentMesh(bool active = true);
 	virtual ~ComponentMesh();
 
-	void Update() override;
 	void Render();
 	void DrawInspector(Application* App);
 	void DrawVertexNormals() const;

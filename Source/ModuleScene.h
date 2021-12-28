@@ -28,6 +28,7 @@ public:
 
 public:
 	bool drawMouse = false;
+	LineSegment ray;
 
 private:
 	GameObject* root;

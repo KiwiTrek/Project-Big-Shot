@@ -17,6 +17,7 @@ class ModuleImporter;
 class ModuleGameObjects;
 class ModuleResources;
 class ModuleViewportBuffer;
+class ModuleParticles;
 
 class Application
 {
@@ -66,6 +67,7 @@ public:
 	ModuleGameObjects* gameObjects = nullptr;
 	ModuleResources* resources = nullptr;
 	ModuleViewportBuffer* viewport = nullptr;
+	ModuleParticles* particles = nullptr;
 
 	ConsoleBuffer* buff;
 

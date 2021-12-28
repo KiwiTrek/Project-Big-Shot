@@ -18,7 +18,7 @@ public:
 	ComponentCamera(bool active = true);
 	~ComponentCamera();
 
-	void Update() override;
+	void Update(float dt, Application* App) override;
 	void Render() const;
 	void DrawFrustum() const;
 	void DrawBBox() const;

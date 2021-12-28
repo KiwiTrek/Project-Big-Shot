@@ -22,7 +22,7 @@ ComponentCamera::ComponentCamera(bool active) : Component(type, active), fixedFO
 ComponentCamera::~ComponentCamera()
 {}
 
-void ComponentCamera::Update()
+void ComponentCamera::Update(float dt, Application* App)
 {
 	frustum.SetPos(owner->GetComponent<Transform>()->GetPos());
 	frustum.SetUp(owner->GetComponent<Transform>()->GetGlobalTransform().WorldY());

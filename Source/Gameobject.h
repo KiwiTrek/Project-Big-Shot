@@ -8,6 +8,8 @@
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
+#include "ComponentBillboard.h"
+#include "ComponentEmitter.h"
 
 #include <string>
 #include <vector>
@@ -17,6 +19,8 @@ typedef ComponentMaterial Material;
 typedef ComponentMesh Mesh;
 typedef ComponentTransform Transform;
 typedef ComponentCamera Camera;
+typedef ComponentBillboard Billboard;
+typedef ComponentEmitter Emitter;
 
 typedef rapidjson::GenericObject<true, rapidjson::Value> jsonObject;
 
@@ -26,7 +30,6 @@ public:
 	GameObject(std::string n, bool active = true);
 	~GameObject();
 
-	void Update();
 	bool CleanUp();
 
 	Component* CreateComponent(ComponentTypes cType, ComponentTransform* t = nullptr);
