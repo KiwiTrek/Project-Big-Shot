@@ -49,12 +49,10 @@ public:
 	template<class T> T* GetComponent()
 	{
 		T* component = nullptr;
-		std::vector<Component*>::iterator c = components.begin();
-		while (c != components.end())
+		for(std::vector<Component*>::iterator c = components.begin(); c != components.end(); c++)
 		{
 			component = dynamic_cast<T*>((*c));
 			if (component) break;
-			c++;
 		}
 		return component;
 	}

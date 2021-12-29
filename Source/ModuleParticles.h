@@ -1,9 +1,14 @@
 #ifndef __MODULE_PARTICLES_H__
 #define __MODULE_PARTICLES_H__
 
+#define MAX_PARTICLES 20000
+
 #include "Module.h"
 #include "Globals.h"
-#include "Particle.h"
+#include <vector>
+
+class GameObject;
+class ResourceMesh;
 
 class ModuleParticles : public Module
 {
@@ -18,11 +23,16 @@ public:
 	bool CleanUp();
 
 
-
 	/*void Load(std::string scene);
 	void Save(std::string scene);*/
 
 public:
+	std::vector<GameObject*> emitters;
+
+	ResourceMesh* plane = nullptr;
+
+	int activeParticles = 0;
+	GameObject* firework = nullptr;
 };
 
 #endif // !__MODULE_PARTICLES_H__

@@ -167,8 +167,7 @@ Resource* ModuleResources::RequestResource(UID uid)
 Resource* ModuleResources::RequestResource(Shape shape)
 {
 	Resource* r = nullptr;
-	std::map<Shape, Resource*>::iterator it = shapes.begin();
-	while (it != shapes.end())
+	for(std::map<Shape, Resource*>::iterator it = shapes.begin(); it != shapes.end(); ++it)
 	{
 		if ((*it).first == shape)
 		{
@@ -179,7 +178,6 @@ Resource* ModuleResources::RequestResource(Shape shape)
 			r->SetUID((*it).second->GetUID());
 			break;
 		}
-		it++;
 	}
 
 	return r;
@@ -188,8 +186,7 @@ Resource* ModuleResources::RequestResource(Shape shape)
 Resource* ModuleResources::RequestResource(std::string name)
 {
 	Resource* r = nullptr;
-	std::map<UID, Resource*>::iterator it = loadedResources.begin();
-	while (it != loadedResources.end())
+	for (std::map<UID, Resource*>::iterator it = loadedResources.begin(); it != loadedResources.end(); ++it)
 	{
 		if ((*it).second->GetAssetFile() == name)
 		{
@@ -197,13 +194,11 @@ Resource* ModuleResources::RequestResource(std::string name)
 			r->SetUID((*it).first);
 			break;
 		}
-		it++;
 	}
 
 	if (r == nullptr)
 	{
-		std::map<UID, Resource*>::iterator it = resources.begin();
-		while (it != resources.end())
+		for(std::map<UID, Resource*>::iterator it = resources.begin(); it != resources.end(); it++)
 		{
 			if ((*it).second->GetAssetFile() == name)
 			{
@@ -211,7 +206,6 @@ Resource* ModuleResources::RequestResource(std::string name)
 				r->SetUID((*it).first);
 				break;
 			}
-			it++;
 		}
 	}
 
@@ -221,8 +215,7 @@ Resource* ModuleResources::RequestResource(std::string name)
 Resource* ModuleResources::RequestResource(Color color)
 {
 	Resource* r = nullptr;
-	std::map<UID, Resource*>::iterator it = loadedResources.begin();
-	while (it != loadedResources.end())
+	for(std::map<UID, Resource*>::iterator it = loadedResources.begin(); it != loadedResources.end(); it++)
 	{
 		ResourceMaterial* rColor = (ResourceMaterial*)(*it).second;
 		if (rColor->diffuse == color)
@@ -231,13 +224,11 @@ Resource* ModuleResources::RequestResource(Color color)
 			r->SetUID((*it).first);
 			break;
 		}
-		it++;
 	}
 
 	if (r == nullptr)
 	{
-		std::map<UID, Resource*>::iterator it = resources.begin();
-		while (it != resources.end())
+		for(std::map<UID, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
 		{
 			ResourceMaterial* rColor = (ResourceMaterial*)(*it).second;
 			if (rColor->diffuse == color)
@@ -246,7 +237,6 @@ Resource* ModuleResources::RequestResource(Color color)
 				r->SetUID((*it).first);
 				break;
 			}
-			it++;
 		}
 	}
 

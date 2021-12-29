@@ -24,11 +24,9 @@ UpdateStatus PanelInspector::Update()
 		if (g == App->scene->GetSceneRoot()) flags |= ImGuiInputTextFlags_ReadOnly;
 		if (ImGui::InputText("Name", &name, flags)) g->name = name;
 		IMGUI_PRINT(IMGUI_YELLOW, "UID: ", "%d", g->uid);
-		std::vector<Component*>::iterator item = g->components.begin();
-		while (item != g->components.end())
+		for (std::vector<Component*>::iterator item = g->components.begin(); item != g->components.end(); item++)
 		{
 			(*item)->DrawInspector(App);
-			item++;
 		}
 	}
 	else

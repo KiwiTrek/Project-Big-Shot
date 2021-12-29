@@ -237,8 +237,7 @@ bool PanelHierarchy::RightClickMenu()
 void PanelHierarchy::MoveUp()
 {
 	std::vector<GameObject*> list = App->gameObjects->selectedGameObject->parent->children;
-	std::vector<GameObject*>::iterator listItem = list.begin();
-	while (listItem != list.end())
+	for (std::vector<GameObject*>::iterator listItem = list.begin(); listItem != list.end(); ++listItem)
 	{
 		if ((*listItem) == App->gameObjects->selectedGameObject)
 		{
@@ -255,15 +254,13 @@ void PanelHierarchy::MoveUp()
 				break;
 			}
 		}
-		listItem++;
 	}
 }
 
 void PanelHierarchy::MoveDown()
 {
 	std::vector<GameObject*> list = App->gameObjects->selectedGameObject->parent->children;
-	std::vector<GameObject*>::iterator listItem = list.begin();
-	while (listItem != list.end())
+	for(std::vector<GameObject*>::iterator listItem = list.begin(); listItem != list.end(); ++listItem)
 	{
 		if ((*listItem) == App->gameObjects->selectedGameObject)
 		{
@@ -280,7 +277,6 @@ void PanelHierarchy::MoveDown()
 				break;
 			}
 		}
-		listItem++;
 	}
 }
 

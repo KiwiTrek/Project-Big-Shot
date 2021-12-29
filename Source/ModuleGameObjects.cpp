@@ -65,8 +65,7 @@ UpdateStatus ModuleGameObjects::Update(float dt)
 {
 	UpdateStatus ret = UpdateStatus::UPDATE_CONTINUE;
 
-	std::vector<GameObject*>::iterator item = gameObjectList.begin();
-	while (item != gameObjectList.end())
+	for(std::vector<GameObject*>::iterator item = gameObjectList.begin(); item != gameObjectList.end(); item++)
 	{
 		if (!(*item)->children.empty()) ret = UpdateChildren(dt, (*item));
 		std::vector<Component*>::iterator c = (*item)->components.begin();
@@ -80,7 +79,6 @@ UpdateStatus ModuleGameObjects::Update(float dt)
 			}
 			c++;
 		}
-		item++;
 	}
 
 	GuizmoTransformation();
@@ -92,8 +90,7 @@ UpdateStatus ModuleGameObjects::UpdateChildren(float dt, GameObject* parent)
 {
 	UpdateStatus ret = UpdateStatus::UPDATE_CONTINUE;
 
-	std::vector<GameObject*>::iterator item = parent->children.begin();
-	while (item != parent->children.end())
+	for (std::vector<GameObject*>::iterator item = parent->children.begin(); item != parent->children.end(); ++item)
 	{
 		if (!(*item)->children.empty()) ret = UpdateChildren(dt, (*item));
 		std::vector<Component*>::iterator c = (*item)->components.begin();
@@ -107,18 +104,17 @@ UpdateStatus ModuleGameObjects::UpdateChildren(float dt, GameObject* parent)
 			}
 			c++;
 		}
-		item++;
 	}
 	return ret;
 }
 
 UpdateStatus ModuleGameObjects::PostUpdate()
 {
-	std::vector<GameObject*>::iterator item = gameObjectList.begin();
-	while (item != gameObjectList.end())
+	for(std::vector<GameObject*>::iterator item = gameObjectList.begin(); item != gameObjectList.end(); ++item)
 	{
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
+		//Mesh
 		ComponentMesh* m = (*item)->GetComponent<Mesh>();
 		if (m != nullptr && m->IsActive())
 		{
@@ -145,6 +141,7 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 			if (m->drawBBox) m->DrawBBox();
 		}
 
+		//Camera
 		ComponentCamera* c = (*item)->GetComponent<Camera>();
 		if (c != nullptr && c->IsActive())
 		{
@@ -159,8 +156,6 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 				c->drawFrustum = false;
 			}
 		}
-
-		++item;
 	}
 
 	return UpdateStatus::UPDATE_CONTINUE;
@@ -169,11 +164,11 @@ UpdateStatus ModuleGameObjects::PostUpdate()
 
 void ModuleGameObjects::RenderChildren(GameObject* parent)
 {
-	std::vector<GameObject*>::iterator item = parent->children.begin();
-	while (item != parent->children.end())
+	for(std::vector<GameObject*>::iterator item = parent->children.begin(); item != parent->children.end(); ++item)
 	{
 		if (!(*item)->children.empty()) RenderChildren((*item));
 
+		//Mesh
 		ComponentMesh* m = (*item)->GetComponent<Mesh>();
 		if (m != nullptr && m->IsActive())
 		{
@@ -197,14 +192,14 @@ void ModuleGameObjects::RenderChildren(GameObject* parent)
 			}
 			if (m->render) m->Render();
 			if (m->drawBBox) m->DrawBBox();
-
-			ComponentCamera* c = (*item)->GetComponent<Camera>();
-			if (c != nullptr && c->IsActive())
-			{
-				(*item) == selectedGameObject ? c->drawFrustum = true : c->drawFrustum = false;
-			}
 		}
-		++item;
+
+		//Camera
+		ComponentCamera* c = (*item)->GetComponent<Camera>();
+		if (c != nullptr && c->IsActive())
+		{
+			(*item) == selectedGameObject ? c->drawFrustum = true : c->drawFrustum = false;
+		}
 	}
 }
 
@@ -239,12 +234,10 @@ bool ModuleGameObjects::CleanUp()
 	LOG("Deleting Game Objects");
 	ImGuizmo::Enable(false);
 
-	std::vector<GameObject*>::reverse_iterator g = gameObjectList.rbegin();
-	while (g != gameObjectList.rend())
+	for(std::vector<GameObject*>::reverse_iterator g = gameObjectList.rbegin(); g != gameObjectList.rend(); ++g)
 	{
 		(*g)->CleanUp();
 		delete (*g);
-		g++;
 	}
 	gameObjectList.clear();
 

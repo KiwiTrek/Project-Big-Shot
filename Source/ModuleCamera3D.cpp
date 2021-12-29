@@ -245,8 +245,7 @@ GameObject* ModuleCamera3D::MousePicking()
 		}
 	}
 
-	std::map<float, GameObject*>::iterator it = hitGameObjects.begin();
-	for (it; it != hitGameObjects.end(); it++)
+	for (std::map<float, GameObject*>::iterator it = hitGameObjects.begin(); it != hitGameObjects.end(); it++)
 	{
 		GameObject* gameObject = it->second;
 

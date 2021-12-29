@@ -1,8 +1,10 @@
 #include "Particle.h"
 #include "ResourceMesh.h"
 
-Particle::Particle(ResourceMesh* shape) : plane(shape)
-{}
+Particle::Particle()
+{
+
+}
 
 void Particle::Update(float dt)
 {

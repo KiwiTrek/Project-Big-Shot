@@ -63,11 +63,9 @@ bool ModuleGuiManager::Start()
 	LogConsole(LOG("Loading Gui Manager"));
 	demo = false;
 
-	std::vector<Panel*>::iterator item = listPanels.begin();
-	while (item != listPanels.end() && status)
+	for (std::vector<Panel*>::iterator item = listPanels.begin(); item != listPanels.end() && status; ++item)
 	{
 		status = (*item)->Start();
-		++item;
 	}
 
 	return status;

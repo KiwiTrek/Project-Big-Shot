@@ -1,6 +1,9 @@
 #include "ModuleParticles.h"
 #include "Application.h"
 
+#include "ModuleInput.h"
+#include "ModuleGameObjects.h"
+
 ModuleParticles::ModuleParticles(Application* app, bool startEnabled): Module(app, startEnabled)
 {}
 
@@ -20,6 +23,19 @@ bool ModuleParticles::Start()
 
 UpdateStatus ModuleParticles::Update(float dt)
 {
+    if (App->input->GetKey(SDL_SCANCODE_1) == KeyState::KEY_DOWN)
+    {
+        if (firework)
+        {
+            LOG_CONSOLE("Created firework!");
+        }
+    }
+
+    for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); ++it)
+    {
+        (*it)->GetComponent<Emitter>()->Update(dt, App);
+    }
+
     return UpdateStatus::UPDATE_CONTINUE;
 }
 
