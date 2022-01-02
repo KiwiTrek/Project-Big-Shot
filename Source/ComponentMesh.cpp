@@ -123,7 +123,7 @@ void ComponentMesh::Render()
 	glPushMatrix();
 	glMultMatrixf((float*)&t.Transposed());
 
-	glColor3f(vertexColor.r, vertexColor.g, vertexColor.b);
+	glColor3f(vertexColor.x, vertexColor.y, vertexColor.z);
 
 	wire || wireOverride ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -388,10 +388,10 @@ void ComponentMesh::OnSave(JSONWriter& writer) const
 	}
 	writer.String("vertexColor");
 	writer.StartArray();
-	writer.Double(vertexColor.r);
-	writer.Double(vertexColor.g);
-	writer.Double(vertexColor.b);
-	writer.Double(vertexColor.a);
+	writer.Double(vertexColor.x);
+	writer.Double(vertexColor.y);
+	writer.Double(vertexColor.z);
+	writer.Double(vertexColor.w);
 	writer.EndArray();
 	writer.String("wire"); writer.Bool(wire);
 	writer.String("wireOverride"); writer.Bool(wireOverride);

@@ -65,6 +65,9 @@ enum class UpdateStatus
 	UPDATE_ERROR
 };
 
+// Particle
+#define MAX_PARTICLES 20000
+
 // ImGui
 #define IMGUI_BLACK ImVec4(0.0f,0.0f,0.0f,1.f)
 #define IMGUI_LIGHT_GREY ImVec4(0.84f,0.84f,0.84f,1.f)

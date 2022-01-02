@@ -3,45 +3,28 @@
 
 #include "Globals.h"
 #include "MathGeoLib.h"
+#include "Color.h"
 
 class ResourceMesh;
 class ResourceTexture;
 class ComponentEmitter;
 
-struct ParticleData
-{
-	uint maxLife;
-
-	double rotSpeed;
-	float initialSpeed;
-	float finalSpeed;
-	float3 initialSize;
-	float3 finalSize;
-
-	float2 randAngle;
-	float3 randFinalSize;
-	float3 randInitialSize;
-
-	float4 initialColor;
-	float4 finalColor;
-
-	ResourceMesh* plane = nullptr;
-	ResourceTexture* texture = nullptr;
-};
-
 class Particle
 {
 public:
 	// Constructor
+	Particle(ResourceTexture* tex, float3 pos, Quat rot, float3 scale);
 	Particle();
+	~Particle();
 
 	// Called each loop iteration
-	void Update(float dt);
+	bool Update(float dt);
 
 	// Draws the particle
 	bool Draw();
 
-	float4x4 GetMatrix() const { return float4x4::FromTRS(pos, rot, scale).Transposed(); }
+	float4x4 GetMatrix() const;
+	void EndParticle(bool& ret);
 
 public:
 	float camDistance = 0.0f;
@@ -50,14 +33,33 @@ public:
 	ComponentEmitter* owner = nullptr;
 
 private:
-	ParticleData data;
+	uint life = 0;
+	uint maxLife;
 
 	float3 pos;
 	Quat rot;
+	float angle;
 	float3 scale;
-	float4 speed;
 
-	uint life = 0;
+	float speed;
+	float angularVelocity;
+
+	float acceleration;
+	float angularAcceleration;
+
+	float3 direction;
+
+	float sizeOverTime;
+
+	std::vector<FadeColor> color;
+	int index;
+	bool multiColor;
+	Color currentColor;
+
+	ResourceMesh* plane = nullptr;
+	ResourceTexture* texture = nullptr;
+
+	bool subEmitter;
 };
 
 struct particleCompare

@@ -108,7 +108,7 @@ UID ModuleResources::Exists(Resource::Type type, const char* pathFile, bool colo
 			ResourceMaterial* rm = (ResourceMaterial*)(*it).second;
 			if ((*it).second->GetType() == Resource::Type::MATERIAL)
 			{
-				if (color && rm->diffuse == c)
+				if (color && CompareColors(rm->diffuse, c))
 				{
 					return (*it).first;
 				}
@@ -218,7 +218,7 @@ Resource* ModuleResources::RequestResource(Color color)
 	for(std::map<UID, Resource*>::iterator it = loadedResources.begin(); it != loadedResources.end(); it++)
 	{
 		ResourceMaterial* rColor = (ResourceMaterial*)(*it).second;
-		if (rColor->diffuse == color)
+		if (CompareColors(rColor->diffuse, color))
 		{
 			r = (*it).second;
 			r->SetUID((*it).first);
@@ -231,7 +231,7 @@ Resource* ModuleResources::RequestResource(Color color)
 		for(std::map<UID, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
 		{
 			ResourceMaterial* rColor = (ResourceMaterial*)(*it).second;
-			if (rColor->diffuse == color)
+			if(CompareColors(rColor->diffuse, color))
 			{
 				r = (*it).second;
 				r->SetUID((*it).first);
@@ -496,7 +496,7 @@ bool ModuleResources::SaveMaterial(const ResourceMaterial* rm, const std::string
 		cursor += bytes;
 
 		bytes = colorBytes;
-		float color[4] = { rm->diffuse.r,rm->diffuse.g,rm->diffuse.b,rm->diffuse.a };
+		float color[4] = { rm->diffuse.x,rm->diffuse.y,rm->diffuse.z,rm->diffuse.w };
 		memcpy(cursor, color, bytes);
 		cursor += bytes;
 
@@ -569,4 +569,9 @@ ResourceMaterial* ModuleResources::LoadMaterial(std::string fileName)
 		return rm;
 	}
 	return nullptr;
+}
+
+bool ModuleResources::CompareColors(Color a, Color b)
+{
+	return (a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w);
 }

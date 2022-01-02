@@ -17,10 +17,10 @@ ResourceMaterial::ResourceMaterial(UID uid) : Resource(uid, Resource::Type::MATE
 ResourceMaterial::ResourceMaterial(UID uid, Color c) : Resource(uid, Resource::Type::MATERIAL)
 {
 	data = new GLubyte[4];
-	data[0] = (GLubyte)(c.r * 255);
-	data[1] = (GLubyte)(c.g * 255);
-	data[2] = (GLubyte)(c.b * 255);
-	data[3] = (GLubyte)(c.a * 255);
+	data[0] = (GLubyte)(c.x * 255);
+	data[1] = (GLubyte)(c.y * 255);
+	data[2] = (GLubyte)(c.z * 255);
+	data[3] = (GLubyte)(c.w * 255);
 
 	name = "Color_texture";
 	texId = -1;

@@ -71,7 +71,7 @@ UpdateStatus ModuleGameObjects::Update(float dt)
 		std::vector<Component*>::iterator c = (*item)->components.begin();
 		while (c != (*item)->components.end())
 		{
-			(*c)->Update(dt, App);
+			if((*c)->IsActive()) (*c)->Update(dt, App);
 			if ((*item) == selectedGameObject && (*c)->type == ComponentTypes::MESH)
 			{
 				ComponentMesh* cm = (ComponentMesh*)(*c);
@@ -96,7 +96,7 @@ UpdateStatus ModuleGameObjects::UpdateChildren(float dt, GameObject* parent)
 		std::vector<Component*>::iterator c = (*item)->components.begin();
 		while (c != (*item)->components.end())
 		{
-			(*c)->Update(dt, App);
+			if((*c)->IsActive()) (*c)->Update(dt, App);
 			if ((*item) == selectedGameObject && (*c)->type == ComponentTypes::MESH)
 			{
 				ComponentMesh* cm = (ComponentMesh*)(*c);

@@ -6,8 +6,11 @@ Light::Light() : ref(-1), on(false), position(float3(0.0f, 0.0f, 0.0f))
 
 void Light::Init()
 {
-	glLightfv(ref, GL_AMBIENT, &ambient);
-	glLightfv(ref, GL_DIFFUSE, &diffuse);
+	GLfloat ambientGl[] = { ambient.x,ambient.y,ambient.z,ambient.w };
+	GLfloat diffuseGl[] = { diffuse.x,diffuse.y,diffuse.z,diffuse.w };
+
+	glLightfv(ref, GL_AMBIENT, ambientGl);
+	glLightfv(ref, GL_DIFFUSE, diffuseGl);
 }
 
 void Light::SetPos(float x, float y, float z)

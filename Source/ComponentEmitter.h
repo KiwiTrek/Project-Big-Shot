@@ -8,6 +8,8 @@
 
 #include "Particle.h"
 
+class GameObject;
+
 struct EmitterData
 {
 	enum class EmitterType
@@ -18,30 +20,56 @@ struct EmitterData
 		FIREWORK_EXPLOSION
 	} eType;
 
-	uint maxLife;
+	float duration = 1.0f;
+	bool loop = true;
 
-	double rotSpeed;
-	float initialSpeed;
-	float finalSpeed;
-	float3 initialSize;
-	float3 finalSize;
 
-	Color initialColor;
-	Color finalColor;
+	bool burst = false;
+	int minPart = 0;
+	int maxPart = 10;
+	float repeatTime = 1.0f;
 
-	uint emitNumber;
-	uint emitNumMult;
-	uint maxParticleLife;
-	double emitLifetime;
-	float3 angleRange;
+	float gravity = 0.0f;
 
-	float2 randRotSpeed;
-	float2 randInitialSpeed;
-	float2 randFinalSpeed;
-	float2 randEmitMult;
-	float2 randLife;
-	float2 randInitialSize;
-	float2 randFinalSize;
+	AABB boxCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+	float3 sizeOBB = float3::zero;
+	bool drawAABB = false;
+	float3 posDifAABB = float3::zero;
+
+	ResourceMaterial* texture = nullptr;
+	int textureRows = 1;
+	int textureColumns = 1;
+
+	bool checkLife = false;
+	bool checkSpeed = false;
+	bool checkAcceleration = false;
+	bool checkSize = false;
+	bool checkSizeOverTime = false;
+	bool checkRotation = false;
+	bool checkAngularAcceleration = false;
+	bool checkAngularVelocity = false;
+
+	bool isSubEmitter = false;
+	GameObject* subEmitter = nullptr;
+	uint subEmitterUUID = 0u;
+
+	int rateOverTime = 10;
+	float timeToParticle = 0.0f;
+	bool subEmitterActive = false;
+
+	float2 life = float2(5.0f, 5.0f);
+	float2 speed = float2(3.0f, 3.0f);
+	float2 acceleration = float2(0.0f, 0.0f);
+	float2 sizeOverTime = float2(0.0f, 0.0f);
+	float2 size = float2(1.0f, 1.0f);
+	float2 rotation = float2(0.0f, 0.0f);
+	float2 angularAcceleration = float2(0.0f, 0.0f);
+	float2 angularVelocity = float2(0.0f, 0.0f);
+
+	std::vector<FadeColor> color;
+	bool timeColor = false;
+
+	float3 particleDirection = float3::unitY;
 };
 
 class ComponentEmitter : public Component
@@ -52,17 +80,25 @@ public:
 
 	void Update(float dt, Application* App) override;
 	void DrawInspector(Application* App);
+	void ClearEmitter();
 
 	float GenerateRandNum(float min, float max);
+	void ShowFloatValue(float2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
 
+	void CreateParticles(int num, const float3& pos, int lastUsedParticle);
 	void DestroyParticle(Particle* p);
+	bool EditColor(FadeColor& color, uint pos = 0);
 
 public:
 	Timer lifeTimer;
+	Timer burstTimer;
+	Timer loopTimer;
+
 	EmitterData data;
 	uint maxParticles;
 
 	std::vector<Particle*> particlePool;
+	Particle* allParticles;
 };
 
 #endif //!__COMPONENT_EMITTER_H__

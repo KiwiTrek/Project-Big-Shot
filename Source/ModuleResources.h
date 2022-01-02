@@ -48,6 +48,7 @@ public:
 
 private:
 	void ReleaseResourceReferences(Resource::Type type, UID uid, GameObject* parent = nullptr);
+	bool CompareColors(Color a, Color b);
 
 private:
 	std::map<UID, Resource*> resources;

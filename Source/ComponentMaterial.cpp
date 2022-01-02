@@ -182,10 +182,10 @@ void ComponentMaterial::OnSave(JSONWriter& writer) const
 			writer.String("Color"); writer.Bool(material->usingColor);
 			writer.String("Diffuse");
 			writer.StartArray();
-			writer.Double(material->diffuse.r);
-			writer.Double(material->diffuse.g);
-			writer.Double(material->diffuse.b);
-			writer.Double(material->diffuse.a);
+			writer.Double(material->diffuse.x);
+			writer.Double(material->diffuse.y);
+			writer.Double(material->diffuse.z);
+			writer.Double(material->diffuse.w);
 			writer.EndArray();
 		}
 	}
