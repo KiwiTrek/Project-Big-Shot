@@ -370,7 +370,7 @@ void ComponentEmitter::ClearEmitter()
 
 	data.color.clear();
 	data.texture = nullptr;
-	allParticles = nullptr;
+	delete[] allParticles;
 }
 
 float ComponentEmitter::GenerateRandNum(float min, float max)

@@ -5,6 +5,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleGameObjects.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleParticles.h"
 
 ModuleScene::ModuleScene(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -36,6 +37,8 @@ bool ModuleScene::Init()
 
 bool ModuleScene::Start()
 {
+	App->gameObjects->AddGameobject(App->particles->CreateEmitter());
+
 	return true;
 }
 

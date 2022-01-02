@@ -98,7 +98,7 @@ public:
 	uint maxParticles;
 
 	std::vector<Particle*> particlePool;
-	Particle* allParticles;
+	Particle allParticles[MAX_PARTICLES];
 };
 
 #endif //!__COMPONENT_EMITTER_H__

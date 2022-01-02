@@ -50,6 +50,17 @@ Component* GameObject::CreateComponent(ComponentTypes cType, ComponentTransform*
 		c = new ComponentCamera();
 		break;
 	}
+	case ComponentTypes::EMITTER:
+	{
+		EmitterData data;
+		c = new ComponentEmitter(data);
+		break;
+	}
+	case ComponentTypes::BILLBOARD:
+	{
+		c = new ComponentBillboard();
+		break;
+	}
 	default:
 		break;
 	}

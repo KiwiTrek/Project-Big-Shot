@@ -83,7 +83,14 @@ GameObject* ModuleParticles::CreateEmitter()
 {
     GameObject* go = new GameObject("Emitter");
     Emitter* e = (Emitter*)go->CreateComponent(ComponentTypes::EMITTER);
-    e->allParticles = particles;
+    for (uint i = 0; i < MAX_PARTICLES; ++i)
+    {
+        if (particles[i].active && particles[i].owner != nullptr)
+        {
+            e->allParticles[i] = particles[i];
+        }
+    }
+    //e->allParticles = particles;
     emitters.push_back(go);
     return go;
 }
