@@ -13,7 +13,7 @@ class Particle
 {
 public:
 	// Constructor
-	Particle(ResourceTexture* tex, float3 pos, Quat rot, float3 scale);
+	Particle(ResourceMesh* mesh, ResourceTexture* tex, float3 pos, Quat rot, float3 scale);
 	Particle();
 	~Particle();
 

@@ -32,12 +32,6 @@ bool ModuleResources::Init()
 
 	LOG_CONSOLE("Loading materials found in Resources folder");
 	listNames.clear();
-	App->fileSystem->GetAllFilesWithExtension(App->fileSystem->texturePath.c_str(), TEXTURE_FORMAT, listNames);
-	for (uint i = 0; i < listNames.size(); ++i)
-	{
-		ResourceMaterial* rm = LoadMaterial(listNames.at(i).c_str());
-		if (rm != nullptr) loadedResources[rm->GetUID()] = rm;
-	}
 
 	shapes[Shape::CUBE] = CreateNewResource(Resource::Type::MESH, Shape::CUBE);
 	shapes[Shape::SPHERE] = CreateNewResource(Resource::Type::MESH, Shape::SPHERE);
@@ -45,6 +39,28 @@ bool ModuleResources::Init()
 	shapes[Shape::TORUS] = CreateNewResource(Resource::Type::MESH, Shape::TORUS);
 	shapes[Shape::PLANE] = CreateNewResource(Resource::Type::MESH, Shape::PLANE);
 	shapes[Shape::CONE] = CreateNewResource(Resource::Type::MESH, Shape::CONE);
+	return true;
+}
+
+bool ModuleResources::Start()
+{
+	std::vector<std::string> listNames;
+	App->fileSystem->GetAllFilesWithExtension(App->fileSystem->texturePath.c_str(), "png", listNames);
+	for (uint i = 0; i < listNames.size(); ++i)
+	{
+		ResourceMaterial* rm = App->importer->LoadTexture(listNames.at(i).c_str());
+		if (rm != nullptr) loadedResources[rm->GetUID()] = rm;
+	}
+	listNames.clear();
+
+	App->fileSystem->GetAllFilesWithExtension(App->fileSystem->texturePath.c_str(), "tga", listNames);
+	for (uint i = 0; i < listNames.size(); ++i)
+	{
+		ResourceMaterial* rm = App->importer->LoadTexture(listNames.at(i).c_str());
+		if (rm != nullptr) loadedResources[rm->GetUID()] = rm;
+	}
+	listNames.clear();
+
 	return true;
 }
 

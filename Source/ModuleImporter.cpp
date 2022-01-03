@@ -117,7 +117,7 @@ GameObject* ModuleImporter::ImportChild(const aiScene* scene, aiNode* n, aiNode*
 		g->parent = parentGameObject;
 	}
 
-	ComponentTransform* t = (ComponentTransform*)g->CreateComponent(ComponentTypes::TRANSFORM, LoadTransform(n));
+	ComponentTransform* t = (ComponentTransform*)g->CreateComponent(ComponentTypes::TRANSFORM, EmitterData(), LoadTransform(n));
 	if (t->GetScale().x >= 100.0f) t->SetScale(1.0f, 1.0f, 1.0f);
 	t->UpdateGlobalTransform();
 	if (g->parent != nullptr) g->parent->UpdateChildrenTransforms();
@@ -154,7 +154,7 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 	UID uid = App->resources->Exists(Resource::Type::MATERIAL, newPath.c_str());
 	if (uid == -1)
 	{
-		uint id = 0;
+		uint id = -1;
 		ilGenImages(1, &id);
 		ilBindImage(id);
 
@@ -163,7 +163,10 @@ ResourceMaterial* ModuleImporter::LoadTexture(const char* path)
 
 		ResourceMaterial* texture = (ResourceMaterial*)App->resources->CreateNewResource(Resource::Type::MATERIAL, Shape::NONE, newPath.c_str());
 
-		if (id == 0) LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
+		if (id == -1)
+		{
+			LOG_CONSOLE("Error generation the image buffer: %s, %d", path, ilGetError());
+		}
 
 		char* data;
 		uint bytes = App->fileSystem->Load(path, &data);

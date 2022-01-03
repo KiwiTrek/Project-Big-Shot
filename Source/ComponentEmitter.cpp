@@ -58,7 +58,7 @@ void ComponentEmitter::DrawInspector(Application* App)
 {
 	if (ImGui::CollapsingHeader("Particle System", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		if (ImGui::CollapsingHeader("Particle Values", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::TreeNodeEx("Particle Values"))
 		{
 			//this is test
 			ImGui::TextDisabled("(?)");
@@ -87,7 +87,7 @@ void ComponentEmitter::DrawInspector(Application* App)
 			ShowFloatValue(data.angularAcceleration, data.checkAngularAcceleration, "Angular Acceleration", 0.25f, -45.0f, 45.0f);
 
 			ImGui::Checkbox("##Lifetime", &data.checkLife);
-			ShowFloatValue(data.life, data.checkLife, "Lifetime", 0.5f, 1.0f, 20.0f);
+			ShowFloatValue(data.particleLife, data.checkLife, "Lifetime", 0.5f, 1.0f, 20.0f);
 
 			ImGui::Checkbox("##Size", &data.checkSize);
 			ShowFloatValue(data.size, data.checkSize, "Size", 0.1f, 0.1f, 5.0f);
@@ -101,69 +101,85 @@ void ComponentEmitter::DrawInspector(Application* App)
 			if (ImGui::Checkbox("Loop", &data.loop))
 				loopTimer.Start();
 			ImGui::DragFloat("Duration", &data.duration, 0.5f, 0.5f, 20.0f, "%.2f");
+
+			ImGui::TreePop();
 		}
 
-		/*if (ImGui::CollapsingHeader("Particle Shape"))
+		if (ImGui::TreeNodeEx("Emitter Shape"))
 		{
 			ImGui::Separator();
 			if (ImGui::BeginMenu("Change Shape"))
 			{
 				if (ImGui::MenuItem("Box"))
-					normalShapeType = ShapeType_BOX;
+					data.shapeType = Shape::CUBE;
 				else if (ImGui::MenuItem("Sphere"))
-					normalShapeType = ShapeType_SPHERE;
+					data.shapeType = Shape::SPHERE;
 				else if (ImGui::MenuItem("Cone"))
-					normalShapeType = ShapeType_CONE;
+					data.shapeType = Shape::CONE;
 				ImGui::End();
 			}
 
-
 			float3 pos;
-			switch (normalShapeType)
+			switch (data.shapeType)
 			{
-			case ShapeType_BOX:
+			case Shape::CUBE:
 				ImGui::Text("Box");
-				pos = boxCreation.Size();
+				pos = data.cubeCreation.Size();
 				ImGui::DragFloat3("Box Size", &pos.x, 0.1f, 0.1f, 20.0f, "%.2f");
 
-				boxCreation.SetFromCenterAndSize(boxCreation.CenterPoint(), pos);
+				data.cubeCreation.SetFromCenterAndSize(data.cubeCreation.CenterPoint(), pos);
 
 				break;
-			case ShapeType_SPHERE:
-			case ShapeType_SPHERE_BORDER:
-			case ShapeType_SPHERE_CENTER:
+			case Shape::SPHERE:
+			{
 				ImGui::Text("Sphere");
 
 				ImGui::Text("Particle emision from:");
 
-				if (ImGui::RadioButton("Random", normalShapeType == ShapeType_SPHERE))
-					normalShapeType = ShapeType_SPHERE;
-				ImGui::SameLine();
-				if (ImGui::RadioButton("Center", normalShapeType == ShapeType_SPHERE_CENTER))
-					normalShapeType = ShapeType_SPHERE_CENTER;
-				ImGui::SameLine();
-				if (ImGui::RadioButton("Border", normalShapeType == ShapeType_SPHERE_BORDER))
-					normalShapeType = ShapeType_SPHERE_BORDER;
+				bool random = data.sType == EmitterData::EmitterSphere::RANDOM;
+				bool center = data.sType == EmitterData::EmitterSphere::CENTER;
+				bool border = data.sType == EmitterData::EmitterSphere::BORDER;
 
-				ImGui::DragFloat("Sphere Size", &sphereCreation.r, 0.25f, 1.0f, 20.0f, "%.2f");
+				if (ImGui::RadioButton("Random", random))
+					data.sType = EmitterData::EmitterSphere::RANDOM;
+				ImGui::SameLine();
+				if (ImGui::RadioButton("Center", center))
+					data.sType = EmitterData::EmitterSphere::CENTER;
+				ImGui::SameLine();
+				if (ImGui::RadioButton("Border", border))
+					data.sType = EmitterData::EmitterSphere::BORDER;
+
+				ImGui::DragFloat("Sphere Size", &data.sphereCreation.r, 0.25f, 1.0f, 20.0f, "%.2f");
 
 				break;
-			case ShapeType_CONE:
+			}
+			case Shape::CONE:
 				ImGui::Text("Cone");
-				ImGui::DragFloat("Sphere Size", &circleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
+				ImGui::DragFloat("Sphere Size", &data.circleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
 
 				break;
 			default:
 				break;
 			}
-		}*/
+			ImGui::TreePop();
+		}
 
-		if (ImGui::CollapsingHeader("Particle Color"))
+		if (ImGui::TreeNodeEx("Particle Color"))
 
 		{
 			ImGui::Text("Particle Color");
 			ImGui::SameLine();
-			//ImGui::ShowHelpMarker("Click color square for change it");
+
+			ImGui::TextDisabled("(?)");
+			if (ImGui::IsItemHovered())
+			{
+				ImGui::BeginTooltip();
+				ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+				ImGui::TextUnformatted("Click color square for change it");
+				ImGui::PopTextWrapPos();
+				ImGui::EndTooltip();
+			}
+
 			std::vector<FadeColor> deleteColor;
 			uint posList = 0u;
 			int nextPos = 100;
@@ -199,9 +215,10 @@ void ComponentEmitter::DrawInspector(Application* App)
 					//data.color.sort();
 				}
 			}
+			ImGui::TreePop();
 		}
 
-		if (ImGui::CollapsingHeader("Particle Burst"))
+		if (ImGui::TreeNodeEx("Particle Burst"))
 		{
 			std::string burstTypeName = "Smoke";
 			ImGui::Checkbox("Burst", &data.burst);
@@ -233,9 +250,10 @@ void ComponentEmitter::DrawInspector(Application* App)
 			ImGui::DragFloat("Repeat Time", &data.repeatTime, 0.5f, 0.0f, 0.0f, "%.1f");
 
 			ImGui::Separator();
+			ImGui::TreePop();
 		}
 
-		/*if (ImGui::CollapsingHeader("Particle BoundingBox"))
+		/*if (ImGui::TreeNode("Particle BoundingBox"))
 		{
 			ImGui::Checkbox("Bounding Box", &data.drawAABB);
 			if (data.drawAABB)
@@ -254,70 +272,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 				}
 			}
 		}*/
-
-		if (ImGui::CollapsingHeader("Particle Texture", ImGuiTreeNodeFlags_FramePadding))
-		{
-			if (data.texture)
-			{
-				std::string name = data.texture->path;
-				name = name.substr(name.find_last_of("\\") + 1);
-
-				ImGui::Text("Loaded texture '%s'", name.data());
-				ImGui::Text("Texture used %i times", data.texture->referenceCount);
-
-				ImGui::Image((void*)(intptr_t)data.texture->GetUID(), ImVec2(256.0f, 256.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
-
-				// do it our way
-				/*if (ImGui::BeginMenu("Change Texture"))
-				{
-					std::vector<Resource*> resource;
-					App->resources->GetResources(resource, ResourceType::texture);
-
-					for (std::vector<Resource*>::iterator iterator = resource.begin(); iterator != resource.end(); ++iterator)
-					{
-						if (ImGui::MenuItem((*iterator)->name.data()))
-						{
-							App->resources->Remove(texture);
-							texture = nullptr;
-
-							texture = ((ResourceTexture*)(*iterator));
-							texture->usage++;
-						}
-					}
-					ImGui::End();
-				}
-				if (ImGui::Button("Remove Texture", ImVec2(125, 25)))
-				{
-					App->resources->Remove(texture);
-					texture = nullptr;
-				}
-				*/
-
-			}
-			else
-			{
-				ImGui::Text("No texture loaded");
-				// do it our way
-				/*if (ImGui::BeginMenu("Add new Texture"))
-				{
-					std::vector<Resource*> resource;
-					App->resources->GetResources(resource, ResourceType::texture);
-
-					for (std::vector<Resource*>::iterator iterator = resource.begin(); iterator != resource.end(); ++iterator)
-					{
-						if (ImGui::MenuItem((*iterator)->name.data()))
-						{
-							texture = ((ResourceTexture*)(*iterator));
-							texture->usage++;
-						}
-					}
-					ImGui::End();
-				}
-				*/
-			}
-
-			ImGui::Separator();
-		}
 
 		if (ImGui::Checkbox("SubEmitter", &data.subEmitterActive))
 		{
@@ -370,7 +324,6 @@ void ComponentEmitter::ClearEmitter()
 
 	data.color.clear();
 	data.texture = nullptr;
-	delete[] allParticles;
 }
 
 float ComponentEmitter::GenerateRandNum(float min, float max)

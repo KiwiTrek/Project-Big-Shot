@@ -3,6 +3,7 @@
 
 #include "ModuleInput.h"
 #include "ModuleGameObjects.h"
+#include "ModuleResources.h"
 
 ModuleParticles::ModuleParticles(Application* app, bool startEnabled): Module(app, startEnabled)
 {}
@@ -13,6 +14,7 @@ ModuleParticles::~ModuleParticles()
 bool ModuleParticles::Init()
 {
     LOG_CONSOLE("Initializing Particles handler");
+    plane = (ResourceMesh*)App->resources->GetShape(Shape::PLANE);
     return true;
 }
 
@@ -64,10 +66,10 @@ bool ModuleParticles::CleanUp()
     for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); ++it)
     {
         DeleteEmitter((*it));
+        if (emitters.empty()) break;
     }
     emitters.clear();
 
-    delete plane;
     plane = nullptr;
     if (firework != nullptr)
     {
@@ -79,10 +81,10 @@ bool ModuleParticles::CleanUp()
     return true;
 }
 
-GameObject* ModuleParticles::CreateEmitter()
+GameObject* ModuleParticles::CreateEmitter(EmitterData data)
 {
     GameObject* go = new GameObject("Emitter");
-    Emitter* e = (Emitter*)go->CreateComponent(ComponentTypes::EMITTER);
+    Emitter* e = (Emitter*)go->CreateComponent(ComponentTypes::EMITTER, data);
     for (uint i = 0; i < MAX_PARTICLES; ++i)
     {
         if (particles[i].active && particles[i].owner != nullptr)
@@ -99,11 +101,12 @@ void ModuleParticles::DeleteEmitter(GameObject* e)
 {
     Emitter* emitter = e->GetComponent<Emitter>();
     emitter->ClearEmitter();
-    for (std::vector<GameObject*>::iterator it; it != emitters.end(); ++it)
+    for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); ++it)
     {
         if ((*it) == e)
         {
             emitters.erase(it);
+            break;
         }
     }
 }

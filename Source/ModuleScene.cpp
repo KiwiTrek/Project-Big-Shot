@@ -37,7 +37,67 @@ bool ModuleScene::Init()
 
 bool ModuleScene::Start()
 {
-	App->gameObjects->AddGameobject(App->particles->CreateEmitter());
+	EmitterData smoke;
+
+	smoke.eType = EmitterData::EmitterType::SMOKE;
+	smoke.sType = EmitterData::EmitterSphere::RANDOM;
+
+	smoke.duration = 1.0f;
+	smoke.loop = true;
+
+	smoke.burst = false;
+	smoke.minPart = 0;
+	smoke.maxPart = 10;
+	smoke.repeatTime = 1.0f;
+
+	smoke.gravity = 0.0f;
+	smoke.particleDirection = float3::unitY;
+
+	smoke.cubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+	smoke.sphereCreation = Sphere(float3::zero, 1.0f);
+	smoke.circleCreation = Circle(float3::unitY, float3::unitY, 0.25f);
+	smoke.shapeType = Shape::SPHERE;
+
+	smoke.sizeOBB = float3::zero;
+	smoke.drawAABB = false;
+	smoke.posDifAABB = float3::zero;
+
+	smoke.plane = App->particles->plane;
+	smoke.texture = (ResourceMaterial*)App->resources->RequestResource("smoke.png");
+	smoke.textureRows = 1;
+	smoke.textureColumns = 1;
+
+	smoke.checkLife = true;
+	smoke.checkSpeed = true;
+	smoke.checkAcceleration = true;
+	smoke.checkSize = true;
+	smoke.checkSizeOverTime = true;
+	smoke.checkRotation = false;
+	smoke.checkAngularAcceleration = true;
+	smoke.checkAngularVelocity = true;
+
+	smoke.isSubEmitter = false;
+	smoke.subEmitter = nullptr;
+	smoke.subEmitterUUID = 0u;
+
+	smoke.rateOverTime = 15;
+	smoke.timeToParticle = 0.0f;
+	smoke.subEmitterActive = false;
+
+	smoke.particleLife = float2(3.0f, 5.0f);
+	smoke.speed = float2(3.0f, 3.0f);
+	smoke.acceleration = float2(0.0f, 0.0f);
+	smoke.sizeOverTime = float2(0.0f, 0.0f);
+	smoke.size = float2(1.0f, 1.0f);
+	smoke.rotation = float2(0.0f, 0.0f);
+	smoke.angularAcceleration = float2(0.0f, 0.0f);
+	smoke.angularVelocity = float2(0.0f, 0.0f);
+
+	smoke.color.push_back(FadeColor(Color(1.0f,1.0f,1.0f,1.0f), 0.0f, true));
+	smoke.color.push_back(FadeColor(Color(1.0f,1.0f,1.0f,0.0f), 1.0f, true));
+	smoke.timeColor = true;
+
+	App->gameObjects->AddGameobject(App->particles->CreateEmitter(smoke));
 
 	return true;
 }

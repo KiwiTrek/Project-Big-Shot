@@ -1,7 +1,6 @@
 #ifndef __MODULE_PARTICLES_H__
 #define __MODULE_PARTICLES_H__
 
-
 #include "Module.h"
 #include "Globals.h"
 #include <vector>
@@ -9,6 +8,7 @@
 
 class GameObject;
 class ResourceMesh;
+class EmitterData;
 
 class ModuleParticles : public Module
 {
@@ -22,7 +22,7 @@ public:
 	UpdateStatus PostUpdate();
 	bool CleanUp();
 
-	GameObject* CreateEmitter();
+	GameObject* CreateEmitter(EmitterData dat);
 	void DeleteEmitter(GameObject* e);
 	void SortParticles();
 

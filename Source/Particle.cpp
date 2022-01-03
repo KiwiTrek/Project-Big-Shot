@@ -2,12 +2,10 @@
 #include "ResourceMesh.h"
 #include "Gameobject.h"
 
-Particle::Particle(ResourceTexture* tex, float3 pos, Quat rot, float3 scale)
+Particle::Particle(ResourceMesh* mesh, ResourceTexture* tex, float3 pos, Quat rot, float3 scale)
 {
-                                                                    // Set active
-
     //color.clear();
-    //plane = App->particle->plane;
+    //plane = mesh;
 
     //lifeTime = CreateRandomNum(data.life);
 

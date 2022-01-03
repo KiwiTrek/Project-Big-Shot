@@ -23,7 +23,7 @@ GameObject::~GameObject()
 	components.clear();
 }
 
-Component* GameObject::CreateComponent(ComponentTypes cType, ComponentTransform* t)
+Component* GameObject::CreateComponent(ComponentTypes cType, EmitterData data, ComponentTransform* t)
 {
 	Component* c = nullptr;
 	switch (cType)
@@ -52,7 +52,6 @@ Component* GameObject::CreateComponent(ComponentTypes cType, ComponentTransform*
 	}
 	case ComponentTypes::EMITTER:
 	{
-		EmitterData data;
 		c = new ComponentEmitter(data);
 		break;
 	}

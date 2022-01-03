@@ -32,7 +32,7 @@ public:
 
 	bool CleanUp();
 
-	Component* CreateComponent(ComponentTypes cType, ComponentTransform* t = nullptr);
+	Component* CreateComponent(ComponentTypes cType, EmitterData data = EmitterData(), ComponentTransform* t = nullptr);
 	void CreateComponent(Component* c);
 	bool RemoveComponent(Component* c);
 

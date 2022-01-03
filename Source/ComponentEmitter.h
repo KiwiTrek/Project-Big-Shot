@@ -20,9 +20,15 @@ struct EmitterData
 		FIREWORK_EXPLOSION
 	} eType;
 
+	enum class EmitterSphere
+	{
+		RANDOM,
+		CENTER,
+		BORDER
+	} sType;
+
 	float duration = 1.0f;
 	bool loop = true;
-
 
 	bool burst = false;
 	int minPart = 0;
@@ -30,12 +36,19 @@ struct EmitterData
 	float repeatTime = 1.0f;
 
 	float gravity = 0.0f;
+	float3 particleDirection = float3::unitY;
 
-	AABB boxCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+	AABB cubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+	Sphere sphereCreation = Sphere(float3::zero, 1.0f);
+	Circle circleCreation = Circle(float3::unitY, float3::unitY, 1.0f);
+
+	Shape shapeType = Shape::CUBE;
+
 	float3 sizeOBB = float3::zero;
 	bool drawAABB = false;
 	float3 posDifAABB = float3::zero;
 
+	ResourceMesh* plane = nullptr;
 	ResourceMaterial* texture = nullptr;
 	int textureRows = 1;
 	int textureColumns = 1;
@@ -57,7 +70,7 @@ struct EmitterData
 	float timeToParticle = 0.0f;
 	bool subEmitterActive = false;
 
-	float2 life = float2(5.0f, 5.0f);
+	float2 particleLife = float2(5.0f, 5.0f);
 	float2 speed = float2(3.0f, 3.0f);
 	float2 acceleration = float2(0.0f, 0.0f);
 	float2 sizeOverTime = float2(0.0f, 0.0f);
@@ -68,8 +81,6 @@ struct EmitterData
 
 	std::vector<FadeColor> color;
 	bool timeColor = false;
-
-	float3 particleDirection = float3::unitY;
 };
 
 class ComponentEmitter : public Component
@@ -95,7 +106,7 @@ public:
 	Timer loopTimer;
 
 	EmitterData data;
-	uint maxParticles;
+	uint maxParticles = MAX_PARTICLES;
 
 	std::vector<Particle*> particlePool;
 	Particle allParticles[MAX_PARTICLES];

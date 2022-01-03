@@ -22,6 +22,7 @@ public:
 	~ModuleResources();
 
 	bool Init();
+	bool Start();
 	bool CleanUp();
 
 	UID GenerateNewUID();
