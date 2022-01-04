@@ -84,7 +84,7 @@ bool ModuleScene::Start()
 	smoke.timeToParticle = 0.0f;
 	smoke.subEmitterActive = false;
 
-	smoke.particleLife = float2(3.0f, 5.0f);
+	smoke.particleLife = float2(5.0f, 10.0f);
 	smoke.speed = float2(3.0f, 3.0f);
 	smoke.acceleration = float2(0.0f, 0.0f);
 	smoke.sizeOverTime = float2(0.0f, 0.0f);

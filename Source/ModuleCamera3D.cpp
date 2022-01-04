@@ -242,6 +242,22 @@ GameObject* ModuleCamera3D::MousePicking()
 					hitGameObjects[dNear] = sceneGameObjects[i];
 				}
 			}
+			else
+			{
+				ComponentEmitter* e = sceneGameObjects[i]->GetComponent<Emitter>();
+				if (e != nullptr)
+				{
+					bool hit = newRay.Intersects(e->bbox);
+
+					if (hit)
+					{
+						float dNear;
+						float dFar;
+						hit = newRay.Intersects(e->bbox, dNear, dFar);
+						hitGameObjects[dNear] = sceneGameObjects[i];
+					}
+				}
+			}
 		}
 	}
 
@@ -288,7 +304,18 @@ GameObject* ModuleCamera3D::MousePicking()
 		else
 		{
 			ComponentCamera* cam = gameObject->GetComponent<Camera>();
-			if (cam != nullptr) return gameObject;
+			if (cam != nullptr)
+			{
+				return gameObject;
+			}
+			else
+			{
+				ComponentEmitter* e = gameObject->GetComponent<Emitter>();
+				if (e != nullptr)
+				{
+					return gameObject;
+				}
+			}
 		}
 	}
 

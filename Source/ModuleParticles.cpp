@@ -45,13 +45,22 @@ UpdateStatus ModuleParticles::PostUpdate()
 {
     SortParticles();
 
-    for (uint i = 0; i < MAX_PARTICLES; ++i)
+    for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); ++it)
     {
-        if (particles[i].active)
+        if ((*it)->active)
         {
-            particles[i].Draw();
+            Emitter* e = (*it)->GetComponent<Emitter>();
+            if (e->IsActive()) e->PostUpdate();
         }
     }
+
+    //for (uint i = 0; i < MAX_PARTICLES; ++i)
+    //{
+    //    if (particles[i].active)
+    //    {
+    //        particles[i].Draw();
+    //    }
+    //}
     return UpdateStatus::UPDATE_CONTINUE;
 }
 

@@ -1,55 +1,78 @@
 #include "Particle.h"
-#include "ResourceMesh.h"
+#include "RenderGlobals.h"
 #include "Gameobject.h"
+#include "ResourceMesh.h"
+#include "ResourceMaterial.h"
 
-Particle::Particle(ResourceMesh* mesh, ResourceTexture* tex, float3 pos, Quat rot, float3 scale)
+Particle::Particle(ResourceMesh* mesh, ResourceMaterial* tex, float lifeTime, float3 pos, float3 scale, float angle, float acc,float vel,float3 direction, float incrementSize, float angularAcc, float angularVel, std::vector<FadeColor> colors)
 {
-    //color.clear();
-    //plane = mesh;
+    color.clear();
+    plane = mesh;
+    texture = tex;
 
-    //lifeTime = CreateRandomNum(data.life);
+    maxLife = lifeTime;
+    life = 0.0f;
 
-    //life = 0.0f;
-
-    //speed = CreateRandomNum(data.speed);
-    //acceleration = CreateRandomNum(data.acceleration);
-    //direction = data.particleDirection;
-
-    //angle = CreateRandomNum(data.rotation) * DEGTORAD;
-    //angularVelocity = CreateRandomNum(data.angularVelocity) * DEGTORAD;
-    //angularAcceleration = CreateRandomNum(data.angularAcceleration) * DEGTORAD;
-
-    //sizeOverTime = CreateRandomNum(data.sizeOverTime);
-
-    //transform.position = pos;
-    //transform.rotation = Quat::FromEulerXYZ(0, 0, 0); //Start rotation
-    //transform.scale = float3::one * CreateRandomNum(data.size);
-
-    ////LOG("life %f", lifeTime);
-    ////LOG("size %f", transform.scale.x);
-
-    //for (std::list<ColorTime>::iterator iter = data.color.begin(); iter != data.color.end(); ++iter)
-    //    color.push_back(*iter);
-
-    //multicolor = data.timeColor;
-    //this->texture = texture;
+    this->pos = pos;
+    rot = Quat::FromEulerXYZ(0, 0, 0);
+    this->scale = scale;
 
 
-    //this->animation = animation;
-    //this->animationSpeed = animationSpeed;
-    //animationTime = 0.0f;
-    //currentFrame = 0u;
+    speed = vel;
+    acceleration = acc;
+    this->direction = direction;
 
-    //active = true;
-    //subEmitterActive = data.subEmitterActive;
-    //index = 0;
+    this->angle = angle * DEG_TO_RAD;
+    angularVelocity = angularVel * DEG_TO_RAD;
+    angularAcceleration = angularAcc * DEG_TO_RAD;
 
-    //App->particle->activeParticles++;
+    sizeOverTime = incrementSize;
+
+    //LOG("life %f", lifeTime);
+    //LOG("size %f", transform.scale.x);
+
+    for (std::vector<FadeColor>::iterator it = colors.begin(); it != colors.end(); ++it)
+    {
+        color.push_back(*it);
+    }
+
+    colors.size() > 1 ? multiColor = true : multiColor = false;
+    index = 0;
+
+    camDistance = 0.0f;
+    active = true;
 }
 
 Particle::Particle()
 {
+    life = 0.0f;
+    maxLife = 0.0f;
 
+    pos = float3(0.0f, 0.0f, 0.0f);
+    rot = Quat::FromEulerXYZ(0, 0, 0);
+    angle = 0.0f;
+    scale = float3(0.0f, 0.0f, 0.0f);
+
+    acceleration = 0.0f;
+    speed = 0.0f;
+
+    angularAcceleration = 0.0f;
+    angularVelocity = 0.0f;
+
+    direction = float3(0.0f, 0.0f, 0.0f);
+    angle = 0.0f;
+
+    sizeOverTime = 0.0f;
+
+    color.clear();
+    index = 0;
+    multiColor = false;
+    currentColor = Color();
+
+    plane = nullptr;
+    texture = nullptr;
+    camDistance = 0.0f;
+    active = false;
 }
 
 Particle::~Particle()
@@ -102,31 +125,82 @@ bool Particle::Update(float dt)
     }
     else
     {
-        EndParticle(ret);
+        if(active) EndParticle(ret);
     }
     return ret;
 }
 
-bool Particle::Draw()
+void Particle::Draw()
 {
-    return false;
+    if (plane == nullptr) return;
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    //vertices
+    glBindBuffer(GL_ARRAY_BUFFER, plane->vertexBuf);
+    glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+    //normals
+    glBindBuffer(GL_NORMAL_ARRAY, plane->normalsBuf);
+    glNormalPointer(GL_FLOAT, 0, NULL);
+
+    //indices
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, plane->indexBuf);
+
+    if (texture != nullptr)
+    {
+        //textures
+        glBindBuffer(GL_ARRAY_BUFFER, plane->textureBuf);
+        glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+        glBindTexture(GL_TEXTURE_2D, texture->texId);
+    }
+
+    float4x4 t = float4x4::FromTRS(pos, rot, scale);
+
+    glPushMatrix();
+    glMultMatrixf((float*)&t.Transposed());
+
+    glColor3f(currentColor.x, currentColor.y, currentColor.z);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    glDrawElements(GL_TRIANGLES, plane->indexNum, GL_UNSIGNED_INT, NULL);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glPopMatrix();
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_NORMAL_ARRAY, 0);
+    glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-float4x4 Particle::GetMatrix() const
+float4x4 Particle::GetMatrix()
 {
     return float4x4::FromTRS(pos, rot, scale).Transposed();
 }
 
 void Particle::EndParticle(bool& ret)
 {
-    active = false;
-    ret = false;
-    for (std::vector<Particle*>::iterator it = owner->particlePool.begin(); it != owner->particlePool.end(); ++it)
+    if (active == true)
     {
-        if (this == (*it))
+        active = false;
+        ret = false;
+        for (std::vector<Particle*>::iterator it = owner->particlePool.begin(); it != owner->particlePool.end(); ++it)
         {
-            owner->particlePool.erase(it);
-            owner = nullptr;
+            if (this == (*it))
+            {
+                owner->particlePool.erase(it);
+                owner = nullptr;
+                break;
+            }
         }
+        LOG("Particle deleted"); // dont delete this
     }
 }

@@ -115,6 +115,7 @@ bool ModuleRenderer3D::Init()
 		glDisable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
 
 		glShadeModel(GL_SMOOTH);
 	}

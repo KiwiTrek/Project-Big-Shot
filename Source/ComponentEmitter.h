@@ -90,6 +90,8 @@ public:
 	~ComponentEmitter();
 
 	void Update(float dt, Application* App) override;
+	void PostUpdate();
+	void DrawBbox() const;
 	void DrawInspector(Application* App);
 	void ClearEmitter();
 
@@ -110,6 +112,9 @@ public:
 
 	std::vector<Particle*> particlePool;
 	Particle allParticles[MAX_PARTICLES];
+
+	AABB bbox;
+	AABB drawingBbox;
 };
 
 #endif //!__COMPONENT_EMITTER_H__

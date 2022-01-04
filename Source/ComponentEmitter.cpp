@@ -11,6 +11,12 @@ ComponentEmitter::ComponentEmitter(EmitterData data, bool active) : Component(ty
 {
     type = ComponentTypes::EMITTER;
 	particlePool.clear();
+
+	lifeTimer.Start();
+	burstTimer.Start();
+	loopTimer.Start();
+
+	drawingBbox.SetFromCenterAndSize(vec(0.0f, 0.0f, 0.0f), vec(1.1f, 1.1f, 1.1f));
 }
 
 ComponentEmitter::~ComponentEmitter()
@@ -20,12 +26,13 @@ ComponentEmitter::~ComponentEmitter()
 
 void ComponentEmitter::Update(float dt, Application* App)
 {
+	bbox.SetFromCenterAndSize(owner->GetComponent<ComponentTransform>()->GetPos(), vec(1.1f, 1.1f, 1.1f));
+
 	float time = lifeTimer.ReadSec();
 	if (time > data.timeToParticle && (data.loop || loopTimer.ReadSec() < data.duration))
 	{
 		int particlesToCreate = (time / (1.0f / data.rateOverTime));
 		CreateParticles(particlesToCreate, float3::zero,App->particles->lastUsedParticle);
-
 		data.timeToParticle = (1.0f / data.rateOverTime);
 		lifeTimer.Start();
 	}
@@ -52,6 +59,132 @@ void ComponentEmitter::Update(float dt, Application* App)
 	{
 		(*p)->Update(dt);
 	}
+}
+
+void ComponentEmitter::PostUpdate()
+{
+	float sx = 0.5f;
+	float sy = 0.5f;
+	float sz = 0.5f;
+
+	//Draw Body
+	float4x4 t = owner->GetComponent<Transform>()->GetGlobalTransform();
+	glPushMatrix();
+	glMultMatrixf((float*)&t.Transposed());
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glLineWidth(3.5f);
+	glBegin(GL_QUADS);
+
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glVertex3f(-sx, -sy, sz);
+	glVertex3f(sx, -sy, sz);
+	glVertex3f(sx, sy, sz);
+	glVertex3f(-sx, sy, sz);
+
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	glVertex3f(sx, -sy, -sz);
+	glVertex3f(-sx, -sy, -sz);
+	glVertex3f(-sx, sy, -sz);
+	glVertex3f(sx, sy, -sz);
+
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(sx, -sy, sz);
+	glVertex3f(sx, -sy, -sz);
+	glVertex3f(sx, sy, -sz);
+	glVertex3f(sx, sy, sz);
+
+	glNormal3f(-1.0f, 0.0f, 0.0f);
+	glVertex3f(-sx, -sy, -sz);
+	glVertex3f(-sx, -sy, sz);
+	glVertex3f(-sx, sy, sz);
+	glVertex3f(-sx, sy, -sz);
+
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(-sx, sy, sz);
+	glVertex3f(sx, sy, sz);
+	glVertex3f(sx, sy, -sz);
+	glVertex3f(-sx, sy, -sz);
+
+	glNormal3f(0.0f, -1.0f, 0.0f);
+	glVertex3f(-sx, -sy, -sz);
+	glVertex3f(sx, -sy, -sz);
+	glVertex3f(sx, -sy, sz);
+	glVertex3f(-sx, -sy, sz);
+
+	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glLineWidth(1.0f);
+
+	glPopMatrix();
+
+	for (std::vector<Particle*>::iterator it = particlePool.begin(); it != particlePool.end(); ++it)
+	{
+		if ((*it)->active && (*it)->owner != nullptr && (*it) != nullptr)
+		{
+			(*it)->Draw();
+		}
+	}
+}
+
+void ComponentEmitter::DrawBbox() const
+{
+	float4x4 t = owner->GetComponent<Transform>()->GetGlobalTransform();
+
+	glPushMatrix();
+	glMultMatrixf((float*)&t.Transposed());
+
+	float3 cornerPoints[8];
+	drawingBbox.GetCornerPoints(cornerPoints);
+
+	glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
+	glLineWidth(3.5f);
+	glBegin(GL_LINES);
+
+	glVertex3f(cornerPoints[0].x, cornerPoints[0].y, cornerPoints[0].z);
+	glVertex3f(cornerPoints[1].x, cornerPoints[1].y, cornerPoints[1].z);
+
+	glVertex3f(cornerPoints[0].x, cornerPoints[0].y, cornerPoints[0].z);
+	glVertex3f(cornerPoints[2].x, cornerPoints[2].y, cornerPoints[2].z);
+
+	glVertex3f(cornerPoints[2].x, cornerPoints[2].y, cornerPoints[2].z);
+	glVertex3f(cornerPoints[3].x, cornerPoints[3].y, cornerPoints[3].z);
+
+	glVertex3f(cornerPoints[1].x, cornerPoints[1].y, cornerPoints[1].z);
+	glVertex3f(cornerPoints[3].x, cornerPoints[3].y, cornerPoints[3].z);
+
+	glVertex3f(cornerPoints[0].x, cornerPoints[0].y, cornerPoints[0].z);
+	glVertex3f(cornerPoints[4].x, cornerPoints[4].y, cornerPoints[4].z);
+
+	glVertex3f(cornerPoints[5].x, cornerPoints[5].y, cornerPoints[5].z);
+	glVertex3f(cornerPoints[4].x, cornerPoints[4].y, cornerPoints[4].z);
+
+	glVertex3f(cornerPoints[5].x, cornerPoints[5].y, cornerPoints[5].z);
+	glVertex3f(cornerPoints[1].x, cornerPoints[1].y, cornerPoints[1].z);
+
+	glVertex3f(cornerPoints[5].x, cornerPoints[5].y, cornerPoints[5].z);
+	glVertex3f(cornerPoints[7].x, cornerPoints[7].y, cornerPoints[7].z);
+
+	glVertex3f(cornerPoints[7].x, cornerPoints[7].y, cornerPoints[7].z);
+	glVertex3f(cornerPoints[6].x, cornerPoints[6].y, cornerPoints[6].z);
+
+	glVertex3f(cornerPoints[6].x, cornerPoints[6].y, cornerPoints[6].z);
+	glVertex3f(cornerPoints[2].x, cornerPoints[2].y, cornerPoints[2].z);
+
+	glVertex3f(cornerPoints[6].x, cornerPoints[6].y, cornerPoints[6].z);
+	glVertex3f(cornerPoints[4].x, cornerPoints[4].y, cornerPoints[4].z);
+
+	glVertex3f(cornerPoints[7].x, cornerPoints[7].y, cornerPoints[7].z);
+	glVertex3f(cornerPoints[3].x, cornerPoints[3].y, cornerPoints[3].z);
+
+	glEnd();
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glLineWidth(1.0f);
+
+	glPopMatrix();
 }
 
 void ComponentEmitter::DrawInspector(Application* App)
@@ -318,7 +451,10 @@ void ComponentEmitter::ClearEmitter()
 	for (std::vector<Particle*>::iterator it = particlePool.begin(); it != particlePool.end(); ++it)
 	{
 		bool ret;
-		(*it)->EndParticle(ret);
+		if ((*it) != nullptr && (*it)->active)
+		{
+			(*it)->EndParticle(ret);
+		}
 	}
 	particlePool.clear();
 
@@ -393,13 +529,57 @@ void ComponentEmitter::CreateParticles(int num, const float3& pos, int lastUsedP
 			}
 		}
 
-		if (id == -1) break;
+		if (id == -1)
+		{
+			LOG("No space left in the array Particles");
+			break;
+		}
 
-		// if we want to start the particle at a random point
-		//float3 spawnPos = pos;
-		//spawnPos += RandPos(shapeType);
+		float3 spawnPos = pos;
+		float3 spawn = float3::zero;
+		float angle = 0.0f;
+		float centerDist = 0.0f;
 
-		allParticles[id] = Particle();
+		switch (data.shapeType)
+		{
+		case Shape::CUBE:
+			spawn = data.cubeCreation.RandomPointInside(LCG());
+			data.particleDirection = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
+			break;
+
+		case Shape::SPHERE:
+			spawn = data.sphereCreation.RandomPointInside(LCG());
+			data.particleDirection = spawn.Normalized();
+			break;
+
+		case Shape::CONE:
+
+			angle = (2 * pi) * LCG().Int() / MAXUINT;
+			centerDist = (float)LCG().Int() / MAXUINT;
+
+			data.circleCreation.pos = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
+			data.circleCreation.normal = -data.circleCreation.pos;
+			data.particleDirection = (data.circleCreation.GetPoint(angle, centerDist)).Normalized();
+			break;
+		default:
+			break;
+		}
+
+		float3 global = owner->GetComponent<ComponentTransform>()->GetGlobalPos();
+
+		spawnPos += spawn + global;
+
+
+		float life = GenerateRandNum(data.particleLife.x, data.particleLife.y);
+		float3 scale = float3::one * GenerateRandNum(data.size.x, data.size.y);
+		float pAngle = GenerateRandNum(data.rotation.x, data.rotation.y);
+		float acc = GenerateRandNum(data.acceleration.x, data.acceleration.y);
+		float vel = GenerateRandNum(data.speed.x, data.speed.y);
+		float incrementSize = GenerateRandNum(data.sizeOverTime.x, data.sizeOverTime.y);
+		float angularAcc = GenerateRandNum(data.angularAcceleration.x, data.angularAcceleration.y);
+		float angularVel = GenerateRandNum(data.angularVelocity.x, data.angularVelocity.y);
+
+		allParticles[id] = Particle(data.plane,data.texture,life,spawnPos,scale,pAngle,acc,vel, data.particleDirection,incrementSize,angularAcc,angularVel, data.color);
 		allParticles[id].owner = this;
 		particlePool.push_back(&allParticles[id]);
 	}

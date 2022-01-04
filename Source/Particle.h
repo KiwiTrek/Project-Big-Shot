@@ -6,14 +6,14 @@
 #include "Color.h"
 
 class ResourceMesh;
-class ResourceTexture;
+class ResourceMaterial;
 class ComponentEmitter;
 
 class Particle
 {
 public:
 	// Constructor
-	Particle(ResourceMesh* mesh, ResourceTexture* tex, float3 pos, Quat rot, float3 scale);
+	Particle(ResourceMesh* mesh, ResourceMaterial* tex, float lifeTime, float3 pos, float3 scale, float angle, float acc, float vel,float3 direction, float incrementSize, float angularAcc, float angularVel, std::vector<FadeColor> colors);
 	Particle();
 	~Particle();
 
@@ -21,45 +21,43 @@ public:
 	bool Update(float dt);
 
 	// Draws the particle
-	bool Draw();
+	void Draw();
 
-	float4x4 GetMatrix() const;
+	float4x4 GetMatrix();
 	void EndParticle(bool& ret);
 
 public:
 	float camDistance = 0.0f;
-	bool active = true;
+	bool active = false;
 
 	ComponentEmitter* owner = nullptr;
 
 private:
-	uint life = 0;
-	uint maxLife;
+	float life = 0.0f;
+	float maxLife = 0.0f;
 
-	float3 pos;
-	Quat rot;
-	float angle;
-	float3 scale;
+	float3 pos = float3(0.0f,0.0f,0.0f);
+	Quat rot = Quat::FromEulerXYZ(0,0,0);
+	float3 scale = float3(0.0f,0.0f,0.0f);
 
-	float speed;
-	float angularVelocity;
+	float acceleration = 0.0f;
+	float speed = 0.0f;
 
-	float acceleration;
-	float angularAcceleration;
+	float angularAcceleration = 0.0f;
+	float angularVelocity = 0.0f;
 
-	float3 direction;
+	float3 direction = float3(0.0f,0.0f,0.0f);
+	float angle = 0.0f;
 
-	float sizeOverTime;
+	float sizeOverTime = 0.0f;
 
 	std::vector<FadeColor> color;
-	int index;
-	bool multiColor;
-	Color currentColor;
+	int index = 0;
+	bool multiColor = false;
+	Color currentColor = Color();
 
 	ResourceMesh* plane = nullptr;
-	ResourceTexture* texture = nullptr;
-
-	bool subEmitter;
+	ResourceMaterial* texture = nullptr;
 };
 
 struct particleCompare
