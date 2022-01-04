@@ -97,8 +97,9 @@ public:
 
 	float GenerateRandNum(float min, float max);
 	void ShowFloatValue(float2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
+	void SortParticles();
 
-	void CreateParticles(int num, const float3& pos, int lastUsedParticle);
+	void CreateParticles(int num, const float3& pos);
 	void DestroyParticle(Particle* p);
 	bool EditColor(FadeColor& color, uint pos = 0);
 
@@ -107,11 +108,12 @@ public:
 	Timer burstTimer;
 	Timer loopTimer;
 
+	float camDistance;
+
 	EmitterData data;
 	uint maxParticles = MAX_PARTICLES;
 
 	std::vector<Particle*> particlePool;
-	Particle allParticles[MAX_PARTICLES];
 
 	AABB bbox;
 	AABB drawingBbox;

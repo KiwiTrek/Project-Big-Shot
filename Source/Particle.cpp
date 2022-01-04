@@ -17,7 +17,6 @@ Particle::Particle(ResourceMesh* mesh, ResourceMaterial* tex, float lifeTime, fl
     rot = Quat::FromEulerXYZ(0, 0, 0);
     this->scale = scale;
 
-
     speed = vel;
     acceleration = acc;
     this->direction = direction;
@@ -72,11 +71,14 @@ Particle::Particle()
     plane = nullptr;
     texture = nullptr;
     camDistance = 0.0f;
-    active = false;
+    active = true;
 }
 
 Particle::~Particle()
 {
+    color.clear();
+    plane = nullptr;
+    texture = nullptr;
 }
 
 bool Particle::Update(float dt)
@@ -122,10 +124,11 @@ bool Particle::Update(float dt)
         angularVelocity += angularAcceleration * dt;
         angle += angularVelocity * dt;
         rot = rot.Mul(Quat::RotateZ(angle));
+        rot = rot.RotateY(180 * DEG_TO_RAD);
     }
     else
     {
-        if(active) EndParticle(ret);
+        active = false;
     }
     return ret;
 }
@@ -152,8 +155,11 @@ void Particle::Draw()
     if (texture != nullptr)
     {
         //textures
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         glBindBuffer(GL_ARRAY_BUFFER, plane->textureBuf);
         glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
         glBindTexture(GL_TEXTURE_2D, texture->texId);
     }
 
@@ -184,23 +190,4 @@ void Particle::Draw()
 float4x4 Particle::GetMatrix()
 {
     return float4x4::FromTRS(pos, rot, scale).Transposed();
-}
-
-void Particle::EndParticle(bool& ret)
-{
-    if (active == true)
-    {
-        active = false;
-        ret = false;
-        for (std::vector<Particle*>::iterator it = owner->particlePool.begin(); it != owner->particlePool.end(); ++it)
-        {
-            if (this == (*it))
-            {
-                owner->particlePool.erase(it);
-                owner = nullptr;
-                break;
-            }
-        }
-        LOG("Particle deleted"); // dont delete this
-    }
 }

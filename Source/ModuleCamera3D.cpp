@@ -242,7 +242,7 @@ GameObject* ModuleCamera3D::MousePicking()
 					hitGameObjects[dNear] = sceneGameObjects[i];
 				}
 			}
-			else
+			else if (c == nullptr)
 			{
 				ComponentEmitter* e = sceneGameObjects[i]->GetComponent<Emitter>();
 				if (e != nullptr)

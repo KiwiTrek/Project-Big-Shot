@@ -24,8 +24,6 @@ public:
 	void Draw();
 
 	float4x4 GetMatrix();
-	void EndParticle(bool& ret);
-
 public:
 	float camDistance = 0.0f;
 	bool active = false;

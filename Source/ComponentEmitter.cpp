@@ -32,7 +32,7 @@ void ComponentEmitter::Update(float dt, Application* App)
 	if (time > data.timeToParticle && (data.loop || loopTimer.ReadSec() < data.duration))
 	{
 		int particlesToCreate = (time / (1.0f / data.rateOverTime));
-		CreateParticles(particlesToCreate, float3::zero,App->particles->lastUsedParticle);
+		CreateParticles(particlesToCreate, float3::zero);
 		data.timeToParticle = (1.0f / data.rateOverTime);
 		lifeTimer.Start();
 	}
@@ -45,7 +45,7 @@ void ComponentEmitter::Update(float dt, Application* App)
 		{
 			particlesToCreate = (rand() % (data.maxPart - data.minPart)) + data.minPart;
 		}
-		CreateParticles(particlesToCreate, float3::zero,App->particles->lastUsedParticle);
+		CreateParticles(particlesToCreate, float3::zero);
 		burstTimer.Start();
 	}
 
@@ -55,6 +55,17 @@ void ComponentEmitter::Update(float dt, Application* App)
 	}
 
 	// Update all alive particles
+	for (std::vector<Particle*>::iterator p = particlePool.begin(); p != particlePool.end(); ++p)
+	{
+		if ((*p)->active == false)
+		{
+			DestroyParticle((*p));
+			p = particlePool.erase(p);
+			if (p != particlePool.begin()) --p;
+			else if (p == particlePool.end()) break;
+		}
+	}
+
 	for (std::vector<Particle*>::iterator p = particlePool.begin(); p != particlePool.end(); ++p)
 	{
 		(*p)->Update(dt);
@@ -453,7 +464,8 @@ void ComponentEmitter::ClearEmitter()
 		bool ret;
 		if ((*it) != nullptr && (*it)->active)
 		{
-			(*it)->EndParticle(ret);
+			delete (*it);
+			LOG("Particle Destroyed");
 		}
 	}
 	particlePool.clear();
@@ -505,36 +517,15 @@ void ComponentEmitter::ShowFloatValue(float2& value, bool checkBox, const char* 
 	ImGui::PopItemWidth();
 }
 
-void ComponentEmitter::CreateParticles(int num, const float3& pos, int lastUsedParticle)
+void ComponentEmitter::SortParticles()
+{
+	std::sort(particlePool.begin(), particlePool.end(), particleCompare());
+}
+
+void ComponentEmitter::CreateParticles(int num, const float3& pos)
 {
 	for (int i = 0; i < num; ++i)
 	{
-		int id = -1;
-
-		for (int i = lastUsedParticle; i < MAX_PARTICLES; ++i)
-		{
-			if (!allParticles[i].active)
-			{
-				lastUsedParticle = i;
-				id = i;
-			}
-		}
-
-		for (int i = 0; i < lastUsedParticle; ++i)
-		{
-			if (!allParticles[i].active)
-			{
-				lastUsedParticle = i;
-				id = i;
-			}
-		}
-
-		if (id == -1)
-		{
-			LOG("No space left in the array Particles");
-			break;
-		}
-
 		float3 spawnPos = pos;
 		float3 spawn = float3::zero;
 		float angle = 0.0f;
@@ -579,9 +570,9 @@ void ComponentEmitter::CreateParticles(int num, const float3& pos, int lastUsedP
 		float angularAcc = GenerateRandNum(data.angularAcceleration.x, data.angularAcceleration.y);
 		float angularVel = GenerateRandNum(data.angularVelocity.x, data.angularVelocity.y);
 
-		allParticles[id] = Particle(data.plane,data.texture,life,spawnPos,scale,pAngle,acc,vel, data.particleDirection,incrementSize,angularAcc,angularVel, data.color);
-		allParticles[id].owner = this;
-		particlePool.push_back(&allParticles[id]);
+		Particle* p = new Particle(data.plane, data.texture, life, spawnPos, scale, pAngle, acc, vel, data.particleDirection, incrementSize, angularAcc, angularVel, data.color);
+		p->owner = this;
+		particlePool.push_back(p);
 	}
 }
 
@@ -593,8 +584,7 @@ void ComponentEmitter::DestroyParticle(Particle* p)
 	{
 		if ((*it) == p)
 		{
-			particlePool.erase(it);
-			RELEASE(p);
+			delete p;
 			break;
 		}
 		it++;

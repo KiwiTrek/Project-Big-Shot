@@ -56,7 +56,7 @@ bool ModuleScene::Start()
 	smoke.cubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
 	smoke.sphereCreation = Sphere(float3::zero, 1.0f);
 	smoke.circleCreation = Circle(float3::unitY, float3::unitY, 0.25f);
-	smoke.shapeType = Shape::SPHERE;
+	smoke.shapeType = Shape::CUBE;
 
 	smoke.sizeOBB = float3::zero;
 	smoke.drawAABB = false;
@@ -64,6 +64,7 @@ bool ModuleScene::Start()
 
 	smoke.plane = App->particles->plane;
 	smoke.texture = (ResourceMaterial*)App->resources->RequestResource("smoke.png");
+	smoke.texture->GenerateBuffers();
 	smoke.textureRows = 1;
 	smoke.textureColumns = 1;
 
@@ -97,7 +98,9 @@ bool ModuleScene::Start()
 	smoke.color.push_back(FadeColor(Color(1.0f,1.0f,1.0f,0.0f), 1.0f, true));
 	smoke.timeColor = true;
 
-	App->gameObjects->AddGameobject(App->particles->CreateEmitter(smoke));
+	GameObject* smoke1 = App->particles->CreateEmitter(smoke);
+	smoke1->GetComponent<Transform>()->SetPos(float3(0.0f, 2.5f, 5.0f));
+	App->gameObjects->AddGameobject(smoke1);
 
 	return true;
 }
