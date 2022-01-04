@@ -5,6 +5,7 @@
 #include "MathGeoLib.h"
 #include "Color.h"
 
+class Application;
 class ResourceMesh;
 class ResourceMaterial;
 class ComponentEmitter;
@@ -18,7 +19,7 @@ public:
 	~Particle();
 
 	// Called each loop iteration
-	bool Update(float dt);
+	bool Update(float dt, Application* App);
 
 	// Draws the particle
 	void Draw();

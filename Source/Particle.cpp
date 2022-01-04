@@ -4,6 +4,9 @@
 #include "ResourceMesh.h"
 #include "ResourceMaterial.h"
 
+#include "Application.h"
+#include "ModuleGameObjects.h"
+
 Particle::Particle(ResourceMesh* mesh, ResourceMaterial* tex, float lifeTime, float3 pos, float3 scale, float angle, float acc,float vel,float3 direction, float incrementSize, float angularAcc, float angularVel, std::vector<FadeColor> colors)
 {
     color.clear();
@@ -81,7 +84,7 @@ Particle::~Particle()
     texture = nullptr;
 }
 
-bool Particle::Update(float dt)
+bool Particle::Update(float dt, Application* App)
 {
     bool ret = true;
     life += dt;
@@ -90,7 +93,11 @@ bool Particle::Update(float dt)
         speed += acceleration * dt;
         pos += direction * speed * dt;
 
-        //look at camera
+        float3 z = -App->gameObjects->mainCamera->GetComponent<Camera>()->frustum.Front();
+        float3 y = -App->gameObjects->mainCamera->GetComponent<Camera>()->frustum.Up();
+        float3 x = y.Cross(z).Normalized();
+
+        rot.Set(float3x3(x, y, z));
 
         if (color.size() == 1 || !multiColor)
         {
@@ -124,7 +131,7 @@ bool Particle::Update(float dt)
         angularVelocity += angularAcceleration * dt;
         angle += angularVelocity * dt;
         rot = rot.Mul(Quat::RotateZ(angle));
-        rot = rot.RotateY(180 * DEG_TO_RAD);
+        camDistance = App->gameObjects->mainCamera->GetComponent<Transform>()->GetPos().DistanceSq(pos);
     }
     else
     {

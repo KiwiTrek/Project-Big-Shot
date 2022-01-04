@@ -68,7 +68,7 @@ void ComponentEmitter::Update(float dt, Application* App)
 
 	for (std::vector<Particle*>::iterator p = particlePool.begin(); p != particlePool.end(); ++p)
 	{
-		(*p)->Update(dt);
+		(*p)->Update(dt, App);
 	}
 }
 
@@ -130,6 +130,8 @@ void ComponentEmitter::PostUpdate()
 	glLineWidth(1.0f);
 
 	glPopMatrix();
+	
+	SortParticles();
 
 	for (std::vector<Particle*>::iterator it = particlePool.begin(); it != particlePool.end(); ++it)
 	{
