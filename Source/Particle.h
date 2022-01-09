@@ -30,6 +30,7 @@ public:
 	bool active = false;
 
 	ComponentEmitter* owner = nullptr;
+	AABB bbox;
 
 private:
 	float life = 0.0f;

@@ -12,14 +12,6 @@ class GameObject;
 
 struct EmitterData
 {
-	enum class EmitterType
-	{
-		NONE = -1,
-		SMOKE,
-		FIREWORK_PROJECTILE,
-		FIREWORK_EXPLOSION
-	} eType;
-
 	enum class EmitterSphere
 	{
 		RANDOM,
@@ -97,7 +89,6 @@ public:
 
 	float GenerateRandNum(float min, float max);
 	void ShowFloatValue(float2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
-	void SortParticles();
 
 	void CreateParticles(int num, const float3& pos);
 	void DestroyParticle(Particle* p);

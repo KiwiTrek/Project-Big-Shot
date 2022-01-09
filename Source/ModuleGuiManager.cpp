@@ -7,6 +7,7 @@
 
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleParticles.h"
 #include "ModuleGameObjects.h"
 
 ModuleGuiManager::ModuleGuiManager(Application* app, bool startEnabled) : Module(app, startEnabled)
@@ -242,6 +243,18 @@ UpdateStatus ModuleGuiManager::MenuBar()
 
 				App->gameObjects->AddGameobject(c);
 				App->gameObjects->selectedGameObject = c;
+			}
+
+			if (ImGui::MenuItem("Particle Emitter"))
+			{
+				GameObject* e = App->particles->CreateEmitter(EmitterData());
+
+				std::string name = "Emitter_";
+				name.append(std::to_string(App->particles->emitters.size()));
+				e->name = name;
+
+				App->gameObjects->AddGameobject(e);
+				App->gameObjects->selectedGameObject = e;
 			}
 
 			ImGui::EndMenu();

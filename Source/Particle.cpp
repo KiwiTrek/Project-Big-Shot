@@ -19,6 +19,7 @@ Particle::Particle(ResourceMesh* mesh, ResourceMaterial* tex, float lifeTime, fl
     this->pos = pos;
     rot = Quat::FromEulerXYZ(0, 0, 0);
     this->scale = scale;
+    bbox.SetFromCenterAndSize(pos, scale);
 
     speed = vel;
     acceleration = acc;
@@ -54,6 +55,7 @@ Particle::Particle()
     rot = Quat::FromEulerXYZ(0, 0, 0);
     angle = 0.0f;
     scale = float3(0.0f, 0.0f, 0.0f);
+    bbox.SetFromCenterAndSize(pos, scale);
 
     acceleration = 0.0f;
     speed = 0.0f;
@@ -88,7 +90,6 @@ bool Particle::Update(float dt, Application* App)
 {
     bool ret = true;
     life += dt;
-    camDistance = App->gameObjects->mainCamera->GetComponent<Transform>()->GetPos().DistanceSq(pos);
     if (life < maxLife)
     {
         speed += acceleration * dt;
@@ -132,17 +133,25 @@ bool Particle::Update(float dt, Application* App)
         angularVelocity += angularAcceleration * dt;
         angle += angularVelocity * dt;
         rot = rot.Mul(Quat::RotateZ(angle));
+        bbox.SetFromCenterAndSize(pos, scale);
     }
     else
     {
         active = false;
+        camDistance = -1;
     }
+
+    camDistance = App->gameObjects->mainCamera->GetComponent<Transform>()->GetPos().DistanceSq(pos);
+
     return ret;
 }
 
 void Particle::Draw()
 {
-    if (plane == nullptr) return;
+    if (plane == nullptr)
+        return;
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
@@ -158,6 +167,8 @@ void Particle::Draw()
     //indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, plane->indexBuf);
 
+    glColor4f(currentColor.x, currentColor.y, currentColor.z, currentColor.w);
+
     if (texture != nullptr)
     {
         //textures
@@ -168,9 +179,12 @@ void Particle::Draw()
         glBindBuffer(GL_ARRAY_BUFFER, plane->textureBuf);
         glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-        glColor4f(1.0f, 1.0f, 1.0f, currentColor.w);
-
         glBindTexture(GL_TEXTURE_2D, texture->texId);
+    }
+    else
+    {
+        glDisable(GL_BLEND);
+        glDisable(GL_ALPHA_TEST);
     }
 
     float4x4 t = float4x4::FromTRS(pos, rot, scale);
@@ -178,9 +192,15 @@ void Particle::Draw()
     glPushMatrix();
     glMultMatrixf((float*)&t.Transposed());
 
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_FALSE);
+
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glDrawElements(GL_TRIANGLES, plane->indexNum, GL_UNSIGNED_INT, NULL);
+
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 

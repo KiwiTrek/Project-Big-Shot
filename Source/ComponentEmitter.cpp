@@ -28,11 +28,12 @@ void ComponentEmitter::Update(float dt, Application* App)
 {
 	bbox.SetFromCenterAndSize(owner->GetComponent<ComponentTransform>()->GetPos(), vec(1.1f, 1.1f, 1.1f));
 
+	float3 defaultPos = float3(0.5, 1.0, -0.5);
 	float time = lifeTimer.ReadSec();
 	if (time > data.timeToParticle && (data.loop || loopTimer.ReadSec() < data.duration))
 	{
 		int particlesToCreate = (time / (1.0f / data.rateOverTime));
-		CreateParticles(particlesToCreate, float3::zero);
+		CreateParticles(particlesToCreate, defaultPos);
 		data.timeToParticle = (1.0f / data.rateOverTime);
 		lifeTimer.Start();
 	}
@@ -45,7 +46,7 @@ void ComponentEmitter::Update(float dt, Application* App)
 		{
 			particlesToCreate = (rand() % (data.maxPart - data.minPart)) + data.minPart;
 		}
-		CreateParticles(particlesToCreate, float3::zero);
+		CreateParticles(particlesToCreate, defaultPos);
 		burstTimer.Start();
 	}
 
@@ -130,16 +131,6 @@ void ComponentEmitter::PostUpdate()
 	glLineWidth(1.0f);
 
 	glPopMatrix();
-	
-	SortParticles();
-
-	for (std::vector<Particle*>::iterator it = particlePool.begin(); it != particlePool.end(); ++it)
-	{
-		if ((*it)->active && (*it)->owner != nullptr && (*it) != nullptr)
-		{
-			(*it)->Draw();
-		}
-	}
 }
 
 void ComponentEmitter::DrawBbox() const
@@ -347,7 +338,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 				++i;
 				++posList;
 			}
-			ImGui::Separator();
 
 
 			//ImGui::Checkbox("Color time", &data.timeColor);
@@ -372,34 +362,13 @@ void ComponentEmitter::DrawInspector(Application* App)
 
 		if (ImGui::TreeNodeEx("Particle Burst"))
 		{
-			std::string burstTypeName = "Smoke";
 			ImGui::Checkbox("Burst", &data.burst);
-			if (ImGui::BeginMenu(burstTypeName.data()))
-			{
-				if (ImGui::MenuItem("Smoke"))
-				{
-					data.eType = EmitterData::EmitterType::SMOKE;
-					burstTypeName = "Smoke Burst";
-				}
-				else if (ImGui::MenuItem("Firework Projectile"))
-				{
-					data.eType = EmitterData::EmitterType::FIREWORK_PROJECTILE;
-					burstTypeName = "Firework Projectile Burst";
-				}
-				else if (ImGui::MenuItem("Firework Explosion"))
-				{
-					data.eType = EmitterData::EmitterType::FIREWORK_EXPLOSION;
-					burstTypeName = "Firework Explosion Burst";
-				}
-				ImGui::End();
-			}
 			ImGui::DragInt("Min particles", &data.minPart, 1.0f, 0, 100);
 			if (data.minPart > data.maxPart) data.maxPart = data.minPart;
 			ImGui::DragInt("Max Particles", &data.maxPart, 1.0f, 0, 100);
 			if (data.maxPart < data.minPart) data.minPart = data.maxPart;
 			ImGui::DragFloat("Repeat Time", &data.repeatTime, 0.5f, 0.0f, 0.0f, "%.1f");
 
-			ImGui::Separator();
 			ImGui::TreePop();
 		}
 
@@ -558,11 +527,6 @@ void ComponentEmitter::ShowFloatValue(float2& value, bool checkBox, const char* 
 			value.y = value.x;
 	}
 	ImGui::PopItemWidth();
-}
-
-void ComponentEmitter::SortParticles()
-{
-	std::sort(particlePool.begin(), particlePool.end(), particleCompare());
 }
 
 void ComponentEmitter::CreateParticles(int num, const float3& pos)

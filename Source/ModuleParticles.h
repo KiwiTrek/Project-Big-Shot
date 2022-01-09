@@ -7,7 +7,7 @@
 #include <list>
 #include "Particle.h"
 
-#define MAX_PARTICLES 20000
+#define MAX_PARTICLES 5000
 
 class GameObject;
 class ResourceMesh;
@@ -30,10 +30,11 @@ public:
 
 	/*void Load(std::string scene);
 	void Save(std::string scene);*/
+private:
+	void SortParticles(std::vector<Particle*> &particlePool);
 
 public:
 	std::vector<GameObject*> emitters;
-
 	ResourceMesh* plane = nullptr;
 
 	GameObject* firework = nullptr;

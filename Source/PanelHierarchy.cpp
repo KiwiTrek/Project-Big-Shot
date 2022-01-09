@@ -43,11 +43,7 @@ UpdateStatus PanelHierarchy::Update()
 
 	if (App->gameObjects->selectedGameObject != nullptr && ImGui::IsWindowFocused() && App->gameObjects->selectedGameObject != App->scene->GetSceneRoot())
 	{
-		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KeyState::KEY_DOWN)
-		{
-			App->gameObjects->RemoveGameobject(App->gameObjects->selectedGameObject);
-			App->gameObjects->selectedGameObject = nullptr;
-		}
+		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KeyState::KEY_DOWN) Delete();
 	}
 
 	RightClickMenu();
@@ -226,6 +222,28 @@ bool PanelHierarchy::RightClickMenu()
 					}
 					ImGui::EndMenu();
 				}
+
+				if (ImGui::MenuItem("Camera"))
+				{
+					GameObject* c = new GameObject("Camera");
+					c->CreateComponent(ComponentTypes::CAMERA);
+
+					App->gameObjects->AddGameobject(c);
+					App->gameObjects->selectedGameObject = c;
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::MenuItem("Particle Emitter"))
+				{
+					std::string name = "Emitter_";
+					name.append(std::to_string(App->particles->emitters.size()));
+					GameObject* e = App->particles->CreateEmitter(EmitterData());
+					e->name = name;
+					App->gameObjects->AddGameobject(e);
+					App->gameObjects->selectedGameObject = e;
+					ImGui::CloseCurrentPopup();
+				}
+
 				ImGui::EndMenu();
 			}
 

@@ -39,22 +39,22 @@ bool ModuleScene::Init()
 bool ModuleScene::Start()
 {
 	GameObject* smoke1 = App->particles->CreateEmitter(CreateSmoke());
-	smoke1->GetComponent<Transform>()->SetPos(float3(-43.0f, 5.0f, -33.0f));
+	smoke1->GetComponent<Transform>()->SetPos(float3(-43.1f, 7.0f, -32.6f));
 	smoke1->name = "EmitterSmoke1";
 	App->gameObjects->AddGameobject(smoke1);
 
 	GameObject* smoke2 = App->particles->CreateEmitter(CreateSmoke());
-	smoke2->GetComponent<Transform>()->SetPos(float3(-30.0f, 5.0f, -34.0f));
+	smoke2->GetComponent<Transform>()->SetPos(float3(-30.3f, 7.0f, -33.6f));
 	smoke2->name = "EmitterSmoke2";
 	App->gameObjects->AddGameobject(smoke2);
 
 	GameObject* smoke3 = App->particles->CreateEmitter(CreateSmoke());
-	smoke3->GetComponent<Transform>()->SetPos(float3(-40.15f, 5.0f, -43.65f));
+	smoke3->GetComponent<Transform>()->SetPos(float3(-40.5f, 7.1f, -43.1f));
 	smoke3->name = "EmitterSmoke3";
 	App->gameObjects->AddGameobject(smoke3);
 
 	GameObject* smoke4 = App->particles->CreateEmitter(CreateSmoke());
-	smoke4->GetComponent<Transform>()->SetPos(float3(-32.65f, 5.0f, -43.5f));
+	smoke4->GetComponent<Transform>()->SetPos(float3(-32.8f, 7.0f, -43.1f));
 	smoke4->name = "EmitterSmoke4";
 	App->gameObjects->AddGameobject(smoke4);
 
@@ -141,7 +141,6 @@ EmitterData ModuleScene::CreateSmoke()
 {
 	EmitterData smoke;
 
-	smoke.eType = EmitterData::EmitterType::SMOKE;
 	smoke.sType = EmitterData::EmitterSphere::RANDOM;
 
 	smoke.duration = 1.0f;
@@ -162,7 +161,7 @@ EmitterData ModuleScene::CreateSmoke()
 	smoke.cubeCreation.SetFromCenterAndSize(smoke.cubeCreation.CenterPoint(), size);
 	smoke.sphereCreation = Sphere(float3::zero, 1.0f);
 	smoke.circleCreation = Circle(float3::unitY, float3::unitY, 0.25f);
-	smoke.shapeType = Shape::CUBE;
+	smoke.shapeType = Shape::CONE;
 
 	smoke.sizeOBB = float3::zero;
 	smoke.drawAABB = false;
@@ -181,19 +180,19 @@ EmitterData ModuleScene::CreateSmoke()
 	smoke.checkAngularAcceleration = true;
 	smoke.checkAngularVelocity = true;
 
-	smoke.rateOverTime = 40;
+	smoke.rateOverTime = 15;
 	smoke.timeToParticle = 0.0f;
 
 	smoke.particleLife = float2(3.0f, 5.0f);
-	smoke.speed = float2(0.5f, 1.5f);
-	smoke.acceleration = float2(0.0f, 0.0f);
-	smoke.sizeOverTime = float2(0.0f, 0.0f);
-	smoke.size = float2(1.0f, 1.0f);
+	smoke.speed = float2(0.5f, 1.0f);
+	smoke.acceleration = float2(0.0f, 0.15f);
+	smoke.sizeOverTime = float2(0.0f, 0.5f);
+	smoke.size = float2(1.0f, 1.20f);
 	smoke.rotation = float2(0.0f, 0.0f);
 	smoke.angularAcceleration = float2(0.0f, 0.0f);
 	smoke.angularVelocity = float2(0.0f, 0.0f);
 
-	smoke.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, true));
+	smoke.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 0.5f), 0.0f, true));
 	smoke.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 0.0f), 1.0f, true));
 	smoke.timeColor = true;
 

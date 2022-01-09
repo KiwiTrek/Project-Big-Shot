@@ -88,6 +88,8 @@ void ComponentMesh::Render()
 
 	ComponentMaterial* mat = owner->GetComponent<Material>();
 
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);

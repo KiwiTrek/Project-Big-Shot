@@ -73,6 +73,39 @@ UpdateStatus ModuleParticles::PostUpdate()
         }
     }
 
+    std::vector<Particle*> allParticles;
+    int i = 0;
+    for (std::vector<GameObject*>::iterator gIt = emitters.begin(); gIt != emitters.end(); ++gIt)
+    {
+        Emitter* e = (*gIt)->GetComponent<Emitter>();
+        for (std::vector<Particle*>::iterator pIt = e->particlePool.begin(); pIt != e->particlePool.end(); ++pIt)
+        {
+            allParticles.push_back((*pIt));
+            ++i;
+        }
+        if (i >= MAX_PARTICLES) break;
+    }
+
+    SortParticles(allParticles);
+
+    for (std::vector<Particle*>::iterator it = allParticles.begin(); it != allParticles.end(); ++it)
+    {
+        if ((*it)->active && (*it)->owner != nullptr && (*it) != nullptr)
+        {
+            if (App->gameObjects->mainCamera->GetComponent<Camera>()->culling)
+            {
+                if (App->gameObjects->mainCamera->GetComponent<Camera>()->ContainsBBox((*it)->bbox))
+                    (*it)->Draw();
+            }
+            else
+            {
+                (*it)->Draw();
+            }
+        }
+    }
+
+    allParticles.clear();
+
     return UpdateStatus::UPDATE_CONTINUE;
 }
 bool ModuleParticles::CleanUp()
@@ -98,6 +131,12 @@ bool ModuleParticles::CleanUp()
 GameObject* ModuleParticles::CreateEmitter(EmitterData data)
 {
     GameObject* go = new GameObject("Emitter");
+    if (data.color.empty())
+    {
+        data.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, true));
+        data.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, true));
+    }
+    if (data.plane == nullptr) data.plane = plane;
     Emitter* e = (Emitter*)go->CreateComponent(ComponentTypes::EMITTER, data);
     emitters.push_back(go);
     return go;
@@ -116,4 +155,10 @@ std::vector<GameObject*>::iterator ModuleParticles::DeleteEmitter(GameObject* e)
             return emitters.erase(it);
         }
     }
+    return emitters.end();
+}
+
+void ModuleParticles::SortParticles(std::vector<Particle*> &particlePool)
+{
+    std::sort(particlePool.begin(), particlePool.end(), particleCompare());
 }
