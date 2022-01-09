@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleGuiManager.h"
 
+#include "ModuleParticles.h"
 #include "ModuleInput.h"
 #include "ModuleGameObjects.h"
 #include "ModuleScene.h"
@@ -282,6 +283,10 @@ void PanelHierarchy::MoveDown()
 
 void PanelHierarchy::Delete()
 {
+	if (App->gameObjects->selectedGameObject->GetComponent<Emitter>())
+	{
+		App->particles->DeleteEmitter(App->gameObjects->selectedGameObject);
+	}
 	App->gameObjects->RemoveGameobject(App->gameObjects->selectedGameObject);
 	App->gameObjects->selectedGameObject = nullptr;
 }

@@ -108,8 +108,6 @@ public:
 	Timer burstTimer;
 	Timer loopTimer;
 
-	float camDistance;
-
 	EmitterData data;
 	uint maxParticles = MAX_PARTICLES;
 

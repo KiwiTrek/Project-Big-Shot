@@ -88,6 +88,7 @@ bool Particle::Update(float dt, Application* App)
 {
     bool ret = true;
     life += dt;
+    camDistance = App->gameObjects->mainCamera->GetComponent<Transform>()->GetPos().DistanceSq(pos);
     if (life < maxLife)
     {
         speed += acceleration * dt;
@@ -131,7 +132,6 @@ bool Particle::Update(float dt, Application* App)
         angularVelocity += angularAcceleration * dt;
         angle += angularVelocity * dt;
         rot = rot.Mul(Quat::RotateZ(angle));
-        camDistance = App->gameObjects->mainCamera->GetComponent<Transform>()->GetPos().DistanceSq(pos);
     }
     else
     {
@@ -146,7 +146,6 @@ void Particle::Draw()
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
     //vertices
     glBindBuffer(GL_ARRAY_BUFFER, plane->vertexBuf);
@@ -162,10 +161,14 @@ void Particle::Draw()
     if (texture != nullptr)
     {
         //textures
+        glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
         glBindBuffer(GL_ARRAY_BUFFER, plane->textureBuf);
         glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+        glColor4f(1.0f, 1.0f, 1.0f, currentColor.w);
 
         glBindTexture(GL_TEXTURE_2D, texture->texId);
     }
@@ -174,8 +177,6 @@ void Particle::Draw()
 
     glPushMatrix();
     glMultMatrixf((float*)&t.Transposed());
-
-    glColor3f(currentColor.x, currentColor.y, currentColor.z);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 

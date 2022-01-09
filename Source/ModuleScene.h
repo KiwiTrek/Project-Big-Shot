@@ -8,6 +8,7 @@
 #define BOUNCER_TIME 200
 
 class GameObject;
+struct EmitterData;
 
 class ModuleScene : public Module
 {
@@ -25,6 +26,8 @@ public:
 	bool CleanUp();
 	void Load(std::string scene);
 	void Save(std::string scene);
+
+	EmitterData CreateSmoke();
 
 public:
 	bool drawMouse = false;

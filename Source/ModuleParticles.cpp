@@ -73,21 +73,13 @@ UpdateStatus ModuleParticles::PostUpdate()
         }
     }
 
-    //for (uint i = 0; i < MAX_PARTICLES; ++i)
-    //{
-    //    if (particles[i].active)
-    //    {
-    //        particles[i].Draw();
-    //    }
-    //}
     return UpdateStatus::UPDATE_CONTINUE;
 }
-
 bool ModuleParticles::CleanUp()
 {
-    for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); ++it)
+    for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); it)
     {
-        DeleteEmitter((*it));
+        it = DeleteEmitter((*it));
         if (emitters.empty()) break;
     }
     emitters.clear();
@@ -111,16 +103,17 @@ GameObject* ModuleParticles::CreateEmitter(EmitterData data)
     return go;
 }
 
-void ModuleParticles::DeleteEmitter(GameObject* e)
+std::vector<GameObject*>::iterator ModuleParticles::DeleteEmitter(GameObject* e)
 {
     Emitter* emitter = e->GetComponent<Emitter>();
     emitter->ClearEmitter();
+    emitter->data.color.clear();
+    emitter->data.texture = nullptr;
     for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); ++it)
     {
         if ((*it) == e)
         {
-            emitters.erase(it);
-            break;
+            return emitters.erase(it);
         }
     }
 }

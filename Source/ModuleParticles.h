@@ -4,7 +4,10 @@
 #include "Module.h"
 #include "Globals.h"
 #include <vector>
+#include <list>
 #include "Particle.h"
+
+#define MAX_PARTICLES 20000
 
 class GameObject;
 class ResourceMesh;
@@ -23,7 +26,7 @@ public:
 	bool CleanUp();
 
 	GameObject* CreateEmitter(EmitterData dat);
-	void DeleteEmitter(GameObject* e);
+	std::vector<GameObject*>::iterator DeleteEmitter(GameObject* e);
 
 	/*void Load(std::string scene);
 	void Save(std::string scene);*/
@@ -32,7 +35,7 @@ public:
 	std::vector<GameObject*> emitters;
 
 	ResourceMesh* plane = nullptr;
-	int activeParticles = 0;
+
 	GameObject* firework = nullptr;
 };
 
