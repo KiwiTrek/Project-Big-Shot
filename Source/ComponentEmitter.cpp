@@ -50,9 +50,13 @@ void ComponentEmitter::Update(float dt, Application* App)
 		burstTimer.Start();
 	}
 
-	if (data.isSubEmitter && data.subEmitterActive)
+	if (!newPositions.empty())
 	{
-		data.subEmitter->GetComponent<Emitter>()->Update(dt, App);
+		for (std::vector<float3>::iterator it = newPositions.begin(); it != newPositions.end(); ++it)
+		{
+			CreateParticles(data.subRateOverTime, (*it), true);
+		}
+		newPositions.clear();
 	}
 
 	// Update all alive particles
@@ -465,13 +469,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 
 void ComponentEmitter::ClearEmitter()
 {
-	if (data.isSubEmitter || data.subEmitter || data.subEmitterActive)
-	{
-		data.subEmitter->GetComponent<Emitter>()->ClearEmitter();
-		delete data.subEmitter;
-		data.subEmitter = nullptr;
-	}
-
 	for (std::vector<Particle*>::iterator it = particlePool.begin(); it != particlePool.end(); ++it)
 	{
 		if ((*it) != nullptr && (*it)->active)
@@ -529,7 +526,7 @@ void ComponentEmitter::ShowFloatValue(float2& value, bool checkBox, const char* 
 	ImGui::PopItemWidth();
 }
 
-void ComponentEmitter::CreateParticles(int num, const float3& pos)
+void ComponentEmitter::CreateParticles(int num, const float3& pos, bool sub)
 {
 	for (int i = 0; i < num; ++i)
 	{
@@ -546,8 +543,20 @@ void ComponentEmitter::CreateParticles(int num, const float3& pos)
 			break;
 
 		case Shape::SPHERE:
-			spawn = data.sphereCreation.RandomPointInside(LCG());
-			data.particleDirection = spawn.Normalized();
+			switch (data.sType)
+			{
+			case EmitterData::EmitterSphere::RANDOM:
+				spawn = data.sphereCreation.RandomPointInside(LCG());
+				data.particleDirection = spawn.Normalized();
+				break;
+			case EmitterData::EmitterSphere::CENTER:
+				data.particleDirection = data.sphereCreation.RandomPointInside(LCG()).Normalized();
+				break;
+			case EmitterData::EmitterSphere::BORDER:
+				spawn = data.sphereCreation.RandomPointOnSurface(LCG());
+				data.particleDirection = spawn.Normalized();
+				break;
+			}
 			break;
 
 		case Shape::CONE:
@@ -567,17 +576,45 @@ void ComponentEmitter::CreateParticles(int num, const float3& pos)
 
 		spawnPos += spawn + global;
 
+		ResourceMaterial* tex;
+		float life;
+		float3 scale;
+		float pAngle;
+		float acc;
+		float vel;
+		float incrementSize;
+		float angularAcc;
+		float angularVel;
+		std::vector<FadeColor> color;
 
-		float life = GenerateRandNum(data.particleLife.x, data.particleLife.y);
-		float3 scale = float3::one * GenerateRandNum(data.size.x, data.size.y);
-		float pAngle = GenerateRandNum(data.rotation.x, data.rotation.y);
-		float acc = GenerateRandNum(data.acceleration.x, data.acceleration.y);
-		float vel = GenerateRandNum(data.speed.x, data.speed.y);
-		float incrementSize = GenerateRandNum(data.sizeOverTime.x, data.sizeOverTime.y);
-		float angularAcc = GenerateRandNum(data.angularAcceleration.x, data.angularAcceleration.y);
-		float angularVel = GenerateRandNum(data.angularVelocity.x, data.angularVelocity.y);
+		if (!sub)
+		{
+			tex = data.texture;
+			life = GenerateRandNum(data.particleLife.x, data.particleLife.y);
+			scale = float3::one * GenerateRandNum(data.size.x, data.size.y);
+			pAngle = GenerateRandNum(data.rotation.x, data.rotation.y);
+			acc = GenerateRandNum(data.acceleration.x, data.acceleration.y);
+			vel = GenerateRandNum(data.speed.x, data.speed.y);
+			incrementSize = GenerateRandNum(data.sizeOverTime.x, data.sizeOverTime.y);
+			angularAcc = GenerateRandNum(data.angularAcceleration.x, data.angularAcceleration.y);
+			angularVel = GenerateRandNum(data.angularVelocity.x, data.angularVelocity.y);
+			color = data.color;
+		}
+		else
+		{
+			tex = data.subTexture;
+			life = GenerateRandNum(data.subParticleLife.x, data.subParticleLife.y);
+			scale = float3::one * GenerateRandNum(data.subSize.x, data.subSize.y);
+			pAngle = GenerateRandNum(data.subRotation.x, data.subRotation.y);
+			acc = GenerateRandNum(data.subAcceleration.x, data.subAcceleration.y);
+			vel = GenerateRandNum(data.subSpeed.x, data.subSpeed.y);
+			incrementSize = GenerateRandNum(data.subSizeOverTime.x, data.subSizeOverTime.y);
+			angularAcc = GenerateRandNum(data.subAngularAcceleration.x, data.subAngularAcceleration.y);
+			angularVel = GenerateRandNum(data.subAngularVelocity.x, data.subAngularVelocity.y);
+			color = data.subColor;
+		}
 
-		Particle* p = new Particle(data.plane, data.texture, life, spawnPos, scale, pAngle, acc, vel, data.particleDirection, incrementSize, angularAcc, angularVel, data.color);
+		Particle* p = new Particle(data.plane, tex, life, spawnPos, scale, pAngle, acc, vel, data.particleDirection, incrementSize, angularAcc, angularVel, color);
 		p->owner = this;
 		particlePool.push_back(p);
 	}

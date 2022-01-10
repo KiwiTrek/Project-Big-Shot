@@ -42,6 +42,7 @@ struct EmitterData
 
 	ResourceMesh* plane = nullptr;
 	ResourceMaterial* texture = nullptr;
+	ResourceMaterial* subTexture = nullptr;
 	int textureRows = 1;
 	int textureColumns = 1;
 
@@ -54,11 +55,8 @@ struct EmitterData
 	bool checkAngularAcceleration = false;
 	bool checkAngularVelocity = false;
 
-	bool isSubEmitter = false;
-	GameObject* subEmitter = nullptr;
-	uint subEmitterUUID = 0u;
-
 	int rateOverTime = 10;
+	int subRateOverTime = 10;
 	float timeToParticle = 0.0f;
 	bool subEmitterActive = false;
 
@@ -72,6 +70,18 @@ struct EmitterData
 	float2 angularVelocity = float2(0.0f, 0.0f);
 
 	std::vector<FadeColor> color;
+
+	float2 subParticleLife = float2(5.0f, 5.0f);
+	float2 subSpeed = float2(3.0f, 3.0f);
+	float2 subAcceleration = float2(0.0f, 0.0f);
+	float2 subSizeOverTime = float2(0.0f, 0.0f);
+	float2 subSize = float2(1.0f, 1.0f);
+	float2 subRotation = float2(0.0f, 0.0f);
+	float2 subAngularAcceleration = float2(0.0f, 0.0f);
+	float2 subAngularVelocity = float2(0.0f, 0.0f);
+
+	std::vector<FadeColor> subColor;
+
 	bool timeColor = false;
 };
 
@@ -90,7 +100,7 @@ public:
 	float GenerateRandNum(float min, float max);
 	void ShowFloatValue(float2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
 
-	void CreateParticles(int num, const float3& pos);
+	void CreateParticles(int num, const float3& pos, bool sub = false);
 	void DestroyParticle(Particle* p);
 	bool EditColor(FadeColor& color, uint pos = 0);
 
@@ -103,6 +113,7 @@ public:
 	uint maxParticles = MAX_PARTICLES;
 
 	std::vector<Particle*> particlePool;
+	std::vector<float3> newPositions;
 
 	AABB bbox;
 	AABB drawingBbox;

@@ -137,8 +137,7 @@ bool Particle::Update(float dt, Application* App)
     }
     else
     {
-        active = false;
-        camDistance = -1;
+        ParticleDeath();
     }
 
     camDistance = App->gameObjects->mainCamera->GetComponent<Transform>()->GetPos().DistanceSq(pos);
@@ -215,7 +214,22 @@ void Particle::Draw()
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+void Particle::ParticleDeath()
+{
+    if (active && owner->data.subEmitterActive && texture == owner->data.texture)
+    {
+        owner->newPositions.push_back(pos - owner->owner->GetComponent<Transform>()->GetPos());
+    }
+    active = false;
+    camDistance = -1;
+}
+
 float4x4 Particle::GetMatrix()
 {
     return float4x4::FromTRS(pos, rot, scale).Transposed();
+}
+
+ResourceMaterial* Particle::GetTexture()
+{
+    return texture;
 }

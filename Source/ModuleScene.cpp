@@ -28,7 +28,7 @@ bool ModuleScene::Init()
 	App->gameObjects->mainCamera->CreateComponent(ComponentTypes::CAMERA);
 	App->gameObjects->mainCamera->GetComponent<Transform>()->SetPos(0.0f, 2.0f, 0.0f);
 	App->gameObjects->mainCamera->GetComponent<Transform>()->SetRot(180.0f, -45.0f, 180.0f);
-	App->gameObjects->mainCamera->GetComponent<Camera>()->culling = true;
+	App->gameObjects->mainCamera->GetComponent<Camera>()->culling = false; // true
 	App->gameObjects->mainCamera->GetComponent<Camera>()->mainCamera = true;
 
 	App->gameObjects->AddGameobject(App->gameObjects->mainCamera);
@@ -38,22 +38,22 @@ bool ModuleScene::Init()
 
 bool ModuleScene::Start()
 {
-	GameObject* smoke1 = App->particles->CreateEmitter(CreateSmoke());
+	GameObject* smoke1 = App->particles->CreateEmitter(CreateSmokeData());
 	smoke1->GetComponent<Transform>()->SetPos(float3(-43.1f, 7.0f, -32.6f));
 	smoke1->name = "EmitterSmoke1";
 	App->gameObjects->AddGameobject(smoke1);
 
-	GameObject* smoke2 = App->particles->CreateEmitter(CreateSmoke());
+	GameObject* smoke2 = App->particles->CreateEmitter(CreateSmokeData());
 	smoke2->GetComponent<Transform>()->SetPos(float3(-30.3f, 7.0f, -33.6f));
 	smoke2->name = "EmitterSmoke2";
 	App->gameObjects->AddGameobject(smoke2);
 
-	GameObject* smoke3 = App->particles->CreateEmitter(CreateSmoke());
+	GameObject* smoke3 = App->particles->CreateEmitter(CreateSmokeData());
 	smoke3->GetComponent<Transform>()->SetPos(float3(-40.5f, 7.1f, -43.1f));
 	smoke3->name = "EmitterSmoke3";
 	App->gameObjects->AddGameobject(smoke3);
 
-	GameObject* smoke4 = App->particles->CreateEmitter(CreateSmoke());
+	GameObject* smoke4 = App->particles->CreateEmitter(CreateSmokeData());
 	smoke4->GetComponent<Transform>()->SetPos(float3(-32.8f, 7.0f, -43.1f));
 	smoke4->name = "EmitterSmoke4";
 	App->gameObjects->AddGameobject(smoke4);
@@ -137,7 +137,7 @@ void ModuleScene::Save(std::string scene)
 	}
 }
 
-EmitterData ModuleScene::CreateSmoke()
+EmitterData ModuleScene::CreateSmokeData()
 {
 	EmitterData smoke;
 

@@ -25,6 +25,9 @@ public:
 	void Draw();
 
 	float4x4 GetMatrix();
+	ResourceMaterial* GetTexture();
+	void ParticleDeath();
+
 public:
 	float camDistance = 0.0f;
 	bool active = false;
@@ -32,11 +35,12 @@ public:
 	ComponentEmitter* owner = nullptr;
 	AABB bbox;
 
+	float3 pos = float3(0.0f, 0.0f, 0.0f);
+
 private:
 	float life = 0.0f;
 	float maxLife = 0.0f;
 
-	float3 pos = float3(0.0f,0.0f,0.0f);
 	Quat rot = Quat::FromEulerXYZ(0,0,0);
 	float3 scale = float3(0.0f,0.0f,0.0f);
 

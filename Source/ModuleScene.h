@@ -27,7 +27,7 @@ public:
 	void Load(std::string scene);
 	void Save(std::string scene);
 
-	EmitterData CreateSmoke();
+	EmitterData CreateSmokeData();
 
 public:
 	bool drawMouse = false;
