@@ -126,9 +126,7 @@ bool ModuleParticles::CleanUp()
     plane = nullptr;
     if (firework != nullptr)
     {
-        firework->RemoveComponent(firework->GetComponent<Emitter>());
-        firework->CleanUp();
-        delete firework;
+        App->gameObjects->RemoveGameobject(firework);
         firework = nullptr;
     }
     return true;
