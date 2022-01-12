@@ -38,6 +38,10 @@ UpdateStatus ModuleParticles::Update(float dt)
         if (firework)
         {
             LOG_CONSOLE("Created firework!");
+            if (firework->GetComponent<Emitter>())
+            {
+                firework->GetComponent<Emitter>()->StartEmitter();
+            }
         }
     }
 
@@ -173,8 +177,8 @@ EmitterData ModuleParticles::CreateFireworkData()
 
     firework.sType = EmitterData::EmitterSphere::CENTER;
 
-    firework.duration = 3.0f;
-    firework.loop = true;
+    firework.duration = 1.5f;
+    firework.loop = false;
 
     firework.burst = false;
     firework.minPart = 0;
@@ -185,12 +189,8 @@ EmitterData ModuleParticles::CreateFireworkData()
     firework.particleDirection = float3::unitY;
 
     firework.cubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
-    vec size = firework.cubeCreation.Size();
-    size.x = 0.25;
-    size.z = 0.25;
-    firework.cubeCreation.SetFromCenterAndSize(firework.cubeCreation.CenterPoint(), size);
     firework.sphereCreation = Sphere(float3::zero, 1.0f);
-    firework.circleCreation = Circle(float3::unitY, float3::unitY, 0.25f);
+    firework.circleCreation = Circle(float3::unitY, float3::unitY, 3.0f);
     firework.shapeType = Shape::CONE;
 
     firework.sizeOBB = float3::zero;
@@ -202,8 +202,6 @@ EmitterData ModuleParticles::CreateFireworkData()
     firework.plane = App->particles->plane;
     firework.texture = (ResourceMaterial*)App->resources->RequestResource("firework_projectile.png");
     firework.texture->GenerateBuffers();
-    firework.subTexture = (ResourceMaterial*)App->resources->RequestResource("firework_flare.png");
-    firework.subTexture->GenerateBuffers();
 
     firework.checkLife = true;
     firework.checkSpeed = true;
@@ -214,34 +212,45 @@ EmitterData ModuleParticles::CreateFireworkData()
     firework.checkAngularAcceleration = true;
     firework.checkAngularVelocity = true;
 
-    firework.rateOverTime = 3;
-    firework.subRateOverTime = 10;
+    firework.rateOverTime = 1;
     firework.timeToParticle = 0.0f;
 
     firework.particleLife = float2(3.0f, 5.0f);
-    firework.speed = float2(2.0f, 3.5f);
-    firework.acceleration = float2(-0.3f, -0.4f);
-    firework.sizeOverTime = float2(0.0f, 0.2f);
-    firework.size = float2(1.0f, 1.20f);
+    firework.speed = float2(5.0f, 7.5f);
+    firework.acceleration = float2(-0.3f, -0.6f);
+    firework.sizeOverTime = float2(0.0f, 0.0f);
+    firework.size = float2(0.7f, 0.7f);
     firework.rotation = float2(0.0f, 0.0f);
     firework.angularAcceleration = float2(0.0f, 0.0f);
     firework.angularVelocity = float2(0.0f, 0.0f);
 
     firework.color.push_back(FadeColor(Color(1.0f, 1.0f, 0.0f, 1.0f), 0.0f, true));
-    firework.color.push_back(FadeColor(Color(1.0f, 0.0f, 0.0f, 0.7f), 1.0f, true));
+    firework.color.push_back(FadeColor(Color(1.0f, 0.0f, 0.0f, 0.5f), 1.0f, true));
 
-    firework.subParticleLife = float2(7.0f, 10.0f);
-    firework.subSpeed = float2(1.2f, 2.0f);
-    firework.subAcceleration = float2(-0.1f, -0.2f);
-    firework.subSizeOverTime = float2(0.0f, 0.2f);
-    firework.subSize = float2(1.0f, 1.20f);
+
+    //Sub Emitter
+
+    firework.subTexture = (ResourceMaterial*)App->resources->RequestResource("firework_flare.png");
+    firework.subTexture->GenerateBuffers();
+
+    firework.subCubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+    firework.subSphereCreation = Sphere(float3::zero, 1.5f);
+    firework.subCircleCreation = Circle(float3::unitY, float3::unitY, 1.0f);
+
+    firework.subShapeType = Shape::SPHERE;
+
+    firework.subRateParticles = 30;
+    firework.subParticleLife = float2(6.0f, 6.0f);
+    firework.subSpeed = float2(3.0f, 3.0f);
+    firework.subAcceleration = float2(0.0f, 0.0f);
+    firework.subSizeOverTime = float2(0.25f, 0.5f);
+    firework.subSize = float2(1.0f, 1.50f);
     firework.subRotation = float2(-360.0f, 360.0f);
     firework.subAngularAcceleration = float2(0.0f, 0.0f);
     firework.subAngularVelocity = float2(0.0f, 0.0f);
 
-    firework.subColor.push_back(FadeColor(Color(1.0f, 1.0f, 0.0f, 1.0f), 0.0f, true));
-    firework.subColor.push_back(FadeColor(Color(1.0f, 1.0f, 0.0f, 0.2f), 0.5f, true));
-    firework.subColor.push_back(FadeColor(Color(1.0f, 1.0f, 0.0f, 0.0f), 1.0f, true));
+    firework.subColor.push_back(FadeColor(Color(0.0f, 1.0f, 1.0f, 1.0f), 0.0f, true));
+    firework.subColor.push_back(FadeColor(Color(0.0f, 1.0f, 1.0f, 0.0f), 1.0f, true));
 
     firework.timeColor = true;
 

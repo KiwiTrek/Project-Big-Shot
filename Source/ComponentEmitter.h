@@ -43,8 +43,6 @@ struct EmitterData
 	ResourceMesh* plane = nullptr;
 	ResourceMaterial* texture = nullptr;
 	ResourceMaterial* subTexture = nullptr;
-	int textureRows = 1;
-	int textureColumns = 1;
 
 	bool checkLife = false;
 	bool checkSpeed = false;
@@ -56,7 +54,7 @@ struct EmitterData
 	bool checkAngularVelocity = false;
 
 	int rateOverTime = 10;
-	int subRateOverTime = 10;
+	int subRateParticles = 10;
 	float timeToParticle = 0.0f;
 	bool subEmitterActive = false;
 
@@ -70,6 +68,14 @@ struct EmitterData
 	float2 angularVelocity = float2(0.0f, 0.0f);
 
 	std::vector<FadeColor> color;
+
+	//Sub Emitter
+
+	AABB subCubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+	Sphere subSphereCreation = Sphere(float3::zero, 1.0f);
+	Circle subCircleCreation = Circle(float3::unitY, float3::unitY, 1.0f);
+
+	Shape subShapeType = Shape::CUBE;
 
 	float2 subParticleLife = float2(5.0f, 5.0f);
 	float2 subSpeed = float2(3.0f, 3.0f);
@@ -90,6 +96,8 @@ class ComponentEmitter : public Component
 public:
 	ComponentEmitter(EmitterData data, bool active = true);
 	~ComponentEmitter();
+
+	void StartEmitter();
 
 	void Update(float dt, Application* App) override;
 	void PostUpdate();
