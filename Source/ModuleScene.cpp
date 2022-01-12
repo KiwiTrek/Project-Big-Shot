@@ -38,22 +38,22 @@ bool ModuleScene::Init()
 
 bool ModuleScene::Start()
 {
-	GameObject* smoke1 = App->particles->CreateEmitter(CreateSmokeData());
+	GameObject* smoke1 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
 	smoke1->GetComponent<Transform>()->SetPos(float3(-43.1f, 7.0f, -32.6f));
 	smoke1->name = "EmitterSmoke1";
 	App->gameObjects->AddGameobject(smoke1);
 
-	GameObject* smoke2 = App->particles->CreateEmitter(CreateSmokeData());
+	GameObject* smoke2 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
 	smoke2->GetComponent<Transform>()->SetPos(float3(-30.3f, 7.0f, -33.6f));
 	smoke2->name = "EmitterSmoke2";
 	App->gameObjects->AddGameobject(smoke2);
 
-	GameObject* smoke3 = App->particles->CreateEmitter(CreateSmokeData());
+	GameObject* smoke3 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
 	smoke3->GetComponent<Transform>()->SetPos(float3(-40.5f, 7.1f, -43.1f));
 	smoke3->name = "EmitterSmoke3";
 	App->gameObjects->AddGameobject(smoke3);
 
-	GameObject* smoke4 = App->particles->CreateEmitter(CreateSmokeData());
+	GameObject* smoke4 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
 	smoke4->GetComponent<Transform>()->SetPos(float3(-32.8f, 7.0f, -43.1f));
 	smoke4->name = "EmitterSmoke4";
 	App->gameObjects->AddGameobject(smoke4);
@@ -135,66 +135,4 @@ void ModuleScene::Save(std::string scene)
 	{
 		LOG_CONSOLE("ERROR: scene not saved.");
 	}
-}
-
-EmitterData ModuleScene::CreateSmokeData()
-{
-	EmitterData smoke;
-
-	smoke.sType = EmitterData::EmitterSphere::RANDOM;
-
-	smoke.duration = 1.0f;
-	smoke.loop = true;
-
-	smoke.burst = false;
-	smoke.minPart = 0;
-	smoke.maxPart = 10;
-	smoke.repeatTime = 1.0f;
-
-	smoke.gravity = 0.0f;
-	smoke.particleDirection = float3::unitY;
-
-	smoke.cubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
-	vec size = smoke.cubeCreation.Size();
-	size.x = 0.25;
-	size.z = 0.25;
-	smoke.cubeCreation.SetFromCenterAndSize(smoke.cubeCreation.CenterPoint(), size);
-	smoke.sphereCreation = Sphere(float3::zero, 1.0f);
-	smoke.circleCreation = Circle(float3::unitY, float3::unitY, 0.25f);
-	smoke.shapeType = Shape::CONE;
-
-	smoke.sizeOBB = float3::zero;
-	smoke.drawAABB = false;
-	smoke.posDifAABB = float3::zero;
-
-	smoke.plane = App->particles->plane;
-	smoke.texture = (ResourceMaterial*)App->resources->RequestResource("smoke.png");
-	smoke.texture->GenerateBuffers();
-
-	smoke.checkLife = true;
-	smoke.checkSpeed = true;
-	smoke.checkAcceleration = true;
-	smoke.checkSize = true;
-	smoke.checkSizeOverTime = true;
-	smoke.checkRotation = false;
-	smoke.checkAngularAcceleration = true;
-	smoke.checkAngularVelocity = true;
-
-	smoke.rateOverTime = 15;
-	smoke.timeToParticle = 0.0f;
-
-	smoke.particleLife = float2(3.0f, 5.0f);
-	smoke.speed = float2(0.5f, 1.0f);
-	smoke.acceleration = float2(0.0f, 0.15f);
-	smoke.sizeOverTime = float2(0.0f, 0.5f);
-	smoke.size = float2(1.0f, 1.20f);
-	smoke.rotation = float2(0.0f, 0.0f);
-	smoke.angularAcceleration = float2(0.0f, 0.0f);
-	smoke.angularVelocity = float2(0.0f, 0.0f);
-
-	smoke.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 0.5f), 0.0f, true));
-	smoke.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 0.0f), 1.0f, true));
-	smoke.timeColor = true;
-
-	return smoke;
 }

@@ -27,7 +27,10 @@ public:
 
 	GameObject* CreateEmitter(EmitterData dat);
 	std::vector<GameObject*>::iterator DeleteEmitter(GameObject* e);
+
 	EmitterData CreateFireworkData();
+	EmitterData CreateSmokeData();
+
 	/*void Load(std::string scene);
 	void Save(std::string scene);*/
 private:

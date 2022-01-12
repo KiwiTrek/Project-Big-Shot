@@ -42,7 +42,6 @@ struct EmitterData
 
 	ResourceMesh* plane = nullptr;
 	ResourceMaterial* texture = nullptr;
-	ResourceMaterial* subTexture = nullptr;
 
 	bool checkLife = false;
 	bool checkSpeed = false;
@@ -54,7 +53,6 @@ struct EmitterData
 	bool checkAngularVelocity = false;
 
 	int rateOverTime = 10;
-	int subRateParticles = 10;
 	float timeToParticle = 0.0f;
 	bool subEmitterActive = false;
 
@@ -71,11 +69,24 @@ struct EmitterData
 
 	//Sub Emitter
 
+	ResourceMaterial* subTexture = nullptr;
+	int subRateParticles = 10;
+	EmitterSphere subSphereType = EmitterSphere::CENTER;
+	
 	AABB subCubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
 	Sphere subSphereCreation = Sphere(float3::zero, 1.0f);
 	Circle subCircleCreation = Circle(float3::unitY, float3::unitY, 1.0f);
 
-	Shape subShapeType = Shape::CUBE;
+	bool subCheckLife = false;
+	bool subCheckSpeed = false;
+	bool subCheckAcceleration = false;
+	bool subCheckSize = false;
+	bool subCheckSizeOverTime = false;
+	bool subCheckRotation = false;
+	bool subCheckAngularAcceleration = false;
+	bool subCheckAngularVelocity = false;
+
+	Shape subShapeType = Shape::SPHERE;
 
 	float2 subParticleLife = float2(5.0f, 5.0f);
 	float2 subSpeed = float2(3.0f, 3.0f);

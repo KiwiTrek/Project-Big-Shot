@@ -245,7 +245,7 @@ void ComponentEmitter::DrawInspector(Application* App)
 			ImGui::Checkbox("##SizeOverTime", &data.checkSizeOverTime);
 			ShowFloatValue(data.sizeOverTime, data.checkSizeOverTime, "Size/Time", 0.25f, -1.0f, 1.0f);
 
-			ImGui::DragInt("Emition", &data.rateOverTime, 1.0f, 0.0f, 300.0f, "%.2f");
+			ImGui::DragInt("Emition Rate", &data.rateOverTime, 1.0f, 1.0f, 300.0f, "%.2f");
 
 			ImGui::Separator();
 			if (ImGui::Checkbox("Loop", &data.loop)) loopTimer.Start();
@@ -254,8 +254,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 
 			ImGui::TreePop();
 		}
-
-		ImGui::Separator();
 
 		if (ImGui::TreeNodeEx("Emitter Shape"))
 		{
@@ -301,7 +299,7 @@ void ComponentEmitter::DrawInspector(Application* App)
 			}
 			case Shape::CONE:
 				ImGui::Text("Cone");
-				ImGui::DragFloat("Sphere Size", &data.circleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
+				ImGui::DragFloat("End Radious", &data.circleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
 
 				break;
 			default:
@@ -310,13 +308,8 @@ void ComponentEmitter::DrawInspector(Application* App)
 			ImGui::TreePop();
 		}
 
-		ImGui::Separator();
-
 		if (ImGui::TreeNodeEx("Particle Color"))
 		{
-			ImGui::Text("Particle Color");
-			ImGui::SameLine();
-
 			ImGui::TextDisabled("(?)");
 			if (ImGui::IsItemHovered())
 			{
@@ -356,8 +349,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 			ImGui::TreePop();
 		}
 
-		ImGui::Separator();
-
 		if (ImGui::TreeNodeEx("Particle Burst"))
 		{
 			ImGui::Checkbox("Burst", &data.burst);
@@ -369,8 +360,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 
 			ImGui::TreePop();
 		}
-
-		ImGui::Separator();
 
 		if (ImGui::TreeNodeEx("Particle Material"))
 		{
@@ -428,35 +417,208 @@ void ComponentEmitter::DrawInspector(Application* App)
 
 		ImGui::Separator();
 
-		/*
-		if (ImGui::Checkbox("SubEmitter", &data.subEmitterActive))
+		ImGui::Checkbox("SubEmitter", &data.subEmitterActive);
+		if (data.subEmitterActive)
 		{
-			if (data.subEmitterActive)
+			ImGui::Separator();
+			if (ImGui::TreeNodeEx("Sub Emitter"))
 			{
-				if (data.subEmitter)
+				if (ImGui::TreeNodeEx("Sub Values"))
 				{
-					data.subEmitter->active = true;
-					data.subEmitter->GetComponent<Emitter>()->active = true;
-				}
-				else
-				{
-					data.subEmitter = new GameObject("SubEmition");
-					data.subEmitter->parent = owner;
-					EmitterData info;
-					info.isSubEmitter = true;
-					data.subEmitter->CreateComponent(ComponentTypes::EMITTER);
-					data.subEmitter->GetComponent<Emitter>()->data = info;
-					//AABB boundingBox = AABB();
-					//boundingBox.SetFromCenterAndSize(data.subEmitter->GetPos(), float3::one);
-					//data.subEmitter->SetABB(boundingBox);
-				}
-			}
-			else
-				data.subEmitter->active = false;
-		}
-		ImGui::Separator();
-		*/
+					//this is test
+					ImGui::TextDisabled("(?)");
+					if (ImGui::IsItemHovered())
+					{
+						ImGui::BeginTooltip();
+						ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+						ImGui::TextUnformatted("Active checkBox if you want a random number");
+						ImGui::PopTextWrapPos();
+						ImGui::EndTooltip();
+					}
 
+					ImGui::Checkbox("##Sub Speed", &data.subCheckSpeed);
+					ShowFloatValue(data.subSpeed, data.subCheckSpeed, "Speed", 0.25f, 0.25f, 20.0f);
+
+					ImGui::Checkbox("##Sub Acceleration", &data.subCheckAcceleration);
+					ShowFloatValue(data.subAcceleration, data.subCheckAcceleration, "Acceleration", 0.25f, -5.0f, 5.0f);
+
+					ImGui::Checkbox("##Sub Rotation", &data.subCheckRotation);
+					ShowFloatValue(data.subRotation, data.subCheckRotation, "Initial Rotation", 0.25f, -360.0f, 360.0f);
+
+					ImGui::Checkbox("##Sub AngVelocity", &data.subCheckAngularVelocity);
+					ShowFloatValue(data.subAngularVelocity, data.subCheckAngularVelocity, "Angular Vel.", 0.25f, -45.0f, 45.0f);
+
+					ImGui::Checkbox("##Sub AngAcceleration", &data.subCheckAngularAcceleration);
+					ShowFloatValue(data.subAngularAcceleration, data.subCheckAngularAcceleration, "Angular Accel.", 0.25f, -45.0f, 45.0f);
+
+					ImGui::Checkbox("##Sub Lifetime", &data.subCheckLife);
+					ShowFloatValue(data.subParticleLife, data.subCheckLife, "Life", 0.5f, 1.0f, 20.0f);
+
+					ImGui::Checkbox("##Sub Size", &data.subCheckSize);
+					ShowFloatValue(data.subSize, data.subCheckSize, "Size", 0.1f, 0.1f, 5.0f);
+
+					ImGui::Checkbox("##Sub SizeOverTime", &data.subCheckSizeOverTime);
+					ShowFloatValue(data.subSizeOverTime, data.subCheckSizeOverTime, "Size/Time", 0.25f, -1.0f, 1.0f);
+
+					ImGui::DragInt("Emition Quant.", &data.subRateParticles, 1.0f, 0.0f, 300.0f, "%.2f");
+
+					ImGui::Separator();
+
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNodeEx("Sub Shape"))
+				{
+					if (ImGui::RadioButton("S.Cube", data.subShapeType == Shape::CUBE)) data.subShapeType = Shape::CUBE;
+					ImGui::SameLine();
+					if (ImGui::RadioButton("S.Sphere", data.subShapeType == Shape::SPHERE)) data.subShapeType = Shape::SPHERE;
+					ImGui::SameLine();
+					if (ImGui::RadioButton("S.Cone", data.subShapeType == Shape::CONE)) data.subShapeType = Shape::CONE;
+
+					float3 pos;
+					switch (data.shapeType)
+					{
+					case Shape::CUBE:
+						ImGui::Text("Sub Box");
+						pos = data.subCubeCreation.Size();
+						ImGui::DragFloat3("S.Box Size", &pos.x, 0.1f, 0.1f, 20.0f, "%.2f");
+
+						data.subCubeCreation.SetFromCenterAndSize(data.subCubeCreation.CenterPoint(), pos);
+
+						break;
+					case Shape::SPHERE:
+					{
+						ImGui::Text("Sub Sphere");
+
+						ImGui::Text("Emision from:");
+
+						bool random = data.subSphereType == EmitterData::EmitterSphere::RANDOM;
+						bool center = data.subSphereType == EmitterData::EmitterSphere::CENTER;
+						bool border = data.subSphereType == EmitterData::EmitterSphere::BORDER;
+
+						if (ImGui::RadioButton("S.Random", random))
+							data.subSphereType = EmitterData::EmitterSphere::RANDOM;
+						ImGui::SameLine();
+						if (ImGui::RadioButton("S.Center", center))
+							data.subSphereType = EmitterData::EmitterSphere::CENTER;
+						ImGui::SameLine();
+						if (ImGui::RadioButton("S.Border", border))
+							data.subSphereType = EmitterData::EmitterSphere::BORDER;
+
+						ImGui::DragFloat("Sub Sphere Size", &data.subSphereCreation.r, 0.25f, 1.0f, 20.0f, "%.2f");
+
+						break;
+					}
+					case Shape::CONE:
+						ImGui::Text("Sub Cone");
+						ImGui::DragFloat("Sub End Radious", &data.subCircleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
+
+						break;
+					default:
+						break;
+					}
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNodeEx("Sub Particle Color"))
+				{
+					ImGui::TextDisabled("(?)");
+					if (ImGui::IsItemHovered())
+					{
+						ImGui::BeginTooltip();
+						ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+						ImGui::TextUnformatted("Click color square to change it");
+						ImGui::PopTextWrapPos();
+						ImGui::EndTooltip();
+					}
+
+					std::vector<FadeColor> deleteColor;
+					uint posList = 0u;
+					int nextPos = 100;
+					Color nextColor = Color(0.0f, 0.0f, 0.0f, 0.0f);
+					int i = 0;
+					for (std::vector<FadeColor>::iterator it = data.subColor.begin(); it != data.subColor.end(); ++it)
+					{
+						//TODO: they must be able to change position
+						ImGui::PushID(i);
+						if ((it) == data.subColor.begin())
+						{//Cant delete 1st color
+
+							if (!EditColor(*it))
+								break;
+						}
+						else
+						{
+							if (!EditColor(*it, posList))
+								data.subColor.erase(it++);
+						}
+						ImGui::PopID();
+						++i;
+						++posList;
+					}
+
+
+					ImGui::TreePop();
+				}
+
+				if (ImGui::TreeNodeEx("Sub Particle Material"))
+				{
+					if (data.subTexture != nullptr)
+					{
+						if (data.subTexture->data != nullptr)
+						{
+							ImGui::Text("UID: "); ImGui::SameLine();
+							ImGui::Button(std::to_string(data.subTexture->GetUID()).c_str(), ImVec2(ImGui::CalcItemWidth(), 20));
+							if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag material from Resources Panel here to change it.");
+							if (ImGui::BeginDragDropTarget())
+							{
+								if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIALS"))
+								{
+									IM_ASSERT(payload->DataSize == sizeof(int));
+									int payloadUID = *(const int*)payload->Data;
+									data.subTexture = (ResourceMaterial*)App->resources->RequestResource((UID)payloadUID);
+									data.subTexture->GenerateBuffers();
+								}
+								ImGui::EndDragDropTarget();
+							}
+
+							IMGUI_PRINT(IMGUI_YELLOW, "Diffuse Texture:", "%s", data.subTexture->name.c_str());
+							IMGUI_PRINT(IMGUI_YELLOW, "Path:", "%s", data.subTexture->path.c_str());
+							IMGUI_PRINT(IMGUI_YELLOW, "Width:", "%d", data.subTexture->width); ImGui::SameLine(); IMGUI_PRINT(IMGUI_YELLOW, "Height:", "%d", data.texture->height);
+							ImGui::Text("Image:");
+							ImGui::Image((ImTextureID)data.subTexture->texId, ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
+
+							if (ImGui::Button("Remove material", ImVec2(ImGui::CalcItemWidth(), 20)))
+							{
+								data.subTexture->referenceCount--;
+								data.subTexture = nullptr;
+							}
+						}
+					}
+					else
+					{
+						ImGui::Text("UID: "); ImGui::SameLine();
+						ImGui::Button("- None -", ImVec2(ImGui::CalcItemWidth(), 20));
+						if (ImGui::IsItemHovered()) ImGui::SetTooltip("Drag material from Resources Panel here to change it.");
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("MATERIALS"))
+							{
+								IM_ASSERT(payload->DataSize == sizeof(int));
+								int payloadUID = *(const int*)payload->Data;
+								data.subTexture = (ResourceMaterial*)App->resources->RequestResource((UID)payloadUID);
+								data.subTexture->GenerateBuffers();
+							}
+							ImGui::EndDragDropTarget();
+						}
+					}
+					ImGui::TreePop();
+				}
+				ImGui::TreePop();
+			}
+		}
+
+		ImGui::Separator();
 		if (ImGui::Button("Remove Particles", ImVec2(150, 25))) ClearEmitter();
 	}
 }

@@ -24,7 +24,7 @@ bool ModuleParticles::Start()
     plane->GenerateBuffers();
 
     firework = CreateEmitter(CreateFireworkData());
-    firework->GetComponent<Transform>()->SetPos(float3(-5.0f, 1.0f, -5.0f));
+    firework->GetComponent<Transform>()->SetPos(float3(-50.0f, 1.0f, -50.0f));
     firework->name = "firework";
     App->gameObjects->AddGameobject(firework);
 
@@ -144,6 +144,11 @@ GameObject* ModuleParticles::CreateEmitter(EmitterData data)
         data.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, true));
         data.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, true));
     }
+    if (data.subColor.empty())
+    {
+        data.subColor.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, true));
+        data.subColor.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 1.0f), 1.0f, true));
+    }
     if (data.plane == nullptr) data.plane = plane;
     Emitter* e = (Emitter*)go->CreateComponent(ComponentTypes::EMITTER, data);
     emitters.push_back(go);
@@ -169,6 +174,68 @@ std::vector<GameObject*>::iterator ModuleParticles::DeleteEmitter(GameObject* e)
 void ModuleParticles::SortParticles(std::vector<Particle*> &particlePool)
 {
     std::sort(particlePool.begin(), particlePool.end(), particleCompare());
+}
+
+EmitterData ModuleParticles::CreateSmokeData()
+{
+    EmitterData smoke;
+
+    smoke.sType = EmitterData::EmitterSphere::RANDOM;
+
+    smoke.duration = 1.0f;
+    smoke.loop = true;
+
+    smoke.burst = false;
+    smoke.minPart = 0;
+    smoke.maxPart = 10;
+    smoke.repeatTime = 1.0f;
+
+    smoke.gravity = 0.0f;
+    smoke.particleDirection = float3::unitY;
+
+    smoke.cubeCreation = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+    vec size = smoke.cubeCreation.Size();
+    size.x = 0.25;
+    size.z = 0.25;
+    smoke.cubeCreation.SetFromCenterAndSize(smoke.cubeCreation.CenterPoint(), size);
+    smoke.sphereCreation = Sphere(float3::zero, 1.0f);
+    smoke.circleCreation = Circle(float3::unitY, float3::unitY, 0.25f);
+    smoke.shapeType = Shape::CONE;
+
+    smoke.sizeOBB = float3::zero;
+    smoke.drawAABB = false;
+    smoke.posDifAABB = float3::zero;
+
+    smoke.plane = App->particles->plane;
+    smoke.texture = (ResourceMaterial*)App->resources->RequestResource("smoke.png");
+    smoke.texture->GenerateBuffers();
+
+    smoke.checkLife = true;
+    smoke.checkSpeed = true;
+    smoke.checkAcceleration = true;
+    smoke.checkSize = true;
+    smoke.checkSizeOverTime = true;
+    smoke.checkRotation = false;
+    smoke.checkAngularAcceleration = true;
+    smoke.checkAngularVelocity = true;
+
+    smoke.rateOverTime = 8;
+    smoke.timeToParticle = 0.0f;
+
+    smoke.particleLife = float2(3.0f, 5.0f);
+    smoke.speed = float2(0.5f, 1.0f);
+    smoke.acceleration = float2(0.0f, 0.15f);
+    smoke.sizeOverTime = float2(0.0f, 0.5f);
+    smoke.size = float2(1.0f, 1.20f);
+    smoke.rotation = float2(0.0f, 0.0f);
+    smoke.angularAcceleration = float2(0.0f, 0.0f);
+    smoke.angularVelocity = float2(0.0f, 0.0f);
+
+    smoke.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 0.5f), 0.0f, true));
+    smoke.color.push_back(FadeColor(Color(1.0f, 1.0f, 1.0f, 0.0f), 1.0f, true));
+    smoke.timeColor = true;
+
+    return smoke;
 }
 
 EmitterData ModuleParticles::CreateFireworkData()
