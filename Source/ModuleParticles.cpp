@@ -37,9 +37,9 @@ UpdateStatus ModuleParticles::Update(float dt)
     {
         if (firework)
         {
-            LOG_CONSOLE("Created firework!");
             if (firework->GetComponent<Emitter>())
             {
+                LOG_CONSOLE("Firework started!");
                 firework->GetComponent<Emitter>()->StartEmitter();
             }
         }
@@ -105,7 +105,9 @@ UpdateStatus ModuleParticles::PostUpdate()
             if (App->gameObjects->mainCamera->GetComponent<Camera>()->culling)
             {
                 if (App->gameObjects->mainCamera->GetComponent<Camera>()->ContainsBBox((*it)->bbox))
+                {
                     (*it)->Draw();
+                }
             }
             else
             {
@@ -115,7 +117,6 @@ UpdateStatus ModuleParticles::PostUpdate()
     }
 
     allParticles.clear();
-
     return UpdateStatus::UPDATE_CONTINUE;
 }
 bool ModuleParticles::CleanUp()

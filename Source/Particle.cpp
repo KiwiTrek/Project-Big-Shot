@@ -31,9 +31,6 @@ Particle::Particle(ResourceMesh* mesh, ResourceMaterial* tex, float lifeTime, fl
 
     sizeOverTime = incrementSize;
 
-    //LOG("life %f", lifeTime);
-    //LOG("size %f", transform.scale.x);
-
     for (std::vector<FadeColor>::iterator it = colors.begin(); it != colors.end(); ++it)
     {
         color.push_back(*it);
@@ -147,8 +144,7 @@ bool Particle::Update(float dt, Application* App)
 
 void Particle::Draw()
 {
-    if (plane == nullptr)
-        return;
+    if (plane == nullptr) return;
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

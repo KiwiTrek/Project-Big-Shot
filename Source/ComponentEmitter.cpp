@@ -41,21 +41,22 @@ void ComponentEmitter::Update(float dt, Application* App)
 	float time = lifeTimer.ReadSec();
 	if (time > data.timeToParticle && (data.loop || loopTimer.ReadSec() < data.duration))
 	{
-		int particlesToCreate = (time / (1.0f / data.rateOverTime));
-		CreateParticles(particlesToCreate, defaultPos);
-		data.timeToParticle = (1.0f / data.rateOverTime);
+		float newTimeToParticle = 1.0f / data.rateOverTime;
+		int num = (time / newTimeToParticle);
+		CreateParticles(num, defaultPos);
+		data.timeToParticle = newTimeToParticle;
 		lifeTimer.Start();
 	}
 
 	float burstTime = burstTimer.ReadSec();
 	if (data.burst && burstTime > data.repeatTime)
 	{
-		int particlesToCreate = data.minPart;
+		int num = data.minPart;
 		if (data.minPart != data.maxPart)
 		{
-			particlesToCreate = (rand() % (data.maxPart - data.minPart)) + data.minPart;
+			num = (rand() % (data.maxPart - data.minPart)) + data.minPart;
 		}
-		CreateParticles(particlesToCreate, defaultPos);
+		CreateParticles(num, defaultPos);
 		burstTimer.Start();
 	}
 
@@ -71,7 +72,7 @@ void ComponentEmitter::Update(float dt, Application* App)
 	// Update all alive particles
 	for (std::vector<Particle*>::iterator p = particlePool.begin(); p != particlePool.end(); ++p)
 	{
-		if ((*p)->active == false)
+		if (!(*p)->active)
 		{
 			DestroyParticle((*p));
 			p = particlePool.erase(p);
@@ -267,13 +268,14 @@ void ComponentEmitter::DrawInspector(Application* App)
 			switch (data.shapeType)
 			{
 			case Shape::CUBE:
+			{
 				ImGui::Text("Box");
 				pos = data.cubeCreation.Size();
 				ImGui::DragFloat3("Box Size", &pos.x, 0.1f, 0.1f, 20.0f, "%.2f");
 
 				data.cubeCreation.SetFromCenterAndSize(data.cubeCreation.CenterPoint(), pos);
-
 				break;
+			}
 			case Shape::SPHERE:
 			{
 				ImGui::Text("Sphere");
@@ -294,14 +296,14 @@ void ComponentEmitter::DrawInspector(Application* App)
 					data.sType = EmitterData::EmitterSphere::BORDER;
 
 				ImGui::DragFloat("Sphere Size", &data.sphereCreation.r, 0.25f, 1.0f, 20.0f, "%.2f");
-
 				break;
 			}
 			case Shape::CONE:
+			{
 				ImGui::Text("Cone");
 				ImGui::DragFloat("End Radious", &data.circleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
-
 				break;
+			}
 			default:
 				break;
 			}
@@ -327,25 +329,19 @@ void ComponentEmitter::DrawInspector(Application* App)
 			int i = 0;
 			for (std::vector<FadeColor>::iterator it = data.color.begin(); it != data.color.end(); ++it)
 			{
-				//TODO: they must be able to change position
 				ImGui::PushID(i);
 				if ((it) == data.color.begin())
-				{//Cant delete 1st color
-
-					if (!EditColor(*it))
-						break;
+				{
+					if (!EditColor(*it)) break;
 				}
 				else
 				{
-					if (!EditColor(*it, posList))
-						data.color.erase(it++);
+					if (!EditColor(*it, posList)) data.color.erase(it++);
 				}
 				ImGui::PopID();
 				++i;
 				++posList;
 			}
-
-
 			ImGui::TreePop();
 		}
 
@@ -414,7 +410,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 			}
 			ImGui::TreePop();
 		}
-
 		ImGui::Separator();
 
 		ImGui::Checkbox("SubEmitter", &data.subEmitterActive);
@@ -425,7 +420,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 			{
 				if (ImGui::TreeNodeEx("Sub Values"))
 				{
-					//this is test
 					ImGui::TextDisabled("(?)");
 					if (ImGui::IsItemHovered())
 					{
@@ -463,7 +457,6 @@ void ComponentEmitter::DrawInspector(Application* App)
 					ImGui::DragInt("Emition Quant.", &data.subRateParticles, 1.0f, 0.0f, 300.0f, "%.2f");
 
 					ImGui::Separator();
-
 					ImGui::TreePop();
 				}
 
@@ -479,17 +472,17 @@ void ComponentEmitter::DrawInspector(Application* App)
 					switch (data.shapeType)
 					{
 					case Shape::CUBE:
+					{
 						ImGui::Text("Sub Box");
 						pos = data.subCubeCreation.Size();
 						ImGui::DragFloat3("S.Box Size", &pos.x, 0.1f, 0.1f, 20.0f, "%.2f");
 
 						data.subCubeCreation.SetFromCenterAndSize(data.subCubeCreation.CenterPoint(), pos);
-
 						break;
+					}
 					case Shape::SPHERE:
 					{
 						ImGui::Text("Sub Sphere");
-
 						ImGui::Text("Emision from:");
 
 						bool random = data.subSphereType == EmitterData::EmitterSphere::RANDOM;
@@ -506,14 +499,14 @@ void ComponentEmitter::DrawInspector(Application* App)
 							data.subSphereType = EmitterData::EmitterSphere::BORDER;
 
 						ImGui::DragFloat("Sub Sphere Size", &data.subSphereCreation.r, 0.25f, 1.0f, 20.0f, "%.2f");
-
 						break;
 					}
 					case Shape::CONE:
+					{
 						ImGui::Text("Sub Cone");
 						ImGui::DragFloat("Sub End Radious", &data.subCircleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
-
 						break;
+					}
 					default:
 						break;
 					}
@@ -539,25 +532,19 @@ void ComponentEmitter::DrawInspector(Application* App)
 					int i = 0;
 					for (std::vector<FadeColor>::iterator it = data.subColor.begin(); it != data.subColor.end(); ++it)
 					{
-						//TODO: they must be able to change position
 						ImGui::PushID(i);
 						if ((it) == data.subColor.begin())
-						{//Cant delete 1st color
-
-							if (!EditColor(*it))
-								break;
+						{
+							if (!EditColor(*it)) break;
 						}
 						else
 						{
-							if (!EditColor(*it, posList))
-								data.subColor.erase(it++);
+							if (!EditColor(*it, posList)) data.subColor.erase(it++);
 						}
 						ImGui::PopID();
 						++i;
 						++posList;
 					}
-
-
 					ImGui::TreePop();
 				}
 
@@ -617,8 +604,8 @@ void ComponentEmitter::DrawInspector(Application* App)
 				ImGui::TreePop();
 			}
 		}
-
 		ImGui::Separator();
+
 		if (ImGui::Button("Remove Particles", ImVec2(150, 25))) ClearEmitter();
 	}
 }
@@ -639,7 +626,7 @@ void ComponentEmitter::ClearEmitter()
 	data.texture = nullptr;
 }
 
-float ComponentEmitter::GenerateRandNum(float min, float max)
+float ComponentEmitter::GenerateRandBetween(float min, float max)
 {
 	float random = ((float)rand()) / (float)RAND_MAX;
 	float diff = max - min;
@@ -659,25 +646,18 @@ void ComponentEmitter::ShowFloatValue(float2& value, bool checkBox, const char* 
 		str.append("min");
 		if (ImGui::DragFloat(str.data(), &value.x, v_speed, v_min, v_max, "%.2f"))
 		{
-			if (value.x > value.y)
-			{
-				value.y = value.x;
-			}
+			if (value.x > value.y) value.y = value.x;
 		}
 		ImGui::SameLine();
 		if (ImGui::DragFloat(name, &value.y, v_speed, v_min, v_max, "%.2f"))
 		{
-			if (value.x > value.y)
-			{
-				value.y = value.x;
-			}
+			if (value.x > value.y) value.y = value.x;
 		}
 	}
 	else
 	{
 		ImGui::PushItemWidth(148.0f);
-		if (ImGui::DragFloat(name, &value.x, v_speed, v_min, v_max, "%.2f"))
-			value.y = value.x;
+		if (ImGui::DragFloat(name, &value.x, v_speed, v_min, v_max, "%.2f")) value.y = value.x;
 	}
 	ImGui::PopItemWidth();
 }
@@ -686,53 +666,8 @@ void ComponentEmitter::CreateParticles(int num, const float3& pos, bool sub)
 {
 	for (int i = 0; i < num; ++i)
 	{
-		float3 spawnPos = pos;
-		float3 spawn = float3::zero;
-		float3 particleDir = float3::zero;
-		float angle = 0.0f;
-		float centerDist = 0.0f;
-
-		switch (data.shapeType)
-		{
-		case Shape::CUBE:
-			spawn = data.cubeCreation.RandomPointInside(LCG());
-			particleDir = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
-			break;
-
-		case Shape::SPHERE:
-			switch (data.sType)
-			{
-			case EmitterData::EmitterSphere::RANDOM:
-				spawn = data.sphereCreation.RandomPointInside(LCG());
-				particleDir = spawn.Normalized();
-				break;
-			case EmitterData::EmitterSphere::CENTER:
-				particleDir = data.sphereCreation.RandomPointInside(LCG()).Normalized();
-				break;
-			case EmitterData::EmitterSphere::BORDER:
-				spawn = data.sphereCreation.RandomPointOnSurface(LCG());
-				particleDir = spawn.Normalized();
-				break;
-			}
-			break;
-
-		case Shape::CONE:
-
-			angle = (2 * pi) * LCG().Int() / MAXUINT;
-			centerDist = (float)LCG().Int() / MAXUINT;
-
-			data.circleCreation.pos = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
-			data.circleCreation.normal = -data.circleCreation.pos;
-			particleDir = (data.circleCreation.GetPoint(angle, centerDist)).Normalized();
-			break;
-		default:
-			break;
-		}
-
-		float3 global = owner->GetComponent<ComponentTransform>()->GetGlobalPos();
-
-		spawnPos += spawn + global;
-
+		float3 initialPos = pos;
+		float3 dir = float3::zero;
 		ResourceMaterial* tex;
 		float life;
 		float3 scale;
@@ -746,78 +681,114 @@ void ComponentEmitter::CreateParticles(int num, const float3& pos, bool sub)
 
 		if (!sub)
 		{
+			ShapeParticleData(initialPos, dir);
+
 			tex = data.texture;
-			life = GenerateRandNum(data.particleLife.x, data.particleLife.y);
-			scale = float3::one * GenerateRandNum(data.size.x, data.size.y);
-			pAngle = GenerateRandNum(data.rotation.x, data.rotation.y);
-			acc = GenerateRandNum(data.acceleration.x, data.acceleration.y);
-			vel = GenerateRandNum(data.speed.x, data.speed.y);
-			incrementSize = GenerateRandNum(data.sizeOverTime.x, data.sizeOverTime.y);
-			angularAcc = GenerateRandNum(data.angularAcceleration.x, data.angularAcceleration.y);
-			angularVel = GenerateRandNum(data.angularVelocity.x, data.angularVelocity.y);
+			life = GenerateRandBetween(data.particleLife.x, data.particleLife.y);
+			scale = float3::one * GenerateRandBetween(data.size.x, data.size.y);
+			pAngle = GenerateRandBetween(data.rotation.x, data.rotation.y);
+			acc = GenerateRandBetween(data.acceleration.x, data.acceleration.y);
+			vel = GenerateRandBetween(data.speed.x, data.speed.y);
+			incrementSize = GenerateRandBetween(data.sizeOverTime.x, data.sizeOverTime.y);
+			angularAcc = GenerateRandBetween(data.angularAcceleration.x, data.angularAcceleration.y);
+			angularVel = GenerateRandBetween(data.angularVelocity.x, data.angularVelocity.y);
 			color = data.color;
 		}
 		else
 		{
-			spawnPos = pos;
-
-			switch (data.subShapeType)
-			{
-			case Shape::CUBE:
-				spawn = data.subCubeCreation.RandomPointInside(LCG());
-				particleDir = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
-				break;
-
-			case Shape::SPHERE:
-				switch (data.sType)
-				{
-				case EmitterData::EmitterSphere::RANDOM:
-					spawn = data.subSphereCreation.RandomPointInside(LCG());
-					particleDir = spawn.Normalized();
-					break;
-				case EmitterData::EmitterSphere::CENTER:
-					particleDir = data.subSphereCreation.RandomPointInside(LCG()).Normalized();
-					break;
-				case EmitterData::EmitterSphere::BORDER:
-					spawn = data.subSphereCreation.RandomPointOnSurface(LCG());
-					particleDir = spawn.Normalized();
-					break;
-				}
-				break;
-
-			case Shape::CONE:
-
-				angle = (2 * pi) * LCG().Int() / MAXUINT;
-				centerDist = (float)LCG().Int() / MAXUINT;
-
-				data.subCircleCreation.pos = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
-				data.subCircleCreation.normal = -data.subCircleCreation.pos;
-				particleDir = (data.subCircleCreation.GetPoint(angle, centerDist)).Normalized();
-				break;
-			default:
-				break;
-			}
-
-			float3 global = owner->GetComponent<ComponentTransform>()->GetGlobalPos();
-
-			spawnPos += spawn + global;
+			ShapeParticleData(initialPos, dir, true);
 
 			tex = data.subTexture;
-			life = GenerateRandNum(data.subParticleLife.x, data.subParticleLife.y);
-			scale = float3::one * GenerateRandNum(data.subSize.x, data.subSize.y);
-			pAngle = GenerateRandNum(data.subRotation.x, data.subRotation.y);
-			acc = GenerateRandNum(data.subAcceleration.x, data.subAcceleration.y);
-			vel = GenerateRandNum(data.subSpeed.x, data.subSpeed.y);
-			incrementSize = GenerateRandNum(data.subSizeOverTime.x, data.subSizeOverTime.y);
-			angularAcc = GenerateRandNum(data.subAngularAcceleration.x, data.subAngularAcceleration.y);
-			angularVel = GenerateRandNum(data.subAngularVelocity.x, data.subAngularVelocity.y);
+			life = GenerateRandBetween(data.subParticleLife.x, data.subParticleLife.y);
+			scale = float3::one * GenerateRandBetween(data.subSize.x, data.subSize.y);
+			pAngle = GenerateRandBetween(data.subRotation.x, data.subRotation.y);
+			acc = GenerateRandBetween(data.subAcceleration.x, data.subAcceleration.y);
+			vel = GenerateRandBetween(data.subSpeed.x, data.subSpeed.y);
+			incrementSize = GenerateRandBetween(data.subSizeOverTime.x, data.subSizeOverTime.y);
+			angularAcc = GenerateRandBetween(data.subAngularAcceleration.x, data.subAngularAcceleration.y);
+			angularVel = GenerateRandBetween(data.subAngularVelocity.x, data.subAngularVelocity.y);
 			color = data.subColor;
 		}
 
-		Particle* p = new Particle(data.plane, tex, life, spawnPos, scale, pAngle, acc, vel, particleDir, incrementSize, angularAcc, angularVel, color);
+		Particle* p = new Particle(data.plane, tex, life, initialPos, scale, pAngle, acc, vel, dir, incrementSize, angularAcc, angularVel, color);
 		p->owner = this;
 		particlePool.push_back(p);
 	}
+}
+
+void ComponentEmitter::ShapeParticleData(float3& pos, float3& dir, bool sub)
+{
+	float3 spawn = float3::zero;
+	Shape s = Shape::NONE;
+	AABB cube;
+	Sphere sphere;
+	EmitterData::EmitterSphere sType;
+	Circle circle;
+	if (!sub)
+	{
+		s = data.shapeType;
+		cube = data.cubeCreation;
+		sphere = data.sphereCreation;
+		sType = data.sType;
+		circle = data.circleCreation;
+	}
+	else
+	{
+		s = data.subShapeType;
+		cube = data.subCubeCreation;
+		sphere = data.subSphereCreation;
+		sType = data.subSphereType;
+		circle = data.subCircleCreation;
+	}
+
+	switch (s)
+	{
+	case Shape::CUBE:
+	{
+		spawn = cube.RandomPointInside(LCG());
+		dir = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
+		break;
+	}
+	case Shape::SPHERE:
+	{
+		switch (sType)
+		{
+		case EmitterData::EmitterSphere::RANDOM:
+		{
+			spawn = sphere.RandomPointInside(LCG());
+			dir = spawn.Normalized();
+			break;
+		}
+		case EmitterData::EmitterSphere::CENTER:
+		{
+			dir = sphere.RandomPointInside(LCG()).Normalized();
+			break;
+		}
+		case EmitterData::EmitterSphere::BORDER:
+		{
+			spawn = sphere.RandomPointOnSurface(LCG());
+			dir = spawn.Normalized();
+			break;
+		}
+		}
+		break;
+	}
+	case Shape::CONE:
+	{
+		float angle = (2 * pi) * LCG().Int() / MAXUINT;
+		float centerDist = (float)LCG().Int() / MAXUINT;
+
+		circle.pos = (float3::unitY * owner->GetComponent<ComponentTransform>()->GetRot().ToFloat3x3()).Normalized();
+		circle.normal = -circle.pos;
+		dir = (circle.GetPoint(angle, centerDist)).Normalized();
+		break;
+	}
+	default:
+		break;
+	}
+
+	pos += spawn + owner->GetComponent<ComponentTransform>()->GetGlobalPos();
+
 }
 
 void ComponentEmitter::DestroyParticle(Particle* p)
@@ -840,7 +811,9 @@ bool ComponentEmitter::EditColor(FadeColor& color, uint pos)
 	bool ret = true;
 	ImVec4 vecColor = ImVec4(color.color.x, color.color.y, color.color.z, color.color.w);
 	if (ImGui::ColorButton("Color", vecColor, ImGuiColorEditFlags_None, ImVec2(100, 20)))
+	{
 		color.changingColor = !color.changingColor;
+	}
 
 	if (!color.changingColor)
 	{
@@ -851,13 +824,16 @@ bool ComponentEmitter::EditColor(FadeColor& color, uint pos)
 			std::string colorStr = "Remove Color ";
 			colorStr.append(std::to_string(pos));
 			ImGui::SameLine();
-			if (ImGui::Button(colorStr.data(), ImVec2(125, 25)))
-				ret = false;
+			if (ImGui::Button(colorStr.data(), ImVec2(125, 25))) ret = false;
 		}
 		else if (!data.timeColor)
+		{
 			ret = false;
+		}
 	}
 	else
+	{
 		ImGui::ColorEdit4("Color", &color.color.x, ImGuiColorEditFlags_AlphaBar);
+	}
 	return ret;
 }

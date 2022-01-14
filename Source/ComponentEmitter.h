@@ -116,8 +116,9 @@ public:
 	void DrawInspector(Application* App);
 	void ClearEmitter();
 
-	float GenerateRandNum(float min, float max);
+	float GenerateRandBetween(float min, float max);
 	void ShowFloatValue(float2& value, bool checkBox, const char* name, float v_speed, float v_min, float v_max);
+	void ShapeParticleData(float3& pos, float3& dir, bool sub = false);
 
 	void CreateParticles(int num, const float3& pos, bool sub = false);
 	void DestroyParticle(Particle* p);
