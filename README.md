@@ -6,15 +6,16 @@ Engine created for the "Game Engines" subject in the Bachelor's degree in Video 
 # Team Members:
  - Guillem Álava Burgueño ([@WillyTrek19](https://github.com/WillyTrek19))
  - Sergi Colomer Ferrer ([@Lladruc37](https://github.com/Lladruc37))
- - **New!** Arnau Lucena Cobo ([@TitoLuce](https://github.com/TitoLuce))
+ - Arnau Lucena Cobo ([@TitoLuce](https://github.com/TitoLuce))
 
 # Keyboard Controls:
 ### General
  - ESC: Exit engine
- - **New!** Left click:
+ - Left click:
    - Drag and drop elements on the scene to import them
    - Mouse picking & gizmo manipulation
    - Drag a resources from the assets panel to a component to replace it
+ - **New!** 1: Ignite Firework
 ### Camera
  - Right Click: Rotate Camera
  - Right Click +:
@@ -32,15 +33,15 @@ Engine created for the "Game Engines" subject in the Bachelor's degree in Video 
  - Ctrl + Left Click: Edit values of sliders
  - Right click: Extra functionalities
  - F1: Show configuration panel
- - **New!** F2: Show asstes panel
- - **New!** F3: Show scene panel
-   - **New!** W: Translate
-   - **New!** E: Rotate
-   - **New!** R: Scale
+ - F2: Show asstes panel
+ - F3: Show scene panel
+   - W: Translate
+   - E: Rotate
+   - R: Scale
  - F4: Show hierarchy panel
     - Return: Select game object
     - Delete: Erase selected game object in hierarchy
-    - **New!** Shift + Up/Down: Move Up/Down
+    - Shift + Up/Down: Move Up/Down
  - F5: Show inspector panel
  - F10: Show console
 
@@ -48,15 +49,16 @@ Engine created for the "Game Engines" subject in the Bachelor's degree in Video 
 Each of the panels has a set of available actions.
 ## Menu Bar
 ### File
- - **New!** Load Scene
- - **New!** Save Scene
+ - Load Scene
+ - Save Scene
  - Quit application
 ### View
  - Show panels (Showed below)
 ### Create
  - Create empty game objects
  - Create primitives
- - **New!** Create camera
+ - Create camera
+ - **New!** Create particle emitter
 ### Help
  - Show GUI Demo Window
  - Go to source code
@@ -74,7 +76,7 @@ Each of the panels has a set of available actions.
  - Set fullscreen
  - Set the window to be resizable
  - Set borderless window
-### _New!_ Editor Camera
+### Editor Camera
  - Set speed
  - Set sensitivity
  - Set Vertical FOV
@@ -86,14 +88,14 @@ Each of the panels has a set of available actions.
    - Depth Test
    - Cull Face
    - Lighting
-   - **New!** Show grid
+   - Show grid
      - Set transparency
    - Color Material
    - Texture 2D
-    - **New!** Draw Mouse raycast
+   - Draw Mouse raycast
 ## Hierarchy
-  - **New!** Drag & Drop to reparent
-  - **New!** When right clicking, a pop-up will appear that shows the following options
+  - Drag & Drop to reparent
+  - When right clicking, a pop-up will appear that shows the following options
     - Move object up & down the hierarchy
     - Delete the object
     - Create a gameobject that is child to the selected object
@@ -102,14 +104,14 @@ Each of the panels has a set of available actions.
   - Change its name
 ### Components
 #### Transform
-  - **New!** Set gizmo operation
+  - Set gizmo operation
   - Set its position, rotation and scale*
   - Set its scale uniformly*
   - Reset to 0
 
 *Scale is disabled when manipulating camera
 
-#### _New!_ Camera
+#### Camera
   - Set as main camera
   - Toggle frustum culling
   - Set fixed FOV
@@ -119,18 +121,37 @@ Each of the panels has a set of available actions.
 #### Material
   - Toggle it
   - Set the checkers texture
-  - **New!** Drag and drop asset to replace
-  - **New!** Remove it
+  - Drag and drop asset to replace
+  - Remove it
 #### Mesh
   - Toggle it
-  - **New!** Enable wireframe mode only on that model
+  - Enable wireframe mode only on that model
   - Draw vertex & face normals
-  - **New!** Drag and drop asset to replace
-  - **New!** Remove it
+  - Drag and drop asset to replace
+  - Remove it
+### **New!** Particle Emitter
+  - Edit particle's values (such as speed, acceleration, rotation, life, size...)
+  - Change the emitter's shape/zone of movement
+  - Change the particle's beginning and ending colors
+  - Set whether or not particles appear in bursts
+    - Set the range of particles that can appear
+    - Set the rate of bursts
+  - Set the particle material
+    - Functionality mostly the same as material component
+  - Set a sub emitter, which will create more particles on particle death
+    - Set the sub emitter's values
+
 ## About
   - Click on hyperlinks
 
 # Additional Features & Notes
+## Assignment 0.3
+ - The firework input initiates the firework emitter; but it needs one second to actually throw a firework. In fact, more fireworks could be thrown if the duration of the emitter is increased.
+ - The duration value cannot be properly tested, as no "game mode" is implemented into the engine. However, we believe it should work as intended, as the emitter stops whenever the loop option is deactivated.
+ - Save and Load functionalities don't support the firework emitters, so when trying to actually save and load data, the fireworks wont be erased nor created. The user will lose control of them, being unable to change the state in which they're currently in.
+ - The bbox shown is not the actual particle's zone of movement, but rather a placeholder to click on the particle emitter and move it around.
+ - Particles will point into the direction of the main camera, and rotate so that they're always looking at it. They're also affected by camera culling. However, the spawn position is not the center, but rather on the bottom-right of the particle plane (like the plane primitive), so, depending on the rotation of the camera, the particles may be displaced.
+
 ## Assignment 0.2
  - Some functionalities have been improved since the last assignment. For example, camera movements have been optimized & several controls saved inside menus are now inside right click popups or drag & drops.
  - Part of the scene doesn't load due to having more than 4 vertices.
