@@ -23,6 +23,26 @@ bool ModuleParticles::Start()
 {
     plane->GenerateBuffers();
 
+    GameObject* smoke1 = CreateEmitter(CreateSmokeData());
+    smoke1->GetComponent<Transform>()->SetPos(float3(-42.7f, 7.0f, -33.0f));
+    smoke1->name = "EmitterSmoke1";
+    App->gameObjects->AddGameobject(smoke1);
+
+    GameObject* smoke2 = CreateEmitter(CreateSmokeData());
+    smoke2->GetComponent<Transform>()->SetPos(float3(-29.9f, 7.0f, -34.0f));
+    smoke2->name = "EmitterSmoke2";
+    App->gameObjects->AddGameobject(smoke2);
+
+    GameObject* smoke3 = CreateEmitter(CreateSmokeData());
+    smoke3->GetComponent<Transform>()->SetPos(float3(-40.1f, 7.1f, -43.7f));
+    smoke3->name = "EmitterSmoke3";
+    App->gameObjects->AddGameobject(smoke3);
+
+    GameObject* smoke4 = CreateEmitter(CreateSmokeData());
+    smoke4->GetComponent<Transform>()->SetPos(float3(-32.4f, 7.0f, -43.7f));
+    smoke4->name = "EmitterSmoke4";
+    App->gameObjects->AddGameobject(smoke4);
+
     firework = CreateEmitter(CreateFireworkData());
     firework->GetComponent<Transform>()->SetPos(float3(-50.0f, 1.0f, -50.0f));
     firework->name = "firework";
@@ -104,10 +124,7 @@ UpdateStatus ModuleParticles::PostUpdate()
         {
             if (App->gameObjects->mainCamera->GetComponent<Camera>()->culling)
             {
-                if (App->gameObjects->mainCamera->GetComponent<Camera>()->ContainsBBox((*it)->bbox))
-                {
-                    (*it)->Draw();
-                }
+                if (App->gameObjects->mainCamera->GetComponent<Camera>()->ContainsBBox((*it)->bbox)) (*it)->Draw();
             }
             else
             {
@@ -164,10 +181,7 @@ std::vector<GameObject*>::iterator ModuleParticles::DeleteEmitter(GameObject* e)
     emitter->data.texture = nullptr;
     for (std::vector<GameObject*>::iterator it = emitters.begin(); it != emitters.end(); ++it)
     {
-        if ((*it) == e)
-        {
-            return emitters.erase(it);
-        }
+        if ((*it) == e) return emitters.erase(it);
     }
     return emitters.end();
 }
@@ -295,8 +309,7 @@ EmitterData ModuleParticles::CreateFireworkData()
     firework.color.push_back(FadeColor(Color(1.0f, 1.0f, 0.0f, 1.0f), 0.0f, true));
     firework.color.push_back(FadeColor(Color(1.0f, 0.0f, 0.0f, 0.5f), 1.0f, true));
 
-
-    //Sub Emitter
+    //Sub Emitter Properties
 
     firework.subTexture = (ResourceMaterial*)App->resources->RequestResource("firework_flare.png");
     firework.subTexture->GenerateBuffers();

@@ -8,7 +8,6 @@
 #include "ComponentMaterial.h"
 #include "ComponentTransform.h"
 #include "ComponentCamera.h"
-#include "ComponentBillboard.h"
 #include "ComponentEmitter.h"
 
 #include <string>
@@ -19,7 +18,6 @@ typedef ComponentMaterial Material;
 typedef ComponentMesh Mesh;
 typedef ComponentTransform Transform;
 typedef ComponentCamera Camera;
-typedef ComponentBillboard Billboard;
 typedef ComponentEmitter Emitter;
 
 typedef rapidjson::GenericObject<true, rapidjson::Value> jsonObject;

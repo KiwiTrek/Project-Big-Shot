@@ -24,8 +24,6 @@ public:
 	// Draws the particle
 	void Draw();
 
-	float4x4 GetMatrix();
-	ResourceMaterial* GetTexture();
 	void ParticleDeath();
 
 public:

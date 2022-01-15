@@ -1,7 +1,7 @@
 {
     "Game Objects": [
         {
-            "UID": 1316934161,
+            "UID": 2015024524,
             "name": "Main",
             "active": true,
             "Components": {
@@ -12,9 +12,9 @@
                         0.0
                     ],
                     "eulerRot": [
-                        -0.0,
                         0.0,
-                        -0.0
+                        0.0,
+                        0.0
                     ],
                     "scale": [
                         1.0,
@@ -25,20 +25,20 @@
             },
             "Children": [
                 {
-                    "UID": 1584905390,
+                    "UID": 2024353738,
                     "name": "Camera",
                     "active": true,
                     "Components": {
                         "Transform": {
                             "pos": [
-                                2.9802322387695315e-8,
-                                7.9760589599609379,
-                                -25.09381866455078
+                                0.0,
+                                2.0,
+                                0.0
                             ],
                             "eulerRot": [
-                                -0.0,
-                                0.0,
-                                -0.0
+                                -180.0,
+                                -45.000003814697269,
+                                -180.0
                             ],
                             "scale": [
                                 1.0,
@@ -47,7 +47,7 @@
                             ]
                         },
                         "Camera": {
-                            "mainCamera": false,
+                            "mainCamera": true,
                             "fixedFOV": 0,
                             "culling": false,
                             "horizontalFOV": 60.0,
@@ -56,7 +56,7 @@
                     }
                 },
                 {
-                    "UID": 2065291257,
+                    "UID": 1235567389,
                     "name": "Street_environment",
                     "active": true,
                     "Components": {
@@ -80,7 +80,7 @@
                     },
                     "Children": [
                         {
-                            "UID": 236602169,
+                            "UID": 1239118060,
                             "name": "Sky001_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -93,7 +93,7 @@
                                     "eulerRot": [
                                         -180.0,
                                         0.0,
-                                        -0.0
+                                        0.0
                                     ],
                                     "scale": [
                                         1.0,
@@ -104,7 +104,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 292647074,
+                                    "UID": 1242181384,
                                     "name": "Sky001_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -117,7 +117,7 @@
                                             "eulerRot": [
                                                 -180.0,
                                                 0.0,
-                                                -0.0
+                                                0.0
                                             ],
                                             "scale": [
                                                 1.0,
@@ -128,7 +128,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 346742591,
+                                            "UID": 1244339635,
                                             "name": "Sky001_$AssimpFbx$_PostRotation",
                                             "active": true,
                                             "Components": {
@@ -139,7 +139,7 @@
                                                         0.0
                                                     ],
                                                     "eulerRot": [
-                                                        -90.00000762939453,
+                                                        -90.0,
                                                         0.0,
                                                         0.0
                                                     ],
@@ -152,7 +152,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 400559624,
+                                                    "UID": 1246567507,
                                                     "name": "Sky001",
                                                     "active": true,
                                                     "Components": {
@@ -182,7 +182,7 @@
                             ]
                         },
                         {
-                            "UID": 455351351,
+                            "UID": 1248865000,
                             "name": "Dummy001_$AssimpFbx$_PreRotation",
                             "active": true,
                             "Components": {
@@ -193,7 +193,7 @@
                                         0.0
                                     ],
                                     "eulerRot": [
-                                        -90.00000762939453,
+                                        -90.0,
                                         0.0,
                                         0.0
                                     ],
@@ -206,7 +206,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 556092938,
+                                    "UID": 1252972639,
                                     "name": "Dummy001",
                                     "active": true,
                                     "Components": {
@@ -230,7 +230,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 609004898,
+                                            "UID": 1255130890,
                                             "name": "City_building_004",
                                             "active": true,
                                             "Components": {
@@ -251,8 +251,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 833833520,
+                                                    "Name": "building03_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 1
+                                                },
                                                 "Mesh": {
-                                                    "UID": 717823221,
+                                                    "UID": 15945197,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -269,18 +275,12 @@
                                                         1.028902292251587
                                                     ],
                                                     "radius": 11.4467134475708,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 484293890,
-                                                    "Name": "building03_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 1
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1684577642,
+                                            "UID": 813222501,
                                             "name": "City_building_001",
                                             "active": true,
                                             "Components": {
@@ -301,8 +301,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 895118765,
+                                                    "Name": "Building_V02_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 2
+                                                },
                                                 "Mesh": {
-                                                    "UID": 637384979,
+                                                    "UID": 1552062941,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -320,17 +326,11 @@
                                                     ],
                                                     "radius": 10.908346176147461,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 1046644524,
-                                                    "Name": "Building_V02_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 3
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1770835976,
+                                            "UID": 1188549312,
                                             "name": "City_building_007",
                                             "active": true,
                                             "Components": {
@@ -351,8 +351,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1297944753,
+                                                    "Name": "building_016_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 4
+                                                },
                                                 "Mesh": {
-                                                    "UID": 707747908,
+                                                    "UID": 591478102,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -370,17 +376,11 @@
                                                     ],
                                                     "radius": 11.523335456848145,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 1727002753,
-                                                    "Name": "building_016_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 4
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 751351771,
+                                            "UID": 1490495589,
                                             "name": "City_building_008",
                                             "active": true,
                                             "Components": {
@@ -393,7 +393,7 @@
                                                     "eulerRot": [
                                                         -0.0,
                                                         0.0,
-                                                        90.00000762939453
+                                                        90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -401,8 +401,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1857812933,
+                                                    "Name": "building_025_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 5
+                                                },
                                                 "Mesh": {
-                                                    "UID": 1983204628,
+                                                    "UID": 1367334526,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -420,17 +426,11 @@
                                                     ],
                                                     "radius": 5.891286373138428,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 206804316,
-                                                    "Name": "building_025_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 5
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1814742925,
+                                            "UID": 1695042087,
                                             "name": "Line002",
                                             "active": true,
                                             "Components": {
@@ -443,7 +443,7 @@
                                                     "eulerRot": [
                                                         0.0,
                                                         0.0,
-                                                        -90.00000762939453
+                                                        -90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -451,8 +451,20 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1762365594,
+                                                    "Color": true,
+                                                    "Diffuse": [
+                                                        0.2705882489681244,
+                                                        0.2705882489681244,
+                                                        0.2705882489681244,
+                                                        1.0
+                                                    ],
+                                                    "usingCheckers": false,
+                                                    "checkersId": 6
+                                                },
                                                 "Mesh": {
-                                                    "UID": 730211589,
+                                                    "UID": 1981182883,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -470,23 +482,11 @@
                                                     ],
                                                     "radius": 79.55875396728516,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 849127662,
-                                                    "Color": true,
-                                                    "Diffuse": [
-                                                        0.2705882489681244,
-                                                        0.2705882489681244,
-                                                        0.2705882489681244,
-                                                        1.0
-                                                    ],
-                                                    "usingCheckers": false,
-                                                    "checkersId": 6
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 185448381,
+                                            "UID": 1948392906,
                                             "name": "Plane001",
                                             "active": true,
                                             "Components": {
@@ -507,8 +507,20 @@
                                                         0.9966350197792053
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 2022817755,
+                                                    "Color": true,
+                                                    "Diffuse": [
+                                                        0.30980393290519717,
+                                                        0.4549019932746887,
+                                                        0.05882353335618973,
+                                                        1.0
+                                                    ],
+                                                    "usingCheckers": false,
+                                                    "checkersId": 7
+                                                },
                                                 "Mesh": {
-                                                    "UID": 1496390694,
+                                                    "UID": 262634217,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -526,23 +538,11 @@
                                                     ],
                                                     "radius": 80.95011138916016,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 1068155328,
-                                                    "Color": true,
-                                                    "Diffuse": [
-                                                        0.30980393290519717,
-                                                        0.4549019932746887,
-                                                        0.05882353335618973,
-                                                        1.0
-                                                    ],
-                                                    "usingCheckers": false,
-                                                    "checkersId": 7
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 562585338,
+                                            "UID": 2106641439,
                                             "name": "City_building_010",
                                             "active": true,
                                             "Components": {
@@ -555,7 +555,7 @@
                                                     "eulerRot": [
                                                         -0.0,
                                                         0.0,
-                                                        90.00000762939453
+                                                        90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -563,8 +563,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1613509792,
+                                                    "Name": "building 01_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 8
+                                                },
                                                 "Mesh": {
-                                                    "UID": 876413604,
+                                                    "UID": 968173431,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -581,18 +587,12 @@
                                                         3.3138985633850099
                                                     ],
                                                     "radius": 6.19549560546875,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1142997903,
-                                                    "Name": "building 01_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 8
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 2128940413,
+                                            "UID": 810622622,
                                             "name": "City_building_011",
                                             "active": true,
                                             "Components": {
@@ -613,8 +613,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1297944753,
+                                                    "Name": "building_016_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 9
+                                                },
                                                 "Mesh": {
-                                                    "UID": 707747908,
+                                                    "UID": 591478102,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -632,17 +638,11 @@
                                                     ],
                                                     "radius": 11.523335456848145,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 1727002753,
-                                                    "Name": "building_016_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 9
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 534804474,
+                                            "UID": 1005422180,
                                             "name": "City_building_013",
                                             "active": true,
                                             "Components": {
@@ -655,7 +655,7 @@
                                                     "eulerRot": [
                                                         -0.0,
                                                         0.0,
-                                                        90.00000762939453
+                                                        90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -663,8 +663,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 886059695,
+                                                    "Name": "building 06_ c .tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 11
+                                                },
                                                 "Mesh": {
-                                                    "UID": 614775801,
+                                                    "UID": 1999538925,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -681,18 +687,12 @@
                                                         1.5026438236236573
                                                     ],
                                                     "radius": 9.827154159545899,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1198089931,
-                                                    "Name": "building 06_ c .tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 10
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 2092178440,
+                                            "UID": 318378250,
                                             "name": "City_building_014",
                                             "active": true,
                                             "Components": {
@@ -713,8 +713,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 833833520,
+                                                    "Name": "building03_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 16
+                                                },
                                                 "Mesh": {
-                                                    "UID": 914888030,
+                                                    "UID": 476903753,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -732,17 +738,11 @@
                                                     ],
                                                     "radius": 14.990031242370606,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 484293890,
-                                                    "Name": "building03_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 11
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1929380640,
+                                            "UID": 1338465142,
                                             "name": "City_building_016",
                                             "active": true,
                                             "Components": {
@@ -763,8 +763,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1613509792,
+                                                    "Name": "building 01_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 17
+                                                },
                                                 "Mesh": {
-                                                    "UID": 876413604,
+                                                    "UID": 968173431,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -781,18 +787,12 @@
                                                         3.3138985633850099
                                                     ],
                                                     "radius": 6.19549560546875,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1142997903,
-                                                    "Name": "building 01_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 12
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 736540145,
+                                            "UID": 1785710446,
                                             "name": "City_building_017",
                                             "active": true,
                                             "Components": {
@@ -805,7 +805,7 @@
                                                     "eulerRot": [
                                                         -0.0,
                                                         0.0,
-                                                        90.00000762939453
+                                                        90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -813,8 +813,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1613509792,
+                                                    "Name": "building 01_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 18
+                                                },
                                                 "Mesh": {
-                                                    "UID": 876413604,
+                                                    "UID": 968173431,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -831,18 +837,12 @@
                                                         3.3138985633850099
                                                     ],
                                                     "radius": 6.19549560546875,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1142997903,
-                                                    "Name": "building 01_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 13
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1372179875,
+                                            "UID": 450077280,
                                             "name": "City_building_022",
                                             "active": true,
                                             "Components": {
@@ -863,8 +863,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1168684543,
+                                                    "Name": "building05 _c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 19
+                                                },
                                                 "Mesh": {
-                                                    "UID": 1932094474,
+                                                    "UID": 1969995719,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -882,17 +888,11 @@
                                                     ],
                                                     "radius": 15.437549591064454,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 191159323,
-                                                    "Name": "building05 _c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 14
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 146545804,
+                                            "UID": 1604393460,
                                             "name": "City_building_023",
                                             "active": true,
                                             "Components": {
@@ -913,8 +913,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1297944753,
+                                                    "Name": "building_016_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 20
+                                                },
                                                 "Mesh": {
-                                                    "UID": 707747908,
+                                                    "UID": 591478102,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -932,17 +938,11 @@
                                                     ],
                                                     "radius": 11.523335456848145,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 1727002753,
-                                                    "Name": "building_016_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 15
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 746818066,
+                                            "UID": 1761945783,
                                             "name": "City_building_024",
                                             "active": true,
                                             "Components": {
@@ -954,7 +954,7 @@
                                                     ],
                                                     "eulerRot": [
                                                         -0.0,
-                                                        -0.0,
+                                                        0.0,
                                                         180.0
                                                     ],
                                                     "scale": [
@@ -963,8 +963,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1857812933,
+                                                    "Name": "building_025_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 21
+                                                },
                                                 "Mesh": {
-                                                    "UID": 1983204628,
+                                                    "UID": 1367334526,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -981,18 +987,12 @@
                                                         0.7095800042152405
                                                     ],
                                                     "radius": 5.891286373138428,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 206804316,
-                                                    "Name": "building_025_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 16
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1291393528,
+                                            "UID": 1879187547,
                                             "name": "City_building_026",
                                             "active": true,
                                             "Components": {
@@ -1004,7 +1004,7 @@
                                                     ],
                                                     "eulerRot": [
                                                         -0.0,
-                                                        -0.0,
+                                                        0.0,
                                                         180.0
                                                     ],
                                                     "scale": [
@@ -1013,8 +1013,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1168684543,
+                                                    "Name": "building05 _c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 22
+                                                },
                                                 "Mesh": {
-                                                    "UID": 199364941,
+                                                    "UID": 1243914140,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1032,17 +1038,11 @@
                                                     ],
                                                     "radius": 15.746590614318848,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 191159323,
-                                                    "Name": "building05 _c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 17
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1123931121,
+                                            "UID": 252399359,
                                             "name": "City_building_028",
                                             "active": true,
                                             "Components": {
@@ -1063,8 +1063,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1503121043,
+                                                    "Name": "Building_V01_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 23
+                                                },
                                                 "Mesh": {
-                                                    "UID": 82166811,
+                                                    "UID": 2122252676,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1081,18 +1087,12 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1225609958,
-                                                    "Name": "Building_V01_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 18
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 239579192,
+                                            "UID": 690315449,
                                             "name": "Object010",
                                             "active": true,
                                             "Components": {
@@ -1113,8 +1113,20 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 881076989,
+                                                    "Color": true,
+                                                    "Diffuse": [
+                                                        0.5882353186607361,
+                                                        0.5882353186607361,
+                                                        0.5882353186607361,
+                                                        1.0
+                                                    ],
+                                                    "usingCheckers": false,
+                                                    "checkersId": 24
+                                                },
                                                 "Mesh": {
-                                                    "UID": 1628216456,
+                                                    "UID": 656915587,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1132,23 +1144,11 @@
                                                     ],
                                                     "radius": 33.4280891418457,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 1964728311,
-                                                    "Color": true,
-                                                    "Diffuse": [
-                                                        0.5882353186607361,
-                                                        0.5882353186607361,
-                                                        0.5882353186607361,
-                                                        1.0
-                                                    ],
-                                                    "usingCheckers": false,
-                                                    "checkersId": 19
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1222558091,
+                                            "UID": 978964115,
                                             "name": "City_building_030",
                                             "active": true,
                                             "Components": {
@@ -1161,7 +1161,7 @@
                                                     "eulerRot": [
                                                         0.0,
                                                         0.0,
-                                                        -90.00000762939453
+                                                        -90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -1169,8 +1169,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1503121043,
+                                                    "Name": "Building_V01_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 25
+                                                },
                                                 "Mesh": {
-                                                    "UID": 82166811,
+                                                    "UID": 2122252676,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1187,18 +1193,12 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1225609958,
-                                                    "Name": "Building_V01_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 20
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1496632066,
+                                            "UID": 1438950062,
                                             "name": "City_building_031",
                                             "active": true,
                                             "Components": {
@@ -1211,7 +1211,7 @@
                                                     "eulerRot": [
                                                         0.0,
                                                         0.0,
-                                                        -90.00000762939453
+                                                        -90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -1219,8 +1219,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1503121043,
+                                                    "Name": "Building_V01_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 26
+                                                },
                                                 "Mesh": {
-                                                    "UID": 82166811,
+                                                    "UID": 2122252676,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1237,18 +1243,12 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1225609958,
-                                                    "Name": "Building_V01_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 21
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1634457744,
+                                            "UID": 1914600734,
                                             "name": "City_building_032",
                                             "active": true,
                                             "Components": {
@@ -1269,8 +1269,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 833833520,
+                                                    "Name": "building03_c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 27
+                                                },
                                                 "Mesh": {
-                                                    "UID": 717823221,
+                                                    "UID": 15945197,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1287,18 +1293,12 @@
                                                         1.028902292251587
                                                     ],
                                                     "radius": 11.4467134475708,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 484293890,
-                                                    "Name": "building03_c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 22
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1448336909,
+                                            "UID": 268597150,
                                             "name": "City_building_033",
                                             "active": true,
                                             "Components": {
@@ -1319,8 +1319,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 886059695,
+                                                    "Name": "building 06_ c .tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 28
+                                                },
                                                 "Mesh": {
-                                                    "UID": 3908637,
+                                                    "UID": 1152245100,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1337,18 +1343,12 @@
                                                         2.095907688140869
                                                     ],
                                                     "radius": 13.345780372619629,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1198089931,
-                                                    "Name": "building 06_ c .tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 23
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1679802832,
+                                            "UID": 1029624301,
                                             "name": "City_building_034",
                                             "active": true,
                                             "Components": {
@@ -1369,8 +1369,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1168684543,
+                                                    "Name": "building05 _c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 29
+                                                },
                                                 "Mesh": {
-                                                    "UID": 1417748003,
+                                                    "UID": 2000785848,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1388,17 +1394,11 @@
                                                     ],
                                                     "radius": 14.565007209777832,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 191159323,
-                                                    "Name": "building05 _c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 24
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1362098307,
+                                            "UID": 1394368720,
                                             "name": "City_building_035",
                                             "active": true,
                                             "Components": {
@@ -1419,8 +1419,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1503121043,
+                                                    "Name": "Building_V01_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 30
+                                                },
                                                 "Mesh": {
-                                                    "UID": 82166811,
+                                                    "UID": 2122252676,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1437,18 +1443,12 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1225609958,
-                                                    "Name": "Building_V01_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 25
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1452720947,
+                                            "UID": 1699447942,
                                             "name": "City_building_036",
                                             "active": true,
                                             "Components": {
@@ -1461,7 +1461,7 @@
                                                     "eulerRot": [
                                                         0.0,
                                                         0.0,
-                                                        -90.00000762939453
+                                                        -90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -1469,8 +1469,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 886059695,
+                                                    "Name": "building 06_ c .tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 31
+                                                },
                                                 "Mesh": {
-                                                    "UID": 614775801,
+                                                    "UID": 1999538925,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1487,18 +1493,12 @@
                                                         1.5026438236236573
                                                     ],
                                                     "radius": 9.827154159545899,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1198089931,
-                                                    "Name": "building 06_ c .tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 26
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 987768007,
+                                            "UID": 396954372,
                                             "name": "City_building_037",
                                             "active": true,
                                             "Components": {
@@ -1519,8 +1519,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1168684543,
+                                                    "Name": "building05 _c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 32
+                                                },
                                                 "Mesh": {
-                                                    "UID": 169417486,
+                                                    "UID": 1644650531,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1538,17 +1544,11 @@
                                                     ],
                                                     "radius": 11.47626781463623,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 191159323,
-                                                    "Name": "building05 _c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 27
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 396313710,
+                                            "UID": 864598629,
                                             "name": "City_building_038",
                                             "active": true,
                                             "Components": {
@@ -1569,8 +1569,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1168684543,
+                                                    "Name": "building05 _c.tga",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 33
+                                                },
                                                 "Mesh": {
-                                                    "UID": 354933549,
+                                                    "UID": 183978049,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1588,17 +1594,11 @@
                                                     ],
                                                     "radius": 14.785143852233887,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 191159323,
-                                                    "Name": "building05 _c.tga",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 28
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 256073114,
+                                            "UID": 1233311445,
                                             "name": "City_building_039",
                                             "active": true,
                                             "Components": {
@@ -1611,7 +1611,7 @@
                                                     "eulerRot": [
                                                         0.0,
                                                         0.0,
-                                                        -90.00000762939453
+                                                        -90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -1619,8 +1619,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1503121043,
+                                                    "Name": "Building_V01_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 34
+                                                },
                                                 "Mesh": {
-                                                    "UID": 82166811,
+                                                    "UID": 2122252676,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1637,18 +1643,12 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1225609958,
-                                                    "Name": "Building_V01_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 29
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 380810044,
+                                            "UID": 1542916032,
                                             "name": "City_building_040",
                                             "active": true,
                                             "Components": {
@@ -1661,7 +1661,7 @@
                                                     "eulerRot": [
                                                         0.0,
                                                         0.0,
-                                                        -90.00000762939453
+                                                        -90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -1669,8 +1669,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 1503121043,
+                                                    "Name": "Building_V01_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 35
+                                                },
                                                 "Mesh": {
-                                                    "UID": 82166811,
+                                                    "UID": 2122252676,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1687,18 +1693,12 @@
                                                         1.1053861379623414
                                                     ],
                                                     "radius": 9.045162200927735,
-                                                    "render": false
-                                                },
-                                                "Material": {
-                                                    "UID": 1225609958,
-                                                    "Name": "Building_V01_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 30
+                                                    "render": true
                                                 }
                                             }
                                         },
                                         {
-                                            "UID": 1005982722,
+                                            "UID": 322227137,
                                             "name": "City_building_041",
                                             "active": true,
                                             "Components": {
@@ -1711,7 +1711,7 @@
                                                     "eulerRot": [
                                                         -0.0,
                                                         0.0,
-                                                        90.00000762939453
+                                                        90.0
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -1719,8 +1719,14 @@
                                                         1.0
                                                     ]
                                                 },
+                                                "Material": {
+                                                    "UID": 895118765,
+                                                    "Name": "Building_V02_C.png",
+                                                    "usingCheckers": false,
+                                                    "checkersId": 36
+                                                },
                                                 "Mesh": {
-                                                    "UID": 637384979,
+                                                    "UID": 1552062941,
                                                     "vertexColor": [
                                                         1.0,
                                                         1.0,
@@ -1738,12 +1744,6 @@
                                                     ],
                                                     "radius": 10.908346176147461,
                                                     "render": true
-                                                },
-                                                "Material": {
-                                                    "UID": 1046644524,
-                                                    "Name": "Building_V02_C.png",
-                                                    "usingCheckers": false,
-                                                    "checkersId": 31
                                                 }
                                             }
                                         }
@@ -1752,7 +1752,7 @@
                             ]
                         },
                         {
-                            "UID": 193829855,
+                            "UID": 622711373,
                             "name": "Camera001_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -1764,7 +1764,7 @@
                                     ],
                                     "eulerRot": [
                                         -158.52523803710938,
-                                        -37.000511169433597,
+                                        -37.00051498413086,
                                         -166.68003845214845
                                     ],
                                     "scale": [
@@ -1776,7 +1776,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 670524842,
+                                    "UID": 643667294,
                                     "name": "Camera001_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -1788,7 +1788,7 @@
                                             ],
                                             "eulerRot": [
                                                 -158.52523803710938,
-                                                -37.000511169433597,
+                                                -37.00051498413086,
                                                 -166.68003845214845
                                             ],
                                             "scale": [
@@ -1800,7 +1800,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 725177327,
+                                            "UID": 646312892,
                                             "name": "Camera001_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -1811,7 +1811,7 @@
                                                         0.0
                                                     ],
                                                     "eulerRot": [
-                                                        -68.52525329589844,
+                                                        -68.52523803710938,
                                                         -37.000518798828128,
                                                         -166.68003845214845
                                                     ],
@@ -1824,7 +1824,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 778994360,
+                                                    "UID": 648888869,
                                                     "name": "Camera001",
                                                     "active": true,
                                                     "Components": {
@@ -1854,7 +1854,7 @@
                             ]
                         },
                         {
-                            "UID": 832672151,
+                            "UID": 652787645,
                             "name": "Camera001.Target_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -1866,7 +1866,7 @@
                                     ],
                                     "eulerRot": [
                                         -158.52523803710938,
-                                        -37.00054168701172,
+                                        -37.00053024291992,
                                         -166.68003845214845
                                     ],
                                     "scale": [
@@ -1878,7 +1878,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 1344038396,
+                                    "UID": 673395461,
                                     "name": "Camera001.Target_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -1890,7 +1890,7 @@
                                             ],
                                             "eulerRot": [
                                                 -158.52523803710938,
-                                                -37.00054168701172,
+                                                -37.00053024291992,
                                                 -166.68003845214845
                                             ],
                                             "scale": [
@@ -1902,7 +1902,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 1398412397,
+                                            "UID": 675971438,
                                             "name": "Camera001.Target_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -1913,8 +1913,8 @@
                                                         0.0
                                                     ],
                                                     "eulerRot": [
-                                                        -68.5252685546875,
-                                                        -37.00053405761719,
+                                                        -68.5252456665039,
+                                                        -37.00053024291992,
                                                         -166.68003845214845
                                                     ],
                                                     "scale": [
@@ -1926,7 +1926,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 1454666165,
+                                                    "UID": 678477794,
                                                     "name": "Camera001.Target",
                                                     "active": true,
                                                     "Components": {
@@ -1956,7 +1956,7 @@
                             ]
                         },
                         {
-                            "UID": 1508413577,
+                            "UID": 680705666,
                             "name": "Spot001_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -1980,7 +1980,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 2066495513,
+                                    "UID": 703610975,
                                     "name": "Spot001_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -2004,7 +2004,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 2121147998,
+                                            "UID": 706465436,
                                             "name": "Spot001_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -2015,9 +2015,9 @@
                                                         0.0
                                                     ],
                                                     "eulerRot": [
-                                                        -0.0000040057489059108779,
-                                                        64.7686767578125,
-                                                        -90.0
+                                                        -0.000008011493264348247,
+                                                        64.76864624023438,
+                                                        -89.99998474121094
                                                     ],
                                                     "scale": [
                                                         1.0,
@@ -2028,7 +2028,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 28734562,
+                                                    "UID": 708832550,
                                                     "name": "Spot001_$AssimpFbx$_PostRotation",
                                                     "active": true,
                                                     "Components": {
@@ -2039,7 +2039,7 @@
                                                                 0.0
                                                             ],
                                                             "eulerRot": [
-                                                                -90.00000762939453,
+                                                                -90.0,
                                                                 0.0,
                                                                 0.0
                                                             ],
@@ -2052,7 +2052,7 @@
                                                     },
                                                     "Children": [
                                                         {
-                                                            "UID": 81994627,
+                                                            "UID": 711060422,
                                                             "name": "Spot001",
                                                             "active": true,
                                                             "Components": {
@@ -2084,7 +2084,7 @@
                             ]
                         },
                         {
-                            "UID": 134906587,
+                            "UID": 713357915,
                             "name": "Spot001.Target_$AssimpFbx$_Translation",
                             "active": true,
                             "Components": {
@@ -2108,7 +2108,7 @@
                             },
                             "Children": [
                                 {
-                                    "UID": 747710629,
+                                    "UID": 737655644,
                                     "name": "Spot001.Target_$AssimpFbx$_PreRotation",
                                     "active": true,
                                     "Components": {
@@ -2132,7 +2132,7 @@
                                     },
                                     "Children": [
                                         {
-                                            "UID": 802363114,
+                                            "UID": 739883516,
                                             "name": "Spot001.Target_$AssimpFbx$_Rotation",
                                             "active": true,
                                             "Components": {
@@ -2156,7 +2156,7 @@
                                             },
                                             "Children": [
                                                 {
-                                                    "UID": 856597873,
+                                                    "UID": 741972146,
                                                     "name": "Spot001.Target",
                                                     "active": true,
                                                     "Components": {
@@ -2188,113 +2188,15 @@
                     ]
                 },
                 {
-                    "UID": 1648392750,
-                    "name": "Cube_1",
+                    "UID": 1684570865,
+                    "name": "EmitterSmoke1",
                     "active": true,
                     "Components": {
                         "Transform": {
                             "pos": [
-                                1.7155213356018067,
-                                9.256521224975586,
-                                19.619253158569337
-                            ],
-                            "eulerRot": [
-                                -1.4617259502410889,
-                                0.3970010578632355,
-                                25.483003616333009
-                            ],
-                            "scale": [
-                                0.9999995827674866,
-                                16.3880558013916,
-                                0.9999980330467224
-                            ]
-                        },
-                        "Mesh": {
-                            "UID": 1798320946,
-                            "Shape": 1,
-                            "vertexColor": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
-                            ],
-                            "wire": false,
-                            "wireOverride": false,
-                            "drawVertexNormals": false,
-                            "drawFaceNormals": false,
-                            "centerPoint": [
-                                0.1882835477590561,
-                                0.11755292117595673,
-                                0.11755292117595673
-                            ],
-                            "radius": 1.089074730873108,
-                            "render": true
-                        },
-                        "Material": {
-                            "usingCheckers": true,
-                            "checkersId": 64
-                        }
-                    }
-                },
-                {
-                    "UID": 20058982,
-                    "name": "Cube_2",
-                    "active": true,
-                    "Components": {
-                        "Transform": {
-                            "pos": [
-                                -5.354861259460449,
-                                9.583864212036133,
-                                19.358741760253908
-                            ],
-                            "eulerRot": [
-                                2.2812182903289797,
-                                0.5336486101150513,
-                                -29.398479461669923
-                            ],
-                            "scale": [
-                                0.9999998211860657,
-                                15.760000228881836,
-                                0.9999997019767761
-                            ]
-                        },
-                        "Mesh": {
-                            "UID": 1798320946,
-                            "Shape": 1,
-                            "vertexColor": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
-                            ],
-                            "wire": false,
-                            "wireOverride": false,
-                            "drawVertexNormals": false,
-                            "drawFaceNormals": false,
-                            "centerPoint": [
-                                0.1882835477590561,
-                                0.11755292117595673,
-                                0.11755292117595673
-                            ],
-                            "radius": 1.089074730873108,
-                            "render": true
-                        },
-                        "Material": {
-                            "usingCheckers": true,
-                            "checkersId": 65
-                        }
-                    }
-                },
-                {
-                    "UID": 1944062330,
-                    "name": "Cube_3",
-                    "active": true,
-                    "Components": {
-                        "Transform": {
-                            "pos": [
-                                -1.4572536945343018,
-                                8.150222778320313,
-                                19.585432052612306
+                                -43.099998474121097,
+                                7.0,
+                                -32.599998474121097
                             ],
                             "eulerRot": [
                                 -0.0,
@@ -2302,66 +2204,106 @@
                                 -0.0
                             ],
                             "scale": [
-                                8.694267272949219,
+                                1.0,
                                 1.0,
                                 1.0
                             ]
-                        },
-                        "Mesh": {
-                            "UID": 1798320946,
-                            "Shape": 1,
-                            "vertexColor": [
-                                1.0,
-                                1.0,
-                                1.0,
-                                1.0
-                            ],
-                            "wire": false,
-                            "wireOverride": false,
-                            "drawVertexNormals": false,
-                            "drawFaceNormals": false,
-                            "centerPoint": [
-                                0.1882835477590561,
-                                0.11755292117595673,
-                                0.11755292117595673
-                            ],
-                            "radius": 1.089074730873108,
-                            "render": true
-                        },
-                        "Material": {
-                            "usingCheckers": true,
-                            "checkersId": 66
                         }
                     }
                 },
                 {
-                    "UID": 1763209213,
-                    "name": "Camera",
+                    "UID": 1933048214,
+                    "name": "EmitterSmoke2",
                     "active": true,
                     "Components": {
                         "Transform": {
                             "pos": [
-                                -33.65801239013672,
-                                5.790231227874756,
-                                29.29656982421875
+                                -30.299999237060548,
+                                7.0,
+                                -33.599998474121097
                             ],
                             "eulerRot": [
-                                -180.0,
-                                49.19896697998047,
-                                -180.0
+                                -0.0,
+                                0.0,
+                                -0.0
                             ],
                             "scale": [
-                                1.0000016689300538,
                                 1.0,
-                                1.0000016689300538
+                                1.0,
+                                1.0
                             ]
-                        },
-                        "Camera": {
-                            "mainCamera": true,
-                            "fixedFOV": 0,
-                            "culling": true,
-                            "horizontalFOV": 60.0,
-                            "aspectRatio": 1.7769999504089356
+                        }
+                    }
+                },
+                {
+                    "UID": 1980042389,
+                    "name": "EmitterSmoke3",
+                    "active": true,
+                    "Components": {
+                        "Transform": {
+                            "pos": [
+                                -40.5,
+                                7.099999904632568,
+                                -43.099998474121097
+                            ],
+                            "eulerRot": [
+                                -0.0,
+                                0.0,
+                                -0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    }
+                },
+                {
+                    "UID": 2020422569,
+                    "name": "EmitterSmoke4",
+                    "active": true,
+                    "Components": {
+                        "Transform": {
+                            "pos": [
+                                -32.79999923706055,
+                                7.0,
+                                -43.099998474121097
+                            ],
+                            "eulerRot": [
+                                -0.0,
+                                0.0,
+                                -0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    }
+                },
+                {
+                    "UID": 665574007,
+                    "name": "firework",
+                    "active": true,
+                    "Components": {
+                        "Transform": {
+                            "pos": [
+                                -50.0,
+                                1.0,
+                                -50.0
+                            ],
+                            "eulerRot": [
+                                -0.0,
+                                0.0,
+                                -0.0
+                            ],
+                            "scale": [
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
                         }
                     }
                 }

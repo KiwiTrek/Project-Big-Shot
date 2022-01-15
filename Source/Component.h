@@ -24,7 +24,6 @@ enum class ComponentTypes
 	MESH,
 	MATERIAL,
 	CAMERA,
-	BILLBOARD,
 	EMITTER
 };
 

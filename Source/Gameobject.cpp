@@ -55,11 +55,6 @@ Component* GameObject::CreateComponent(ComponentTypes cType, EmitterData data, C
 		c = new ComponentEmitter(data);
 		break;
 	}
-	case ComponentTypes::BILLBOARD:
-	{
-		c = new ComponentBillboard();
-		break;
-	}
 	default:
 		break;
 	}

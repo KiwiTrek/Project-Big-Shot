@@ -735,9 +735,6 @@
     <ClInclude Include="MathWarnings.h">
       <Filter>Sources\Tools\MathGeoLib</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentBillboard.h">
-      <Filter>Sources\Modules\Particles\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>Sources\Modules\Particles</Filter>
     </ClInclude>
@@ -1012,9 +1009,6 @@
     </ClCompile>
     <ClCompile Include="External\ImGuizmo\include\ImSequencer.cpp">
       <Filter>Sources\Tools\ImGuizmo</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentBillboard.cpp">
-      <Filter>Sources\Modules\Particles\Components</Filter>
     </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>Sources\Modules\Particles</Filter>

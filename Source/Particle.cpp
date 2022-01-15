@@ -108,10 +108,7 @@ bool Particle::Update(float dt, Application* App)
             if (color[index + 1].pos > lifeNormalized)
             {
                 float timeNormalized = (lifeNormalized - color[index].pos / (color[index + 1].pos - color[index].pos));
-                if (color[index + 1].pos == 0)
-                {
-                    timeNormalized = 0;
-                }
+                if (color[index + 1].pos == 0) timeNormalized = 0;
                 currentColor = color[index].color.Lerp(color[index + 1].color, timeNormalized);
             }
             else
@@ -151,22 +148,22 @@ void Particle::Draw()
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
 
-    //vertices
+    //Vertices
     glBindBuffer(GL_ARRAY_BUFFER, plane->vertexBuf);
     glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-    //normals
+    //Normals
     glBindBuffer(GL_NORMAL_ARRAY, plane->normalsBuf);
     glNormalPointer(GL_FLOAT, 0, NULL);
 
-    //indices
+    //Indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, plane->indexBuf);
 
     glColor4f(currentColor.x, currentColor.y, currentColor.z, currentColor.w);
 
     if (texture != nullptr)
     {
-        //textures
+        //Textures
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -218,14 +215,4 @@ void Particle::ParticleDeath()
     }
     active = false;
     camDistance = -1;
-}
-
-float4x4 Particle::GetMatrix()
-{
-    return float4x4::FromTRS(pos, rot, scale).Transposed();
-}
-
-ResourceMaterial* Particle::GetTexture()
-{
-    return texture;
 }

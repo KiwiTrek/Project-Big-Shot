@@ -38,26 +38,6 @@ bool ModuleScene::Init()
 
 bool ModuleScene::Start()
 {
-	GameObject* smoke1 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
-	smoke1->GetComponent<Transform>()->SetPos(float3(-43.1f, 7.0f, -32.6f));
-	smoke1->name = "EmitterSmoke1";
-	App->gameObjects->AddGameobject(smoke1);
-
-	GameObject* smoke2 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
-	smoke2->GetComponent<Transform>()->SetPos(float3(-30.3f, 7.0f, -33.6f));
-	smoke2->name = "EmitterSmoke2";
-	App->gameObjects->AddGameobject(smoke2);
-
-	GameObject* smoke3 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
-	smoke3->GetComponent<Transform>()->SetPos(float3(-40.5f, 7.1f, -43.1f));
-	smoke3->name = "EmitterSmoke3";
-	App->gameObjects->AddGameobject(smoke3);
-
-	GameObject* smoke4 = App->particles->CreateEmitter(App->particles->CreateSmokeData());
-	smoke4->GetComponent<Transform>()->SetPos(float3(-32.8f, 7.0f, -43.1f));
-	smoke4->name = "EmitterSmoke4";
-	App->gameObjects->AddGameobject(smoke4);
-
 	return true;
 }
 

@@ -85,7 +85,6 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
-    <ClInclude Include="ComponentBillboard.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentEmitter.h" />
     <ClInclude Include="ConsoleBuffer.h" />
@@ -305,7 +304,6 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="ComponentBillboard.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentEmitter.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />

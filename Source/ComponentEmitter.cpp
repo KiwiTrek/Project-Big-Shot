@@ -22,6 +22,10 @@ ComponentEmitter::ComponentEmitter(EmitterData data, bool active) : Component(ty
 ComponentEmitter::~ComponentEmitter()
 {
 	particlePool.clear();
+	newPositions.clear();
+
+	data.color.clear();
+	data.subColor.clear();
 }
 
 void ComponentEmitter::StartEmitter()
@@ -39,25 +43,28 @@ void ComponentEmitter::Update(float dt, Application* App)
 
 	float3 defaultPos = float3(0.5, 1.0, -0.5);
 	float time = lifeTimer.ReadSec();
-	if (time > data.timeToParticle && (data.loop || loopTimer.ReadSec() < data.duration))
-	{
-		float newTimeToParticle = 1.0f / data.rateOverTime;
-		int num = (time / newTimeToParticle);
-		CreateParticles(num, defaultPos);
-		data.timeToParticle = newTimeToParticle;
-		lifeTimer.Start();
-	}
-
 	float burstTime = burstTimer.ReadSec();
-	if (data.burst && burstTime > data.repeatTime)
+
+	if (data.burst)
 	{
-		int num = data.minPart;
-		if (data.minPart != data.maxPart)
+		if (burstTime > data.repeatTime)
 		{
-			num = (rand() % (data.maxPart - data.minPart)) + data.minPart;
+			int num = data.minPart;
+			if (data.minPart != data.maxPart) num = (rand() % (data.maxPart - data.minPart)) + data.minPart;
+			CreateParticles(num, defaultPos);
+			burstTimer.Start();
 		}
-		CreateParticles(num, defaultPos);
-		burstTimer.Start();
+	}
+	else
+	{
+		if (time > data.timeToParticle && (data.loop || loopTimer.ReadSec() < data.duration))
+		{
+			float newTimeToParticle = 1.0f / data.rateOverTime;
+			int num = (time / newTimeToParticle);
+			CreateParticles(num, defaultPos);
+			data.timeToParticle = newTimeToParticle;
+			lifeTimer.Start();
+		}
 	}
 
 	if (!newPositions.empty())
@@ -237,7 +244,7 @@ void ComponentEmitter::DrawInspector(Application* App)
 			ImGui::Checkbox("##AngAcceleration", &data.checkAngularAcceleration);
 			ShowFloatValue(data.angularAcceleration, data.checkAngularAcceleration, "Angular Accel.", 0.25f, -45.0f, 45.0f);
 
-			ImGui::Checkbox("##Lifetime", &data.checkLife);
+			ImGui::Checkbox("##LifeTime", &data.checkLife);
 			ShowFloatValue(data.particleLife, data.checkLife, "Life", 0.5f, 1.0f, 20.0f);
 
 			ImGui::Checkbox("##Size", &data.checkSize);
@@ -286,14 +293,11 @@ void ComponentEmitter::DrawInspector(Application* App)
 				bool center = data.sType == EmitterData::EmitterSphere::CENTER;
 				bool border = data.sType == EmitterData::EmitterSphere::BORDER;
 
-				if (ImGui::RadioButton("Random", random))
-					data.sType = EmitterData::EmitterSphere::RANDOM;
+				if (ImGui::RadioButton("Random", random)) data.sType = EmitterData::EmitterSphere::RANDOM;
 				ImGui::SameLine();
-				if (ImGui::RadioButton("Center", center))
-					data.sType = EmitterData::EmitterSphere::CENTER;
+				if (ImGui::RadioButton("Center", center)) data.sType = EmitterData::EmitterSphere::CENTER;
 				ImGui::SameLine();
-				if (ImGui::RadioButton("Border", border))
-					data.sType = EmitterData::EmitterSphere::BORDER;
+				if (ImGui::RadioButton("Border", border)) data.sType = EmitterData::EmitterSphere::BORDER;
 
 				ImGui::DragFloat("Sphere Size", &data.sphereCreation.r, 0.25f, 1.0f, 20.0f, "%.2f");
 				break;
@@ -301,7 +305,7 @@ void ComponentEmitter::DrawInspector(Application* App)
 			case Shape::CONE:
 			{
 				ImGui::Text("Cone");
-				ImGui::DragFloat("End Radious", &data.circleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
+				ImGui::DragFloat("End Radius", &data.circleCreation.r, 0.25f, 0.25f, 20.0f, "%.2f");
 				break;
 			}
 			default:
@@ -350,8 +354,10 @@ void ComponentEmitter::DrawInspector(Application* App)
 			ImGui::Checkbox("Burst", &data.burst);
 			ImGui::DragInt("Min particles", &data.minPart, 1.0f, 0, 100);
 			if (data.minPart > data.maxPart) data.maxPart = data.minPart;
+			else if (data.minPart <= 0.0f) data.minPart = 0.0f;
 			ImGui::DragInt("Max Particles", &data.maxPart, 1.0f, 0, 100);
 			if (data.maxPart < data.minPart) data.minPart = data.maxPart;
+			else if (data.maxPart <= 0.0f) data.maxPart = 0.0f;
 			ImGui::DragFloat("Repeat Time", &data.repeatTime, 0.5f, 0.0f, 0.0f, "%.1f");
 
 			ImGui::TreePop();
@@ -489,14 +495,11 @@ void ComponentEmitter::DrawInspector(Application* App)
 						bool center = data.subSphereType == EmitterData::EmitterSphere::CENTER;
 						bool border = data.subSphereType == EmitterData::EmitterSphere::BORDER;
 
-						if (ImGui::RadioButton("S.Random", random))
-							data.subSphereType = EmitterData::EmitterSphere::RANDOM;
+						if (ImGui::RadioButton("S.Random", random)) data.subSphereType = EmitterData::EmitterSphere::RANDOM;
 						ImGui::SameLine();
-						if (ImGui::RadioButton("S.Center", center))
-							data.subSphereType = EmitterData::EmitterSphere::CENTER;
+						if (ImGui::RadioButton("S.Center", center)) data.subSphereType = EmitterData::EmitterSphere::CENTER;
 						ImGui::SameLine();
-						if (ImGui::RadioButton("S.Border", border))
-							data.subSphereType = EmitterData::EmitterSphere::BORDER;
+						if (ImGui::RadioButton("S.Border", border)) data.subSphereType = EmitterData::EmitterSphere::BORDER;
 
 						ImGui::DragFloat("Sub Sphere Size", &data.subSphereCreation.r, 0.25f, 1.0f, 20.0f, "%.2f");
 						break;
@@ -671,12 +674,7 @@ void ComponentEmitter::CreateParticles(int num, const float3& pos, bool sub)
 		ResourceMaterial* tex;
 		float life;
 		float3 scale;
-		float pAngle;
-		float acc;
-		float vel;
-		float incrementSize;
-		float angularAcc;
-		float angularVel;
+		float pAngle, acc, vel, incrementSize, angularAcc, angularVel;
 		std::vector<FadeColor> color;
 
 		if (!sub)
@@ -724,6 +722,7 @@ void ComponentEmitter::ShapeParticleData(float3& pos, float3& dir, bool sub)
 	Sphere sphere;
 	EmitterData::EmitterSphere sType;
 	Circle circle;
+
 	if (!sub)
 	{
 		s = data.shapeType;
@@ -788,6 +787,9 @@ void ComponentEmitter::ShapeParticleData(float3& pos, float3& dir, bool sub)
 	}
 
 	pos += spawn + owner->GetComponent<ComponentTransform>()->GetGlobalPos();
+	pos.x -= 0.5;
+	pos.y -= 0.5;
+	pos.z += 0.5;
 
 }
 
@@ -810,10 +812,7 @@ bool ComponentEmitter::EditColor(FadeColor& color, uint pos)
 {
 	bool ret = true;
 	ImVec4 vecColor = ImVec4(color.color.x, color.color.y, color.color.z, color.color.w);
-	if (ImGui::ColorButton("Color", vecColor, ImGuiColorEditFlags_None, ImVec2(100, 20)))
-	{
-		color.changingColor = !color.changingColor;
-	}
+	if (ImGui::ColorButton("Color", vecColor, ImGuiColorEditFlags_None, ImVec2(100, 20))) color.changingColor = !color.changingColor;
 
 	if (!color.changingColor)
 	{

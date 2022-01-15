@@ -67,7 +67,7 @@ struct EmitterData
 
 	std::vector<FadeColor> color;
 
-	//Sub Emitter
+	//Sub Emitter Properties
 
 	ResourceMaterial* subTexture = nullptr;
 	int subRateParticles = 10;
